@@ -14,6 +14,8 @@
   <img src="docs/screenshots/controller-mode.png" width="49%" alt="Controller-friendly mode">
 </p>
 
+> **Vibecoded:** PiP Studio was built with the help of AI (Claude). It works well for me, but expect the odd rough edge, and please [report anything weird](../../issues/new/choose).
+
 ## Download
 
 Get the latest version from the **[Releases](../../releases/latest)** page:

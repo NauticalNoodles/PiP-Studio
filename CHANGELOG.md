@@ -4,17 +4,23 @@ Newest first. Each `## x.y.z` section becomes the notes of that GitHub release.
 
 ## 1.0.0
 
-The first public release.
+First release! 🎉
 
-- **PiPs of anything:** any window, a whole display or a screen region, in a floating always-on-top window using Windows' own live thumbnails. Auto mode follows the window you just left.
-- **Sizes and placement:** 8 sizes by width, size limits, snapping to the corners and edge middles, crop and zoom, theater mode, ghost mode, opacity, source volume and media keys.
-- **Smart hiding** while the source is in front, over full-screen apps, or when you point at a PiP.
-- **Other apps' PiPs:** browser PiPs, Discord pop-outs and other floating video windows are found automatically and can be moved, sized, faded, muted and snapped, with Discord's black bars trimmed away.
-- **Options for each PiP** on the Running PiPs page: opacity, volume, size, shape, black bars and snapping.
-- **A customizable PiP title bar**, including Previous and Next window buttons.
-- **Game controllers:** steer PiPs from Xbox, PlayStation, Switch and most other controllers, and a controller-friendly mode for the main window.
-- **A Windows 11-style main window:** Windows and Running PiPs pages, a window picker, settings with animated explanations, settings search, light and dark themes and Lite mode.
-- **An installer and a portable version**, neither needing .NET.
+PiP Studio lets you pop any window out into a small floating picture-in-picture, so you can keep a video, a stream or a guide on screen while you play or work.
+
+- Works with any app, a whole screen, or just part of one
+- Also controls the PiPs from your browser, Discord and other apps
+- Snaps neatly into corners and stays out of your way
+- Can be used entirely with a controller
+- Light and dark themes that match Windows
+
+Full disclosure: this app is vibecoded. I built it together with AI (Claude), so expect the odd rough edge, and please report anything weird you run into.
+
+Download **PiPStudio-Setup-1.0.0.exe** below to install it, or grab the portable zip if you don't want to install anything.
+
+If Windows shows a "Windows protected your PC" warning, click **More info** and then **Run anyway**.
+
+Found a bug or have an idea? [Let me know](https://github.com/NauticalNoodles/PiPStudio/issues/new/choose)!
 
 ---
 
