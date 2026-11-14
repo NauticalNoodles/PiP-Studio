@@ -1,0 +1,64 @@
+name: Bug report
+description: Something doesn't work the way it should
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report this. The more detail, the faster it can be fixed.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a PiP of ...
+        2. Press ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: PiP Studio version
+      description: Settings > About shows it.
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: windows
+    attributes:
+      label: Windows version
+      description: Press Win+R, type winver and press Enter.
+      placeholder: "Windows 11 24H2"
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part is it about?
+      multiple: true
+      options:
+        - PiP Studio's own PiPs
+        - Other apps' PiPs (browser, Discord, ...)
+        - Controller
+        - Shortcuts
+        - Main window / settings
+        - Window picker
+        - Installer
+        - Something else
+  - type: input
+    id: apps
+    attributes:
+      label: Apps or games involved
+      description: The app shown in the PiP, the game you were playing, the controller model, and so on.
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
+      description: Drag images or videos here. Lite mode, multiple displays or display scaling can matter too.

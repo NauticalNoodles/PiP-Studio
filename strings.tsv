@@ -1,0 +1,592 @@
+Windows	النوافذ	窗口
+Running PiPs	النوافذ العائمة الحالية	正在运行的画中画
+Appearance	المظهر	外观
+Behavior	السلوك	行为
+Controller	وحدة التحكم	控制器
+Shortcuts	الاختصارات	快捷键
+Settings	الإعدادات	设置
+Find a setting	ابحث عن إعداد	查找设置
+Search windows	ابحث في النوافذ	搜索窗口
+Search results	نتائج البحث	搜索结果
+Open or close navigation	فتح القائمة أو إغلاقها	打开或关闭导航
+Hide explanations	إخفاء الشروح	隐藏说明
+Show explanations	إظهار الشروح	显示说明
+Hide the explanations (you can bring them back from the top of the page)	إخفاء الشروح (يمكنك إعادتها من أعلى الصفحة)	隐藏说明（可在页面顶部重新打开）
+Point at a setting to see what it does.	أشر إلى أي إعداد لترى ما يفعله.	将指针移到某个设置上即可查看其作用。
+Explanations	الشروح	说明
+Open in PiP	فتح في نافذة عائمة	在画中画中打开
+Open in picture-in-picture	فتح في وضع الصورة داخل الصورة	以画中画方式打开
+Click a window	انقر على نافذة	点击一个窗口
+Screen region	منطقة من الشاشة	屏幕区域
+Refresh	تحديث	刷新
+Next corner	الزاوية التالية	下一个角落
+Bigger	أكبر	放大
+Smaller	أصغر	缩小
+Change source	تغيير المصدر	更改来源
+Show source	إظهار المصدر	显示来源
+Show all	إظهار الكل	全部显示
+Hide all	إخفاء الكل	全部隐藏
+Name	الاسم	名称
+Status	الحالة	状态
+Showing	المعروض	显示内容
+Mode	الوضع	模式
+App	التطبيق	应用
+Size	الحجم	大小
+Position	الموضع	位置
+Opacity	الشفافية	不透明度
+Volume	مستوى الصوت	音量
+Source	المصدر	来源
+In PiP	في نافذة عائمة	画中画中
+Minimized	مصغّرة	已最小化
+Whole screen	الشاشة كاملة	整个屏幕
+Auto	تلقائي	自动
+Starts on the first available window, then switches to the one you last used. Skips minimized and closed windows.	يبدأ بأول نافذة متاحة، ثم ينتقل إلى آخر نافذة استخدمتها. ويتخطى النوافذ المصغّرة والمغلقة.	从第一个可用窗口开始，然后切换到你最近使用的窗口。会跳过已最小化和已关闭的窗口。
+Starts on the first available window, then switches to the one you were last using, even with Follow turned off.	يبدأ بأول نافذة متاحة، ثم ينتقل إلى آخر نافذة كنت تستخدمها، حتى لو كانت ميزة المتابعة مطفأة.	从第一个可用窗口开始，然后切换到你最近使用的窗口，即使“跟随”已关闭。
+Nothing selected	لم يُحدَّد شيء	未选择任何内容
+Pick a window in the list.	اختر نافذة من القائمة.	请在列表中选择一个窗口。
+Mirrors this whole display	يعرض هذه الشاشة بالكامل	镜像整个显示器
+Live preview	معاينة مباشرة	实时预览
+Waiting for a window	بانتظار نافذة	正在等待窗口
+Minimized — it will be restored	مصغّرة — ستُستعاد	已最小化 — 将会恢复
+Display {0} (main)	الشاشة {0} (الرئيسية)	显示器 {0}（主）
+Display {0}	الشاشة {0}	显示器 {0}
+Whole screen · {0}	الشاشة كاملة · {0}	整个屏幕 · {0}
+PiP Studio is still running	لا يزال PiP Studio يعمل	PiP Studio 仍在运行
+Your shortcuts keep working. Click the tray icon to open it again.	تبقى اختصاراتك تعمل. انقر على أيقونة شريط المهام لفتحه مجددًا.	快捷键仍然有效。点击托盘图标可再次打开。
+No controller	لا توجد وحدة تحكم	没有控制器
+The picture may freeze. Click for the fix.	قد تتجمد الصورة. انقر لرؤية الحل.	画面可能会冻结。点击查看解决办法。
+The picture may freeze	قد تتجمد الصورة	画面可能会冻结
+This app stops drawing while another window covers it. Restart it with the fix to keep it moving.	يتوقف هذا التطبيق عن الرسم عندما تغطيه نافذة أخرى. أعد تشغيله مع الإصلاح ليبقى متحركًا.	当被其他窗口遮挡时，此应用会停止绘制。使用修复重新启动它即可保持画面更新。
+Restart with the fix	أعد التشغيل مع الإصلاح	使用修复重新启动
+Always start it with the fix	شغّله دائمًا مع الإصلاح	始终使用修复启动
+Always start {0} with the fix	شغّل {0} دائمًا مع الإصلاح	始终使用修复启动 {0}
+Fix frozen picture	إصلاح الصورة المتجمدة	修复冻结的画面
+Frozen preview	معاينة متجمدة	预览已冻结
+Looking for this app's shortcuts…	جارٍ البحث عن اختصارات هذا التطبيق…	正在查找此应用的快捷方式…
+No desktop, Start or taskbar shortcut was found for this app.	لم يُعثر على اختصار لهذا التطبيق في سطح المكتب أو قائمة ابدأ أو شريط المهام.	未找到此应用的桌面、开始菜单或任务栏快捷方式。
+Adding the fix to the shortcuts…	جارٍ إضافة الإصلاح إلى الاختصارات…	正在将修复添加到快捷方式…
+Removing the fix from the shortcuts…	جارٍ إزالة الإصلاح من الاختصارات…	正在从快捷方式中移除修复…
+Added the fix to {0} shortcut.	أُضيف الإصلاح إلى {0} اختصار.	已将修复添加到 {0} 个快捷方式。
+Added the fix to {0} shortcuts.	أُضيف الإصلاح إلى {0} اختصارات.	已将修复添加到 {0} 个快捷方式。
+Removed the fix from {0} shortcut.	أُزيل الإصلاح من {0} اختصار.	已从 {0} 个快捷方式中移除修复。
+Removed the fix from {0} shortcuts.	أُزيل الإصلاح من {0} اختصارات.	已从 {0} 个快捷方式中移除修复。
+Restart {0}?	إعادة تشغيل {0}؟	重新启动 {0}？
+Restart {0}	إعادة تشغيل {0}	重新启动 {0}
+This closes {0} and starts it again with a setting that keeps its window drawing while other windows cover it.	سيُغلق هذا {0} ويُشغّله مجددًا بإعداد يُبقي نافذته مرسومة حتى عندما تغطيها نوافذ أخرى.	这会关闭 {0} 并以一个设置重新启动它，使其窗口在被其他窗口遮挡时仍保持绘制。
+Anything unsaved in it will be lost. It only helps Chromium-based apps (Chrome, Edge, Spotify, Discord, ...).	سيضيع أي شيء غير محفوظ فيه. يفيد هذا تطبيقات Chromium فقط (Chrome وEdge وSpotify وDiscord...).	其中未保存的内容将会丢失。仅对基于 Chromium 的应用有效（Chrome、Edge、Spotify、Discord 等）。
+{0} stops drawing while other windows cover it, so its PiP can freeze. Restarting it with a fix keeps it drawing. Anything unsaved in it will be lost.	يتوقف {0} عن الرسم عندما تغطيه نوافذ أخرى، لذا قد تتجمد نافذته العائمة. إعادة تشغيله مع الإصلاح تُبقيه يرسم. سيضيع أي شيء غير محفوظ فيه.	{0} 被其他窗口遮挡时会停止绘制，因此其画中画可能会冻结。使用修复重新启动可保持绘制。其中未保存的内容将会丢失。
+This app's program file can't be read (it may be running as administrator), so it can't be restarted from here.	تتعذر قراءة ملف برنامج هذا التطبيق (ربما يعمل كمسؤول)، لذا لا يمكن إعادة تشغيله من هنا.	无法读取此应用的程序文件（它可能以管理员身份运行），因此无法从这里重新启动。
+Cancel	إلغاء	取消
+OK	حسنًا	确定
+Not now	ليس الآن	以后再说
+Restart	إعادة التشغيل	重新启动
+Restart now	أعد التشغيل الآن	立即重新启动
+Later	لاحقًا	稍后
+Restart PiP Studio?	إعادة تشغيل PiP Studio؟	重新启动 PiP Studio？
+The new language shows after PiP Studio restarts. Your PiPs come back afterwards.	ستظهر اللغة الجديدة بعد إعادة تشغيل PiP Studio. وستعود نوافذك العائمة بعد ذلك.	重新启动 PiP Studio 后将显示新语言。你的画中画随后会恢复。
+Language	اللغة	语言
+PiP Studio restarts to switch	يُعاد تشغيل PiP Studio للتبديل	切换时 PiP Studio 会重新启动
+Use my Windows language	استخدم لغة Windows	使用我的 Windows 语言
+No PiPs are open.\nPick a window on the Windows page, or press {0} anywhere.	لا توجد نوافذ عائمة مفتوحة.\nاختر نافذة من صفحة النوافذ، أو اضغط {0} من أي مكان.	没有打开的画中画。\n请在“窗口”页面选择一个窗口，或在任意位置按 {0}。
+No settings match “{0}”. Try a different word.	لا توجد إعدادات تطابق «{0}». جرّب كلمة أخرى.	没有与“{0}”匹配的设置。请换个词试试。
+Add Ctrl, Alt or Win…	أضف Ctrl أو Alt أو Win…	添加 Ctrl、Alt 或 Win…
+Press keys…	اضغط المفاتيح…	请按键…
+Not set	غير محدد	未设置
+Choose	اختيار	选择
+Colors	الألوان	颜色
+PiP window	النافذة العائمة	画中画窗口
+Effects	المؤثرات	效果
+New PiPs	النوافذ العائمة الجديدة	新画中画
+Placement	الموضع	位置
+Mouse	الفأرة	鼠标
+Smart hiding	الإخفاء الذكي	智能隐藏
+Sources	المصادر	来源
+Screen regions	مناطق الشاشة	屏幕区域
+Startup	بدء التشغيل	启动
+Notifications	الإشعارات	通知
+Privacy	الخصوصية	隐私
+Performance	الأداء	性能
+Administrator	المسؤول	管理员
+About	حول	关于
+Options	الخيارات	选项
+Buttons	الأزرار	按钮
+App theme	سمة التطبيق	应用主题
+Light or dark for PiP Studio's windows and menus, or follow Windows.	فاتح أو داكن لنوافذ PiP Studio وقوائمه، أو اتّباع Windows.	PiP Studio 的窗口和菜单使用浅色或深色，或跟随 Windows。
+Light or dark, for PiP Studio's windows and menus	فاتح أو داكن لنوافذ PiP Studio وقوائمه	PiP Studio 窗口和菜单的浅色或深色
+Use my Windows setting	استخدم إعداد Windows	使用我的 Windows 设置
+Light	فاتح	浅色
+Dark	داكن	深色
+Accent color	لون التمييز	主题色
+The color of highlights, switches, the focus ring and borders. Use Windows' color or pick your own.	لون الإبرازات والمفاتيح وحلقة التركيز والحدود. استخدم لون Windows أو اختر لونك.	用于突出显示、开关、焦点框和边框的颜色。可使用 Windows 的颜色或自选颜色。
+Borders, highlights and controller hints	الحدود والإبرازات وتلميحات وحدة التحكم	边框、突出显示和控制器提示
+Use my Windows accent color	استخدم لون تمييز Windows	使用我的 Windows 主题色
+Custom accent color	لون تمييز مخصص	自定义主题色
+Used when the Windows accent color is off	يُستخدم عند إيقاف لون تمييز Windows	关闭 Windows 主题色时使用
+Rounded corners	زوايا مستديرة	圆角
+Square or rounded corners, like other Windows 11 windows.	زوايا مربعة أو مستديرة، مثل نوافذ Windows 11 الأخرى.	方角或圆角，与其他 Windows 11 窗口一致。
+Windows 11 only	Windows 11 فقط	仅限 Windows 11
+Border	الحد	边框
+A thin outline around each PiP, in your accent color or one you pick.	إطار رفيع حول كل نافذة عائمة، بلون التمييز أو بلون تختاره.	每个画中画周围的细边框，使用主题色或你选择的颜色。
+A thin outline around each PiP, in your accent color or one you pick	إطار رفيع حول كل نافذة عائمة، بلون التمييز أو بلون تختاره	每个画中画周围的细边框，使用主题色或你选择的颜色
+An outline around each PiP	إطار حول كل نافذة عائمة	每个画中画周围的边框
+Border color	لون الحد	边框颜色
+Match accent color	مطابقة لون التمييز	匹配主题色
+Used when Match accent color is off	يُستخدم عند إيقاف مطابقة لون التمييز	关闭“匹配主题色”时使用
+Width	العرض	宽度
+Messages under the PiP	الرسائل أسفل النافذة العائمة	画中画下方的消息
+When you switch sources or change a mode, the message shows below the PiP instead of over the picture	عند تبديل المصدر أو تغيير الوضع، تظهر الرسالة أسفل النافذة العائمة بدلًا من فوق الصورة	切换来源或更改模式时，消息显示在画中画下方，而不是画面上
+When you switch sources or change a mode, the message shows in a small caption below the PiP instead of over the picture. Volume changes show a level bar there too.	عند تبديل المصدر أو تغيير الوضع، تظهر الرسالة في شريط صغير أسفل النافذة العائمة بدلًا من فوق الصورة. وتظهر هناك أيضًا مستويات الصوت عند تغييره.	切换来源或更改模式时，消息以小标签显示在画中画下方，而不是画面上。调节音量时，那里也会显示音量条。
+Show messages below the PiP, not on it	أظهر الرسائل أسفل النافذة العائمة لا فوقها	在画中画下方显示消息，而不是在画面上
+Lite mode	الوضع الخفيف	精简模式
+For slower PCs: turns off animations, the Mica background, shadows and live previews	للأجهزة الأبطأ: يوقف الحركات وخلفية Mica والظلال والمعاينات المباشرة	适用于较慢的电脑：关闭动画、Mica 背景、阴影和实时预览
+For slower PCs: turns off animations, the Mica background, shadows and live previews. PiPs themselves work the same.	للأجهزة الأبطأ: يوقف الحركات وخلفية Mica والظلال والمعاينات المباشرة. تعمل النوافذ العائمة نفسها كما هي.	适用于较慢的电脑：关闭动画、Mica 背景、阴影和实时预览。画中画本身的功能不变。
+Fewer effects, for slower PCs	مؤثرات أقل للأجهزة الأبطأ	减少效果，适合较慢的电脑
+Animation effects	مؤثرات الحركة	动画效果
+Glide, fade and slide effects in PiP Studio and on PiPs	مؤثرات الانزلاق والتلاشي في PiP Studio وعلى النوافذ العائمة	PiP Studio 和画中画中的滑动与淡入淡出效果
+Glide, fade and slide effects in PiP Studio and on PiPs. Off, things jump straight into place.	مؤثرات الانزلاق والتلاشي في PiP Studio وعلى النوافذ العائمة. عند إيقافها، تقفز الأشياء مباشرة إلى مكانها.	PiP Studio 和画中画中的滑动与淡入淡出效果。关闭后，元素会直接跳到位。
+Glide and fade effects	مؤثرات الانزلاق والتلاشي	滑动和淡入淡出效果
+Where and how they open	أين وكيف تُفتح	在哪里以及如何打开
+Small	صغير	小
+Medium	متوسط	中
+Large	كبير	大
+Extra large	كبير جدًا	特大
+Top left	أعلى اليسار	左上
+Top middle	أعلى الوسط	上方中间
+Top right	أعلى اليمين	右上
+Left middle	وسط اليسار	左侧中间
+Right middle	وسط اليمين	右侧中间
+Bottom left	أسفل اليسار	左下
+Bottom middle	أسفل الوسط	下方中间
+Bottom right	أسفل اليمين	右下
+Top	أعلى	上
+Middle	الوسط	中间
+Bottom	أسفل	下
+Left	يسار	左
+Right	يمين	右
+Up	أعلى	上
+Down	أسفل	下
+Size limits	حدود الحجم	尺寸限制
+Keep tall or wide apps from getting too big. Applies to new PiPs, size presets, resizing and source changes (theater mode ignores them).	يمنع التطبيقات الطويلة أو العريضة من أن تصبح كبيرة جدًا. ينطبق على النوافذ العائمة الجديدة وأحجامها المسبقة وتغيير الحجم وتبديل المصدر (يتجاهلها وضع المسرح).	防止过高或过宽的应用变得太大。适用于新画中画、预设大小、调整大小和更换来源（影院模式除外）。
+Tall or wide apps stop growing at the size you set, as a share of the screen. Applies to new PiPs, size presets, resizing and source changes. Theater mode ignores them.	تتوقف التطبيقات الطويلة أو العريضة عن الكبر عند الحجم الذي تحدده كنسبة من الشاشة. ينطبق على النوافذ العائمة الجديدة وأحجامها المسبقة وتغيير الحجم وتبديل المصدر. يتجاهلها وضع المسرح.	过高或过宽的应用会在你设定的大小（屏幕比例）处停止变大。适用于新画中画、预设大小、调整大小和更换来源。影院模式不受限制。
+Stop tall or wide apps getting too big	امنع التطبيقات الطويلة أو العريضة من الكبر الزائد	防止过高或过宽的应用变得太大
+Limit width	تحديد العرض	限制宽度
+Maximum width	أقصى عرض	最大宽度
+Limit height	تحديد الارتفاع	限制高度
+Maximum height	أقصى ارتفاع	最大高度
+Share of the screen	نسبة من الشاشة	占屏幕的比例
+Control other apps' PiP windows	التحكم في النوافذ العائمة للتطبيقات الأخرى	控制其他应用的画中画窗口
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture window of Chrome, Edge, Firefox and other apps.	عندما لا تكون هناك نافذة عائمة من PiP Studio مفتوحة، تتحكم اختصاراتك ووحدة التحكم في نافذة الصورة داخل الصورة الخاصة بـ Chrome وEdge وFirefox وغيرها: تحريكًا وتغييرًا للحجم وتلاشيًا وكتمًا وإغلاقًا.	当没有打开 PiP Studio 画中画时，你的快捷键和控制器可以移动、缩放、淡化、静音和关闭 Chrome、Edge、Firefox 等应用的画中画窗口。
+Steer browser and app PiPs too	تحكم أيضًا في النوافذ العائمة للمتصفحات والتطبيقات	也可控制浏览器和应用的画中画
+Snap other apps' PiPs to spots	ثبّت النوافذ العائمة للتطبيقات الأخرى في المواضع	将其他应用的画中画吸附到位置
+Other apps' PiP windows land on the same corners and edge spots as PiP Studio's PiPs, when they open and when you let go of them after dragging.	تستقر النوافذ العائمة للتطبيقات الأخرى في نفس الزوايا ومواضع الحواف التي تستخدمها نوافذ PiP Studio، عند فتحها وعند إفلاتها بعد السحب.	其他应用的画中画窗口在打开时以及拖动后松开时，会停靠到与 PiP Studio 画中画相同的角落和边缘位置。
+They land on the same spots as yours	تستقر في نفس مواضع نوافذك	它们会停靠在与你的画中画相同的位置
+Allow more than one PiP at a time	السماح بأكثر من نافذة عائمة في وقت واحد	允许同时打开多个画中画
+When off, opening a new PiP switches the one that's already open	عند الإيقاف، يؤدي فتح نافذة عائمة جديدة إلى تبديل النافذة المفتوحة	关闭后，打开新画中画会切换已打开的那个
+Off: a new PiP replaces the open one	إيقاف: النافذة الجديدة تحل محل المفتوحة	关闭：新画中画会替换已打开的
+Follow the window I just left	تابع النافذة التي غادرتها للتو	跟随我刚离开的窗口
+When you switch windows, the PiP switches to the one you were on	عند التبديل بين النوافذ، تنتقل النافذة العائمة إلى النافذة التي كنت عليها	切换窗口时，画中画会切换到你刚才所在的窗口
+The PiP shows the window you just left	تعرض النافذة العائمة النافذة التي غادرتها للتو	画中画显示你刚离开的窗口
+Snap after moving	التثبيت بعد التحريك	移动后吸附
+Glides to the nearest spot when you let go	تنزلق إلى أقرب موضع عند الإفلات	松开时滑到最近的位置
+Middle of each edge too	ومنتصف كل حافة أيضًا	也包括每条边的中点
+8 spots instead of 4 corners — also used by the arrow keys and D-pad	8 مواضع بدلًا من 4 زوايا — تستخدمها أيضًا مفاتيح الأسهم وأزرار الاتجاه	8 个位置而不是 4 个角 — 方向键和十字键也使用这些位置
+Gap from the screen edges	المسافة من حواف الشاشة	与屏幕边缘的间距
+Gap from the edges	المسافة من الحواف	与边缘的间距
+Stay on one display	البقاء على شاشة واحدة	保持在一个显示器上
+Moving past the edge won't hop to the next display	التحريك بعد الحافة لن ينقلها إلى الشاشة التالية	移过边缘时不会跳到下一个显示器
+Don't hop to the next display	لا تنتقل إلى الشاشة التالية	不跳到下一个显示器
+When the pointer is over a PiP	عندما يكون المؤشر فوق نافذة عائمة	当指针位于画中画上时
+What a PiP does when you point at it	ما تفعله النافذة العائمة عند الإشارة إليها	指针指向画中画时它会怎么做
+Move out of the way slides it aside — hold Ctrl to grab it instead	«الابتعاد عن الطريق» يزيحها جانبًا — اضغط Ctrl مطولًا لإمساكها بدلًا من ذلك	“让开”会把它移到一边 — 按住 Ctrl 可以抓住它
+Show controls	إظهار عناصر التحكم	显示控件
+Fade out	التلاشي	淡出
+Do nothing	لا شيء	不执行任何操作
+Move out of the way	الابتعاد عن الطريق	让开
+Show move arrows	إظهار أسهم التحريك	显示移动箭头
+Arrow buttons send the PiP to the next spot — or the next display	أزرار الأسهم ترسل النافذة العائمة إلى الموضع التالي — أو الشاشة التالية	箭头按钮把画中画移到下一个位置 — 或下一个显示器
+Arrow buttons that hop to the next spot	أزرار أسهم تنتقل إلى الموضع التالي	跳到下一个位置的箭头按钮
+Fade-out opacity	شفافية التلاشي	淡出不透明度
+How visible a PiP stays while it fades under the pointer	مدى ظهور النافذة العائمة أثناء تلاشيها تحت المؤشر	指针下淡出时画中画的可见程度
+How see-through it gets	مدى شفافيتها	它变得多透明
+Click-through opacity	شفافية وضع النقر عبرها	点击穿透不透明度
+How visible a ghost-mode PiP is under the pointer	مدى ظهور النافذة العائمة في وضع الشبح تحت المؤشر	幽灵模式下指针下画中画的可见程度
+How see-through ghost mode is	مدى شفافية وضع الشبح	幽灵模式的透明程度
+Right-click on a PiP	النقر بزر الفأرة الأيمن على نافذة عائمة	右键单击画中画
+Show the menu	إظهار القائمة	显示菜单
+Close it	إغلاقها	关闭它
+Bring its source to the front	إحضار مصدرها إلى المقدمة	将其来源窗口置于前台
+Theater mode	وضع المسرح	影院模式
+Middle-click closes a PiP	النقر بالزر الأوسط يغلق النافذة العائمة	中键单击关闭画中画
+Hide a PiP while its window is in front	إخفاء النافذة العائمة عندما تكون نافذتها في المقدمة	当其窗口在前台时隐藏画中画
+It would only repeat what's already on screen	ستكرر فقط ما هو موجود على الشاشة	它只会重复屏幕上已有的内容
+Hide PiPs while a fullscreen app is on the same display	إخفاء النوافذ العائمة أثناء تشغيل تطبيق بملء الشاشة على نفس الشاشة	同一显示器上有全屏应用时隐藏画中画
+Borderless games still show PiPs unless this is on	الألعاب بلا إطار تظل تُظهر النوافذ العائمة ما لم يكن هذا مفعّلًا	除非打开此项，否则无边框游戏仍会显示画中画
+Includes borderless games	يشمل الألعاب بلا إطار	包括无边框游戏
+Keep minimized sources playing	إبقاء المصادر المصغّرة قيد التشغيل	让最小化的来源继续播放
+The PiP keeps moving when you minimize	تستمر النافذة العائمة بالحركة عند التصغير	最小化后画中画仍会继续更新
+Reconnect when a closed app opens again	إعادة الاتصال عند فتح التطبيق المغلق مجددًا	关闭的应用再次打开时重新连接
+Window sources always run at full speed	مصادر النوافذ تعمل دائمًا بأقصى سرعة	窗口来源始终全速运行
+Frame rate	معدل الإطارات	帧率
+Show the pointer	إظهار المؤشر	显示指针
+Use game controllers	استخدام وحدات تحكم الألعاب	使用游戏控制器
+Xbox, PlayStation, Switch and most others	Xbox وPlayStation وSwitch ومعظم الأنواع الأخرى	Xbox、PlayStation、Switch 及大多数其他控制器
+Turn controls on when PiP Studio starts	تشغيل التحكم عند بدء PiP Studio	PiP Studio 启动时打开控制
+Release the game's focus while controls are on	تحرير تركيز اللعبة أثناء تشغيل التحكم	控制打开时释放游戏的焦点
+The game ignores the controller while you move the PiP, and gets focus back afterwards	تتجاهل اللعبة وحدة التحكم أثناء تحريكك للنافذة العائمة، وتستعيد التركيز بعد ذلك	移动画中画时游戏会忽略控制器，之后重新获得焦点
+The game ignores the controller meanwhile	تتجاهل اللعبة وحدة التحكم في هذه الأثناء	在此期间游戏会忽略控制器
+Show button hints on the PiP	إظهار تلميحات الأزرار على النافذة العائمة	在画中画上显示按钮提示
+Controller-friendly mode	وضع ملائم لوحدة التحكم	控制器友好模式
+Bigger layout and button hints	تخطيط أكبر وتلميحات للأزرار	更大的布局和按钮提示
+Bigger layout, a focus ring and button hints, so you can use this window with a controller. Pressing a key on the keyboard switches back.	تخطيط أكبر وحلقة تركيز وتلميحات للأزرار حتى تستخدم هذه النافذة بوحدة التحكم. الضغط على أي مفتاح في لوحة المفاتيح يعيدها كما كانت.	更大的布局、焦点框和按钮提示，方便用控制器操作此窗口。按下键盘上的任意键即可切换回来。
+When I use a controller	عندما أستخدم وحدة تحكم	使用控制器时
+Always	دائمًا	始终
+Off	إيقاف	关闭
+Fade controller hints when idle	إخفاء تلميحات وحدة التحكم عند الخمول	空闲时淡出控制器提示
+Hints fade after a few seconds	تتلاشى التلميحات بعد بضع ثوانٍ	提示会在几秒后淡出
+The PiP's name and button hints fade after a few seconds without input. Any button brings them back. Less for Windows to draw over your game.	يتلاشى اسم النافذة العائمة وتلميحات الأزرار بعد بضع ثوانٍ دون إدخال. أي زر يعيدها. فيقل ما يرسمه Windows فوق لعبتك.	无输入几秒后，画中画名称和按钮提示会淡出。按任意按钮即可恢复。Windows 在游戏上需要绘制的内容更少。
+Controller options	خيارات وحدة التحكم	控制器选项
+Button assignments	تعيين الأزرار	按钮分配
+Click, then press a button. Right-click clears it.	انقر ثم اضغط زرًا. النقر بالزر الأيمن يمسحه.	点击后按下按钮。右键单击可清除。
+Click a binding, then press the button or combination. Right-click clears it. Trigger: press, double press or hold.	انقر على أحد التعيينات ثم اضغط الزر أو المجموعة. النقر بالزر الأيمن يمسحه. طريقة التشغيل: ضغطة أو ضغطتان أو ضغط مطوّل.	点击一个绑定，然后按下按钮或组合键。右键单击可清除。触发方式：按下、双击或长按。
+Click, then press the button(s). Right-click to clear.	انقر ثم اضغط الزر (أو الأزرار). انقر بالزر الأيمن للمسح.	点击后按下按钮。右键单击可清除。
+Press once, press twice quickly, or hold	اضغط مرة، أو مرتين بسرعة، أو اضغط مطولًا	按一次、快速按两次或长按
+Press	ضغطة	按下
+Double press	ضغطتان	双击
+Hold	ضغط مطوّل	长按
+Reset	إعادة تعيين	重置
+Connect a controller	وصّل وحدة تحكم	连接控制器
+Press button(s)…	اضغط الزر (أو الأزرار)…	请按按钮…
+No controller connected	لا توجد وحدة تحكم موصولة	未连接控制器
+No controller found	لم يُعثر على وحدة تحكم	未找到控制器
+Connect an Xbox, PlayStation or Switch controller by USB or Bluetooth.	وصّل وحدة تحكم Xbox أو PlayStation أو Switch عبر USB أو Bluetooth.	通过 USB 或蓝牙连接 Xbox、PlayStation 或 Switch 控制器。
+Connect an Xbox, PlayStation or Switch controller to use controller controls.	وصّل وحدة تحكم Xbox أو PlayStation أو Switch لاستخدام التحكم بها.	连接 Xbox、PlayStation 或 Switch 控制器以使用控制器控制。
+Controls are on — the PiP has an accent outline. {0} turns them off.	التحكم مفعّل — للنافذة العائمة إطار ملوّن. {0} يوقفه.	控制已打开 — 画中画带有主题色边框。按 {0} 关闭。
+Press {0} to turn controls on.	اضغط {0} لتشغيل التحكم.	按 {0} 打开控制。
+Controller controls	التحكم بوحدة التحكم	控制器控制
+Controller controls on · {0} turns them off	التحكم بوحدة التحكم مفعّل · {0} يوقفه	控制器控制已打开 · 按 {0} 关闭
+Controller controls off	التحكم بوحدة التحكم متوقف	控制器控制已关闭
+Controller controls ({0})	التحكم بوحدة التحكم ({0})	控制器控制（{0}）
+Xbox controller	وحدة تحكم Xbox	Xbox 控制器
+PlayStation controller	وحدة تحكم PlayStation	PlayStation 控制器
+Switch controller	وحدة تحكم Switch	Switch 控制器
+These work anywhere in Windows. Click a shortcut, then press the new keys (Backspace clears, Esc cancels). Right-click clears it. They act on the PiP you used or pointed at most recently.	تعمل هذه في أي مكان في Windows. انقر على اختصار ثم اضغط المفاتيح الجديدة (Backspace يمسح وEsc يلغي). النقر بالزر الأيمن يمسحه. تعمل على آخر نافذة عائمة استخدمتها أو أشرت إليها.	这些快捷键在 Windows 中任何地方都可用。点击一个快捷键，然后按下新按键（Backspace 清除，Esc 取消）。右键单击可清除。它们作用于你最近使用或指向的画中画。
+Open and choose	الفتح والاختيار	打开和选择
+Move and size	التحريك والحجم	移动和大小
+Look and visibility	الشكل والظهور	外观和可见性
+Source and media	المصدر والوسائط	来源和媒体
+Click, then press keys. Right-click to clear.	انقر ثم اضغط المفاتيح. انقر بالزر الأيمن للمسح.	点击后按下按键。右键单击可清除。
+Reset shortcuts	إعادة تعيين الاختصارات	重置快捷键
+Puts every shortcut back to its default	يعيد كل اختصار إلى وضعه الافتراضي	将所有快捷键恢复为默认值
+Start PiP Studio when I sign in	تشغيل PiP Studio عند تسجيل الدخول	登录时启动 PiP Studio
+It starts quietly in the tray	يبدأ بهدوء في شريط المهام	它会在托盘中静默启动
+Bring back my PiPs when PiP Studio starts	إعادة نوافذي العائمة عند بدء PiP Studio	PiP Studio 启动时恢复我的画中画
+Tips and alerts from the tray icon	نصائح وتنبيهات من أيقونة شريط المهام	来自托盘图标的提示和提醒
+Hide PiPs from screenshots, recordings and screen sharing	إخفاء النوافذ العائمة من لقطات الشاشة والتسجيلات ومشاركة الشاشة	在截图、录屏和屏幕共享中隐藏画中画
+OBS, Discord, Teams and the Snipping Tool won't see them. Costs a little performance, so leave it off unless you stream or share your screen.	لن يراها OBS وDiscord وTeams وأداة القصاصة. يكلّف قليلًا من الأداء، لذا اتركه مطفأً ما لم تكن تبث أو تشارك شاشتك.	OBS、Discord、Teams 和截图工具都看不到它们。会稍微影响性能，除非你在直播或共享屏幕，否则请保持关闭。
+Costs a little performance	يكلّف قليلًا من الأداء	会稍微影响性能
+Keep running in the tray when I close this window	الاستمرار في العمل في شريط المهام عند إغلاق هذه النافذة	关闭此窗口时继续在托盘中运行
+Otherwise closing this window quits PiP Studio	وإلا فإن إغلاق هذه النافذة ينهي PiP Studio	否则关闭此窗口会退出 PiP Studio
+Release memory while idle	تحرير الذاكرة عند الخمول	空闲时释放内存
+Gives unused memory back to Windows while PiP Studio sits in the tray	يعيد الذاكرة غير المستخدمة إلى Windows أثناء بقاء PiP Studio في شريط المهام	PiP Studio 在托盘中时将未使用的内存归还给 Windows
+Give memory back while in the tray	إعادة الذاكرة أثناء البقاء في شريط المهام	在托盘中时归还内存
+Running as administrator	يعمل كمسؤول	正在以管理员身份运行
+PiP Studio can show windows of apps that run as administrator	يمكن لـ PiP Studio عرض نوافذ التطبيقات التي تعمل كمسؤول	PiP Studio 可以显示以管理员身份运行的应用窗口
+Can show admin apps' windows	يمكنه عرض نوافذ تطبيقات المسؤول	可以显示管理员应用的窗口
+Restart as administrator	إعادة التشغيل كمسؤول	以管理员身份重新启动
+Needed only to show windows of apps that run as administrator	مطلوب فقط لعرض نوافذ التطبيقات التي تعمل كمسؤول	仅在显示以管理员身份运行的应用窗口时需要
+Only needed for admin apps' windows	مطلوب فقط لنوافذ تطبيقات المسؤول	仅管理员应用窗口需要
+Needs administrator	يتطلب صلاحيات المسؤول	需要管理员权限
+Version {0}	الإصدار {0}	版本 {0}
+Exit PiP Studio	إنهاء PiP Studio	退出 PiP Studio
+Settings folder	مجلد الإعدادات	设置文件夹
+Open	فتح	打开
+Picture-in-picture for any window or part of the screen	صورة داخل صورة لأي نافذة أو جزء من الشاشة	为任意窗口或屏幕区域开启画中画
+Uses Windows' own live thumbnails	يستخدم الصور المصغرة المباشرة الخاصة بـ Windows	使用 Windows 自带的实时缩略图
+Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.	يستخدم عرض النوافذ المباشر نظام الصور المصغرة الخاص بـ Windows، لذا لا يكاد يكلّف شيئًا.	实时窗口镜像使用 Windows 自带的缩略图系统，因此几乎不占资源。
+Select	تحديد	选择
+Back	رجوع	返回
+Tabs	علامات التبويب	标签页
+Search	بحث	搜索
+Scroll	تمرير	滚动
+Type	كتابة	输入
+Space	مسافة	空格
+Clear	مسح	清除
+Done	تم	完成
+Snap spots	مواضع التثبيت	吸附位置
+When you let go of a PiP it glides to the nearest spot: the 4 corners, plus the middle of each edge with 8 spots on. The arrow keys and D-pad use the same spots.	عند إفلات نافذة عائمة تنزلق إلى أقرب موضع: الزوايا الأربع، ومنتصف كل حافة عند تفعيل المواضع الثمانية. تستخدم مفاتيح الأسهم وأزرار الاتجاه المواضع نفسها.	松开画中画时，它会滑到最近的位置：4 个角，开启 8 个位置时还包括每条边的中点。方向键和十字键使用相同的位置。
+How far a PiP sits from the edges of the screen.	المسافة بين النافذة العائمة وحواف الشاشة.	画中画与屏幕边缘的距离。
+Where new PiPs open	أين تُفتح النوافذ العائمة الجديدة	新画中画的打开位置
+A new PiP pops up in the corner you pick here.	تظهر النافذة العائمة الجديدة في الزاوية التي تختارها هنا.	新画中画会出现在你在这里选择的位置。
+Size of new PiPs	حجم النوافذ العائمة الجديدة	新画中画的大小
+A PiP can show its controls, fade, do nothing, or slide out of the way when the pointer reaches it. When it slides aside, hold Ctrl to grab it instead. Fade-out opacity sets how see-through it gets.	عندما يصل المؤشر إلى النافذة العائمة، يمكنها إظهار عناصر التحكم أو التلاشي أو عدم فعل شيء أو الابتعاد عن الطريق. عندما تبتعد، اضغط Ctrl مطولًا لإمساكها. وتحدد «شفافية التلاشي» مدى شفافيتها.	指针移到画中画上时，它可以显示控件、淡出、不做任何事，或滑开让路。滑开时，按住 Ctrl 可以抓住它。“淡出不透明度”决定它的透明程度。
+Move arrows	أسهم التحريك	移动箭头
+Arrow buttons on the PiP send it to the next spot, or across to the next display.	أزرار الأسهم على النافذة العائمة ترسلها إلى الموضع التالي، أو إلى الشاشة التالية.	画中画上的箭头按钮可将其移到下一个位置，或移到下一个显示器。
+Ghost mode	وضع الشبح	幽灵模式
+Clicks go straight through the PiP to the window behind it.	تمر النقرات عبر النافذة العائمة مباشرة إلى النافذة التي خلفها.	点击会直接穿过画中画，作用于其后面的窗口。
+Follow the window you left	تابع النافذة التي غادرتها	跟随你离开的窗口
+When you switch windows, the PiP switches to the one you were just on, so the window you left stays in view. Auto PiPs always do this.	عند التبديل بين النوافذ، تنتقل النافذة العائمة إلى النافذة التي كنت عليها، فتبقى النافذة التي غادرتها ظاهرة. النوافذ العائمة التلقائية تفعل ذلك دائمًا.	切换窗口时，画中画会切换到你刚才所在的窗口，让你离开的窗口保持可见。自动画中画始终如此。
+Hide while its window is in front	الإخفاء عندما تكون نافذتها في المقدمة	当其窗口在前台时隐藏
+No point showing a window twice: the PiP steps away while you're in its window.	لا داعي لعرض النافذة مرتين: تختفي النافذة العائمة أثناء وجودك في نافذتها.	没必要显示两次同一个窗口：当你在其窗口中时，画中画会让开。
+Hide over full-screen apps	الإخفاء فوق التطبيقات بملء الشاشة	在全屏应用上方隐藏
+PiPs on a display get out of the way while a full-screen app or game runs there.	تبتعد النوافذ العائمة على الشاشة أثناء تشغيل تطبيق أو لعبة بملء الشاشة عليها.	当显示器上运行全屏应用或游戏时，该显示器上的画中画会让开。
+How see-through a new PiP is.	مدى شفافية النافذة العائمة الجديدة.	新画中画的透明程度。
+A big, centered PiP for when you want to watch properly. Press again to go back.	نافذة عائمة كبيرة في المنتصف عندما تريد المشاهدة بتركيز. اضغط مجددًا للعودة.	一个居中的大画中画，适合认真观看。再按一次即可返回。
+Minimizing a source tucks it off-screen so the PiP keeps moving. Click it in the taskbar to bring it back.	تصغير المصدر يخفيه خارج الشاشة لتستمر النافذة العائمة بالحركة. انقر عليه في شريط المهام لإعادته.	最小化来源时会将其移到屏幕外，让画中画继续更新。在任务栏中点击它即可恢复。
+What a right-click on a PiP does: open its menu, close it, show its window, theater mode, or nothing.	ما يفعله النقر بالزر الأيمن على النافذة العائمة: فتح قائمتها أو إغلاقها أو إظهار نافذتها أو وضع المسرح أو لا شيء.	右键单击画中画时的操作：打开菜单、关闭、显示其窗口、影院模式或不执行任何操作。
+More than one PiP	أكثر من نافذة عائمة	多个画中画
+On: each new PiP opens alongside the others. Off: opening a new PiP switches the one that's already open to the new window.	تشغيل: تُفتح كل نافذة عائمة جديدة بجانب الأخرى. إيقاف: فتح نافذة جديدة يبدّل النافذة المفتوحة إلى النافذة الجديدة.	开启：每个新画中画都会与其他画中画并存。关闭：打开新画中画会把已打开的那个切换到新窗口。
+Other apps' PiPs	النوافذ العائمة للتطبيقات الأخرى	其他应用的画中画
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture windows of Chrome, Edge, Firefox, Discord and other apps. They also land on the same spots as your PiPs, when they open and when you let go after dragging them.	عندما لا تكون هناك نافذة عائمة من PiP Studio مفتوحة، تتحكم اختصاراتك ووحدة التحكم في نوافذ الصورة داخل الصورة الخاصة بـ Chrome وEdge وFirefox وDiscord وغيرها: تحريكًا وتغييرًا للحجم وتلاشيًا وكتمًا وإغلاقًا. وتستقر أيضًا في نفس مواضع نوافذك عند فتحها وعند إفلاتها بعد السحب.	当没有打开 PiP Studio 画中画时，你的快捷键和控制器可以移动、缩放、淡化、静音和关闭 Chrome、Edge、Firefox、Discord 等应用的画中画窗口。它们在打开时以及拖动后松开时，也会停靠到与你的画中画相同的位置。
+Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.	حرّك النوافذ العائمة وغيّر حجمها وبدّلها بوحدة تحكم Xbox أو PlayStation أو Switch أو معظم الأنواع الأخرى. مع تفعيل «تحرير تركيز اللعبة» تتجاهل اللعبة وحدة التحكم أثناء توجيهك للنافذة العائمة وتستعيد التركيز بعد ذلك. تُظهر التلميحات وظيفة كل زر، وتتلاشى بعد بضع ثوانٍ من الخمول.	用 Xbox、PlayStation、Switch 或大多数其他控制器移动、缩放和切换画中画。开启“释放游戏的焦点”后，你操作画中画时游戏会忽略控制器，之后重新获得焦点。提示会显示每个按钮的作用，空闲几秒后淡出。
+Shows controls	تُظهر عناصر التحكم	显示控件
+Fades to {0}%	تتلاشى إلى {0}%	淡出至 {0}%
+Nothing happens	لا يحدث شيء	什么也不发生
+Moves out of the way	تبتعد عن الطريق	让开
+Glides into place	تنزلق إلى مكانها	滑动到位
+Jumps into place	تقفز إلى مكانها	直接跳到位
+Max height {0}%	أقصى ارتفاع {0}%	最大高度 {0}%
+Max width {0}%	أقصى عرض {0}%	最大宽度 {0}%
+A second PiP opens	تُفتح نافذة عائمة ثانية	打开第二个画中画
+The PiP switches to the new window	تنتقل النافذة العائمة إلى النافذة الجديدة	画中画切换到新窗口
+Right-click: menu	النقر الأيمن: القائمة	右键：菜单
+Right-click: close	النقر الأيمن: إغلاق	右键：关闭
+Right-click: show its window	النقر الأيمن: إظهار نافذتها	右键：显示其窗口
+Right-click: theater mode	النقر الأيمن: وضع المسرح	右键：影院模式
+Right-click: nothing	النقر الأيمن: لا شيء	右键：无操作
+Follows Windows	يتبع Windows	跟随 Windows
+Lite	خفيف	精简
+Rounded	مستديرة	圆角
+Square	مربعة	方角
+Volume 60%	مستوى الصوت 60%	音量 60%
+Browser's own PiP	النافذة العائمة الخاصة بالمتصفح	浏览器自带的画中画
+This app	هذا التطبيق	此应用
+Accent	التمييز	主题色
+{0}'s own PiP	النافذة العائمة الخاصة بـ {0}	{0} 自带的画中画
+App's own PiP	النافذة العائمة الخاصة بالتطبيق	应用自带的画中画
+{0} isn't available for {1}'s own PiP	{0} غير متاح للنافذة العائمة الخاصة بـ {1}	{0} 不适用于 {1} 自带的画中画
+Couldn't find {0}'s window	تعذر العثور على نافذة {0}	找不到 {0} 的窗口
+Showing {0}	عرض {0}	正在显示 {0}
+Opacity {0}%	الشفافية {0}%	不透明度 {0}%
+Volume {0}%	مستوى الصوت {0}%	音量 {0}%
+Muted	مكتوم	已静音
+Sound on	الصوت مفعّل	声音已打开
+Unmuted	أُلغي الكتم	已取消静音
+That	هذا	该操作
+Hiding	الإخفاء	隐藏
+Cropping	القص	裁剪
+Follows	يتابع	跟随
+Source hidden	المصدر مخفي	来源已隐藏
+Locked	مقفل	已锁定
+Waiting	بانتظار	等待中
+Hidden	مخفي	已隐藏
+Screen	الشاشة	屏幕
+Normal	عادي	正常
+PiP Studio is running	PiP Studio يعمل	PiP Studio 正在运行
+Press {0} any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.	اضغط {0} في أي وقت لوضع نافذة في وضع الصورة داخل الصورة. انقر على أيقونة شريط المهام هذه لفتح PiP Studio.	随时按 {0} 即可将窗口放入画中画。点击此托盘图标可打开 PiP Studio。
+Something went wrong	حدث خطأ ما	出了点问题
+Some shortcuts are taken by another app	بعض الاختصارات يستخدمها تطبيق آخر	某些快捷键已被其他应用占用
+No PiP is open	لا توجد نافذة عائمة مفتوحة	没有打开的画中画
+Press {0} to open one.	اضغط {0} لفتح واحدة.	按 {0} 打开一个。
+PiPs hidden	النوافذ العائمة مخفية	画中画已隐藏
+Press {0} or click here to bring them back.	اضغط {0} أو انقر هنا لإعادتها.	按 {0} 或点击此处恢复。
+Nothing to PiP	لا يوجد ما يُعرض	没有可放入画中画的内容
+Click the window you want first, then press {0}.	انقر على النافذة التي تريدها أولًا، ثم اضغط {0}.	先点击你想要的窗口，然后按 {0}。
+Drag to select the part of the screen you want to watch	اسحب لتحديد جزء الشاشة الذي تريد مشاهدته	拖动选择你想观看的屏幕区域
+A PiP is already open	هناك نافذة عائمة مفتوحة بالفعل	已经打开了一个画中画
+Open a window first — Auto picks it up from there.	افتح نافذة أولًا — وسيتولى الوضع التلقائي الأمر من هناك.	请先打开一个窗口 — “自动”会从那里接手。
+Moves out of the mouse's way · hold Ctrl to grab it	تبتعد عن طريق الفأرة · اضغط Ctrl مطولًا لإمساكها	避开鼠标 · 按住 Ctrl 可抓住它
+Stays put under the mouse	تبقى في مكانها تحت الفأرة	在鼠标下保持不动
+Choose a window…	اختر نافذة…	选择一个窗口…
+Click a window on screen…	انقر على نافذة على الشاشة…	点击屏幕上的一个窗口…
+Mirror a screen region…	اعرض منطقة من الشاشة…	镜像屏幕区域…
+Change source…	تغيير المصدر…	更改来源…
+Crop…	قص…	裁剪…
+Click-through	النقر عبرها	点击穿透
+Move back to the default spot	العودة إلى الموضع الافتراضي	移回默认位置
+Hide all PiPs	إخفاء كل النوافذ العائمة	隐藏所有画中画
+Turn off click-through everywhere	إيقاف النقر عبرها في كل مكان	关闭所有点击穿透
+Close all PiPs	إغلاق كل النوافذ العائمة	关闭所有画中画
+Exit	خروج	退出
+Open PiP Studio	فتح PiP Studio	打开 PiP Studio
+Close	إغلاق	关闭
+New PiP…	نافذة عائمة جديدة…	新建画中画…
+Choose a window to PiP	اختر نافذة لعرضها عائمة	选择要放入画中画的窗口
+PiP the active window	اعرض النافذة النشطة عائمة	将活动窗口放入画中画
+PiP a region of the screen	اعرض منطقة من الشاشة عائمة	将屏幕区域放入画中画
+Hide / show all PiPs	إخفاء / إظهار كل النوافذ العائمة	隐藏/显示所有画中画
+Click-through (ghost mode)	النقر عبرها (وضع الشبح)	点击穿透（幽灵模式）
+Move PiP up	تحريك النافذة العائمة لأعلى	向上移动画中画
+Move PiP down	تحريك النافذة العائمة لأسفل	向下移动画中画
+Move PiP left	تحريك النافذة العائمة لليسار	向左移动画中画
+Move PiP right	تحريك النافذة العائمة لليمين	向右移动画中画
+Move PiP to the next corner	نقل النافذة العائمة إلى الزاوية التالية	将画中画移到下一个角落
+Move PiP to the next display	نقل النافذة العائمة إلى الشاشة التالية	将画中画移到下一个显示器
+Make PiP bigger	تكبير النافذة العائمة	放大画中画
+Make PiP smaller	تصغير النافذة العائمة	缩小画中画
+More opaque	أقل شفافية	更不透明
+More transparent	أكثر شفافية	更透明
+Theater mode on / off	تشغيل / إيقاف وضع المسرح	打开/关闭影院模式
+Show the previous window (wraps around through Auto)	إظهار النافذة السابقة (تمر عبر الوضع التلقائي)	显示上一个窗口（循环经过“自动”）
+Show the next window (wraps around through Auto)	إظهار النافذة التالية (تمر عبر الوضع التلقائي)	显示下一个窗口（循环经过“自动”）
+Follow the window I just left (on / off)	متابعة النافذة التي غادرتها للتو (تشغيل / إيقاف)	跟随我刚离开的窗口（开/关）
+Move out of the mouse's way (on / off)	الابتعاد عن طريق الفأرة (تشغيل / إيقاف)	避开鼠标（开/关）
+Bring the source window to the front	إحضار نافذة المصدر إلى المقدمة	将来源窗口置于前台
+Mute / unmute the source app	كتم / إلغاء كتم تطبيق المصدر	静音/取消静音来源应用
+Turn the source app's volume up	رفع صوت تطبيق المصدر	调高来源应用的音量
+Turn the source app's volume down	خفض صوت تطبيق المصدر	调低来源应用的音量
+Media play / pause	تشغيل / إيقاف الوسائط مؤقتًا	媒体播放/暂停
+Crop the PiP	قص النافذة العائمة	裁剪画中画
+Close the PiP	إغلاق النافذة العائمة	关闭画中画
+Controller controls on / off	تشغيل / إيقاف التحكم بوحدة التحكم	打开/关闭控制器控制
+Start a PiP on Auto (when none is open)	بدء نافذة عائمة تلقائية (عند عدم وجود أي نافذة)	以“自动”启动画中画（没有打开时）
+Turn controller controls off	إيقاف التحكم بوحدة التحكم	关闭控制器控制
+Pick	اختيار	选择
+Region	منطقة	区域
+Hide	إخفاء	隐藏
+Ghost	شبح	幽灵
+Corner	زاوية	角落
+Display	الشاشة	显示器
+Size +	الحجم +	大小 +
+Size −	الحجم −	大小 −
+Opacity +	العتامة +	不透明度 +
+Opacity −	العتامة −	不透明度 −
+Theater	المسرح	影院
+Prev	السابق	上一个
+Next	التالي	下一个
+Follow	متابعة	跟随
+Dodge	تفادٍ	避让
+Show	إظهار	显示
+Mute	كتم	静音
+Volume +	الصوت +	音量 +
+Volume −	الصوت −	音量 −
+Play	تشغيل	播放
+Crop	قص	裁剪
+Controls	التحكم	控制
+Start	بدء	开始
+Move	تحريك	移动
+D-pad	أزرار الاتجاه	十字键
+Click any window to open it in PiP  ·  Esc to cancel	انقر على أي نافذة لفتحها عائمة  ·  Esc للإلغاء	点击任意窗口即可在画中画中打开  ·  按 Esc 取消
+Enter opens the selected window  ·  Arrow keys move  ·  Type to search  ·  Esc closes	Enter يفتح النافذة المحددة  ·  الأسهم للتنقل  ·  اكتب للبحث  ·  Esc للإغلاق	Enter 打开所选窗口  ·  方向键移动  ·  输入以搜索  ·  Esc 关闭
+Free	حر	自由
+Screen region {0}	منطقة الشاشة {0}	屏幕区域 {0}
+Can't show this window	تعذر عرض هذه النافذة	无法显示此窗口
+Windows refused to mirror this window (error 0x{0}). Try another window.	رفض Windows عرض هذه النافذة (الخطأ 0x{0}). جرّب نافذة أخرى.	Windows 拒绝镜像此窗口（错误 0x{0}）。请尝试其他窗口。
+This PiP shows a screen region	تعرض هذه النافذة العائمة منطقة من الشاشة	此画中画显示的是屏幕区域
+No other windows	لا توجد نوافذ أخرى	没有其他窗口
+Auto off	الوضع التلقائي متوقف	自动已关闭
+Auto — {0}	تلقائي — {0}	自动 — {0}
+Follows the window you just left	تتابع النافذة التي غادرتها للتو	跟随你刚离开的窗口
+Stays on {0}	تبقى على {0}	保持在 {0}
+Auto — waiting for a window	تلقائي — بانتظار نافذة	自动 — 正在等待窗口
+Source closed — waiting for it to come back	أُغلق المصدر — بانتظار عودته	来源已关闭 — 正在等待它恢复
+Source hidden — still playing	المصدر مخفي — لا يزال يعمل	来源已隐藏 — 仍在播放
+Source restored	استُعيد المصدر	来源已恢复
+Original size	الحجم الأصلي	原始大小
+Only one display	توجد شاشة واحدة فقط	只有一个显示器
+Locked to this display	مقفلة على هذه الشاشة	已锁定到此显示器
+No source to crop	لا يوجد مصدر للقص	没有可裁剪的来源
+Couldn't capture the source to crop it	تعذر التقاط المصدر لقصه	无法捕获来源进行裁剪
+Crop — drag to choose the part of {0} to show	قص — اسحب لاختيار الجزء الذي يُعرض من {0}	裁剪 — 拖动选择要显示的 {0} 部分
+Full view	العرض الكامل	完整视图
+Zoom {0}	تكبير {0}	缩放 {0}
+Click-through on · {0} turns it off	النقر عبرها مفعّل · {0} يوقفه	点击穿透已打开 · 按 {0} 关闭
+Click-through off	النقر عبرها متوقف	点击穿透已关闭
+Always on top	دائمًا في المقدمة	始终置顶
+Not on top	ليست في المقدمة	未置顶
+Fit	ملاءمة	适应
+Fill	ملء	填充
+Stretch	تمديد	拉伸
+Position locked	الموضع مقفل	位置已锁定
+Position unlocked	الموضع غير مقفل	位置已解锁
+No app audio for this source	لا يوجد صوت تطبيق لهذا المصدر	此来源没有应用音频
+Waiting for {0}…	بانتظار {0}…	正在等待 {0}…
+Source closed	أُغلق المصدر	来源已关闭
+It will reconnect automatically when it reopens.	ستُعاد الصلة تلقائيًا عند إعادة فتحه.	它重新打开时会自动重新连接。
+Right-click › Source › Change source…	النقر الأيمن › المصدر › تغيير المصدر…	右键 › 来源 › 更改来源…
+Source is minimized	المصدر مصغّر	来源已最小化
+Restore it, or use right-click › Source › Hide source window to keep it playing out of sight.	استعده، أو استخدم النقر الأيمن › المصدر › إخفاء نافذة المصدر ليبقى يعمل بعيدًا عن الأنظار.	请恢复它，或使用右键 › 来源 › 隐藏来源窗口，让它在看不见的地方继续播放。
+Mirror a screen region instead…	اعرض منطقة من الشاشة بدلًا من ذلك…	改为镜像屏幕区域…
+Show everything (reset crop & zoom)	إظهار الكل (إعادة تعيين القص والتكبير)	显示全部（重置裁剪和缩放）
+Hide the source's title bar	إخفاء شريط عنوان المصدر	隐藏来源的标题栏
+Bring source to front	إحضار المصدر إلى المقدمة	将来源置于前台
+Hide source window (keeps playing)	إخفاء نافذة المصدر (تستمر بالعمل)	隐藏来源窗口（继续播放）
+Previous window	النافذة السابقة	上一个窗口
+Next window	النافذة التالية	下一个窗口
+Auto (first window, then the one you just left)	تلقائي (أول نافذة، ثم التي غادرتها للتو)	自动（先是第一个窗口，然后是你刚离开的窗口）
+Fix frozen picture (restart {0})…	إصلاح الصورة المتجمدة (إعادة تشغيل {0})…	修复冻结的画面（重新启动 {0}）…
+Previous display	الشاشة السابقة	上一个显示器
+Next display	الشاشة التالية	下一个显示器
+Original size (1:1 pixels)	الحجم الأصلي (بكسل 1:1)	原始大小（1:1 像素）
+Move to next display	النقل إلى الشاشة التالية	移到下一个显示器
+Snap to the middle of edges too	التثبيت في منتصف الحواف أيضًا	也吸附到边缘中点
+Move out of the mouse's way	الابتعاد عن طريق الفأرة	避开鼠标
+Lock position & size	قفل الموضع والحجم	锁定位置和大小
+Scaling	التحجيم	缩放方式
+Fit (keep shape)	ملاءمة (الحفاظ على الشكل)	适应（保持比例）
+Fill (crop edges to fill)	ملء (قص الحواف للملء)	填充（裁剪边缘以填满）
+Media & audio	الوسائط والصوت	媒体和音频
+Play / pause	تشغيل / إيقاف مؤقت	播放/暂停
+Next track	المقطع التالي	下一曲
+Previous track	المقطع السابق	上一曲
+Mute {0}	كتم {0}	静音 {0}
+Duplicate this PiP	تكرار هذه النافذة العائمة	复制此画中画
+More options	خيارات أخرى	更多选项
+Exit theater mode	الخروج من وضع المسرح	退出影院模式
+Mute — scroll to change volume	كتم — مرّر لتغيير الصوت	静音 — 滚动可调节音量
+Move left	تحريك لليسار	向左移动
+Move right	تحريك لليمين	向右移动
+Move up	تحريك لأعلى	向上移动
+Move down	تحريك لأسفل	向下移动
+Change what this PiP shows	تغيير ما تعرضه هذه النافذة العائمة	更改此画中画显示的内容
+Tools	الأدوات	工具
+PiP controls	التحكم في النافذة العائمة	画中画控制
+Unbound	غير معيّن	未绑定
+Enter or double-click to confirm  ·  Esc to cancel  ·  F = everything  ·  Shape: 1 Free  2 16:9  3 4:3  4 1:1  5 9:16  (now: {0})	Enter أو النقر المزدوج للتأكيد  ·  Esc للإلغاء  ·  F = الكل  ·  الشكل: 1 حر  2 16:9  3 4:3  4 1:1  5 9:16  (الحالي: {0})	Enter 或双击确认  ·  Esc 取消  ·  F = 全部  ·  形状：1 自由  2 16:9  3 4:3  4 1:1  5 9:16 （当前：{0}）
+8 spots instead of 4 corners	8 مواضع بدلًا من 4 زوايا	8 个位置而不是 4 个角
+Small+	صغير+	小+
+Medium+	متوسط+	中+
+Large+	كبير+	大+
+Largest size	أكبر حجم	最大尺寸
+Smallest size	أصغر حجم	最小尺寸
+Eight sizes from Extra small to Extra large, set by width so a PiP keeps its shape. Bigger and Smaller step through the same sizes. Your choice is highlighted.	ثمانية أحجام من صغير جدًا إلى كبير جدًا، تُحدَّد بالعرض لتحافظ النافذة العائمة على شكلها. يتنقل «أكبر» و«أصغر» بين الأحجام نفسها. يُبرَز اختيارك.	从特小到特大共八种尺寸，按宽度设定，画中画保持原有比例。“放大”和“缩小”在这些尺寸之间切换。你的选择会突出显示。
+Extra small	صغير جدًا	特小
+Pick a window or a display for this PiP	اختر نافذة أو شاشة لهذه النافذة العائمة	为此画中画选择一个窗口或显示器
+Show in this PiP	اعرض في هذه النافذة العائمة	在此画中画中显示
+No preview for this window	لا توجد معاينة لهذه النافذة	此窗口没有预览
+This window has closed	أُغلقت هذه النافذة	此窗口已关闭
+It opens in a floating picture-in-picture window	تُفتح في نافذة عائمة بوضع الصورة داخل الصورة	它会在浮动的画中画窗口中打开
+No matching windows	لا توجد نوافذ مطابقة	没有匹配的窗口
+Choose a window	اختر نافذة	选择一个窗口
+Title bar buttons	أزرار شريط العنوان	标题栏按钮
+Pick the buttons on a PiP's title bar and their order	اختر أزرار شريط عنوان النافذة العائمة وترتيبها	选择画中画标题栏上的按钮及其顺序
+Always shown, so the full menu is never out of reach	تظهر دائمًا، لتبقى القائمة الكاملة في متناولك	始终显示，确保随时可以打开完整菜单
+Reset title bar buttons	إعادة تعيين أزرار شريط العنوان	重置标题栏按钮
+Back to the default buttons and order	العودة إلى الأزرار والترتيب الافتراضي	恢复默认按钮和顺序
+The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.	الأزرار التي يُظهرها شريط عنوان النافذة العائمة عند الإشارة إليها، بالترتيب الذي تختاره. يبدّل زرا النافذة السابقة والتالية ما تعرضه النافذة العائمة. يبقى زر «خيارات أخرى» دائمًا لتبقى القائمة الكاملة في متناولك. في النافذة الضيقة، تُخلي الأزرار اليسرى المكان أولًا.	指针指向画中画时标题栏显示的按钮，按你设定的顺序排列。“上一个窗口”和“下一个窗口”可切换画中画显示的内容。“更多选项”始终保留，确保随时可以打开完整菜单。画中画较窄时，左侧的按钮会先让出空间。
+Treat as a PiP	اعتبرها نافذة عائمة	视为画中画
+Not a PiP	ليست نافذة عائمة	不是画中画
+Find other apps' PiPs automatically	اكتشاف النوافذ العائمة للتطبيقات الأخرى تلقائيًا	自动查找其他应用的画中画
+Small always-on-top windows, like video players' mini modes, count as PiPs. Mark one as Not a PiP on the Running PiPs page.	تُعدّ النوافذ الصغيرة الدائمة في المقدمة، مثل الأوضاع المصغرة لمشغلات الفيديو، نوافذ عائمة. حدّد أيًا منها كـ«ليست نافذة عائمة» من صفحة النوافذ العائمة الحالية.	小型置顶窗口（例如视频播放器的迷你模式）会被视为画中画。可在“正在运行的画中画”页面将其标记为“不是画中画”。
+Windows you marked	النوافذ التي حدّدتها	你标记的窗口
+Forget every Treat as a PiP and Not a PiP you chose	انسَ كل اختيارات «اعتبرها نافذة عائمة» و«ليست نافذة عائمة»	忘记你选择的所有“视为画中画”和“不是画中画”
+Find other apps' PiPs	اكتشاف النوافذ العائمة للتطبيقات الأخرى	查找其他应用的画中画
+PiP options	خيارات النافذة العائمة	画中画选项
+Shape	الشكل	形状
+Black bars	الأشرطة السوداء	黑边
+Snapping	التثبيت	吸附
+Match the picture	مطابقة الصورة	匹配画面
+Follow my setting	اتبع إعدادي	跟随我的设置
+Always snap to spots	التثبيت دائمًا في المواضع	始终吸附到位置
+Never snap	عدم التثبيت أبدًا	从不吸附
+No sound from this app right now	لا يصدر هذا التطبيق صوتًا الآن	此应用当前没有声音
+Crops away the bars around the video	يقص الأشرطة المحيطة بالفيديو	裁掉视频周围的黑边
+Fits the window to the video so the bars disappear	يلائم النافذة مع الفيديو لتختفي الأشرطة	使窗口贴合视频，让黑边消失
+Snapping follows Settings	التثبيت يتبع الإعدادات	吸附跟随设置
+Snaps to spots	تُثبَّت في المواضع	吸附到位置
+Doesn't snap	لا تُثبَّت	不吸附
+Showing the whole picture	عرض الصورة كاملة	显示完整画面
+Couldn't look at the source right now	تعذر فحص المصدر الآن	暂时无法查看来源
+No black bars found	لم يُعثر على أشرطة سوداء	未发现黑边
+Black bars removed	أُزيلت الأشرطة السوداء	已去除黑边
+Removing black bars	جارٍ إزالة الأشرطة السوداء	正在去除黑边
+Black bars left alone	تُركت الأشرطة السوداء كما هي	保留黑边

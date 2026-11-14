@@ -1,0 +1,106 @@
+# Builds PiP Studio and attaches the downloads to a GitHub release.
+#
+# Runs when you publish a release on GitHub (Releases > Draft a new release > tag like v1.0.0 > Publish),
+# or when you push a tag like v1.0.0. You can also run it by hand from the Actions tab (it then only
+# uploads the files as a build artifact, without making a release).
+#
+# Each release gets:
+#   PiPStudio-Setup-<version>.exe            installer (per user, no admin, includes .NET)
+#   PiPStudio-<version>-win-x64-portable.zip  the same app as a single exe, no install needed
+# and the matching section of CHANGELOG.md as its notes.
+
+name: Release
+
+on:
+  release:
+    types: [published]
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Work out the version
+        id: ver
+        shell: pwsh
+        run: |
+          $ref = "${{ github.ref_name }}"
+          if ($ref -match '^v(\d+\.\d+\.\d+)') { $v = $Matches[1] }
+          else { $v = ([xml](Get-Content PiPStudio.csproj)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1 }
+          "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $v"
+
+      - name: Build (self-contained, single exe)
+        shell: pwsh
+        run: >
+          dotnet publish PiPStudio.csproj -c Release -r win-x64 --self-contained true
+          -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true
+          -p:Version=${{ steps.ver.outputs.version }} -o publish-release
+
+      - name: Portable zip
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          New-Item -ItemType Directory -Force out | Out-Null
+          Copy-Item LICENSE publish-release\LICENSE.txt
+          Copy-Item THIRD-PARTY-NOTICES.md publish-release\
+          Compress-Archive -Path publish-release\PiPStudio.exe, publish-release\LICENSE.txt, publish-release\THIRD-PARTY-NOTICES.md -DestinationPath "out\PiPStudio-$v-win-x64-portable.zip" -Force
+
+      - name: Installer
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress | Out-Null }
+          & $iscc "/DAppVersion=$v" "/DSourceDir=..\publish-release" "/DOutputDir=..\out" installer\PiPStudio.iss
+          if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
+
+      - name: Release notes from CHANGELOG.md
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          $lines = Get-Content CHANGELOG.md
+          $start = ($lines | Select-String -Pattern "^## $([regex]::Escape($v))\b" | Select-Object -First 1).LineNumber
+          if ($start) {
+            $rest = $lines[$start..($lines.Length - 1)]
+            $end = ($rest | Select-String -Pattern '^## ' | Select-Object -First 1).LineNumber
+            $body = if ($end) { $rest[0..($end - 2)] } else { $rest }
+          } else { $body = @("PiP Studio $v") }
+          $body += ""
+          $body += "**Downloads:** the Setup exe installs PiP Studio for your account (no admin needed). The portable zip runs without installing. Neither needs .NET installed."
+          $body += ""
+          $body += "Windows may show **Windows protected your PC** because the app isn't code-signed: choose **More info > Run anyway**."
+          $body | Set-Content out\notes.md -Encoding utf8
+
+      - name: Attach to the release
+        if: github.event_name != 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version }}
+          name: PiP Studio ${{ steps.ver.outputs.version }}
+          body_path: out/notes.md
+          files: |
+            out/PiPStudio-Setup-${{ steps.ver.outputs.version }}.exe
+            out/PiPStudio-${{ steps.ver.outputs.version }}-win-x64-portable.zip
+
+      - name: Keep the files (manual runs)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PiPStudio-${{ steps.ver.outputs.version }}
+          path: out/*
