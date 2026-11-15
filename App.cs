@@ -352,7 +352,8 @@ namespace PipStudio
             SystemEvents.SessionEnding += (o, e) => { try { SaveSession(); } catch { } };
 
             bool restored = S.RestoreSessions && RestoreSession();
-            bool silent = args.Any(a => a.Equals("--startup", StringComparison.OrdinalIgnoreCase));
+            bool silent = args.Any(a => a.Equals("--startup", StringComparison.OrdinalIgnoreCase))
+                          || (Packaged.IsPackaged && args.Length == 0 && Packaged.LaunchedAtStartup());
             if (S.FirstRun)
             {
                 S.FirstRun = false;
@@ -1178,11 +1179,13 @@ namespace PipStudio
         {
             get
             {
+                if (Packaged.IsPackaged) return Packaged.StartupEnabled;      // Store version: the package's startup task
                 try { using (var k = Registry.CurrentUser.OpenSubKey(RunKey)) return k != null && k.GetValue("PiPStudio") != null; }
                 catch { return false; }
             }
             set
             {
+                if (Packaged.IsPackaged) { Packaged.StartupEnabled = value; return; }
                 using (var k = Registry.CurrentUser.CreateSubKey(RunKey))
                 {
                     if (value) k.SetValue("PiPStudio", "\"" + Environment.ProcessPath + "\" --startup");

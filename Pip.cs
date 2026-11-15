@@ -246,7 +246,7 @@ namespace PipStudio
             IntPtr srcCopy = Src;
             App.RunSoon(() =>
             {
-                if (hr == unchecked((int)0x80070005) && !App.IsElevated)
+                if (hr == unchecked((int)0x80070005) && !App.IsElevated && !Packaged.IsPackaged)
                 {
                     MainUI.Ask("Needs administrator", U.ProcessName(srcCopy) + " is running as administrator, so Windows won't let PiP Studio show it. Restart PiP Studio as administrator?",
                         "Restart as administrator", "Not now", yes => { if (yes) App.I.RestartElevated(); });

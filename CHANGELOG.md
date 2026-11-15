@@ -2,6 +2,13 @@
 
 Newest first. Each `## x.y.z` section becomes the notes of that GitHub release.
 
+## 1.0.1
+
+Getting ready for the Microsoft Store. If you use the installer or the portable version, nothing changes for you.
+
+- When it runs as the Store version, "Start when I sign in" uses Windows' startup apps list, and "Settings folder" opens the right place
+- The "Restart as administrator" option is hidden in the Store version, since it can't do that
+
 ## 1.0.0
 
 First release! 🎉
@@ -20,7 +27,7 @@ Download **PiPStudio-Setup-1.0.0.exe** below to install it, or grab the portable
 
 If Windows shows a "Windows protected your PC" warning, click **More info** and then **Run anyway**.
 
-Found a bug or have an idea? [Let me know](https://github.com/NauticalNoodles/PiPStudio/issues/new/choose)!
+Found a bug or have an idea? [Let me know](https://github.com/NauticalNoodles/PiP-Studio/issues/new/choose)!
 
 ---
 

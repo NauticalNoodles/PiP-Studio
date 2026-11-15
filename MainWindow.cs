@@ -2616,12 +2616,15 @@ namespace PipStudio
             Section(ge, "Performance");
             Card(ge, "", "Keep running in the tray when I close this window", "Otherwise closing this window quits PiP Studio", Switch(() => S.CloseToTray, v => S.CloseToTray = v), "tray background close quit");
             Card(ge, "", "Release memory while idle", "Gives unused memory back to Windows while PiP Studio sits in the tray", Switch(() => S.MinimizeMemory, v => S.MinimizeMemory = v), "ram memory trim");
-            Section(ge, "Administrator");
-            if (App.IsElevated) Card(ge, "", "Running as administrator", "PiP Studio can show windows of apps that run as administrator", null, "admin elevated uac");
-            else Card(ge, "", "Restart as administrator", "Needed only to show windows of apps that run as administrator", PlainButton("Restart", App.I.RestartElevated), "admin elevated uac");
+            if (!Packaged.IsPackaged)                                     // the Store version can't restart itself elevated
+            {
+                Section(ge, "Administrator");
+                if (App.IsElevated) Card(ge, "", "Running as administrator", "PiP Studio can show windows of apps that run as administrator", null, "admin elevated uac");
+                else Card(ge, "", "Restart as administrator", "Needed only to show windows of apps that run as administrator", PlainButton("Restart", App.I.RestartElevated), "admin elevated uac");
+            }
             Section(ge, "About");
-            var about = MakeExpander(ge, "", "PiP Studio", "Version 1.0.0", PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
-            Row(about, "Settings folder", Settings.Dir, PlainButton("Open", () => { try { Directory.CreateDirectory(Settings.Dir); Process.Start("explorer.exe", "\"" + Settings.Dir + "\""); } catch { } }), "folder files log");
+            var about = MakeExpander(ge, "", "PiP Studio", "Version 1.0.1", PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
+            Row(about, "Settings folder", Packaged.RealPath(Settings.Dir), PlainButton("Open", () => { try { Directory.CreateDirectory(Settings.Dir); Process.Start("explorer.exe", "\"" + Packaged.RealPath(Settings.Dir) + "\""); } catch { } }), "folder files log");
             Row(about, "Picture-in-picture for any window or part of the screen", "Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.", null, "about");
 
             NewPage("search");
