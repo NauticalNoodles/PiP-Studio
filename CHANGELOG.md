@@ -1,5 +1,14 @@
 # PiP Studio changelog
 
+## 1.0.4
+
+Feeling nostalgic? PiP Studio's window can now dress up as an older Windows.
+
+- New **Window style** option in Settings > Appearance: Windows 11, Windows 10 or Windows 7
+- Windows 10 is flat with square corners, and follows your light or dark setting
+- Windows 7 brings back the Aero look: light blue glass, a blue side pane and those glossy buttons (it's always light, just like the real thing)
+- Only the main window changes; your PiPs and menus look the same as before
+
 ## 1.0.3
 
 Other apps' PiPs get the PiP Studio treatment when you point at them.

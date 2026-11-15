@@ -633,6 +633,12 @@ namespace PipStudio
                 { "Restore {0}'s PiP", "استعادة النافذة العائمة لـ {0}" },
                 { "PiP Studio's title bar appears", "يظهر شريط عنوان PiP Studio" },
                 { "Your video", "الفيديو الخاص بك" },
+                { "Window style", "نمط النافذة" },
+                { "How this window looks. PiPs and menus keep their look.", "شكل هذه النافذة. تحتفظ النوافذ العائمة والقوائم بشكلها." },
+                { "Windows 11", "Windows 11" },
+                { "Windows 10", "Windows 10" },
+                { "Windows 7", "Windows 7" },
+                { "Dress this window like Windows 11, Windows 10 (flat, square corners) or Windows 7 (Aero: light blue glass and glossy buttons, always light). Only this window changes: your PiPs, menus and the window picker keep their look.", "اجعل هذه النافذة تبدو مثل Windows 11 أو Windows 10 (مسطّحة بزوايا مربعة) أو Windows 7 (Aero: زجاج أزرق فاتح وأزرار لامعة، فاتحة دائمًا). تتغيّر هذه النافذة فقط: تحتفظ نوافذك العائمة والقوائم ومنتقي النوافذ بشكلها." },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1263,6 +1269,12 @@ namespace PipStudio
                 { "Restore {0}'s PiP", "还原 {0} 的画中画" },
                 { "PiP Studio's title bar appears", "显示 PiP Studio 的标题栏" },
                 { "Your video", "你的视频" },
+                { "Window style", "窗口样式" },
+                { "How this window looks. PiPs and menus keep their look.", "此窗口的外观。画中画和菜单保持原样。" },
+                { "Windows 11", "Windows 11" },
+                { "Windows 10", "Windows 10" },
+                { "Windows 7", "Windows 7" },
+                { "Dress this window like Windows 11, Windows 10 (flat, square corners) or Windows 7 (Aero: light blue glass and glossy buttons, always light). Only this window changes: your PiPs, menus and the window picker keep their look.", "让此窗口看起来像 Windows 11、Windows 10（扁平、直角）或 Windows 7（Aero：浅蓝色玻璃和光泽按钮，始终为浅色）。只有此窗口会改变：画中画、菜单和窗口选择器保持原样。" },
             };
         }
     }

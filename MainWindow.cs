@@ -126,6 +126,7 @@ namespace PipStudio
             App.OpenMain = Open;
             App.CloseMain = () => { if (w != null && !exiting) { exiting = true; w.Close(); } };
             Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
+            Theme.Changed += () => { if (w != null) Looks.Apply(w); };   // the Windows 10 look follows light and dark
         }
 
         // ----------------------------------------------------------------------------- XAML
@@ -571,8 +572,9 @@ namespace PipStudio
         {
             exiting = false;
             Fluent.PickBrushes();
-            var win = (Window)XamlReader.Parse(App.S.LiteMode ? LiteXaml(Xaml) : Xaml);
+            var win = (Window)XamlReader.Parse(Looks.Xaml(App.S.LiteMode ? LiteXaml(Xaml) : Xaml));
             w = win;
+            Looks.Apply(win);
             L.Watch(win);
             ImageSource appIcon = null;
             if (App.AppIconHandle != IntPtr.Zero)
@@ -742,6 +744,7 @@ namespace PipStudio
             win.SourceInitialized += (o, e) =>
             {
                 try { if (App.S.ThemeMode == 0) Wpf.Ui.Appearance.SystemThemeWatcher.Watch(win); } catch { }
+                Looks.ApplyFrame(win);
                 // while the user drags the window edge, hide the live preview: the DWM thumbnail can't keep pace with WPF's layout and shakes
                 try
                 {
@@ -878,11 +881,11 @@ namespace PipStudio
                 navPane.SetResourceReference(Border.BackgroundProperty, "PaneOverlay");
                 navPane.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
                 navPane.BorderThickness = new Thickness(0, 1, 1, 1);
-                if (!App.S.LiteMode) navPane.Effect = new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 28, ShadowDepth = 6, Direction = 315, Opacity = Theme.Dark ? 0.45 : 0.18, Color = Colors.Black };
+                if (!App.S.LiteMode) navPane.Effect = new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 28, ShadowDepth = 6, Direction = 315, Opacity = Looks.Dark ? 0.45 : 0.18, Color = Colors.Black };
             }
             else
             {
-                navPane.Background = Brushes.Transparent;
+                navPane.SetResourceReference(Border.BackgroundProperty, "LookNav");   // transparent, or the Windows 7 side pane
                 navPane.BorderThickness = new Thickness(0);
                 navPane.Effect = null;
             }
@@ -900,7 +903,7 @@ namespace PipStudio
                 scrim.Visibility = Visibility.Collapsed;
                 navSpace.BeginAnimation(FrameworkElement.WidthProperty, null);
                 navSpace.Width = 0;
-                contentLayer.CornerRadius = new CornerRadius(0);
+                contentLayer.CornerRadius = Looks.CR(0);
                 contentLayer.BorderThickness = new Thickness(0, 1, 0, 0);
                 UpdateColumns(wd - ContentChrome);
                 return;
@@ -908,7 +911,7 @@ namespace PipStudio
             if (navPane.Visibility != Visibility.Visible)
             {
                 navPane.Visibility = Visibility.Visible;
-                contentLayer.CornerRadius = new CornerRadius(8, 0, 0, 0);
+                contentLayer.CornerRadius = Looks.CR(8, 0, 0, 0);
                 contentLayer.BorderThickness = new Thickness(1, 1, 0, 0);
             }
             bool wide = IsWide();
@@ -1150,7 +1153,7 @@ namespace PipStudio
             for (int i = 0; i < titles.Length; i++)
             {
                 var cell = new Grid { Background = Brushes.Transparent, Margin = new Thickness(i == 0 ? -8 : -8, 0, 4, 0) };
-                var hov = new Border { CornerRadius = new CornerRadius(4), Margin = new Thickness(0, 2, 0, 2) };
+                var hov = new Border { CornerRadius = Looks.CR(4), Margin = new Thickness(0, 2, 0, 2) };
                 hov.SetResourceReference(Border.BackgroundProperty, "Hover");
                 var sp = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(8, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center };
                 if (i == 0) sp.Margin = new Thickness(8 + 28, 0, 8, 0);
@@ -1492,8 +1495,9 @@ namespace PipStudio
             if (w == null) return;
             bool lite = App.S.LiteMode;
             var fw = w as Wpf.Ui.Controls.FluentWindow;
-            try { if (fw != null) fw.WindowBackdropType = lite ? Wpf.Ui.Controls.WindowBackdropType.None : Wpf.Ui.Controls.WindowBackdropType.Mica; } catch { }
-            if (lite) w.SetResourceReference(Control.BackgroundProperty, "AppBg");
+            bool solid = Looks.Solid;                                     // Lite mode, or the Windows 10 / 7 looks (no Mica there)
+            try { if (fw != null) fw.WindowBackdropType = solid ? Wpf.Ui.Controls.WindowBackdropType.None : Wpf.Ui.Controls.WindowBackdropType.Mica; } catch { }
+            if (solid) w.SetResourceReference(Control.BackgroundProperty, "AppBg");
             else w.Background = Brushes.Transparent;
             if (padRing != null) padRing.Effect = lite ? null : padGlow;
             if (lite && navPane != null) navPane.Effect = null;
@@ -1721,7 +1725,7 @@ namespace PipStudio
 
             var card = new Border
             {
-                Width = 340, Padding = new Thickness(16, 14, 16, 16), CornerRadius = new CornerRadius(8), BorderThickness = new Thickness(1),
+                Width = 340, Padding = new Thickness(16, 14, 16, 16), CornerRadius = Looks.CR(8), BorderThickness = new Thickness(1),
                 Child = sp, Margin = new Thickness(12),
                 Effect = new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 24, ShadowDepth = 4, Opacity = 0.28, Color = Colors.Black }
             };
@@ -1895,7 +1899,7 @@ namespace PipStudio
         {
             var host = el as Panel;
             if (host is StackPanel && ((StackPanel)host).Children.Count > 0) host = ((StackPanel)host).Children[0] as Panel;   // expander: ring its header
-            var ring = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(2), IsHitTestVisible = false, Opacity = 0 };
+            var ring = new Border { CornerRadius = Looks.CR(4), BorderThickness = new Thickness(2), IsHitTestVisible = false, Opacity = 0 };
             ring.SetResourceReference(Border.BorderBrushProperty, "Accent");
             if (host == null)
             {
@@ -2066,7 +2070,7 @@ namespace PipStudio
         {
             TextBlock tb, db;
             var content = CardContent(glyph, title, desc, control, out tb, out db);
-            var b = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(1), Padding = new Thickness(16, 12, 16, 12), MinHeight = 68, Margin = new Thickness(0, 0, 0, 4), Child = content };
+            var b = new Border { CornerRadius = Looks.CR(4), BorderThickness = new Thickness(1), Padding = new Thickness(16, 12, 16, 12), MinHeight = 68, Margin = new Thickness(0, 0, 0, 4), Child = content };
             b.SetResourceReference(Border.BackgroundProperty, "Card");
             b.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
             p.Children.Add(b);
@@ -2078,12 +2082,12 @@ namespace PipStudio
         static Grid ClickRow(StackPanel p, string glyph, string title, string desc, Action click)
         {
             var root = new Grid { Margin = new Thickness(0, 0, 0, 4), Cursor = Cursors.Hand, MinHeight = 68 };
-            var bg = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(1) };
+            var bg = new Border { CornerRadius = Looks.CR(4), BorderThickness = new Thickness(1) };
             bg.SetResourceReference(Border.BackgroundProperty, "Card");
             bg.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
-            var hov = new Border { CornerRadius = new CornerRadius(4) };
+            var hov = new Border { CornerRadius = Looks.CR(4) };
             hov.SetResourceReference(Border.BackgroundProperty, "Hover");
-            var pr = new Border { CornerRadius = new CornerRadius(4) };
+            var pr = new Border { CornerRadius = Looks.CR(4) };
             pr.SetResourceReference(Border.BackgroundProperty, "Pressed");
             TextBlock tb, db;
             var chev = Fluent.Glyph("", 12, "Sub");
@@ -2108,12 +2112,12 @@ namespace PipStudio
         {
             var outer = new StackPanel { Margin = new Thickness(0, 0, 0, 4) };
             var head = new Grid { Cursor = Cursors.Hand, MinHeight = 68 };
-            var headBg = new Border { CornerRadius = new CornerRadius(4), BorderThickness = new Thickness(1) };
+            var headBg = new Border { CornerRadius = Looks.CR(4), BorderThickness = new Thickness(1) };
             headBg.SetResourceReference(Border.BackgroundProperty, "Card");
             headBg.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
-            var hov = new Border { CornerRadius = new CornerRadius(4) };
+            var hov = new Border { CornerRadius = Looks.CR(4) };
             hov.SetResourceReference(Border.BackgroundProperty, "Hover");
-            var pr = new Border { CornerRadius = new CornerRadius(4) };
+            var pr = new Border { CornerRadius = Looks.CR(4) };
             pr.SetResourceReference(Border.BackgroundProperty, "Pressed");
 
             var right = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
@@ -2134,7 +2138,7 @@ namespace PipStudio
             Anim.Hover(head, hov, pr);
 
             var rows = new StackPanel();
-            var rowsHost = new Border { BorderThickness = new Thickness(1, 0, 1, 1), CornerRadius = new CornerRadius(0, 0, 4, 4), Visibility = Visibility.Collapsed, ClipToBounds = true, Child = rows };
+            var rowsHost = new Border { BorderThickness = new Thickness(1, 0, 1, 1), CornerRadius = Looks.CR(0, 0, 4, 4), Visibility = Visibility.Collapsed, ClipToBounds = true, Child = rows };
             rowsHost.SetResourceReference(Border.BackgroundProperty, "CardSecondary");
             rowsHost.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
             outer.Children.Add(head);
@@ -2147,7 +2151,7 @@ namespace PipStudio
             {
                 if (wantOpen == open) return;
                 open = wantOpen;
-                var r0 = new CornerRadius(4, 4, wantOpen ? 0 : 4, wantOpen ? 0 : 4);
+                var r0 = Looks.CR(4, 4, wantOpen ? 0 : 4, wantOpen ? 0 : 4);
                 headBg.CornerRadius = hov.CornerRadius = pr.CornerRadius = r0;
                 bool anim = animate && Anim.On;
                 if (anim) rot.BeginAnimation(RotateTransform.AngleProperty, new DoubleAnimation(wantOpen ? 180 : 0, TimeSpan.FromMilliseconds(250)) { EasingFunction = Anim.Smooth });
@@ -2302,7 +2306,7 @@ namespace PipStudio
             var previewPip = new StackPanel { MaxWidth = 460, HorizontalAlignment = HorizontalAlignment.Left };
             previewPip.Children.Add(previewBar);
             previewPip.Children.Add(previewPic);
-            var previewClip = new Border { CornerRadius = new CornerRadius(6), ClipToBounds = true, Child = previewPip, HorizontalAlignment = HorizontalAlignment.Left };
+            var previewClip = new Border { CornerRadius = Looks.CR(6), ClipToBounds = true, Child = previewPip, HorizontalAlignment = HorizontalAlignment.Left };
             var previewRow = new Border { Padding = new Thickness(52, 12, 16, 14), Child = previewClip };
             Action redrawPreview = () =>
             {
@@ -2415,7 +2419,7 @@ namespace PipStudio
         static FrameworkElement ColorButton(Func<System.Drawing.Color> get, Action<System.Drawing.Color> set)
         {
             var c0 = get();
-            var swatch = new Border { Width = 24, Height = 16, CornerRadius = new CornerRadius(3), Background = new SolidColorBrush(Color.FromRgb(c0.R, c0.G, c0.B)), Margin = new Thickness(0, 0, 10, 0), BorderThickness = new Thickness(1) };
+            var swatch = new Border { Width = 24, Height = 16, CornerRadius = Looks.CR(3), Background = new SolidColorBrush(Color.FromRgb(c0.R, c0.G, c0.B)), Margin = new Thickness(0, 0, 10, 0), BorderThickness = new Thickness(1) };
             swatch.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
             var sp = new StackPanel { Orientation = Orientation.Horizontal };
             sp.Children.Add(swatch);
@@ -2484,6 +2488,14 @@ namespace PipStudio
             Section(ap, "Colors");
             Card(ap, "", "App theme", "Light or dark, for PiP Studio's windows and menus",
                 Combo(new[] { "Use my Windows setting", "Light", "Dark" }, S.ThemeMode, v => S.ThemeMode = v), "light dark mode night");
+            Card(ap, "\uE771", "Window style", "How this window looks. PiPs and menus keep their look.",
+                Combo(Looks.Names, Looks.Current, v =>
+                {
+                    if (v == Looks.Current) return;
+                    S.WindowStyle = v;
+                    App.I.SettingsChanged();
+                    w.Dispatcher.BeginInvoke(new Action(SwitchLanguage), DispatcherPriority.Background);   // rebuilds the window in the new look
+                }), "windows 11 10 7 aero classic old look skin style theme retro");
             Button colorBtn = null;
             var accent = MakeExpander(ap, "", "Accent color", "Borders, highlights and controller hints", null, false, "color colour highlight");
             Row(accent, "Use my Windows accent color", null, Switch(() => S.UseSystemAccent, v => { S.UseSystemAccent = v; if (colorBtn != null) colorBtn.IsEnabled = !v; }), "system automatic");
