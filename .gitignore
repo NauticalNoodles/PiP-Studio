@@ -27,3 +27,4 @@ Desktop.ini
 
 # Python (make_langdata.py)
 __pycache__/
+msix-layout/

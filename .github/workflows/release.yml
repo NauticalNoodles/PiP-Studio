@@ -70,6 +70,36 @@ jobs:
           & $iscc "/DAppVersion=$v" "/DSourceDir=..\publish-release" "/DOutputDir=..\out" installer\PiPStudio.iss
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
 
+      # Microsoft Store package. Runs once you've set the repository variables MSIX_IDENTITY_NAME, MSIX_PUBLISHER and
+      # MSIX_PUBLISHER_DISPLAY_NAME (Settings > Secrets and variables > Actions > Variables) to the values Partner Center
+      # shows under your app > Product management > Product identity. Not attached to the release (it's unsigned until
+      # the Store signs it): download it from this run's artifacts and upload it in Partner Center.
+      - name: Microsoft Store package (MSIX)
+        if: vars.MSIX_IDENTITY_NAME != ''
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          dotnet publish PiPStudio.csproj -c Release -r win-x64 --self-contained true -p:Version=$v -o msix-layout
+          if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
+          Copy-Item msix\Assets msix-layout\Assets -Recurse -Force
+          $m = Get-Content msix\AppxManifest.xml -Raw
+          $m = $m.Replace('$IDENTITY_NAME$', '${{ vars.MSIX_IDENTITY_NAME }}')
+          $m = $m.Replace('$PUBLISHER_DISPLAY_NAME$', '${{ vars.MSIX_PUBLISHER_DISPLAY_NAME }}')
+          $m = $m.Replace('$PUBLISHER$', '${{ vars.MSIX_PUBLISHER }}')
+          $m = $m.Replace('$VERSION$', "$v.0")                    # the Store wants x.y.z.0
+          Set-Content msix-layout\AppxManifest.xml $m -Encoding utf8
+          $makeappx = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\makeappx.exe" | Sort-Object FullName | Select-Object -Last 1
+          if (-not $makeappx) { throw "makeappx.exe not found" }
+          & $makeappx.FullName pack /d msix-layout /p "out\PiPStudio-$v-Store.msix" /o
+          if ($LASTEXITCODE -ne 0) { throw "makeappx failed" }
+
+      - name: Keep the Store package
+        if: vars.MSIX_IDENTITY_NAME != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: PiPStudio-${{ steps.ver.outputs.version }}-Store
+          path: out/*.msix
+
       - name: Release notes from CHANGELOG.md
         shell: pwsh
         run: |

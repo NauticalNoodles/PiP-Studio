@@ -52,6 +52,8 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 
 The **Release** workflow then builds the installer and the portable zip, attaches them to the release, and fills in the notes from that version's CHANGELOG section. It takes a few minutes; you can follow it on the Actions tab.
 
+To publish on the Microsoft Store too, see [docs/microsoft-store.md](docs/microsoft-store.md).
+
 ## What it does
 
 **PiPs**
@@ -124,6 +126,8 @@ You can change them all on the Shortcuts page.
 | `Util.cs` | Settings, size presets, window helpers and menus. |
 | `Native.cs` | Windows API declarations and per-app audio. |
 | `installer/PiPStudio.iss` | The installer (Inno Setup). |
+| `msix/` | The Microsoft Store package manifest and tile images. See [docs/microsoft-store.md](docs/microsoft-store.md). |
+| `Packaged.cs` | What's different when it runs as the Store version (startup task, settings location). |
 | `.github/workflows/release.yml` | Builds the downloads for each GitHub release. |
 
 ## Settings
