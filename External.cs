@@ -257,6 +257,8 @@ namespace PipStudio
                 case "grow": StepSize(h, 1); return true;
                 case "shrink": StepSize(h, -1); return true;
                 case "theater": Theater(h); return true;
+                case "maximize": Maximize(h); return true;
+                case "minimize": Minimize(h); return true;
                 case "opup": Opacity(h, 26); return true;
                 case "opdown": Opacity(h, -26); return true;
                 case "volup": Volume(h, 0.05f); return true;
@@ -378,7 +380,7 @@ namespace PipStudio
             if (!App.S.ControlOtherPips) { lastRect.Clear(); moved.Clear(); appControlled.Clear(); return; }
             bool mouseDown = (Native.GetAsyncKeyState(0x01) & 0x8000) != 0;
             var now = FindAll();
-            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); }
+            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); maximized.Remove(gone); theaterRestore.Remove(gone); }
             foreach (var h in now)
             {
                 if (theaterRestore.ContainsKey(h)) continue;              // theater: leave it centered
@@ -751,10 +753,64 @@ namespace PipStudio
             catch { if (bmp != null) bmp.Dispose(); return null; }
         }
 
+        // ------------------------------------------------------------ maximize and minimize (the hover title bar's buttons)
+        static readonly HashSet<IntPtr> maximized = new HashSet<IntPtr>();
+        static readonly List<IntPtr> minimized = new List<IntPtr>();
+
+        public static bool IsMaximized(IntPtr h) { return maximized.Contains(h); }
+
+        /// <summary>As big as the display allows while keeping its shape, centered; again puts it back. Shares theater mode's
+        /// way back, so either button returns it to where it was.</summary>
+        static void Maximize(IntPtr h)
+        {
+            Rectangle back;
+            if (maximized.Contains(h) && theaterRestore.TryGetValue(h, out back))
+            {
+                theaterRestore.Remove(h); maximized.Remove(h);
+                Place(h, back);
+                return;
+            }
+            var b = Bounds(h); var wa = Work(h);
+            if (!theaterRestore.ContainsKey(h)) theaterRestore[h] = b;   // from theater mode: still go back to the spot before it
+            maximized.Add(h);
+            double aspect = b.Height > 0 ? b.Width / (double)b.Height : 16.0 / 9;
+            int w = wa.Width, hgt = (int)Math.Round(w / aspect);
+            if (hgt > wa.Height) { hgt = wa.Height; w = (int)Math.Round(hgt * aspect); }
+            Place(h, new Rectangle(wa.Left + (wa.Width - w) / 2, wa.Top + (wa.Height - hgt) / 2, w, hgt));
+        }
+
+        /// <summary>Minimizes it without taking focus. Some PiPs have no taskbar button, so the tray menu lists them to bring back.</summary>
+        static void Minimize(IntPtr h)
+        {
+            Rectangle back;
+            if (theaterRestore.TryGetValue(h, out back))                // maximized or theater: put it back first, so it comes back normal
+            {
+                theaterRestore.Remove(h); maximized.Remove(h);
+                Place(h, back);
+            }
+            if (!minimized.Contains(h)) minimized.Add(h);
+            Native.ShowWindow(h, 7);                                     // SW_SHOWMINNOACTIVE
+        }
+
+        /// <summary>Other apps' PiPs PiP Studio minimized that are still minimized.</summary>
+        public static List<IntPtr> Minimized()
+        {
+            minimized.RemoveAll(h => !Native.IsWindow(h) || !Native.IsIconic(h));
+            return new List<IntPtr>(minimized);
+        }
+
+        public static void RestoreMinimized(IntPtr h)
+        {
+            minimized.Remove(h);
+            if (!Native.IsWindow(h)) return;
+            Native.ShowWindow(h, 4);                                     // SW_SHOWNOACTIVATE: back where it was, no focus change
+            Pin(h);
+        }
+
         static void Theater(IntPtr h)
         {
             Rectangle back;
-            if (theaterRestore.TryGetValue(h, out back)) { theaterRestore.Remove(h); Place(h, back); return; }
+            if (theaterRestore.TryGetValue(h, out back)) { theaterRestore.Remove(h); maximized.Remove(h); Place(h, back); return; }
             var b = Bounds(h); var wa = Work(h);
             theaterRestore[h] = b;
             double aspect = b.Height > 0 ? b.Width / (double)b.Height : 16.0 / 9;
@@ -916,7 +972,7 @@ namespace PipStudio
 
     /// <summary>
     /// PiP Studio's title bar over another app's PiP while you point at it: the app's name and the title bar buttons you picked
-    /// in Settings (the ones that make sense for a window PiP Studio doesn't own), plus mute. Drag the bar to move the PiP,
+    /// in Settings (the ones that make sense for a window PiP Studio doesn't own), plus mute, minimize and maximize. Drag the bar to move the PiP,
     /// scroll on it to change the volume. Only the bar takes clicks; everything under it stays the app's own.
     /// PiP Studio can't see the mouse inside another app's window, so it watches the pointer's position instead.
     /// </summary>
@@ -1042,6 +1098,12 @@ namespace PipStudio
                 HBtn b = Make(k);
                 if (b != null) defs.Add(b);
             }
+            // minimize and maximize, next to Close like on any window
+            int ci = defs.FindIndex(b => b.Key == "close");
+            if (ci < 0) ci = defs.Count;
+            bool max = ExternalPip.IsMaximized(target);
+            defs.Insert(ci, new HBtn { Key = "maximize", Glyph = max ? "\uE923" : "\uE922", Tip = max ? "Restore" : "Maximize" });
+            defs.Insert(ci, new HBtn { Key = "minimize", Glyph = "\uE921", Tip = "Minimize" });
             bool? muted = Audio.GetMute(U.ProcessName(target));
             defs.Insert(0, new HBtn { Key = "mute", Glyph = muted == true ? "" : "", Tip = "Mute — scroll to change volume", On = muted == true });
 
@@ -1067,15 +1129,15 @@ namespace PipStudio
             string app = ExternalPip.AppName(target);
             switch (key)
             {
-                case "prev": return new HBtn { Key = "prevsrc", Glyph = TitleBarItems.Glyph(key), Tip = "Previous window" };
-                case "next": return new HBtn { Key = "nextsrc", Glyph = TitleBarItems.Glyph(key), Tip = "Next window" };
+                case "shrink": return new HBtn { Key = "shrink", Glyph = TitleBarItems.Glyph(key), Tip = "Make PiP smaller" };
+                case "grow": return new HBtn { Key = "grow", Glyph = TitleBarItems.Glyph(key), Tip = "Make PiP bigger" };
                 case "theater": return new HBtn { Key = "theater", Glyph = "", Tip = "Theater mode" };
                 case "corner": return new HBtn { Key = "corner", Glyph = TitleBarItems.Glyph(key), Tip = "Next corner" };
                 case "display": return Screen.AllScreens.Length < 2 ? null : new HBtn { Key = "nextmon", Glyph = TitleBarItems.Glyph(key), Tip = "Move to next display" };
                 case "source": return new HBtn { Key = "swap", Glyph = TitleBarItems.Glyph(key), Tip = "Show " + app };
                 case "more": return new HBtn { Key = "more", Glyph = TitleBarItems.Glyph(key), Tip = "Options in PiP Studio" };
                 case "close": return new HBtn { Key = "close", Glyph = TitleBarItems.Glyph(key), Tip = "Close" };
-                default: return null;   // change source, crop and ghost mode only work on PiP Studio's own PiPs
+                default: return null;   // switching windows, change source, crop and ghost mode are for PiP Studio's own PiPs
             }
         }
 

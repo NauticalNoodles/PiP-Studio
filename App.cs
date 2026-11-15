@@ -1137,6 +1137,11 @@ namespace PipStudio
             open.Font = new Font(SystemFonts.MenuFont, FontStyle.Bold);
             items.Add(open);
             if (Updater.CanInstall) items.Add(Menus.Item("Update to version " + Updater.Latest.ToString(3) + "…", () => ShowMain("settings")));
+            foreach (var mh in ExternalPip.Minimized())                  // other apps' PiPs minimized from their title bar (some have no taskbar button)
+            {
+                var h = mh;
+                items.Add(Menus.Item(("Restore " + ExternalPip.AppName(h) + "'s PiP").Replace("&", "&&"), () => ExternalPip.RestoreMinimized(h)));
+            }
             items.Add(new ToolStripSeparator());
             items.Add(Menus.Item("Choose a window…", () => ShowPicker(null), "HK_NewPip"));
             items.Add(Menus.Item("Click a window on screen…", () => PickOnScreen(null)));

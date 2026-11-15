@@ -546,6 +546,11 @@ namespace PipStudio
                 s.DefaultSize = U.Clamp(s.DefaultSize + 1, 0, 7);           // Extra small was added in front
                 s.SettingsVersion = 5;
             }
+            if (s.SettingsVersion < 6)
+            {
+                s.TitleBarButtons = TitleBarItems.WithSizeButtons(s.TitleBarButtons);   // size buttons on every title bar
+                s.SettingsVersion = 6;
+            }
             return s;
         }
 
@@ -891,10 +896,20 @@ namespace PipStudio
     /// so the full menu is never out of reach.</summary>
     static class TitleBarItems
     {
-        public static readonly string[] Keys = { "prev", "next", "change", "theater", "crop", "corner", "display", "source", "ghost", "more", "close" };
-        public static readonly string[] Labels = { "Previous window", "Next window", "Change source…", "Theater mode", "Crop", "Next corner", "Next display", "Bring source to front", "Click-through (ghost mode)", "More options", "Close" };
-        public static readonly string[] Glyphs = { "\uE892", "\uE893", "\uE8AB", "\uE740", "\uE7A8", "\uE8B3", "\uE7F4", "\uE8A7", "\uED1A", "\uE712", "\uE8BB" };
-        public const string Default = "prev,next,theater,crop,source,ghost,more,close";
+        public static readonly string[] Keys = { "prev", "next", "change", "theater", "shrink", "grow", "crop", "corner", "display", "source", "ghost", "more", "close" };
+        public static readonly string[] Labels = { "Previous window", "Next window", "Change source…", "Theater mode", "Make PiP smaller", "Make PiP bigger", "Crop", "Next corner", "Next display", "Bring source to front", "Click-through (ghost mode)", "More options", "Close" };
+        public static readonly string[] Glyphs = { "\uE892", "\uE893", "\uE8AB", "\uE740", "\uE71F", "\uE8A3", "\uE7A8", "\uE8B3", "\uE7F4", "\uE8A7", "\uED1A", "\uE712", "\uE8BB" };
+        public const string Default = "prev,next,theater,crop,source,ghost,shrink,grow,more,close";
+
+        /// <summary>Adds Make smaller and Make bigger to a saved title bar that doesn't have them yet, just before More options.</summary>
+        public static string WithSizeButtons(string setting)
+        {
+            var l = On(setting);
+            if (l.Contains("shrink") || l.Contains("grow")) return string.Join(",", l);
+            int at = l.IndexOf(Required);
+            l.InsertRange(at < 0 ? l.Count : at, new[] { "shrink", "grow" });
+            return string.Join(",", l);
+        }
         public const string Required = "more";
 
         /// <summary>The buttons that are on, left to right (unknown names dropped, More options always included).</summary>

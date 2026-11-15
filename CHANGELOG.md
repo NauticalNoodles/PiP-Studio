@@ -6,7 +6,9 @@ Other apps' PiPs get the PiP Studio treatment when you point at them.
 
 - Hover over the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar pops up on top of it
 - Drag the bar to move the PiP (it snaps into place when you let go), or scroll on it to change the volume
-- It has the same buttons you picked for your own PiPs' title bar: show the app, theater mode, next corner, next display, close and more, plus a mute button
+- It has minimize, maximize and mute buttons, plus the buttons you picked for your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, next display and close
+- Minimized one that has no taskbar button? Bring it back from PiP Studio's tray menu
+- Every title bar now has buttons to make the PiP bigger or smaller (you can turn them off in Settings > Appearance > Title bar buttons)
 - Don't want it? Turn off "Show controls on other apps' PiPs" in Settings > Behavior
 
 ## 1.0.2

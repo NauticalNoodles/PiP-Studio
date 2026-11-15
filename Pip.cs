@@ -2070,6 +2070,8 @@ namespace PipStudio
                 case "next": b = new OBtn(TitleBarItems.Glyph(key), "Next window", () => pip.CycleSource(1)); break;
                 case "change": b = new OBtn(TitleBarItems.Glyph(key), "Change source…", () => App.I.ShowPicker(pip)); break;
                 case "theater": b = new OBtn(pip.InTheater ? "\uE73F" : "\uE740", pip.InTheater ? "Exit theater mode" : "Theater mode", pip.ToggleTheater); break;
+                case "shrink": b = new OBtn(TitleBarItems.Glyph(key), "Make PiP smaller", () => pip.StepSize(-1)); break;
+                case "grow": b = new OBtn(TitleBarItems.Glyph(key), "Make PiP bigger", () => pip.StepSize(1)); break;
                 case "crop": b = new OBtn(TitleBarItems.Glyph(key), "Crop", pip.StartCrop); break;
                 case "corner": b = new OBtn(TitleBarItems.Glyph(key), "Next corner", pip.CycleCorner); break;
                 case "display": if (Screen.AllScreens.Length < 2) return null; b = new OBtn(TitleBarItems.Glyph(key), "Move to next display", pip.NextMonitor); break;
