@@ -573,7 +573,7 @@ namespace PipStudio
                 { "Always shown, so the full menu is never out of reach", "تظهر دائمًا، لتبقى القائمة الكاملة في متناولك" },
                 { "Reset title bar buttons", "إعادة تعيين أزرار شريط العنوان" },
                 { "Back to the default buttons and order", "العودة إلى الأزرار والترتيب الافتراضي" },
-                { "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", "الأزرار التي يُظهرها شريط عنوان النافذة العائمة عند الإشارة إليها، بالترتيب الذي تختاره. يبدّل زرا النافذة السابقة والتالية ما تعرضه النافذة العائمة. يبقى زر «خيارات أخرى» دائمًا لتبقى القائمة الكاملة في متناولك. في النافذة الضيقة، تُخلي الأزرار اليسرى المكان أولًا." },
+                { "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", "الأزرار التي يُظهرها شريط عنوان النافذة العائمة عند الإشارة إليها، بالترتيب الذي تختاره. يبدّل زرا النافذة السابقة والتالية ما تعرضه النافذة العائمة، وينتقل زرا التكبير والتصغير بين الأحجام. يبقى زر «خيارات أخرى» دائمًا لتبقى القائمة الكاملة في متناولك. في النافذة الضيقة، تُخلي الأزرار اليسرى المكان أولًا." },
                 { "Treat as a PiP", "اعتبرها نافذة عائمة" },
                 { "Not a PiP", "ليست نافذة عائمة" },
                 { "Find other apps' PiPs automatically", "اكتشاف النوافذ العائمة للتطبيقات الأخرى تلقائيًا" },
@@ -631,6 +631,7 @@ namespace PipStudio
                 { "Maximize", "تكبير إلى ملء الشاشة" },
                 { "Restore", "استعادة" },
                 { "Restore {0}'s PiP", "استعادة النافذة العائمة لـ {0}" },
+                { "PiP Studio's title bar appears", "يظهر شريط عنوان PiP Studio" },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1201,7 +1202,7 @@ namespace PipStudio
                 { "Always shown, so the full menu is never out of reach", "始终显示，确保随时可以打开完整菜单" },
                 { "Reset title bar buttons", "重置标题栏按钮" },
                 { "Back to the default buttons and order", "恢复默认按钮和顺序" },
-                { "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", "指针指向画中画时标题栏显示的按钮，按你设定的顺序排列。“上一个窗口”和“下一个窗口”可切换画中画显示的内容。“更多选项”始终保留，确保随时可以打开完整菜单。画中画较窄时，左侧的按钮会先让出空间。" },
+                { "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", "指针指向画中画时标题栏显示的按钮，按你设定的顺序排列。“上一个窗口”和“下一个窗口”可切换画中画显示的内容，“放大”和“缩小”可逐级调整大小。“更多选项”始终保留，确保随时可以打开完整菜单。画中画较窄时，左侧的按钮会先让出空间。" },
                 { "Treat as a PiP", "视为画中画" },
                 { "Not a PiP", "不是画中画" },
                 { "Find other apps' PiPs automatically", "自动查找其他应用的画中画" },
@@ -1259,6 +1260,7 @@ namespace PipStudio
                 { "Maximize", "最大化" },
                 { "Restore", "还原" },
                 { "Restore {0}'s PiP", "还原 {0} 的画中画" },
+                { "PiP Studio's title bar appears", "显示 PiP Studio 的标题栏" },
             };
         }
     }

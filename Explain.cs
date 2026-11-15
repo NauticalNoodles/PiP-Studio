@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -111,7 +112,7 @@ namespace PipStudio
                 "Border", "Border color", "Match accent color", "Width");
             EAdd("detectpips", "Find other apps' PiPs", "Besides browser PiPs and Discord pop-outs, PiP Studio treats small always-on-top windows of other apps as their PiPs: video players' mini modes, Chrome's document PiPs (Spotify, YouTube Music, Meet), Telegram and Zoom floating videos and so on. If it picks up something that isn't one, select it on the Running PiPs page and choose Not a PiP. To add a window it missed, select it on the Windows page and choose Treat as a PiP. For browsers and Discord the mark lasts until that window closes; for other apps it's remembered.", null,
                 "Find other apps' PiPs automatically", "Windows you marked");
-            EAdd("titlebar", "Title bar buttons", "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", ScTitleBar,
+            EAdd("titlebar", "Title bar buttons", "The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.", ScTitleBar,
                 "Title bar buttons", "Reset title bar buttons");
             EAdd("messages", "Messages under the PiP", "When you switch sources or change a mode, the message shows in a small caption below the PiP instead of over the picture. Volume changes show a level bar there too.", ScMessages,
                 "Messages under the PiP");
@@ -135,7 +136,7 @@ namespace PipStudio
                 "Allow more than one PiP at a time");
             EAdd("external", "Other apps' PiPs", "When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture windows of Chrome, Edge, Firefox, Discord and other apps. They also land on the same spots as your PiPs, when they open and when you let go after dragging them.", ScExternal,
                 "Control other apps' PiP windows", "Snap other apps' PiPs to spots");
-            EAdd("exthover", "Controls on other apps' PiPs", "Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize or maximize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.", null,
+            EAdd("exthover", "Controls on other apps' PiPs", "Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize or maximize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.", ScExtHover,
                 "Show controls on other apps' PiPs");
             EAdd("controller", "Controller controls", "Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.", ScController,
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
@@ -401,15 +402,69 @@ namespace PipStudio
             EPut(c, pip, x, y);
             var bar = new Grid { Width = w, Height = 20, Background = new SolidColorBrush(Color.FromArgb(215, 22, 22, 26)), Opacity = 0 };
             var sp = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 0, 3, 0) };
-            foreach (var k in TitleBarItems.On(App.S.TitleBarButtons))
+            foreach (var glyph in EFitBar(TitleBarItems.On(App.S.TitleBarButtons).Select(TitleBarItems.Glyph).ToList(), w, 17))
                 sp.Children.Add(new TextBlock
                 {
-                    Text = TitleBarItems.Glyph(k), FontFamily = Fluent.IconFont, FontSize = 9, Foreground = Brushes.White,
+                    Text = glyph, FontFamily = Fluent.IconFont, FontSize = 9, Foreground = Brushes.White,
                     Width = 17, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center
                 });
             bar.Children.Add(sp);
             EPut(c, bar, x, y);
             EK(sb, bar, UIElement.OpacityProperty, 0, 0, 0.7, 0, 1.0, 1, 3.6, 1);
+        }
+
+        /// <summary>Like the real title bars: when the buttons don't fit, the ones on the left make room first, but the last two
+        /// (More options and Close, or Maximize and Close) stay.</summary>
+        static List<string> EFitBar(List<string> glyphs, double barWidth, double each)
+        {
+            int max = Math.Max(2, (int)((barWidth - 30) / each));
+            var l = new List<string>(glyphs);
+            while (l.Count > max) l.RemoveAt(0);
+            return l;
+        }
+
+        /// <summary>The pointer reaches another app's PiP and PiP Studio's title bar fades in over its top edge, with the
+        /// buttons it would really have there: mute, your title bar buttons that work on other apps' PiPs, minimize, maximize.</summary>
+        static void ScExtHover(Canvas c, Storyboard sb)
+        {
+            const double w = 150, h = 86;
+            var p = ESpot(2, 2, w, h);
+            var g = new Grid { Width = w, Height = h };
+            g.Children.Add(new Rectangle { Fill = EB("Accent") });
+            g.Children.Add(new Rectangle { Height = 11, Fill = EHex("#202124"), VerticalAlignment = VerticalAlignment.Top });   // the app's own top strip
+            var appIcon = EBadge(8); appIcon.HorizontalAlignment = HorizontalAlignment.Left; appIcon.VerticalAlignment = VerticalAlignment.Top; appIcon.Margin = new Thickness(3, 1.5, 0, 0);
+            g.Children.Add(appIcon);
+            g.Children.Add(new Path { Data = Geometry.Parse("M0,0 L11,6.5 L0,13 Z"), Fill = Brushes.White, Opacity = 0.9, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center });
+            EPut(c, g, p.X, p.Y);
+
+            // the same buttons ExtHover builds
+            var keep = new HashSet<string> { "theater", "shrink", "grow", "corner", "display", "source", "more", "close" };
+            var glyphs = new List<string> { "\uE767" };                                         // mute
+            foreach (var k in TitleBarItems.On(App.S.TitleBarButtons))
+                if (keep.Contains(k) && (k != "display" || System.Windows.Forms.Screen.AllScreens.Length > 1)) glyphs.Add(TitleBarItems.Glyph(k));
+            int ci = glyphs.IndexOf(TitleBarItems.Glyph("close"));
+            if (ci < 0) ci = glyphs.Count;
+            glyphs.InsertRange(ci, new[] { "\uE921", "\uE922" });                              // minimize, maximize
+
+            var bar = new Grid { Width = w, Height = 17, Opacity = 0 };
+            bar.Children.Add(new Rectangle { Fill = EHex("#F0141418") });
+            var name = new TextBlock { Text = "Browser", Foreground = Brushes.White, FontSize = 8, Margin = new Thickness(5, 0, 0, 0), VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Left };
+            bar.Children.Add(name);
+            var sp = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 0, 2, 0) };
+            foreach (var glyph in EFitBar(glyphs, w, 12))
+                sp.Children.Add(new TextBlock { Text = glyph, FontFamily = Fluent.IconFont, FontSize = 7.5, Foreground = Brushes.White, Width = 12, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center });
+            bar.Children.Add(sp);
+            EPut(c, bar, p.X, p.Y);
+
+            var cur = ECursor(); EPut(c, cur, 40, 40);
+            double cx = p.X + w / 2, cy = p.Y + h / 2 + 6;
+            EK(sb, cur, Canvas.LeftProperty, 0, 40, 0.5, 40, 1.3, cx, 3.0, cx, 3.7, 40, 4.2, 40);
+            EK(sb, cur, Canvas.TopProperty, 0, 40, 0.5, 40, 1.3, cy, 3.0, cy, 3.7, 40, 4.2, 40);
+            EK(sb, bar, UIElement.OpacityProperty, 0, 0, 1.2, 0, 1.45, 1, 3.1, 1, 3.4, 0);
+            if (!App.S.HoverOtherPips || !App.S.ControlOtherPips) bar.Visibility = Visibility.Collapsed;   // off: pointing at it does nothing
+            var tag = new TextBlock { Foreground = Brushes.White, FontSize = 10, FontWeight = FontWeights.SemiBold, Opacity = 0.8,
+                Text = App.S.HoverOtherPips && App.S.ControlOtherPips ? "PiP Studio's title bar appears" : "Nothing happens" };
+            EPut(c, ETag(tag), 6, 6);
         }
 
         /// <summary>The eight sizes, smallest to largest, yours highlighted.</summary>

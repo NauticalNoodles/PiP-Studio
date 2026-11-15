@@ -562,7 +562,7 @@ Pick the buttons on a PiP's title bar and their order	اختر أزرار شري
 Always shown, so the full menu is never out of reach	تظهر دائمًا، لتبقى القائمة الكاملة في متناولك	始终显示，确保随时可以打开完整菜单
 Reset title bar buttons	إعادة تعيين أزرار شريط العنوان	重置标题栏按钮
 Back to the default buttons and order	العودة إلى الأزرار والترتيب الافتراضي	恢复默认按钮和顺序
-The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.	الأزرار التي يُظهرها شريط عنوان النافذة العائمة عند الإشارة إليها، بالترتيب الذي تختاره. يبدّل زرا النافذة السابقة والتالية ما تعرضه النافذة العائمة. يبقى زر «خيارات أخرى» دائمًا لتبقى القائمة الكاملة في متناولك. في النافذة الضيقة، تُخلي الأزرار اليسرى المكان أولًا.	指针指向画中画时标题栏显示的按钮，按你设定的顺序排列。“上一个窗口”和“下一个窗口”可切换画中画显示的内容。“更多选项”始终保留，确保随时可以打开完整菜单。画中画较窄时，左侧的按钮会先让出空间。
+The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.	الأزرار التي يُظهرها شريط عنوان النافذة العائمة عند الإشارة إليها، بالترتيب الذي تختاره. يبدّل زرا النافذة السابقة والتالية ما تعرضه النافذة العائمة، وينتقل زرا التكبير والتصغير بين الأحجام. يبقى زر «خيارات أخرى» دائمًا لتبقى القائمة الكاملة في متناولك. في النافذة الضيقة، تُخلي الأزرار اليسرى المكان أولًا.	指针指向画中画时标题栏显示的按钮，按你设定的顺序排列。“上一个窗口”和“下一个窗口”可切换画中画显示的内容，“放大”和“缩小”可逐级调整大小。“更多选项”始终保留，确保随时可以打开完整菜单。画中画较窄时，左侧的按钮会先让出空间。
 Treat as a PiP	اعتبرها نافذة عائمة	视为画中画
 Not a PiP	ليست نافذة عائمة	不是画中画
 Find other apps' PiPs automatically	اكتشاف النوافذ العائمة للتطبيقات الأخرى تلقائيًا	自动查找其他应用的画中画
@@ -620,3 +620,4 @@ Minimize	تصغير إلى شريط المهام	最小化
 Maximize	تكبير إلى ملء الشاشة	最大化
 Restore	استعادة	还原
 Restore {0}'s PiP	استعادة النافذة العائمة لـ {0}	还原 {0} 的画中画
+PiP Studio's title bar appears	يظهر شريط عنوان PiP Studio	显示 PiP Studio 的标题栏
