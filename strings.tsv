@@ -590,3 +590,23 @@ No black bars found	لم يُعثر على أشرطة سوداء	未发现黑边
 Black bars removed	أُزيلت الأشرطة السوداء	已去除黑边
 Removing black bars	جارٍ إزالة الأشرطة السوداء	正在去除黑边
 Black bars left alone	تُركت الأشرطة السوداء كما هي	保留黑边
+Updates	التحديثات	更新
+What's new	ما الجديد	新功能
+Check now	تحقّق الآن	立即检查
+Update now	حدّث الآن	立即更新
+Check for updates automatically	التحقّق من التحديثات تلقائيًا	自动检查更新
+Once a day, on GitHub. Nothing about you or your PC is sent.	مرة يوميًا عبر GitHub. لا يُرسَل أي شيء عنك أو عن جهازك.	每天一次，通过 GitHub。不会发送任何关于你或你电脑的信息。
+Checking for updates…	جارٍ التحقّق من التحديثات…	正在检查更新…
+You're up to date (version {0})	لديك أحدث إصدار ({0})	已是最新版本（{0}）
+Version {0} is available	الإصدار {0} متاح	版本 {0} 可用
+Downloading the update… {0}%	جارٍ تنزيل التحديث… {0}%	正在下载更新… {0}%
+Installing the update…	جارٍ تثبيت التحديث…	正在安装更新…
+You have version {0}	لديك الإصدار {0}	当前版本 {0}
+The update didn't work	لم ينجح التحديث	更新未成功
+Update available	يتوفّر تحديث	有可用更新
+PiP Studio {0} is out. Click to update.	صدر PiP Studio {0}. انقر للتحديث.	PiP Studio {0} 已发布。点击更新。
+PiP Studio was updated	تم تحديث PiP Studio	PiP Studio 已更新
+You're now on version {0}.	أنت الآن على الإصدار {0}.	你现在使用的是版本 {0}。
+Update to version {0}…	التحديث إلى الإصدار {0}…	更新到版本 {0}…
+Couldn't reach GitHub. Check your internet connection and try again.	تعذّر الوصول إلى GitHub. تحقّق من اتصالك بالإنترنت وحاول مرة أخرى.	无法连接到 GitHub。请检查网络连接后重试。
+The download was damaged (its fingerprint doesn't match). Please try again.	التنزيل تالف (البصمة غير مطابقة). يُرجى المحاولة مرة أخرى.	下载的文件已损坏（校验值不匹配）。请重试。

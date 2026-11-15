@@ -360,8 +360,10 @@ namespace PipStudio
                 S.Save();
                 Balloon("PiP Studio is running", "Press " + HK.Display("HK_NewPip") + " any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.", true);
             }
-            if (!silent && !restored) RunSoon(() => ShowMain(null), 50);
+            bool updated = args.Any(a => a.Equals("--updated", StringComparison.OrdinalIgnoreCase));   // restarted by Updater.Install
+            if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
+            Updater.Start(updated);
         }
 
         static void Safe(Action a) { try { a(); } catch (Exception ex) { ReportError(ex); } }
@@ -1134,6 +1136,7 @@ namespace PipStudio
             var open = Menus.Item("Open PiP Studio", () => ShowMain(null), "HK_ShowApp");
             open.Font = new Font(SystemFonts.MenuFont, FontStyle.Bold);
             items.Add(open);
+            if (Updater.CanInstall) items.Add(Menus.Item("Update to version " + Updater.Latest.ToString(3) + "…", () => ShowMain("settings")));
             items.Add(new ToolStripSeparator());
             items.Add(Menus.Item("Choose a window…", () => ShowPicker(null), "HK_NewPip"));
             items.Add(Menus.Item("Click a window on screen…", () => PickOnScreen(null)));

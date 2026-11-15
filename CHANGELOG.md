@@ -1,5 +1,14 @@
 # PiP Studio changelog
 
+## 1.0.2
+
+PiP Studio can now update itself! No more downloading new versions by hand.
+
+- It checks for a new version once a day and lets you know when one is out
+- Click **Update now** in Settings > General > Updates, and it downloads the update and restarts on the new version, with your PiPs right where they were
+- Don't want it to check? Turn off "Check for updates automatically" in the same place
+- The Microsoft Store version keeps getting its updates from the Store
+
 ## 1.0.1
 
 Getting ready for the Microsoft Store. If you use the installer or the portable version, nothing changes for you.

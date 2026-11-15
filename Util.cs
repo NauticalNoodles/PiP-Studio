@@ -478,6 +478,10 @@ namespace PipStudio
         public bool BorderUseAccent = false;      // border follows the accent color
         public Color BorderColor = Color.Black;
         public bool OsdBelow = true;              // show messages (new source, mode changes) in a caption under the PiP, not over the picture
+        // Updates (installer and portable versions; see Updater.cs)
+        public bool CheckForUpdates = true;       // look for a new version on GitHub once a day
+        public string LastUpdateCheck = "";       // UTC ticks of the last successful check
+        public string UpdateNotified = "";        // the version the "Update available" notification was shown for
         public Color AccentColor = Color.FromArgb(76, 141, 255);
         public Color BackgroundColor = Color.Black;
 

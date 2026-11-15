@@ -119,11 +119,13 @@ namespace PipStudio
         static string captureKb;
         static Button captureKbBtn;
         static Action refreshBindings;
+        static Action refreshUpdates;   // the Updates card on the settings page, while the window is open
 
         public static void Init()
         {
             App.OpenMain = Open;
             App.CloseMain = () => { if (w != null && !exiting) { exiting = true; w.Close(); } };
+            Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
         }
 
         // ----------------------------------------------------------------------------- XAML
@@ -796,7 +798,7 @@ namespace PipStudio
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
-            fixAlways = null; fixNow = null; refreshBindings = null;
+            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null;
             pages.Clear(); searchIndex.Clear(); iconCache.Clear(); winSig = runSig = "";
             if (!exiting && App.S.MinimizeMemory) App.RunSoon(U.Trim, 1500);
         }
@@ -2416,6 +2418,32 @@ namespace PipStudio
             return b;
         }
 
+        /// <summary>Settings > General > Updates: where things stand, Check now / Update now / What's new, and the daily check.</summary>
+        static void BuildUpdateSettings(StackPanel ge, Settings S)
+        {
+            Section(ge, "Updates");
+            var buttons = new StackPanel { Orientation = Orientation.Horizontal };
+            var whatsNew = PlainButton("What's new", Updater.OpenReleasePage);
+            var check = PlainButton("Check now", () => Updater.Check(true));
+            var install = PlainButton("Update now", Updater.Install, true);
+            whatsNew.Margin = new Thickness(0, 0, 8, 0);
+            check.Margin = new Thickness(0, 0, 8, 0);
+            buttons.Children.Add(whatsNew); buttons.Children.Add(check); buttons.Children.Add(install);
+            var card = Card(ge, "", "Updates", Updater.Status, buttons, "update upgrade new version download latest");
+            Card(ge, "", "Check for updates automatically", "Once a day, on GitHub. Nothing about you or your PC is sent.", Switch(() => S.CheckForUpdates, v => S.CheckForUpdates = v), "update automatic check github");
+
+            refreshUpdates = () =>
+            {
+                if (card.Desc != null) card.Desc.Text = Updater.Status;
+                bool busy = Updater.Busy;
+                install.Visibility = Updater.CanInstall ? Visibility.Visible : Visibility.Collapsed;
+                check.Visibility = Updater.CanInstall ? Visibility.Collapsed : Visibility.Visible;
+                whatsNew.Visibility = Updater.Latest != null ? Visibility.Visible : Visibility.Collapsed;
+                check.IsEnabled = install.IsEnabled = !busy;
+            };
+            refreshUpdates();
+        }
+
         // ----------------------------------------------------------------------------- the settings pages
         static void BuildSettingsPages()
         {
@@ -2622,8 +2650,9 @@ namespace PipStudio
                 if (App.IsElevated) Card(ge, "", "Running as administrator", "PiP Studio can show windows of apps that run as administrator", null, "admin elevated uac");
                 else Card(ge, "", "Restart as administrator", "Needed only to show windows of apps that run as administrator", PlainButton("Restart", App.I.RestartElevated), "admin elevated uac");
             }
+            if (Updater.Supported) BuildUpdateSettings(ge, S);   // the Store version gets its updates from the Store
             Section(ge, "About");
-            var about = MakeExpander(ge, "", "PiP Studio", "Version 1.0.1", PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
+            var about = MakeExpander(ge, "", "PiP Studio", "Version " + Updater.CurrentText, PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
             Row(about, "Settings folder", Packaged.RealPath(Settings.Dir), PlainButton("Open", () => { try { Directory.CreateDirectory(Settings.Dir); Process.Start("explorer.exe", "\"" + Packaged.RealPath(Settings.Dir) + "\""); } catch { } }), "folder files log");
             Row(about, "Picture-in-picture for any window or part of the screen", "Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.", null, "about");
 

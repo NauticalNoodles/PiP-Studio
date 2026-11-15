@@ -22,7 +22,7 @@ Get the latest version from the **[Releases](../../releases/latest)** page:
 - **`PiPStudio-Setup-<version>.exe`** – the installer. It installs for your account only (no admin needed), adds a Start menu shortcut and can start PiP Studio when you sign in. Settings > Apps uninstalls it.
 - **`PiPStudio-<version>-win-x64-portable.zip`** – the same app as a single exe that runs without installing.
 
-Neither needs .NET installed.
+Neither needs .NET installed. Both keep themselves up to date: PiP Studio checks for a new version once a day and updates when you click **Update now** in Settings > General > Updates.
 
 **"Windows protected your PC"?** PiP Studio isn't code-signed yet, so Windows SmartScreen warns about it the first few times. Choose **More info > Run anyway**. You can always build it yourself from this source code instead (see below).
 

@@ -7,6 +7,7 @@
 # Each release gets:
 #   PiPStudio-Setup-<version>.exe            installer (per user, no admin, includes .NET)
 #   PiPStudio-<version>-win-x64-portable.zip  the same app as a single exe, no install needed
+#   SHA256SUMS.txt                            fingerprints of both, which the app's updater checks
 # and the matching section of CHANGELOG.md as its notes.
 
 name: Release
@@ -70,6 +71,16 @@ jobs:
           & $iscc "/DAppVersion=$v" "/DSourceDir=..\publish-release" "/DOutputDir=..\out" installer\PiPStudio.iss
           if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed" }
 
+      # Fingerprints of the downloads. PiP Studio's updater (Updater.cs) won't install a download that doesn't match.
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $v = "${{ steps.ver.outputs.version }}"
+          $files = @("PiPStudio-Setup-$v.exe", "PiPStudio-$v-win-x64-portable.zip")
+          $lines = foreach ($f in $files) { "$((Get-FileHash "out\$f" -Algorithm SHA256).Hash.ToLower())  $f" }
+          [IO.File]::WriteAllText("out\SHA256SUMS.txt", (($lines -join "`n") + "`n"))
+          Get-Content out\SHA256SUMS.txt
+
       # Microsoft Store package. Runs once you've set the repository variables MSIX_IDENTITY_NAME, MSIX_PUBLISHER and
       # MSIX_PUBLISHER_DISPLAY_NAME (Settings > Secrets and variables > Actions > Variables) to the values Partner Center
       # shows under your app > Product management > Product identity. Not attached to the release (it's unsigned until
@@ -124,6 +135,7 @@ jobs:
           files: |
             out/PiPStudio-Setup-${{ steps.ver.outputs.version }}.exe
             out/PiPStudio-${{ steps.ver.outputs.version }}-win-x64-portable.zip
+            out/SHA256SUMS.txt
 
       - name: Keep the files (manual runs)
         if: github.event_name == 'workflow_dispatch'
