@@ -441,6 +441,7 @@ namespace PipStudio
         public string NotPipApps = "";               // "process|class;..." you marked as not PiPs
         public string Language = "";                 // "" follows Windows; en, ar, zh          // animated explanations next to settings
         public bool ControlOtherPips = true;
+        public bool HoverOtherPips = true;        // PiP Studio's title bar over other apps' PiPs while you point at them (ExtHover)
         public bool SnapOtherPips = true;         // other apps' PiPs snap to PiP Studio's spots when they appear and when you let go of them      // steer Chrome/Firefox/FreeTube's own PiP windows when no PiP Studio PiP is open
         public string GpuPrefsAdded = "";         // left over from the removed GPU option: exe paths to clean up once             // for slower PCs: no animations, Mica, shadows or live previews
         public int HoverAction = 0;                 // 0 controls, 1 fade, 2 nothing, 3 move out of the way (dodge)

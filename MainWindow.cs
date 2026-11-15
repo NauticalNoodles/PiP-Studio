@@ -2499,6 +2499,8 @@ namespace PipStudio
             var marksBtn = new Button { Content = "Reset", Padding = new Thickness(14, 4, 14, 4) };
             marksBtn.Click += (o, e) => { ExternalPip.ClearMarks(); runSig = ""; winSig = ""; };
             Card(be, "\uE894", "Windows you marked", "Forget every Treat as a PiP and Not a PiP you chose", marksBtn, "mark treat not pip reset forget list");
+            Card(be, "\uE7C9", "Show controls on other apps' PiPs", "Point at another app's PiP to get PiP Studio's title bar over it: drag it to move the PiP, scroll on it to change the volume, and use the title bar buttons you picked.",
+                Switch(() => S.HoverOtherPips, v => S.HoverOtherPips = v), "hover controls title bar buttons point mouse chrome firefox discord external other");
             Card(be, "\uE8B0", "Snap other apps' PiPs to spots", "Other apps' PiP windows land on the same corners and edge spots as PiP Studio's PiPs, when they open and when you let go of them after dragging.",
                 Switch(() => S.SnapOtherPips, v => S.SnapOtherPips = v), "snap corners spots chrome firefox discord external other");
             Card(be, "\uE737", "Allow more than one PiP at a time", "When off, opening a new PiP switches the one that's already open",

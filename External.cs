@@ -310,6 +310,38 @@ namespace PipStudio
         {
             watch.Tick += (o, e) => { try { WatchTick(); } catch { } };
             watch.Start();
+            hoverTimer.Tick += (o, e) => { try { HoverTick(); } catch (Exception ex) { App.ReportError(ex); } };
+            hoverTimer.Start();
+        }
+
+        /// <summary>True for another app's PiP that PiP Studio is currently keeping track of.</summary>
+        public static bool IsKnown(IntPtr h) { return h != IntPtr.Zero && lastRect.ContainsKey(h); }
+
+        // ------------------------------------------------------------ hover controls (ExtHover)
+        static readonly Timer hoverTimer = new Timer { Interval = 40 };
+        static ExtHover hover;
+
+        /// <summary>Point at another app's PiP and PiP Studio's title bar appears over it (see ExtHover).</summary>
+        static void HoverTick()
+        {
+            bool on = App.S.ControlOtherPips && App.S.HoverOtherPips && !App.I.PadActive;   // controller controls have their own overlay
+            if (!on || lastRect.Count == 0)
+            {
+                if (hover != null && !hover.IsDisposed) hover.Tick(IntPtr.Zero);
+                return;
+            }
+            if (hover == null || hover.IsDisposed) hover = new ExtHover();
+            hover.Tick(hover.TargetUnderCursor());
+        }
+
+        /// <summary>Runs a title bar action on another app's PiP (the same ones its shortcuts do).</summary>
+        public static void HoverAction(IntPtr h, string key) { Handle(key, h); }
+
+        /// <summary>Dragging another app's PiP by PiP Studio's title bar. Letting go snaps it like a normal drag (WatchTick).</summary>
+        public static void DragTo(IntPtr h, int x, int y)
+        {
+            if (!Native.IsWindow(h)) return;
+            Native.SetWindowPos(h, IntPtr.Zero, x, y, 0, 0, Native.SWP_NOSIZE | Native.SWP_NOZORDER | Native.SWP_NOACTIVATE);
         }
 
         // ------------------------------------------------------------ keeping steered PiPs on top
@@ -879,6 +911,288 @@ namespace PipStudio
                     TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix);
             }
             if (App.S.PadHints) PipOverlay.DrawHintChips(g, s, ClientSize);
+        }
+    }
+
+    /// <summary>
+    /// PiP Studio's title bar over another app's PiP while you point at it: the app's name and the title bar buttons you picked
+    /// in Settings (the ones that make sense for a window PiP Studio doesn't own), plus mute. Drag the bar to move the PiP,
+    /// scroll on it to change the volume. Only the bar takes clicks; everything under it stays the app's own.
+    /// PiP Studio can't see the mouse inside another app's window, so it watches the pointer's position instead.
+    /// </summary>
+    class ExtHover : Form
+    {
+        class HBtn
+        {
+            public Rectangle R;
+            public string Glyph, Tip, Key;
+            public bool On;
+        }
+
+        static readonly Color Key = Color.FromArgb(255, 1, 0, 1);
+        static readonly Color BarColor = Color.FromArgb(20, 20, 24);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")] static extern IntPtr WindowFromPoint(Point p);
+        const uint GA_ROOT = 2;
+
+        IntPtr target;
+        DateTime lastOver = DateTime.MinValue, lastTop = DateTime.MinValue;
+        double alpha;
+        float scale = 1;
+        readonly List<HBtn> btns = new List<HBtn>();
+        Rectangle barRect;
+        int hot = -1, pressed = -1;
+        bool dragging;
+        Point dragStart;
+        Rectangle dragFrom;
+
+        public ExtHover()
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
+            BackColor = Key;
+            TransparencyKey = Key;          // the transparent part (where tooltips go) lets clicks through to the app
+            Text = "PiP controls";
+            Opacity = 0;
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
+        }
+
+        protected override bool ShowWithoutActivation { get { return true; } }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= Native.WS_EX_TOOLWINDOW | Native.WS_EX_NOACTIVATE | Native.WS_EX_TOPMOST;
+                return cp;
+            }
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            U.ExcludeFromCapture(Handle, true);   // the controls never show up in recordings or screen sharing
+        }
+
+        /// <summary>The other app's PiP under the pointer, the one the bar is on while you're over the bar, or zero.</summary>
+        public IntPtr TargetUnderCursor()
+        {
+            if (dragging) return target;
+            var p = Cursor.Position;
+            IntPtr root = Native.GetAncestor(WindowFromPoint(p), GA_ROOT);
+            if (root == IntPtr.Zero) return IntPtr.Zero;
+            if (IsHandleCreated && root == Handle) return target;
+            return ExternalPip.IsKnown(root) ? root : IntPtr.Zero;
+        }
+
+        /// <summary>Called every 40 ms with the PiP the pointer is over (zero for none): fades in or out and follows the PiP.</summary>
+        public void Tick(IntPtr over)
+        {
+            if (over != IntPtr.Zero && Native.IsWindow(over) && Native.IsWindowVisible(over) && !Native.IsIconic(over))
+            {
+                if (over != target) { target = over; hot = pressed = -1; Invalidate(); }
+                lastOver = DateTime.Now;
+            }
+            bool want = target != IntPtr.Zero && Native.IsWindow(target) && (DateTime.Now - lastOver).TotalMilliseconds < 350;   // a moment's grace to reach the bar
+            alpha = U.Approach(alpha, want ? 0.96 : 0, U.Animations ? 0.25 : 1);
+            if (alpha < 0.02)
+            {
+                if (Visible) Hide();
+                if (!want) { target = IntPtr.Zero; dragging = false; }
+                return;
+            }
+            Place();
+            if (!Visible) Show();
+            if (Math.Abs(Opacity - alpha) > 0.01) Opacity = alpha;
+            // the app's PiP is topmost too, and steering it puts it back on top: stay above it
+            if ((DateTime.Now - lastTop).TotalMilliseconds > 400)
+            {
+                lastTop = DateTime.Now;
+                Native.SetWindowPos(Handle, Native.HWND_TOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE);
+            }
+        }
+
+        /// <summary>Over the top of the PiP: the bar, and room under it for a tooltip (see-through and click-through).</summary>
+        void Place()
+        {
+            var r = U.WindowRect(target);
+            uint d = Native.GetDpiForWindow(target);
+            float s = d > 0 ? d / 96f : 1;
+            if (s != scale) { scale = s; Invalidate(); }
+            int h = Math.Min(r.Height, (int)(64 * s));
+            var b = new Rectangle(r.X, r.Y, r.Width, h);
+            if (Bounds != b) { Bounds = b; Invalidate(); }
+        }
+
+        /// <summary>The buttons you picked for the title bar, minus ones a window PiP Studio doesn't own can't do.</summary>
+        void BuildLayout()
+        {
+            btns.Clear();
+            float s = scale;
+            int W = ClientSize.Width, bh = (int)(32 * s), bw = (int)(30 * s);
+            barRect = new Rectangle(0, 0, W, bh);
+            if (target == IntPtr.Zero) return;
+
+            var defs = new List<HBtn>();
+            var on = TitleBarItems.On(App.S.TitleBarButtons);
+            foreach (var k in on)
+            {
+                HBtn b = Make(k);
+                if (b != null) defs.Add(b);
+            }
+            bool? muted = Audio.GetMute(U.ProcessName(target));
+            defs.Insert(0, new HBtn { Key = "mute", Glyph = muted == true ? "" : "", Tip = "Mute — scroll to change volume", On = muted == true });
+
+            // a narrow PiP drops buttons from the left; Close stays
+            int maxBtns = Math.Max(1, (W - (int)(60 * s)) / bw);
+            while (defs.Count > maxBtns)
+            {
+                int i = defs.FindIndex(b => b.Key != "close");
+                if (i < 0) break;
+                defs.RemoveAt(i);
+            }
+            int x = W - (int)(3 * s) - defs.Count * bw;
+            foreach (var b in defs)
+            {
+                b.R = new Rectangle(x, (bh - bw) / 2 + 1, bw, bw - 2);
+                x += bw;
+                btns.Add(b);
+            }
+        }
+
+        HBtn Make(string key)
+        {
+            string app = ExternalPip.AppName(target);
+            switch (key)
+            {
+                case "prev": return new HBtn { Key = "prevsrc", Glyph = TitleBarItems.Glyph(key), Tip = "Previous window" };
+                case "next": return new HBtn { Key = "nextsrc", Glyph = TitleBarItems.Glyph(key), Tip = "Next window" };
+                case "theater": return new HBtn { Key = "theater", Glyph = "", Tip = "Theater mode" };
+                case "corner": return new HBtn { Key = "corner", Glyph = TitleBarItems.Glyph(key), Tip = "Next corner" };
+                case "display": return Screen.AllScreens.Length < 2 ? null : new HBtn { Key = "nextmon", Glyph = TitleBarItems.Glyph(key), Tip = "Move to next display" };
+                case "source": return new HBtn { Key = "swap", Glyph = TitleBarItems.Glyph(key), Tip = "Show " + app };
+                case "more": return new HBtn { Key = "more", Glyph = TitleBarItems.Glyph(key), Tip = "Options in PiP Studio" };
+                case "close": return new HBtn { Key = "close", Glyph = TitleBarItems.Glyph(key), Tip = "Close" };
+                default: return null;   // change source, crop and ghost mode only work on PiP Studio's own PiPs
+            }
+        }
+
+        int IndexAt(Point p)
+        {
+            for (int i = 0; i < btns.Count; i++) if (btns[i].R.Contains(p)) return i;
+            return -1;
+        }
+
+        void Run(HBtn b)
+        {
+            IntPtr h = target;
+            if (b.Key == "more") { App.I.ShowMain("running"); return; }
+            ExternalPip.HoverAction(h, b.Key);
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.Clear(Key);
+            BuildLayout();
+            if (target == IntPtr.Zero) return;
+            float s = scale;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            using (var b = new SolidBrush(BarColor)) g.FillRectangle(b, barRect);
+
+            int left = btns.Count > 0 ? btns[0].R.Left : ClientSize.Width;
+            var titleRect = new Rectangle((int)(10 * s), 0, Math.Max(0, left - (int)(14 * s)), barRect.Height);
+            if (titleRect.Width > 20)
+                LT.DrawText(g, ExternalPip.AppName(target), U.UI(12 * s), titleRect, Color.FromArgb(235, 235, 242),
+                    TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix);
+
+            for (int i = 0; i < btns.Count; i++)
+            {
+                var bt = btns[i];
+                if (i == hot)
+                {
+                    Color hc = bt.Key == "close" ? Color.FromArgb(196, 43, 28) : Color.FromArgb(58, 60, 70);
+                    using (var path = U.RoundRect(Rectangle.Inflate(bt.R, -2, -2), 5 * s))
+                    using (var b = new SolidBrush(hc))
+                        g.FillPath(b, path);
+                }
+                LT.DrawText(g, bt.Glyph, U.Icons(13 * s), bt.R, bt.On ? Theme.Accent : Color.FromArgb(238, 238, 244),
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+            }
+
+            if (hot >= 0 && hot < btns.Count && !dragging)
+            {
+                var bt = btns[hot];
+                Font tf = U.UI(11 * s);
+                Size ts = LT.MeasureText(bt.Tip, tf);
+                int tw = ts.Width + (int)(14 * s), th = ts.Height + (int)(6 * s);
+                int tx = U.Clamp(bt.R.X + bt.R.Width / 2 - tw / 2, 4, Math.Max(4, ClientSize.Width - tw - 4));
+                var tr = new Rectangle(tx, barRect.Bottom + (int)(4 * s), tw, th);
+                if (tr.Bottom <= ClientSize.Height)
+                    using (var path = U.RoundRect(tr, 4 * s))
+                    using (var b = new SolidBrush(BarColor))
+                    {
+                        g.FillPath(b, path);
+                        LT.DrawText(g, bt.Tip, tf, tr, Color.FromArgb(225, 225, 232),
+                            TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix);
+                    }
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            lastOver = DateTime.Now;
+            if (dragging)
+            {
+                var p = Cursor.Position;
+                ExternalPip.DragTo(target, dragFrom.X + p.X - dragStart.X, dragFrom.Y + p.Y - dragStart.Y);
+                return;
+            }
+            int i = IndexAt(e.Location);
+            if (i != hot) { hot = i; Invalidate(); }
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            if (hot != -1) { hot = -1; Invalidate(); }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (e.Button != MouseButtons.Left || target == IntPtr.Zero) return;
+            pressed = IndexAt(e.Location);
+            if (pressed < 0 && barRect.Contains(e.Location))
+            {
+                dragging = true;                       // grab the bar to move the PiP
+                dragStart = Cursor.Position;
+                dragFrom = U.WindowRect(target);
+                ExternalPip.Pin(target);
+                hot = -1;
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (dragging) { dragging = false; Invalidate(); return; }
+            int i = IndexAt(e.Location);
+            if (e.Button == MouseButtons.Left && i >= 0 && i == pressed) Run(btns[i]);
+            pressed = -1;
+        }
+
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            base.OnMouseWheel(e);
+            if (target == IntPtr.Zero) return;
+            ExternalPip.HoverAction(target, e.Delta > 0 ? "volup" : "voldown");
+            Invalidate();
         }
     }
 
