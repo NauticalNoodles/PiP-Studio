@@ -9,6 +9,8 @@ Other apps' PiPs get the PiP Studio treatment when you point at them.
 - It has minimize, maximize and mute buttons, plus the buttons you picked for your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, next display and close
 - Minimized one that has no taskbar button? Bring it back from PiP Studio's tray menu
 - Every title bar now has buttons to make the PiP bigger or smaller (you can turn them off in Settings > Appearance > Title bar buttons)
+- Settings > Appearance > Title bar buttons shows a preview of your title bar that updates as you turn buttons on and off or move them
+- "Follow the window I just left" is now right in a PiP's menu instead of tucked away under Source
 - Don't want it? Turn off "Show controls on other apps' PiPs" in Settings > Behavior
 
 ## 1.0.2

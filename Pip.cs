@@ -1614,7 +1614,6 @@ namespace PipStudio
                 src.DropDownItems.Add(Menus.Item("Previous window", () => CycleSource(-1), "HK_PrevSource"));
                 src.DropDownItems.Add(Menus.Item("Next window", () => CycleSource(1), "HK_NextSource"));
                 src.DropDownItems.Add(Menus.Check("Auto (first window, then the one you just left)", St.Auto, () => SetAuto(!St.Auto)));
-                src.DropDownItems.Add(Menus.Check("Follow the window I just left", St.Follow, () => SetFollow(!St.Follow), "HK_Follow"));
                 if (Src != IntPtr.Zero && SourceLooksChromium)
                 {
                     src.DropDownItems.Add(new ToolStripSeparator());
@@ -1699,6 +1698,7 @@ namespace PipStudio
             items.Add(media);
 
             items.Add(new ToolStripSeparator());
+            if (win) items.Add(Menus.Check("Follow the window I just left", St.Follow, () => SetFollow(!St.Follow), "HK_Follow"));   // used often enough to sit at the top level
             items.Add(Menus.Check("Click-through (ghost mode)", St.ClickThrough, () => SetClickThrough(!St.ClickThrough), "HK_ClickThrough"));
             items.Add(Menus.Check("Always on top", St.TopMost, () => SetTopMost(!St.TopMost)));
             if (App.S.AllowMultiple) items.Add(Menus.Item("Duplicate this PiP", Duplicate));

@@ -632,6 +632,7 @@ namespace PipStudio
                 { "Restore", "استعادة" },
                 { "Restore {0}'s PiP", "استعادة النافذة العائمة لـ {0}" },
                 { "PiP Studio's title bar appears", "يظهر شريط عنوان PiP Studio" },
+                { "Your video", "الفيديو الخاص بك" },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1261,6 +1262,7 @@ namespace PipStudio
                 { "Restore", "还原" },
                 { "Restore {0}'s PiP", "还原 {0} 的画中画" },
                 { "PiP Studio's title bar appears", "显示 PiP Studio 的标题栏" },
+                { "Your video", "你的视频" },
             };
         }
     }

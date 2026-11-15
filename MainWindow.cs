@@ -2290,17 +2290,46 @@ namespace PipStudio
             reset.Click += (o, e) => save(TitleBarItems.On(TitleBarItems.Default));
             var resetRow = Row(ex, "Reset title bar buttons", "Back to the default buttons and order", reset, "default restore");
 
+            // a preview of the title bar at the top: your buttons, in your order, redrawn on every change
+            var previewIcons = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Margin = new Thickness(0, 0, 3, 0) };
+            var previewBar = new Grid { Height = 32, Background = new SolidColorBrush(Color.FromRgb(20, 20, 24)) };
+            previewBar.Children.Add(new TextBlock { Text = "Your video", Foreground = new SolidColorBrush(Color.FromRgb(235, 235, 242)), FontSize = 12,
+                VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(10, 0, 0, 0), TextTrimming = TextTrimming.CharacterEllipsis });
+            previewBar.Children.Add(previewIcons);
+            var previewPic = new Border { Height = 46 };
+            previewPic.SetResourceReference(Border.BackgroundProperty, "Accent");
+            previewPic.Opacity = 0.55;
+            var previewPip = new StackPanel { MaxWidth = 460, HorizontalAlignment = HorizontalAlignment.Left };
+            previewPip.Children.Add(previewBar);
+            previewPip.Children.Add(previewPic);
+            var previewClip = new Border { CornerRadius = new CornerRadius(6), ClipToBounds = true, Child = previewPip, HorizontalAlignment = HorizontalAlignment.Left };
+            var previewRow = new Border { Padding = new Thickness(52, 12, 16, 14), Child = previewClip };
+            Action redrawPreview = () =>
+            {
+                previewIcons.Children.Clear();
+                foreach (var k in TitleBarItems.On(App.S.TitleBarButtons))
+                    previewIcons.Children.Add(new TextBlock
+                    {
+                        Text = TitleBarItems.Glyph(k), FontFamily = Fluent.IconFont, FontSize = 13, Width = 30,
+                        Foreground = new SolidColorBrush(Color.FromRgb(238, 238, 244)), TextAlignment = TextAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center, ToolTip = TitleBarItems.Label(k)
+                    });
+                previewPip.Width = Math.Max(240, previewIcons.Children.Count * 30 + 120);   // wide enough for every button and a bit of title
+            };
+
             relayout = () =>
             {
                 var on = TitleBarItems.On(App.S.TitleBarButtons);
                 var seq = new List<string>(on);
                 foreach (var k in TitleBarItems.Keys) if (!seq.Contains(k)) seq.Add(k);
                 ex.Rows.Children.Clear();
+                redrawPreview();
+                ex.Rows.Children.Add(previewRow);
                 for (int i = 0; i < seq.Count; i++)
                 {
                     string k = seq[i];
                     var row = rows[k];
-                    ((Border)row.Children[0]).Visibility = i == 0 ? Visibility.Collapsed : Visibility.Visible;
+                    ((Border)row.Children[0]).Visibility = Visibility.Visible;              // the preview sits above the first row
                     ex.Rows.Children.Add(row);
                     int at = on.IndexOf(k);
                     lefts[k].IsEnabled = at > 0;

@@ -140,6 +140,9 @@ namespace PipStudio
                 "Show controls on other apps' PiPs");
             EAdd("controller", "Controller controls", "Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.", ScController,
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
+            // the rows inside Title bar buttons (one per button) explain the title bar, unless they have an explanation of their own
+            foreach (var t in TitleBarItems.Labels.Concat(new[] { "Reset title bar buttons" }))
+                if (!explainByTitle.ContainsKey(t)) explainByTitle[t] = "titlebar";
         }
 
         static void EAdd(string id, string title, string text, Action<Canvas, Storyboard> build, params string[] titles)
