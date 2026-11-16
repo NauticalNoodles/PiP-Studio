@@ -1,5 +1,6 @@
 # Takes screenshots of PiP Studio on a Windows machine, for the README and the Microsoft Store: builds it, opens Notepad
 # (something to show in a PiP), runs "PiPStudio.exe --screenshots", and keeps the pictures as a download on the run.
+# On a claude/ branch it also commits them to docs/screenshots/raw, so they can be picked up without the download.
 # Runs when a commit message says [screenshots], or by hand from the Actions tab.
 
 name: Screenshots
@@ -10,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   shots:
@@ -47,6 +48,19 @@ jobs:
           Get-ChildItem $dir | Format-Table Name, Length
           $prog = Join-Path $dir "progress.txt"
           if (Test-Path $prog) { Get-Content $prog }
+
+      - name: Commit them to the branch (claude/ branches)
+        if: startsWith(github.ref_name, 'claude/')
+        shell: pwsh
+        run: |
+          $raw = "docs/screenshots/raw"
+          New-Item -ItemType Directory -Force $raw | Out-Null
+          Copy-Item (Join-Path $env:RUNNER_TEMP "shots\*.png") $raw -Force
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add $raw
+          git commit -m "Raw screenshots from the Screenshots workflow"
+          git push origin "HEAD:${{ github.ref_name }}"
 
       - uses: actions/upload-artifact@v4
         with:
