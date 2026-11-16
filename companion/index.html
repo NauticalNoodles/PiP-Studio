@@ -496,11 +496,16 @@
   document.querySelectorAll("[data-global]").forEach((b) => b.addEventListener("click", () => globalAct(b.dataset.global)));
 
   // ---------------------------------------------------------------- sliders: send while dragging, don't let polling yank them back
+  // how far along the track the knob is: from the slider's own minimum (opacity starts at 20%, volume at 0%)
+  function fill(input) {
+    const min = +input.min || 0, max = +input.max || 100;
+    input.style.setProperty("--p", ((input.value - min) / (max - min)) * 100 + "%");
+  }
   const busy = new Map();                                          // slider key -> time of the last touch
   const isBusy = (k) => Date.now() - (busy.get(k) || 0) < 1500;
   function wireSlider(input, key, send) {
     let last = 0, timer = 0;
-    const paint = () => { input.style.setProperty("--p", input.value + "%"); const l = input.parentElement.querySelector(".lbl"); if (l) l.textContent = input.value + "%"; };
+    const paint = () => { fill(input); const l = input.parentElement.querySelector(".lbl"); if (l) l.textContent = input.value + "%"; };
     const fire = () => { last = Date.now(); send(input.value / 100); };
     input.addEventListener("input", () => {
       busy.set(key, Date.now()); paint();
@@ -663,7 +668,7 @@
   function setSlider(input, key, v) {
     if (!input || v == null || isBusy(key)) return;
     input.value = pct(v);
-    input.style.setProperty("--p", input.value + "%");
+    fill(input);
     const l = input.parentElement.querySelector(".lbl");
     if (l) l.textContent = input.value + "%";
   }
