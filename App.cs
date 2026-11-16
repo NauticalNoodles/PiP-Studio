@@ -362,7 +362,7 @@ namespace PipStudio
             }
             bool updated = args.Any(a => a.Equals("--updated", StringComparison.OrdinalIgnoreCase));   // restarted by Updater.Install
             string shots = MainUI.ShotsDir(args);
-            if (shots != null) RunSoon(() => MainUI.TakeShots(shots), 1500);      // the screenshots workflow
+            if (shots != null) { MainUI.ShotsLog(args, "scheduled"); RunSoon(() => MainUI.TakeShots(shots), 1500); }      // the screenshots workflow
             else if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
             Updater.Start(updated);

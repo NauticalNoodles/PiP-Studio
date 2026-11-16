@@ -18,6 +18,7 @@ namespace PipStudio
         static int Main(string[] args)
         {
             try { Native.SetProcessDpiAwarenessContext(new IntPtr(-4)); } catch { }
+            MainUI.ShotsLog(args, "started");
             if (AdminStart.HandOver(args)) return 0;                      // "Always start as administrator": the elevated copy takes over
             args = AdminStart.TakeArgs(args);
 
@@ -54,7 +55,9 @@ namespace PipStudio
             Theme.Refresh();
             Fluent.Init(wapp);
             MainUI.Init();
+            MainUI.ShotsLog(args, "starting the app");
             new App(args);
+            MainUI.ShotsLog(args, "app started");
             wapp.Exit += (o, e) => { try { if (App.I != null) App.I.Cleanup(); } catch { } };
             wapp.Run();
             GC.KeepAlive(mutex);

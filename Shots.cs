@@ -23,9 +23,21 @@ namespace PipStudio
             return i >= 0 && i + 1 < args.Length ? args[i + 1] : null;
         }
 
+        /// <summary>A line in progress.txt in the screenshots folder (the workflow keeps it, to see how far it got).</summary>
+        public static void ShotsLog(string[] args, string msg)
+        {
+            string dir = ShotsDir(args);
+            if (dir == null) return;
+            try { Directory.CreateDirectory(dir); File.AppendAllText(Path.Combine(dir, "progress.txt"), DateTime.Now.ToString("HH:mm:ss.fff ") + msg + "\r\n"); } catch { }
+        }
+        static string shotsDir;
+        static void Log(string msg) { if (shotsDir != null) ShotsLog(new[] { "--screenshots", shotsDir }, msg); }
+
         public static void TakeShots(string dir)
         {
+            shotsDir = dir;
             Directory.CreateDirectory(dir);
+            Log("taking screenshots");
             var S = App.S;
             S.ThemeMode = 2; S.ShowExplainers = true; S.CompanionOn = !Packaged.IsPackaged;
             App.I.SettingsChanged();
@@ -66,6 +78,7 @@ namespace PipStudio
             t.Tick += (o, e) =>
             {
                 if (n >= steps.Count) { t.Stop(); return; }
+                Log("step " + n);
                 try { steps[n++](); } catch (Exception ex) { App.ReportError(ex); File.AppendAllText(Path.Combine(dir, "errors.txt"), ex + "\r\n"); }
             };
             t.Start();
@@ -90,6 +103,7 @@ namespace PipStudio
             var enc = new PngBitmapEncoder();
             enc.Frames.Add(BitmapFrame.Create(bmp));
             using (var f = File.Create(path)) enc.Save(f);
+            Log("saved " + System.IO.Path.GetFileName(path));
         }
     }
 }

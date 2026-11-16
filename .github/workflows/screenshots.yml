@@ -30,13 +30,23 @@ jobs:
         shell: pwsh
         run: |
           $dir = Join-Path $env:RUNNER_TEMP "shots"
+          New-Item -ItemType Directory -Force $dir | Out-Null
           Start-Process notepad
           Start-Sleep -Seconds 3
           $p = Start-Process -FilePath ".\out\PiPStudio.exe" -ArgumentList "--screenshots", "`"$dir`"" -PassThru
-          if (-not $p.WaitForExit(180000)) { $p.Kill(); Write-Host "PiP Studio didn't finish in time" }
-          Get-ChildItem $dir | Format-Table Name, Length
+          Start-Sleep -Seconds 25
+          # what's on the machine's screen at this point (to see a dialog in the way, if it gets stuck)
+          Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+          $b = [System.Windows.Forms.SystemInformation]::VirtualScreen
+          $bmp = New-Object System.Drawing.Bitmap $b.Width, $b.Height
+          $g = [System.Drawing.Graphics]::FromImage($bmp); $g.CopyFromScreen($b.Left, $b.Top, 0, 0, $bmp.Size)
+          $bmp.Save((Join-Path $dir "screen.png")); $g.Dispose(); $bmp.Dispose()
+          if (-not $p.WaitForExit(150000)) { $p.Kill(); Write-Host "PiP Studio didn't finish in time" }
           $err = Join-Path $env:APPDATA "PiPStudio\errors.log"
           if (Test-Path $err) { Copy-Item $err $dir }
+          Get-ChildItem $dir | Format-Table Name, Length
+          $prog = Join-Path $dir "progress.txt"
+          if (Test-Path $prog) { Get-Content $prog }
 
       - uses: actions/upload-artifact@v4
         with:
