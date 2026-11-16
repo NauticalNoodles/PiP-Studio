@@ -65,7 +65,9 @@ namespace PipStudio
                 steps.Add(() => Save(Path.Combine(dir, name + ".png")));
             };
             shot("windows", "windows");
+            steps.Add(() => App.I.ToggleHideAll());                           // the PiPs out of the way of the live preview
             steps.Add(() => SaveFromScreen(Path.Combine(dir, "windows-screen.png")));   // with the live preview, which Windows draws on top
+            steps.Add(() => App.I.ToggleHideAll());
             shot("running", "running");
             shot("appearance", "appearance");
             shot("behavior", "behavior");
