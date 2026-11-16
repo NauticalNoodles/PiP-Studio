@@ -21,7 +21,8 @@ Control PiP Studio from your phone:
 
 - New **Phone companion** in Settings > General: turn it on, press **Pair a phone**, scan the QR code, and type the PIN your phone shows (just like pairing Moonlight with Sunshine)
 - It opens in your phone's browser (Android or iPhone, nothing to install) and shows every PiP, yours and other apps', with buttons to move, resize, minimize, restore and close them, plus opacity and volume sliders
-- A **Volume** tab works like Windows' volume mixer: a slider and mute button for every app playing sound
+- Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound
+- Tap **Install app** to put it on your home screen, where it opens full screen like a real app
 - It only works on your home network, only for phones you've paired, and everything between your phone and PC is encrypted. You can remove a phone any time
 
 Behind the scenes:

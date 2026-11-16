@@ -70,7 +70,8 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 **Phone companion**
 - Turn it on in Settings > General > Phone companion, scan the QR code and pair like Moonlight: your phone shows a PIN, you type it into PiP Studio. It runs in the phone's browser (Android or iPhone), no app to install.
 - Move, resize, minimize, restore and close any PiP (yours or other apps'), change its opacity and volume, start a PiP, hide them all, or play/pause.
-- A volume mixer for every app that's playing sound.
+- A volume mixer for every app that's playing sound, right under the PiP controls.
+- Install it on your home screen with the Install app button, and it opens full screen like an app.
 - Local network only, and everything between phone and PC is encrypted with a key set up during pairing. Nothing goes over the internet.
 
 **Main window**

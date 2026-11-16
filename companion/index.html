@@ -8,6 +8,11 @@
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.png">
 <link rel="apple-touch-icon" href="/icon.png">
+<!-- Add to Home Screen: open full screen like an app (iPhone/iPad read these; Android reads the manifest) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PiP Studio">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>PiP Studio</title>
 <script src="/crypto.js"></script>
 <!--
@@ -29,7 +34,7 @@
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-  body { min-height: 100vh; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  body { min-height: 100vh; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
   button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
   button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .hidden { display: none !important; }
@@ -90,13 +95,27 @@
   .empty { text-align: center; color: var(--sub); padding: 40px 16px; }
   .empty svg { width: 44px; height: 44px; color: var(--faint); }
   .empty p { margin: 8px 0 16px; }
+  .empty.small { padding: 14px 16px; background: var(--surface); border: 1px dashed var(--line); border-radius: var(--radius); }
+  .empty.small p { margin: 0; }
   .primary { background: var(--accent); color: var(--on-accent); border-radius: 12px; min-height: 48px; padding: 0 22px; font-weight: 600; }
   .secondary { background: var(--surface2); border-radius: 12px; min-height: 48px; padding: 0 18px; font-weight: 600; }
 
-  nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; padding-bottom: env(safe-area-inset-bottom); }
-  nav button { min-height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 12px; color: var(--sub); }
-  nav button svg { width: 24px; height: 24px; }
-  nav button[aria-selected=true] { color: var(--accent); }
+  h2.sect { font-size: 13px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--sub); margin: 22px 2px 10px; display: flex; align-items: center; gap: 8px; }
+  h2.sect svg { width: 16px; height: 16px; }
+
+  header .grow { flex: 1; min-width: 0; }
+  .install { display: flex; align-items: center; gap: 6px; background: var(--surface2); border-radius: 99px; padding: 0 14px; min-height: 40px; font-size: 13.5px; font-weight: 600; flex: none; }
+  .install svg { width: 18px; height: 18px; }
+
+  .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.55); display: flex; align-items: flex-end; justify-content: center; }
+  .sheet .panel { background: var(--surface); border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; padding: 22px 20px calc(20px + env(safe-area-inset-bottom)); box-shadow: 0 -8px 30px rgba(0,0,0,.35); }
+  .sheet h3 { margin: 0 0 6px; font-size: 19px; }
+  .sheet p { color: var(--sub); margin: 0 0 12px; }
+  .sheet ol { margin: 0 0 16px; padding-left: 22px; }
+  .sheet ol li { margin-bottom: 8px; }
+  .sheet .note { font-size: 13px; color: var(--faint); }
+  .sheet .kbd { display: inline-flex; align-items: center; justify-content: center; vertical-align: -5px; width: 24px; height: 24px; border-radius: 6px; background: var(--surface2); }
+  .sheet .kbd svg { width: 16px; height: 16px; }
 
   #pair { max-width: 420px; margin: 0 auto; padding: 32px 20px; text-align: center; }
   #pair img { width: 72px; height: 72px; border-radius: 18px; }
@@ -106,6 +125,8 @@
   #pair ol li { margin-bottom: 6px; }
   #pair b { color: var(--text); }
   .wide { width: 100%; }
+  .link { color: var(--accent); font-weight: 600; text-decoration: underline; padding: 0; }
+  #pair .note { color: var(--sub); font-size: 14px; }
   .pin { font-size: 52px; font-weight: 700; letter-spacing: 6px; font-variant-numeric: tabular-nums; margin: 8px 0 12px; }
   .waiting { color: var(--sub); margin: 0 0 20px; animation: breathe 1.6s ease-in-out infinite; }
   @keyframes breathe { 50% { opacity: .45; } }
@@ -129,6 +150,7 @@
       <li>Type the PIN this phone shows into PiP Studio.</li>
     </ol>
     <button class="primary wide" id="pairBtn">Pair</button>
+    <p class="note hidden" id="pairInstallHint" style="margin-top:16px">Want it on your home screen? <button class="link" data-install>Install the app</button> first, then pair inside it.</p>
   </div>
   <div id="pairPin" class="hidden">
     <p>Type this PIN in PiP Studio on your PC:</p>
@@ -139,37 +161,47 @@
   <div id="pairMsg" role="alert"></div>
 </section>
 
+<!-- how to put it on the home screen, for browsers that don't offer a one-tap install on a home-network page -->
+<div class="sheet hidden" id="installSheet" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+  <div class="panel">
+    <h3 id="installTitle">Install PiP Studio</h3>
+    <p>Put it on your home screen, and it opens full screen like an app.</p>
+    <ol id="installSteps"></ol>
+    <p class="note" id="installNote"></p>
+    <button class="primary wide" id="installClose">Got it</button>
+  </div>
+</div>
+
 <!-- paired -->
 <div id="appView" class="hidden">
   <header>
     <img src="/icon.png" alt="">
-    <div>
+    <div class="grow">
       <h1>PiP Studio</h1>
       <div class="pc"><span class="dot" id="dot"></span><span id="pcName">Connecting…</span></div>
     </div>
+    <button class="install hidden" data-install aria-label="Install as an app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Install app</button>
   </header>
   <main>
     <div class="banner hidden" id="offline" role="status">Can't reach PiP Studio. Check that this phone is on the same Wi-Fi as your PC and PiP Studio is running.</div>
 
-    <section id="tabPips" role="tabpanel" aria-labelledby="navPips">
+    <section id="pipsSection">
       <div class="quick">
         <button class="chip" data-global="startpip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="12" y="11" width="7" height="6" rx="1" fill="currentColor"/></svg>Start a PiP</button>
         <button class="chip" data-global="toggleall" id="hideAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Hide all</span></button>
         <button class="chip" data-global="playpause"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4.5v15l8-7.5z"/><rect x="15" y="5" width="3" height="14" rx="1"/><rect x="19.5" y="5" width="3" height="14" rx="1" transform="translate(-1 0)"/></svg>Play / pause</button>
       </div>
+      <h2 class="sect">PiPs</h2>
       <div id="pipList"></div>
     </section>
 
-    <section id="tabAudio" role="tabpanel" aria-labelledby="navAudio" class="hidden">
+    <section id="audioSection">
+      <h2 class="sect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>App volume</h2>
       <div id="audioList"></div>
     </section>
 
     <div class="foot"><span id="ver"></span> · <button id="forget">Disconnect this phone</button></div>
   </main>
-  <nav role="tablist">
-    <button role="tab" id="navPips" aria-selected="true" aria-controls="tabPips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><rect x="11.5" y="11" width="7.5" height="6" rx="1" fill="currentColor"/></svg>PiPs</button>
-    <button role="tab" id="navAudio" aria-selected="false" aria-controls="tabAudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Volume</button>
-  </nav>
 </div>
 
 <script>
@@ -320,18 +352,57 @@
     store.set(null); showPair();
   });
 
-  // ---------------------------------------------------------------- tabs
-  function tab(which) {
-    const pips = which === "pips";
-    $("#navPips").setAttribute("aria-selected", pips);
-    $("#navAudio").setAttribute("aria-selected", !pips);
-    $("#tabPips").classList.toggle("hidden", !pips);
-    $("#tabAudio").classList.toggle("hidden", pips);
-    try { sessionStorage.setItem("pipstudio.tab", which); } catch (e) {}
+  // ---------------------------------------------------------------- install as an app
+  // Browsers only offer a one-tap install on https sites; this page comes from your PC over your home network, so most
+  // phones get the steps for their browser's own "Add to Home Screen" instead. Either way it then opens full screen.
+  let installPrompt = null;
+  const installed = () => matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches || navigator.standalone === true;
+  function showInstallButtons() {
+    const show = !installed();
+    document.querySelectorAll("[data-install]").forEach((b) => b.closest(".note") ? b.closest(".note").classList.toggle("hidden", !show) : b.classList.toggle("hidden", !show));
   }
-  $("#navPips").addEventListener("click", () => tab("pips"));
-  $("#navAudio").addEventListener("click", () => tab("audio"));
-  try { if (sessionStorage.getItem("pipstudio.tab") === "audio") tab("audio"); } catch (e) {}
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installPrompt = e; showInstallButtons(); });
+  window.addEventListener("appinstalled", () => { installPrompt = null; showInstallButtons(); });
+
+  const SHARE = '<span class="kbd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M8 11H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-2"/></svg></span>';
+  const DOTS = '<span class="kbd"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></span>';
+  const LINES = '<span class="kbd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span>';
+  function installSteps() {
+    const ua = navigator.userAgent || "";
+    const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (ios) {
+      const safari = !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+      return {
+        steps: [(safari ? "" : "Open this page in <b>Safari</b> (other browsers on iPhone can't add apps). ") + "Tap " + SHARE + " <b>Share</b> at the bottom of the screen.",
+                "Scroll down and tap <b>Add to Home Screen</b>.", "Tap <b>Add</b>. PiP Studio appears on your home screen."],
+        note: "The app on your home screen keeps its own storage, so you'll pair it once more inside the app."
+      };
+    }
+    if (/SamsungBrowser/.test(ua)) return { steps: ["Tap " + LINES + " <b>Menu</b> at the bottom right.", "Tap <b>Add page to</b>, then <b>Home screen</b>.", "Tap <b>Add</b>."], note: "" };
+    if (/Firefox/.test(ua)) return { steps: ["Tap " + DOTS + " <b>Menu</b>.", "Tap <b>Add to Home screen</b> (or <b>Install</b>).", "Tap <b>Add</b>."], note: "" };
+    if (/Android/.test(ua)) return { steps: ["Tap " + DOTS + " <b>Menu</b> at the top right.", "Tap <b>Add to Home screen</b> (or <b>Install app</b>).", "Tap <b>Install</b> or <b>Add</b>."], note: "" };
+    return { steps: ["Open your browser's menu.", "Choose <b>Install PiP Studio</b>, <b>Add to Home screen</b> or <b>Create shortcut</b>."], note: "" };
+  }
+  async function install() {
+    if (installPrompt) {                                           // the browser's own install prompt, where it offers one
+      installPrompt.prompt();
+      try { await installPrompt.userChoice; } catch (e) {}
+      installPrompt = null; showInstallButtons();
+      return;
+    }
+    const how = installSteps();
+    $("#installSteps").innerHTML = how.steps.map((x) => "<li>" + x + "</li>").join("");
+    $("#installNote").textContent = how.note;
+    $("#installNote").classList.toggle("hidden", !how.note);
+    $("#installSheet").classList.remove("hidden");
+    $("#installClose").focus();
+  }
+  const closeSheet = () => $("#installSheet").classList.add("hidden");
+  document.querySelectorAll("[data-install]").forEach((b) => b.addEventListener("click", install));
+  $("#installClose").addEventListener("click", closeSheet);
+  $("#installSheet").addEventListener("click", (e) => { if (e.target.id === "installSheet") closeSheet(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSheet(); });
+  showInstallButtons();
   document.querySelectorAll("[data-global]").forEach((b) => b.addEventListener("click", () => globalAct(b.dataset.global)));
 
   // ---------------------------------------------------------------- sliders: send while dragging, don't let polling yank them back
@@ -430,7 +501,7 @@
   function renderAudio(state) {
     const list = $("#audioList");
     if (!state.audio.length) {
-      list.innerHTML = `<div class="empty">${ICON.music}<p>No apps are playing sound right now.</p></div>`;
+      list.innerHTML = `<div class="empty small"><p>No apps are playing sound right now.</p></div>`;
       list.dataset.sig = "";
       return;
     }
