@@ -577,10 +577,12 @@ namespace PipStudio
             var knob = new Border { Width = 11, Height = 7, CornerRadius = new CornerRadius(3.5), Background = Brushes.White };
             EPut(c, knob, 224, 78);
             EK(sb, knob, Canvas.LeftProperty, 0, 224, 2.4, 224, 3.2, 200, 4.2, 200);
-            // a finger: tap Corner, then drag the slider
-            var cur = ECursor(); EPut(c, cur, 236, 120);
-            EK(sb, cur, Canvas.LeftProperty, 0, 236, 0.8, 199, 2.0, 199, 2.4, 229, 3.2, 205, 4.2, 236);
-            EK(sb, cur, Canvas.TopProperty, 0, 120, 0.8, 52, 2.0, 52, 2.4, 81, 3.2, 81, 4.2, 120);
+            // a finger (a touch dot, it's a phone): tap Corner, then drag the slider down
+            var touch = new Ellipse { Width = 14, Height = 14, Fill = EHex("#B3FFFFFF"), Stroke = EHex("#40000000"), StrokeThickness = 1, Opacity = 0 };
+            EPut(c, touch, 193, 45);
+            EK(sb, touch, UIElement.OpacityProperty, 0, 0, 0.9, 0, 1.0, 1, 1.3, 1, 1.45, 0, 2.2, 0, 2.3, 1, 3.25, 1, 3.45, 0, 4.2, 0);
+            EK(sb, touch, Canvas.LeftProperty, 0, 193, 2.0, 193, 2.05, 223, 2.4, 223, 3.2, 199, 4.2, 199);
+            EK(sb, touch, Canvas.TopProperty, 0, 45, 2.0, 45, 2.05, 74.5, 4.2, 74.5);
         }
 
         /// <summary>Pairing: the phone shows a PIN, it's typed into PiP Studio's dialog digit by digit, and both get a tick.</summary>
