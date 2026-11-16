@@ -1,0 +1,45 @@
+# Takes screenshots of PiP Studio on a Windows machine, for the README and the Microsoft Store: builds it, opens Notepad
+# (something to show in a PiP), runs "PiPStudio.exe --screenshots", and keeps the pictures as a download on the run.
+# Runs when a commit message says [screenshots], or by hand from the Actions tab.
+
+name: Screenshots
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shots:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[screenshots]')
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build
+        run: dotnet publish PiPStudio.csproj -c Release -r win-x64 --self-contained false -o out
+
+      - name: Take screenshots
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP "shots"
+          Start-Process notepad
+          Start-Sleep -Seconds 3
+          $p = Start-Process -FilePath ".\out\PiPStudio.exe" -ArgumentList "--screenshots", "`"$dir`"" -PassThru
+          if (-not $p.WaitForExit(180000)) { $p.Kill(); Write-Host "PiP Studio didn't finish in time" }
+          Get-ChildItem $dir | Format-Table Name, Length
+          $err = Join-Path $env:APPDATA "PiPStudio\errors.log"
+          if (Test-Path $err) { Copy-Item $err $dir }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: ${{ runner.temp }}/shots
+          retention-days: 7

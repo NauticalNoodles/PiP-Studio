@@ -361,7 +361,9 @@ namespace PipStudio
                 Balloon("PiP Studio is running", "Press " + HK.Display("HK_NewPip") + " any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.", true);
             }
             bool updated = args.Any(a => a.Equals("--updated", StringComparison.OrdinalIgnoreCase));   // restarted by Updater.Install
-            if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
+            string shots = MainUI.ShotsDir(args);
+            if (shots != null) RunSoon(() => MainUI.TakeShots(shots), 1500);      // the screenshots workflow
+            else if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
             Updater.Start(updated);
             Companion.Apply();                                            // the phone companion, if you turned it on
