@@ -28,11 +28,3 @@ Desktop.ini
 # Python (make_langdata.py)
 __pycache__/
 msix-layout/
-
-# Android app (android/)
-android/.gradle/
-android/build/
-android/app/build/
-android/local.properties
-*.jks
-*.keystore

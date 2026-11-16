@@ -438,8 +438,7 @@
   // Browsers only offer a one-tap install on https sites; this page comes from your PC over your home network, so most
   // phones get the steps for their browser's own "Add to Home Screen" instead. Either way it then opens full screen.
   let installPrompt = null;
-  const installed = () => matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches || navigator.standalone === true
-    || /; wv\)/.test(navigator.userAgent);                        // inside the Android app: it's already installed
+  const installed = () => matchMedia("(display-mode: standalone)").matches || matchMedia("(display-mode: fullscreen)").matches || navigator.standalone === true;
   function showInstallButtons() {
     const show = !installed();
     document.querySelectorAll("[data-install]").forEach((b) => b.closest(".note") ? b.closest(".note").classList.toggle("hidden", !show) : b.classList.toggle("hidden", !show));

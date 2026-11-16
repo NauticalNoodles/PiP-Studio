@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- PiP Studio serves the companion page over plain http on your home network (its messages are encrypted inside). -->
-<network-security-config>
-    <base-config cleartextTrafficPermitted="true" />
-</network-security-config>
