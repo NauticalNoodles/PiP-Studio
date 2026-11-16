@@ -1244,7 +1244,7 @@ namespace PipStudio
                 Ser.Write(p.St, sb);
             }
             Directory.CreateDirectory(Settings.Dir);
-            File.WriteAllText(SessionPath, sb.ToString());
+            U.SafeWrite(SessionPath, sb.ToString());
         }
 
         bool RestoreSession()

@@ -27,6 +27,17 @@ namespace PipStudio
     static class U
     {
         public static readonly CultureInfo CI = CultureInfo.InvariantCulture;
+
+        /// <summary>Writes a file so a crash or power cut mid-save can't leave it empty or half written: the text goes to a
+        /// temporary file next to it first, which then takes the old file's place in one step.</summary>
+        public static void SafeWrite(string path, string text)
+        {
+            string tmp = path + ".tmp";
+            File.WriteAllText(tmp, text);
+            if (!File.Exists(path)) { File.Move(tmp, path); return; }
+            try { File.Replace(tmp, path, null); }
+            catch (IOException) { File.Copy(tmp, path, true); File.Delete(tmp); }   // drives that can't swap files in one step
+        }
         static readonly int ourPid = Process.GetCurrentProcess().Id;
         static readonly Dictionary<int, string> pidNames = new Dictionary<int, string>();
         static readonly Dictionary<string, Font> fonts = new Dictionary<string, Font>();
@@ -563,7 +574,7 @@ namespace PipStudio
                 var sb = new StringBuilder();
                 sb.AppendLine("; PiP Studio settings");
                 Ser.Write(this, sb);
-                File.WriteAllText(FilePath, sb.ToString());
+                U.SafeWrite(FilePath, sb.ToString());
             }
             catch { }
         }

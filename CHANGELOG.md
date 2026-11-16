@@ -17,6 +17,10 @@ Marking windows as PiPs is clearer and easier to undo:
 - Other apps' PiPs stay on the Running PiPs page while they're minimized, with a Restore button to bring them back
 - The title bar on other apps' PiPs no longer has a maximize button
 
+Behind the scenes:
+
+- Settings and your open PiPs are saved more safely, so a crash or power cut can't wipe them
+
 ## 1.0.3
 
 Other apps' PiPs get the PiP Studio treatment when you point at them.
