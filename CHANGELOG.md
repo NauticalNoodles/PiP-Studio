@@ -16,6 +16,7 @@ Marking windows as PiPs is clearer and easier to undo:
 - Removing a mark makes it a normal window again and takes it off always on top
 - Other apps' PiPs stay on the Running PiPs page while they're minimized, with a Restore button to bring them back
 - The title bar on other apps' PiPs no longer has a maximize button
+- Discord's in-game overlay no longer counts as a PiP
 
 Control PiP Studio from your phone:
 

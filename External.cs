@@ -230,10 +230,15 @@ namespace PipStudio
             if (U.ClassName(h) != "Chrome_WidgetWin_1") return false;
             if (!DiscordNames.Contains(U.ProcessName(h))) return false;
             if ((title ?? "").Trim().EndsWith("Discord", StringComparison.OrdinalIgnoreCase)) return false;
+            if ((title ?? "").IndexOf("overlay", StringComparison.OrdinalIgnoreCase) >= 0) return false;   // Discord's in-game overlay
             int ex = Native.GetWindowLong(h, Native.GWL_EXSTYLE);
-            if ((ex & Native.WS_EX_NOACTIVATE) != 0) return false;        // Discord's overlay and notification helpers
+            if ((ex & (Native.WS_EX_NOACTIVATE | Native.WS_EX_TRANSPARENT)) != 0) return false;   // overlay and notification helpers (click-through)
             var r = U.WindowRect(h);
-            return r.Width >= 200 && r.Height >= 120;
+            if (r.Width < 200 || r.Height < 120) return false;
+            // the overlay covers the whole screen (even when you open it with Shift+Tab and it stops being click-through);
+            // a call pop-out is a small window
+            var mon = Screen.FromHandle(h).Bounds;
+            return (double)r.Width * r.Height < 0.6 * mon.Width * mon.Height;
         }
 
         /// <summary>A short note under the window: this is another app's own PiP (shown once each time control moves to it).</summary>
