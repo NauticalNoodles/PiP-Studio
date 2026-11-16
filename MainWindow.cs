@@ -101,8 +101,8 @@ namespace PipStudio
         static Button fixNow;
         static readonly Dictionary<string, StackPanel> pages = new Dictionary<string, StackPanel>();
         static readonly List<SearchEntry> searchIndex = new List<SearchEntry>();
-        static readonly string[] navKeys = { "windows", "running", "appearance", "behavior", "controller", "shortcuts", "settings" };
-        static readonly string[] navLabels = { "Windows", "Running PiPs", "Appearance", "Behavior", "Controller", "Shortcuts", "Settings" };
+        static readonly string[] navKeys = { "windows", "running", "appearance", "behavior", "controller", "shortcuts", "settings", "phone" };
+        static readonly string[] navLabels = { "Windows", "Running PiPs", "Appearance", "Behavior", "Controller", "Shortcuts", "Settings", "Phone" };
         static string page = "windows", buildingPage, lastSettingsPage = "appearance";
         static Action buildingReveal;
         static bool compact, userCompact, overlayOpen, paneStyled, lastExpanded = true, fixSync;
@@ -369,6 +369,7 @@ namespace PipStudio
               <RadioButton x:Name='Nav3' Tag='&#xE8B0;' Content='Behavior' GroupName='nav' Style='{StaticResource Nav}'/>
               <RadioButton x:Name='Nav4' Tag='&#xE7FC;' Content='Controller' GroupName='nav' Style='{StaticResource Nav}'/>
               <RadioButton x:Name='Nav5' Tag='&#xE765;' Content='Shortcuts' GroupName='nav' Style='{StaticResource Nav}'/>
+              <RadioButton x:Name='Nav7' Tag='&#xE8EA;' Content='Phone' GroupName='nav' Style='{StaticResource Nav}'/>
             </StackPanel>
           </DockPanel>
           <Canvas x:Name='IndCanvas' IsHitTestVisible='False'>
@@ -634,7 +635,7 @@ namespace PipStudio
             overlayOpen = false; paneStyled = false; lastExpanded = true;
             indicator = F<Rectangle>("Indicator"); indCanvas = F<Canvas>("IndCanvas"); indTop = -1;
             fixAlways = F<Wpf.Ui.Controls.ToggleSwitch>("FixAlways"); fixNow = F<Button>("FixNow");
-            navBtns = Enumerable.Range(0, 7).Select(i => F<RadioButton>("Nav" + i)).ToArray();
+            navBtns = Enumerable.Range(0, navKeys.Length).Select(i => F<RadioButton>("Nav" + i)).ToArray();
             for (int i = 0; i < navBtns.Length; i++)
             {
                 int idx = i;
@@ -2553,16 +2554,24 @@ namespace PipStudio
             return b;
         }
 
-        /// <summary>Settings > General > Phone companion: on/off, the address, Pair a phone (QR code), and the paired phones.</summary>
-        static void BuildCompanionSettings(StackPanel ge, Settings S)
+        /// <summary>The Phone page: the companion on or off, the address and Pair a phone, then the paired phones with Rename
+        /// and Remove.</summary>
+        static void BuildPhonePage(StackPanel pp, Settings S)
         {
-            Section(ge, "Phone companion");
-            Card(ge, "\uE8EA", "Control PiP Studio from your phone", "Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.",
+            if (Packaged.IsPackaged)
+            {
+                Card(pp, "\uE8EA", "Not in the Microsoft Store version", "The phone companion needs network access the Store version doesn't have. The installer and portable versions from GitHub include it.", null, "phone companion store");
+                return;
+            }
+            Section(pp, "Phone companion");
+            Card(pp, "\uE8EA", "Control PiP Studio from your phone", "Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.",
                 Switch(() => S.CompanionOn, v => { S.CompanionOn = v; Companion.Apply(); }), "phone mobile android iphone remote companion volume mixer wifi qr");
             var pairBtn = PlainButton("Pair a phone", ShowPairing, true);
-            var pairCard = Card(ge, "\uED14", "Pair a phone", "Turn on the switch above first", pairBtn, "pair qr code connect phone scan");
+            var pairCard = Card(pp, "\uED14", "Pair a phone", "Turn on the switch above first", pairBtn, "pair qr code connect phone scan pin");
+
+            Section(pp, "Paired phones");
             var phonesHost = new StackPanel();
-            ge.Children.Add(phonesHost);
+            pp.Children.Add(phonesHost);
 
             refreshCompanion = () =>
             {
@@ -2572,16 +2581,39 @@ namespace PipStudio
                     pairCard.Desc.Text = !S.CompanionOn ? "Turn on the switch above first"
                         : Companion.Problem ?? (url == null ? "This PC isn't on a network right now" : "Your phone opens " + url);
                 phonesHost.Children.Clear();
-                foreach (var d in Companion.Devices())
+                var devices = Companion.Devices();
+                if (devices.Count == 0)
+                {
+                    var none = Fluent.Label("No phones are paired yet. Press Pair a phone above to add one.", 13, "Sub");
+                    none.Margin = new Thickness(4, 2, 0, 8);
+                    phonesHost.Children.Add(none);
+                }
+                foreach (var d in devices)
                 {
                     var dev = d;
                     string seen = dev.LastSeen == null ? "Not used since PiP Studio started" : "Last used " + dev.LastSeen.Value.ToString("t");
+                    var buttons = new StackPanel { Orientation = Orientation.Horizontal };
+                    var rename = PlainButton("Rename", () => RenamePhone(dev));
+                    rename.Margin = new Thickness(0, 0, 8, 0);
                     var remove = PlainButton("Remove", () =>
                         Ask("Remove " + dev.Name + "?", "It stops working right away. You can pair it again any time.", "Remove", "Cancel", ok => { if (ok) Companion.Remove(dev.Id); }));
-                    Card(phonesHost, "\uE8EA", dev.Name, seen, remove, "paired phone device remove");
+                    buttons.Children.Add(rename); buttons.Children.Add(remove);
+                    Card(phonesHost, "\uE8EA", dev.Name, seen, buttons, "paired phone device rename remove");
                 }
             };
             refreshCompanion();
+        }
+
+        /// <summary>Rename a paired phone (its name comes from what the phone's browser says it is, like "Pixel 7").</summary>
+        static void RenamePhone(Companion.Device dev)
+        {
+            var box = new TextBox { Text = dev.Name, MaxLength = 40, MinWidth = 280, Padding = new Thickness(8, 6, 8, 6) };
+            box.Loaded += (o, e) => box.SelectAll();
+            Ask("Rename phone", "The name shows here, so you can tell your phones apart.", "Save", "Cancel", ok =>
+            {
+                string name = (box.Text ?? "").Trim();
+                if (ok && name.Length > 0) Companion.Rename(dev.Id, name);
+            }, false, box, box);
         }
 
         /// <summary>The Pair a phone dialog, like Moonlight and Sunshine: the phone shows a 6-digit PIN and you type it here.
@@ -2912,7 +2944,6 @@ namespace PipStudio
                 };
                 Card(ge, "\uE7EF", "Always start as administrator", "Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.", always, "admin elevated uac always startup sign in task");
             }
-            if (!Packaged.IsPackaged) BuildCompanionSettings(ge, S);
             if (Updater.Supported) BuildUpdateSettings(ge, S);   // the Store version gets its updates from the Store
             Section(ge, "About");
             var about = MakeExpander(ge, "", "PiP Studio", "Version " + Updater.CurrentText, PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
@@ -2920,6 +2951,7 @@ namespace PipStudio
             Row(about, "Report a problem", "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", PlainButton("Report", CrashReports.ReportProblem), "bug report problem crash issue feedback github");
             Row(about, "Picture-in-picture for any window or part of the screen", "Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.", null, "about");
 
+            BuildPhonePage(NewPage("phone"), S);                          // the phone companion has its own page
             NewPage("search");
         }
     }

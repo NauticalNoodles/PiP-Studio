@@ -681,3 +681,12 @@ Always start as administrator	التشغيل كمسؤول دائمًا	始终以
 Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.	دون السؤال في كل مرة، وعند تسجيل الدخول أيضًا. للألعاب والتطبيقات التي تعمل كمسؤول: يمكن لـ PiP Studio حينها عرض نوافذها وأخذ التركيز منها لعناصر تحكم وحدة التحكم. يسأل Windows مرة واحدة لإعداد ذلك.	无需每次询问，登录时也是如此。适用于以管理员身份运行的游戏和应用：PiP Studio 可以显示它们的窗口，并在手柄控制时夺取焦点。Windows 只会在设置时询问一次。
 Restart as administrator now?	هل تريد إعادة التشغيل كمسؤول الآن؟	现在以管理员身份重新启动？
 From now on PiP Studio starts as administrator without asking, also when it starts at sign-in.	من الآن فصاعدًا يبدأ PiP Studio كمسؤول دون السؤال، وكذلك عند بدء التشغيل مع تسجيل الدخول.	从现在起，PiP Studio 会以管理员身份启动而无需询问，登录时自动启动也是如此。
+Phone	الهاتف	手机
+Paired phones	الهواتف المقترنة	已配对的手机
+No phones are paired yet. Press Pair a phone above to add one.	لا توجد هواتف مقترنة بعد. اضغط «إقران هاتف» أعلاه لإضافة هاتف.	还没有配对的手机。按上方的“配对手机”来添加。
+Rename	إعادة تسمية	重命名
+Rename phone	إعادة تسمية الهاتف	重命名手机
+The name shows here, so you can tell your phones apart.	يظهر الاسم هنا حتى تميّز بين هواتفك.	名称会显示在这里，方便你区分各部手机。
+Save	حفظ	保存
+Not in the Microsoft Store version	غير متوفر في إصدار Microsoft Store	Microsoft Store 版本中不可用
+The phone companion needs network access the Store version doesn't have. The installer and portable versions from GitHub include it.	يحتاج تطبيق الهاتف المرافق إلى وصول للشبكة غير متوفر في إصدار المتجر. يتضمنه إصدار المثبّت والإصدار المحمول من GitHub.	手机伴侣需要 Store 版本所没有的网络访问权限。GitHub 上的安装版和便携版包含此功能。

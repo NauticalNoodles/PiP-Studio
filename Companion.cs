@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace PipStudio
 {
     /// <summary>
-    /// Phone companion (Settings > General > Phone companion): control PiPs and every app's volume from a phone's browser.
+    /// Phone companion (the Phone page in PiP Studio): control PiPs and every app's volume from a phone's browser.
     /// - Off by default. When on, PiP Studio listens on one port (48765, or the next free one) and answers only devices on
     ///   the local network (private and link-local addresses); nothing goes over the internet.
     /// - Pairing works like Moonlight and Sunshine: the phone shows a 6-digit PIN and you type it into PiP Studio's Pair a
@@ -231,6 +231,16 @@ namespace PipStudio
         {
             App.S.CompanionDevices = string.Join(";", l.Select(d => d.Id + "|" + d.Sealed + "|" + Uri.EscapeDataString(d.Name ?? "Phone")));
             App.I.SaveSettingsSoon();
+        }
+
+        /// <summary>Gives a paired phone another name.</summary>
+        public static void Rename(string id, string name)
+        {
+            name = (name ?? "").Trim();
+            if (name.Length == 0) return;
+            if (name.Length > 40) name = name.Substring(0, 40);
+            OnUi(() => { var l = Devices(); foreach (var d in l) if (d.Id == id) d.Name = name; SaveDevices(l); return 0; });
+            Raise();
         }
 
         /// <summary>Forgets a phone: its key stops working right away.</summary>
