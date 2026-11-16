@@ -639,6 +639,7 @@ namespace PipStudio
                 id = h.ToInt64().ToString("x"),
                 title = string.IsNullOrWhiteSpace(U.WindowTitle(h)) ? ExternalPip.AppName(h) : U.WindowTitle(h),
                 app = ExternalPip.AppName(h),
+                proc = U.ProcessName(h),
                 minimized = Native.IsIconic(h)
             }).ToList();
         }

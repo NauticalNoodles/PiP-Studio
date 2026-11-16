@@ -248,7 +248,9 @@
 
   /* Window: the open windows, the one showing now marked */
   .winlist { max-height: 55vh; overflow-y: auto; margin: 6px -4px 14px; padding: 2px 4px; display: flex; flex-direction: column; gap: 8px; }
-  .win { text-align: left; border-radius: 18px; padding: 11px 14px; display: flex; flex-direction: column; min-height: 54px; }
+  .win { text-align: left; border-radius: 18px; padding: 10px 14px 10px 10px; display: flex; align-items: center; gap: 12px; min-height: 54px; }
+  .win .appicon { width: 34px; height: 34px; border-radius: 9px; font-size: 14px; }
+  .win .wtxt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
   .win .wt { font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .win .wa { font-size: 12.5px; color: var(--sub); }
   .win.on { background: rgba(255,255,255,.14); }
@@ -725,6 +727,8 @@
       if (fo) { fo.classList.toggle("on", !!p.follow); fo.setAttribute("aria-pressed", !!p.follow); }
       card.querySelector('[data-f="title"]').textContent = p.title;
       card.querySelector('[data-f="app"]').textContent = p.app || "";
+      const ic = card.querySelector(".top .appicon[data-proc]");          // it now shows another app's window: that app's icon
+      if (ic && ic.dataset.proc !== (p.proc || "")) { ic.outerHTML = appIcon(p.proc, p.app); loadIcons(card); }
       const th = card.querySelector('[data-a="theater"]');
       if (th) th.classList.toggle("on", !!p.theater);
       setSlider(card.querySelector('[data-s="opacity"]'), p.id + "opacity", p.opacity);
@@ -788,8 +792,10 @@
     if (!list.length) { $("#pickBody").innerHTML = '<p class="hint">No other windows are open.</p>'; return; }
     $("#pickBody").innerHTML = `<div class="winlist">${list.map((w) => `
       <button class="win${w.id === cur ? " on" : ""}" data-win="${esc(w.id)}">
-        <span class="wt">${esc(w.title)}</span><span class="wa">${esc(w.app)}${w.minimized ? " · minimized" : ""}${w.id === cur ? " · showing now" : ""}</span>
+        ${appIcon(w.proc, w.app)}
+        <span class="wtxt"><span class="wt">${esc(w.title)}</span><span class="wa">${esc(w.app)}${w.minimized ? " · minimized" : ""}${w.id === cur ? " · showing now" : ""}</span></span>
       </button>`).join("")}</div>`;
+    loadIcons($("#pickBody"));
     $("#pickBody").querySelectorAll("[data-win]").forEach((b) => b.addEventListener("click", () => { act(id, "source", undefined, b.dataset.win); closePicker(); }));
   }
 

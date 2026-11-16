@@ -7,6 +7,7 @@
 - The side menu folds into icons at the same window width on every page, whether explanations are on or not
 - A custom accent color now also colors the switches, sliders and main buttons, not only PiP Studio's own highlights
 - Phone companion: adding it to your phone's home screen names the shortcut after your PC ("PiP Studio (Your-PC)"), so you can tell PCs apart
+- Phone companion: Show a window lists each window with its app's icon, and a PiP's icon changes when it switches to another app's window
 - Phone companion: the page behind a menu (like Show a window) no longer scrolls, and long menus scroll inside themselves
 - Phone companion: sliders fill all the way at 100%, and apps running as administrator (like many games) show their icon too
 - Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. Controller mode keeps the panel. The Phone page has explanations too.
