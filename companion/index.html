@@ -281,6 +281,41 @@
   .foot { text-align: center; color: var(--faint); font-size: 12px; margin-top: 24px; }
   .foot button { color: var(--sub); text-decoration: underline; font-size: 12px; }
 
+  /* ---- a computer: mouse feedback, dark scrollbars, and on a wide window two columns (PiPs | App volume) ---- */
+  @media (hover: hover) and (pointer: fine) {
+    .chip:hover, .install:hover, .act:hover, .iconbtn:hover, .close:hover, .secondary:hover, .spot:hover, .win:hover, .pinbtn:hover { background: rgba(255,255,255,.12); }
+    .close:hover { color: var(--danger); }
+    .primary:hover { filter: brightness(1.08); }
+    input[type=range]::-webkit-slider-thumb { cursor: grab; }
+    input[type=range]:active::-webkit-slider-thumb { cursor: grabbing; }
+    html { scrollbar-color: rgba(255,255,255,.22) transparent; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 99px; border: 3px solid transparent; background-clip: padding-box; }
+    ::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,.3); }
+    ::-webkit-scrollbar-track { background: transparent; }
+  }
+  @media (min-width: 900px) {
+    header { max-width: 1200px; padding: 28px 32px 10px; }
+    header img { width: 48px; height: 48px; border-radius: 13px; }
+    header h1 { font-size: 32px; }
+    main { max-width: 1200px; padding: 12px 32px 28px; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr); column-gap: 28px; align-items: start; }
+    main > .banner, main > .foot { grid-column: 1 / -1; }
+    #pipsSection { grid-column: 1; }
+    /* App volume: its own column that stays in view and scrolls by itself */
+    #audioSection { grid-column: 2; position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto; overscroll-behavior: contain; padding: 0 4px 8px; margin: 0 -4px; }
+    #audioSection h2.sect { margin-top: 68px; }
+    .quick { max-width: 560px; }
+    /* menus: a dialog in the middle of the window instead of a sheet from the bottom */
+    .sheet { align-items: center; padding: 24px; }
+    .sheet .panel { max-width: 480px; max-height: calc(100vh - 48px); }
+    .winlist { max-height: 60vh; }
+    #pair { margin-top: 10vh; }
+  }
+  @media (min-width: 1300px) {
+    /* lots of room: PiPs side by side */
+    #pipList { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 0 16px; }
+  }
+
   /* ---- fallbacks ---- */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
     .card, .app, .chip, .install, .sheet .panel, #pair, .empty.small { background: var(--glass-solid); }
@@ -304,11 +339,11 @@
   <img src="/icon.png" alt="">
   <h2>Connect to PiP Studio</h2>
   <div id="pairStart">
-    <p>Control your PiPs and every app's volume from this phone.</p>
+    <p>Control your PiPs and every app's volume from this <span class="dev">phone</span>.</p>
     <ol>
       <li>On your PC, open <b>PiP Studio</b> &rsaquo; <b>Phone</b> and press <b>Pair a phone</b>.</li>
       <li>Tap <b>Pair</b> below.</li>
-      <li>Type the PIN this phone shows into PiP Studio.</li>
+      <li>Type the PIN this <span class="dev">phone</span> shows into PiP Studio.</li>
     </ol>
     <button class="primary wide" id="pairBtn">Pair</button>
     <p class="note hidden" id="pairInstallHint" style="margin-top:16px">Want it on your home screen? <button class="link" data-install>Install the app</button> first, then pair inside it.</p>
@@ -353,7 +388,7 @@
     <button class="install hidden" data-install aria-label="Install as an app"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4.5-4.5M12 15l4.5-4.5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Install app</button>
   </header>
   <main>
-    <div class="banner hidden" id="offline" role="status">Can't reach PiP Studio. Check that this phone is on the same Wi-Fi as your PC and PiP Studio is running.</div>
+    <div class="banner hidden" id="offline" role="status">Can't reach PiP Studio. Check that this <span class="dev">phone</span> is on the same <span class="net">Wi-Fi</span> as your PC and PiP Studio is running.</div>
 
     <section id="pipsSection">
       <div class="quick">
@@ -370,7 +405,7 @@
       <div id="audioList"></div>
     </section>
 
-    <div class="foot"><span id="ver"></span> · <button id="forget">Disconnect this phone</button></div>
+    <div class="foot"><span id="ver"></span> · <button id="forget">Disconnect this <span class="dev">phone</span></button></div>
   </main>
 </div>
 
@@ -378,6 +413,10 @@
 "use strict";
 (() => {
   const $ = (s) => document.querySelector(s);
+  // opened on a computer (a mouse): say "this computer", not "this phone"
+  const DEV = matchMedia("(hover: hover) and (pointer: fine)").matches ? "computer" : "phone", NET = DEV === "computer" ? "network" : "Wi-Fi";
+  document.querySelectorAll(".dev").forEach((x) => { x.textContent = DEV; });
+  document.querySelectorAll(".net").forEach((x) => { x.textContent = NET; });
   const C = window.PipCrypto;
   // what pairing left in this browser: the device id PiP Studio gave us and our shared key (base64)
   const KEY = "pipstudio.device";
@@ -508,7 +547,7 @@
       if (pairing !== token) return;
       pairing = null;
       $("#pairPin").classList.add("hidden"); $("#pairStart").classList.remove("hidden");
-      $("#pairMsg").textContent = e instanceof TypeError ? "Can't reach PiP Studio. Is this phone on the same Wi-Fi as your PC?" : e.message;
+      $("#pairMsg").textContent = e instanceof TypeError ? "Can't reach PiP Studio. Is this " + DEV + " on the same " + NET + " as your PC?" : e.message;
     }
   }
 
@@ -530,7 +569,7 @@
   $("#pairBtn").addEventListener("click", pair);
   $("#pairCancel").addEventListener("click", () => showPair());
   $("#forget").addEventListener("click", () => {
-    if (!confirm("Disconnect this phone? You'll need to pair it again to use it. (To remove it completely, use Remove in PiP Studio's settings.)")) return;
+    if (!confirm("Disconnect this " + DEV + "? You'll need to pair it again to use it. (To remove it completely, use Remove in PiP Studio's settings.)")) return;
     store.set(null); showPair();
   });
 
