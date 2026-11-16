@@ -64,6 +64,7 @@ namespace PipStudio
                 steps.Add(() => Save(Path.Combine(dir, name + ".png")));
             };
             shot("windows", "windows");
+            steps.Add(() => SaveFromScreen(Path.Combine(dir, "windows-screen.png")));   // with the live preview, which Windows draws on top
             shot("running", "running");
             shot("appearance", "appearance");
             shot("behavior", "behavior");
@@ -91,6 +92,19 @@ namespace PipStudio
                 }
             }) { IsBackground = true };
             th.Start();
+        }
+
+        /// <summary>The window as it is on screen (includes the live preview, which Windows draws over the window).</summary>
+        static void SaveFromScreen(string path)
+        {
+            var h = new System.Windows.Interop.WindowInteropHelper(w).Handle;
+            var r = U.FrameRect(h);                                     // the visible frame, without the invisible resize border
+            using (var bmp = new System.Drawing.Bitmap(r.Width, r.Height))
+            {
+                using (var g = System.Drawing.Graphics.FromImage(bmp)) g.CopyFromScreen(r.Location, System.Drawing.Point.Empty, r.Size);
+                bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+            }
+            Log("saved " + Path.GetFileName(path));
         }
 
         /// <summary>The window drawn at twice its size on its own solid background (Mica can't be captured this way).</summary>
