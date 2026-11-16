@@ -388,7 +388,7 @@ namespace PipStudio
                 var m = new Dictionary<string, object>
                 {
                     ["name"] = "PiP Studio", ["short_name"] = "PiP Studio", ["start_url"] = "/", ["display"] = "standalone",
-                    ["background_color"] = "#0b0e22", ["theme_color"] = "#0b0e22",
+                    ["background_color"] = "#0a0a0c", ["theme_color"] = "#0a0a0c",
                     ["icons"] = new[] { new Dictionary<string, string> { ["src"] = "/icon.png", ["sizes"] = "256x256", ["type"] = "image/png" } }
                 };
                 await Send(s, 200, "application/manifest+json", JsonSerializer.SerializeToUtf8Bytes(m), true);
