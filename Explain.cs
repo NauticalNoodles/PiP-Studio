@@ -524,7 +524,7 @@ namespace PipStudio
             foreach (var glyph in EFitBar(glyphs, w, 12))
                 sp.Children.Add(new TextBlock { Text = glyph, FontFamily = Fluent.IconFont, FontSize = 7.5, Foreground = Brushes.White, Width = 12, TextAlignment = TextAlignment.Center, VerticalAlignment = VerticalAlignment.Center });
             bar.Children.Add(sp);
-            EPut(c, bar, p.X, p.Y);
+            EPut(c, bar, p.X, p.Y - 17);                                       // just above the PiP, not over it
 
             var cur = ECursor(); EPut(c, cur, 40, 40);
             double cx = p.X + w / 2, cy = p.Y + h / 2 + 6;

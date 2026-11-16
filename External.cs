@@ -1104,6 +1104,7 @@ namespace PipStudio
         bool dragging;
         Point dragStart;
         Rectangle dragFrom;
+        int barOffset;                 // where the bar sits relative to the PiP (above, below or on it)
 
         public ExtHover()
         {
@@ -1173,15 +1174,27 @@ namespace PipStudio
             }
         }
 
-        /// <summary>Over the top of the PiP: the bar, and room under it for a tooltip (see-through and click-through).</summary>
+        /// <summary>Just above the PiP (below it when it's at the top of the screen, over its top edge if neither fits): the bar,
+        /// and room under it for a tooltip (see-through and click-through).</summary>
         void Place()
         {
             var r = U.WindowRect(target);
             uint d = Native.GetDpiForWindow(target);
             float s = d > 0 ? d / 96f : 1;
             if (s != scale) { scale = s; Invalidate(); }
-            int h = Math.Min(r.Height, (int)(64 * s));
-            var b = new Rectangle(r.X, r.Y, r.Width, h);
+            int bh = (int)(32 * s), h = (int)(64 * s);
+            Rectangle wa;
+            try { wa = Screen.FromHandle(target).WorkingArea; } catch { wa = r; }
+            int y;
+            if (dragging) y = r.Y + barOffset;                              // while you drag, it keeps its side of the PiP
+            else
+            {
+                if (r.Y - bh >= wa.Top) y = r.Y - bh;
+                else if (r.Bottom + bh <= wa.Bottom) y = r.Bottom;
+                else { y = r.Y; h = Math.Min(r.Height, h); }
+                barOffset = y - r.Y;
+            }
+            var b = new Rectangle(r.X, y, r.Width, h);
             if (Bounds != b) { Bounds = b; Invalidate(); }
         }
 
