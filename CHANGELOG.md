@@ -7,7 +7,7 @@
 - The side menu folds into icons at the same window width on every page, whether explanations are on or not
 - A custom accent color now also colors the switches, sliders and main buttons, not only PiP Studio's own highlights
 - Phone companion: adding it to your phone's home screen names the shortcut after your PC ("PiP Studio (Your-PC)"), so you can tell PCs apart
-- Phone companion on a computer: a wide window shows PiPs and App volume side by side (App volume scrolls on its own), menus open as dialogs in the middle, buttons light up under the mouse, and the page says "this computer" instead of "this phone"
+- Phone companion on a computer: a wide window shows every PiP button at once (no More) in a denser layout, PiPs and App volume side by side (App volume scrolls on its own), menus open as dialogs in the middle, buttons light up under the mouse, and the page says "this computer" instead of "this phone"
 - Phone companion: sliders only move when you drag the knob, so a stray tap on the track no longer jumps the volume; app icons show whole, without a tile behind them
 - Phone companion: Show a window lists each window with its app's icon, and a PiP's icon changes when it switches to another app's window
 - Phone companion: the page behind a menu (like Show a window) no longer scrolls, and long menus scroll inside themselves

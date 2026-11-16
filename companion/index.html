@@ -311,6 +311,35 @@
     .winlist { max-height: 60vh; }
     #pair { margin-top: 10vh; }
   }
+  @media (min-width: 900px) {
+    /* denser: a computer screen is read up close, with a precise pointer */
+    header { padding: 20px 32px 4px; }
+    header img { width: 42px; height: 42px; border-radius: 11px; }
+    header h1 { font-size: 26px; }
+    main { padding-top: 8px; }
+    .quick { margin: 0 0 2px; }
+    .chip { min-height: 36px; font-size: 13px; }
+    h2.sect { margin: 16px 6px 7px; }
+    #audioSection h2.sect { margin-top: 54px; }
+    .card { padding: 11px 12px 8px; margin-bottom: 10px; border-radius: 22px; }
+    .card .title { font-size: 15px; }
+    .card .meta { font-size: 12px; }
+    .card .appicon { width: 32px; height: 32px; }
+    .close { width: 30px; height: 30px; }
+    .actions { gap: 6px; margin-top: 9px; }
+    .actions.all { grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); }
+    .act { min-height: 48px; gap: 3px; font-size: 11px; border-radius: 13px; }
+    .act svg { width: 18px; height: 18px; }
+    .sliders { margin-top: 6px; }
+    .slider { grid-template-columns: 32px 1fr 42px; gap: 8px; margin-top: 0; }
+    .slider input[type=range] { height: 32px; }
+    .slider .lbl { font-size: 12px; }
+    .slider .iconbtn, .iconlbl { width: 32px; height: 32px; }
+    .slider .iconbtn svg, .iconlbl svg { width: 17px; height: 17px; }
+    .app { padding: 9px 12px 2px; margin-bottom: 8px; border-radius: 18px; }
+    .app .name { font-size: 14px; }
+    .app .appicon { width: 26px; height: 26px; }
+  }
   @media (min-width: 1300px) {
     /* lots of room: PiPs side by side */
     #pipList { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 0 16px; }
@@ -708,6 +737,7 @@
     if (p.kind === "app") a.push(["minimize", "Minimize"]);
     return a;
   }
+  const WIDE = matchMedia("(min-width: 900px)");                   // the desktop layout (the cards rebuild on the next refresh when it changes)
   let lastPips = new Map();                                        // the latest state of each PiP, for the pickers
   const expanded = new Set();                                      // cards whose More is open, kept across refreshes
   const btn = ([k, label]) => `<button class="act" data-a="${k}" aria-label="${label}">${ICON[k]}<span>${label}</span></button>`;
@@ -723,11 +753,13 @@
       return;
     }
     // rebuild the cards only when the set of PiPs or their buttons change; otherwise just update the numbers
-    const sig = state.pips.map((p) => [p.id, p.minimized, p.window, p.kind, p.volume == null].join(",")).join("|");
+    const sig = WIDE.matches + "|" + state.pips.map((p) => [p.id, p.minimized, p.window, p.kind, p.volume == null].join(",")).join("|");
     if (list.dataset.sig !== sig) {
       list.dataset.sig = sig;
       list.innerHTML = state.pips.map((p) => {
-        const more = moreActions(p), open = expanded.has(p.id);
+        // a wide window has room for every button: no More
+        const wide = WIDE.matches && !p.minimized, more = wide ? [] : moreActions(p), open = expanded.has(p.id);
+        const main = wide ? mainActions(p).concat(moreActions(p)) : mainActions(p);
         return `
         <div class="card${p.minimized ? " min" : ""}" data-id="${esc(p.id)}">
           <div class="top">
@@ -739,7 +771,7 @@
             <button class="close" data-a="close" aria-label="Close this PiP">${ICON.close}</button>
           </div>
           <div class="preview${previews.has(p.id) ? "" : " hidden"}"><img alt="Live preview of this PiP"><span class="pmsg">Loading preview…</span></div>
-          <div class="actions">${mainActions(p).map(btn).join("")}${more.length ? `<button class="act" data-more aria-expanded="${open}">${ICON.dots}<span>More</span></button>` : ""}</div>
+          <div class="actions${wide ? " all" : ""}">${main.map(btn).join("")}${more.length ? `<button class="act" data-more aria-expanded="${open}">${ICON.dots}<span>More</span></button>` : ""}</div>
           ${more.length ? `
           <div class="more${open ? "" : " hidden"}"><div class="actions">${more.map(btn).join("")}</div></div>` : ""}
           ${p.minimized ? "" : `
