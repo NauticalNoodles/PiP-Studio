@@ -122,6 +122,7 @@
 
   .appicon { width: 40px; height: 40px; border-radius: 11px; flex: none; display: grid; place-items: center; overflow: hidden; }
   .appicon img { width: 100%; height: 100%; object-fit: contain; }
+  .appicon:not(.ph) { border-radius: 0; overflow: visible; background: none; }   /* a real icon: shown whole, no tile or rounded crop */
   .appicon.ph { color: var(--sub); font-weight: 650; font-size: 16px; }
   .appicon.ph svg { width: 20px; height: 20px; }
   .appicon.small { width: 26px; height: 26px; border-radius: 7px; font-size: 12px; }
@@ -600,14 +601,25 @@
     let last = 0, timer = 0;
     const paint = () => { fill(input); const l = input.closest(".slider").querySelector(".lbl"); if (l) l.textContent = input.value + "%"; };
     const fire = () => { last = Date.now(); send(input.value / 100); };
+    // only the knob moves the slider: a tap elsewhere on the track does nothing (no sudden jump to full volume)
+    let grab = true, start = input.value;
+    input.addEventListener("pointerdown", (e) => {
+      const r = input.getBoundingClientRect(), min = +input.min || 0, max = +input.max || 100;
+      const knobX = r.left + 20 + (input.value - min) / (max - min) * (r.width - 40);   // the knob is 40px wide
+      grab = Math.abs(e.clientX - knobX) <= 34;
+      start = input.value;
+      if (grab) input.classList.add("drag");
+    });
+    input.addEventListener("keydown", () => { grab = true; });
+    const refuse = () => { if (grab) return false; input.value = start; paint(); return true; };
     input.addEventListener("input", () => {
+      if (refuse()) return;
       busy.set(key, Date.now()); paint();
       clearTimeout(timer);
       if (Date.now() - last > 90) fire(); else timer = setTimeout(fire, 90);
     });
-    input.addEventListener("change", () => { busy.set(key, Date.now()); clearTimeout(timer); fire(); });
+    input.addEventListener("change", () => { if (refuse()) return; busy.set(key, Date.now()); clearTimeout(timer); fire(); });
     const up = () => input.classList.remove("drag");
-    input.addEventListener("pointerdown", () => input.classList.add("drag"));
     input.addEventListener("pointerup", up); input.addEventListener("pointercancel", up); input.addEventListener("blur", up);
     paint();
   }
