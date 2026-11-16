@@ -487,7 +487,7 @@ namespace PipStudio
             bool mouseDown = (Native.GetAsyncKeyState(0x01) & 0x8000) != 0;
             var now = FindAll();
             foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone) && Native.IsWindow(gone) && Native.IsIconic(gone)) wentIconic.Add(gone);
-            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); theaterRestore.Remove(gone); }
+            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); nextBarCheck.Remove(gone); seenBars.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); theaterRestore.Remove(gone); }
             foreach (var h in now)
             {
                 if (theaterRestore.ContainsKey(h)) continue;              // theater: leave it centered
@@ -513,6 +513,7 @@ namespace PipStudio
                         moved.Remove(h);
                         if (!appControlled.Contains(h) && SnapsHere(h)) SnapNearest(h);   // you let go: glide to the nearest spot
                     }
+                    else if (!mouseDown && !moved.Contains(h)) RecheckBars(h);   // sitting still: has the stream changed shape?
                     continue;
                 }
                 lastRect[h] = r;
@@ -788,17 +789,9 @@ namespace PipStudio
         static int TrimBars(IntPtr h, bool trimmed)
         {
             var b = Bounds(h);
-            var c = U.ClientScreenRect(h);                                         // the picture: without the window's title bar and frame
-            if (c.Width < 40 || c.Height < 40) return -1;
-            int top, bottom, left, right;
-            if (!FindBars(h, c, out top, out bottom, out left, out right)) return -1;
-            int dh = 0;
-            if (top + bottom >= 4) dh = -(top + bottom);                           // letterbox: too tall for the video
-            else if (left + right >= 4)                                            // pillarbox: too short for the video
-            {
-                int vw = c.Width - left - right;
-                dh = (int)Math.Round(c.Height * (left + right) / (double)Math.Max(1, vw));
-            }
+            Rectangle c;
+            int dh = BarsDh(h, out c);
+            if (dh == int.MinValue) return -1;
             if (dh == 0)
             {
                 // no bars left after trimming: remember this shape while the window is open (a first look with no bars proves less, so it's checked again next time)
@@ -809,6 +802,48 @@ namespace PipStudio
             if (sz.Height == b.Height) return -1;
             ResizeTo(h, sz.Width, sz.Height);
             return 1;                                                           // the next pass checks it; the shape is remembered once no bars are left
+        }
+
+        /// <summary>How much taller (+) or shorter (-) the picture should be to lose its black bars: 0 for none,
+        /// int.MinValue when it can't tell. <paramref name="c"/> is the picture area it measured.</summary>
+        static int BarsDh(IntPtr h, out Rectangle c)
+        {
+            c = U.ClientScreenRect(h);                                             // the picture: without the window's title bar and frame
+            if (c.Width < 40 || c.Height < 40) return int.MinValue;
+            int top, bottom, left, right;
+            if (!FindBars(h, c, out top, out bottom, out left, out right)) return int.MinValue;
+            if (top + bottom >= 4) return -(top + bottom);                         // letterbox: too tall for the video
+            if (left + right >= 4)                                                 // pillarbox: too short for the video
+            {
+                int vw = c.Width - left - right;
+                return (int)Math.Round(c.Height * (left + right) / (double)Math.Max(1, vw));
+            }
+            return 0;
+        }
+
+        // A stream changes shape while it plays (a loading screen first, or the streamer switches resolution or window), so
+        // windows that lose their bars are looked at again every few seconds. Bars have to show up twice in a row, the same,
+        // before it trims: a dark scene for a moment isn't a bar.
+        static readonly Dictionary<IntPtr, DateTime> nextBarCheck = new Dictionary<IntPtr, DateTime>();
+        static readonly Dictionary<IntPtr, int> seenBars = new Dictionary<IntPtr, int>();
+
+        static void RecheckBars(IntPtr h)
+        {
+            if (!IsFreeShape(h) || AspectOf(h) != 0 || Native.IsIconic(h)) { seenBars.Remove(h); return; }
+            DateTime due;
+            if (nextBarCheck.TryGetValue(h, out due) && DateTime.Now < due) return;
+            nextBarCheck[h] = DateTime.Now.AddSeconds(3);
+            Rectangle c;
+            int dh = BarsDh(h, out c), before;
+            if (dh == int.MinValue || dh == 0) { seenBars.Remove(h); return; }
+            if (seenBars.TryGetValue(h, out before) && Math.Sign(before) == Math.Sign(dh) && Math.Abs(before - dh) <= 3)
+            {
+                seenBars.Remove(h);
+                freeAspect.Remove(h);                                              // its old shape is out of date
+                nextBarCheck[h] = DateTime.Now.AddSeconds(5);                      // give the trim time to finish
+                TrimBarsSoon(h, 4);
+            }
+            else seenBars[h] = dh;
         }
 
         /// <summary>Measures the bars around the video: solid dark strips (black, or the app's dark grey background like Discord's).

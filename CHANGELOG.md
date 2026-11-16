@@ -23,6 +23,7 @@ Marking windows as PiPs is clearer and easier to undo:
 - The title bar on other apps' PiPs no longer has a maximize button
 - The title bar on other apps' PiPs now sits just above them instead of covering their top (below them when there's no room above)
 - Discord's in-game overlay no longer counts as a PiP
+- Black bar removal keeps watching: when a Discord stream changes shape while it plays (after loading, or when the streamer switches resolution), the new bars are trimmed off within a few seconds
 - Black bar removal works on windows with their own title bar (like a game you marked as a PiP): bars are measured inside the window's picture only, and its shape is kept without the title bar when it's resized
 - Full-screen windows can't be treated as PiPs, and a marked window that goes full screen is no longer kept on top, so you can't get stuck under it
 - The live preview no longer covers questions PiP Studio asks you
