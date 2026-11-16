@@ -90,6 +90,16 @@ namespace PipStudio
         {
             var r = App.Resources;
             bool dark = Theme.Dark;
+            // WPF-UI's own controls (switches, sliders, main buttons): your accent colour, not only Windows'
+            try
+            {
+                var ab = Theme.AccentBase;
+                var wt = dark ? Wpf.Ui.Appearance.ApplicationTheme.Dark : Wpf.Ui.Appearance.ApplicationTheme.Light;
+                if (PipStudio.App.S != null && !PipStudio.App.S.UseSystemAccent)
+                    Wpf.Ui.Appearance.ApplicationAccentColorManager.Apply(Color.FromRgb(ab.R, ab.G, ab.B), wt);
+                else Wpf.Ui.Appearance.ApplicationAccentColorManager.ApplySystemAccent();
+            }
+            catch { }
             Func<string, string, string, Brush> pick = (key, dk, lt) => (App.TryFindResource(key) as Brush) ?? Hex(dark ? dk : lt);
             var acc = Theme.Accent;
             var accBrush = new SolidColorBrush(Color.FromRgb(acc.R, acc.G, acc.B));
