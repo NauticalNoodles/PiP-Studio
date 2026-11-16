@@ -636,9 +636,19 @@ namespace PipStudio
             int maxW = (int)(wa.Width * (App.S.LimitWidth ? App.S.MaxWidthPercent / 100.0 : 0.9));
             int maxH = (int)(wa.Height * (App.S.LimitHeight ? App.S.MaxHeightPercent / 100.0 : 0.9));
             w = Math.Max(minW, Math.Min(maxW, w));
-            int hgt = (int)Math.Round(w / aspect);
-            if (hgt > maxH) { hgt = maxH; w = (int)Math.Round(hgt * aspect); }
+            int ncW, ncH;
+            Chrome(h, out ncW, out ncH);
+            int hgt = (int)Math.Round((w - ncW) / aspect) + ncH;                   // the shape is the picture's, not the frame's
+            if (hgt > maxH) { hgt = maxH; w = (int)Math.Round((hgt - ncH) * aspect) + ncW; }
             return new Size(w, hgt);
+        }
+
+        /// <summary>How much of the window isn't picture: its title bar and frame (zero for frameless PiPs).</summary>
+        static void Chrome(IntPtr h, out int ncW, out int ncH)
+        {
+            var b = Bounds(h); var c = U.ClientScreenRect(h);
+            if (c.Width <= 0 || c.Height <= 0 || !b.Contains(c)) { ncW = ncH = 0; return; }
+            ncW = b.Width - c.Width; ncH = b.Height - c.Height;
         }
 
         static void ResizeTo(IntPtr h, int w, int hgt)
@@ -716,8 +726,8 @@ namespace PipStudio
             double known;
             if (IsFreeShape(h) && freeAspect.TryGetValue(h, out known)) return known;
             if (IsFreeShape(h)) return 16.0 / 9;
-            var b = Bounds(h);
-            return b.Height > 0 ? b.Width / (double)b.Height : 16.0 / 9;
+            var c = U.ClientScreenRect(h);
+            return c.Height > 0 ? c.Width / (double)c.Height : 16.0 / 9;
         }
 
         public static void SetSizePreset(IntPtr h, int i)
@@ -778,23 +788,24 @@ namespace PipStudio
         static int TrimBars(IntPtr h, bool trimmed)
         {
             var b = Bounds(h);
-            if (b.Width < 40 || b.Height < 40) return -1;
+            var c = U.ClientScreenRect(h);                                         // the picture: without the window's title bar and frame
+            if (c.Width < 40 || c.Height < 40) return -1;
             int top, bottom, left, right;
-            if (!FindBars(h, b, out top, out bottom, out left, out right)) return -1;
+            if (!FindBars(h, c, out top, out bottom, out left, out right)) return -1;
             int dh = 0;
             if (top + bottom >= 4) dh = -(top + bottom);                           // letterbox: too tall for the video
             else if (left + right >= 4)                                            // pillarbox: too short for the video
             {
-                int vw = b.Width - left - right;
-                dh = (int)Math.Round(b.Height * (left + right) / (double)Math.Max(1, vw));
+                int vw = c.Width - left - right;
+                dh = (int)Math.Round(c.Height * (left + right) / (double)Math.Max(1, vw));
             }
             if (dh == 0)
             {
                 // no bars left after trimming: remember this shape while the window is open (a first look with no bars proves less, so it's checked again next time)
-                if (trimmed) freeAspect[h] = b.Width / (double)b.Height;
+                if (trimmed) freeAspect[h] = c.Width / (double)c.Height;
                 return 0;
             }
-            var sz = Fit(h, b.Width, b.Width / (double)Math.Max(40, b.Height + dh));
+            var sz = Fit(h, b.Width, c.Width / (double)Math.Max(40, c.Height + dh));
             if (sz.Height == b.Height) return -1;
             ResizeTo(h, sz.Width, sz.Height);
             return 1;                                                           // the next pass checks it; the shape is remembered once no bars are left
@@ -835,29 +846,35 @@ namespace PipStudio
         }
 
         /// <summary>The window's picture: drawn by the app itself (unaffected by what's behind it), or copied from the screen.</summary>
-        static Bitmap Grab(IntPtr h, Rectangle b, bool fromScreen)
+        /// <param name="c">The picture area on screen (the client area: no title bar, frame or invisible resize border).</param>
+        static Bitmap Grab(IntPtr h, Rectangle c, bool fromScreen)
         {
-            Bitmap bmp = null;
+            Bitmap bmp = null, whole = null;
             try
             {
-                bmp = new Bitmap(b.Width, b.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                bmp = new Bitmap(c.Width, c.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 if (fromScreen)
                 {
-                    using (var g = Graphics.FromImage(bmp)) g.CopyFromScreen(b.Location, Point.Empty, b.Size);
+                    using (var g = Graphics.FromImage(bmp)) g.CopyFromScreen(c.Location, Point.Empty, c.Size);
                     return bmp;
                 }
+                // PrintWindow draws the whole window from its top-left corner; keep just the picture
+                var wr = U.WindowRect(h);
+                whole = new Bitmap(Math.Max(1, wr.Width), Math.Max(1, wr.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 bool ok;
-                using (var g = Graphics.FromImage(bmp))
+                using (var g = Graphics.FromImage(whole))
                 {
                     IntPtr hdc = g.GetHdc();
                     try { ok = Native.PrintWindow(h, hdc, 2); }   // PW_RENDERFULLCONTENT: Chromium/Electron windows too
                     finally { g.ReleaseHdc(hdc); }
                 }
+                using (var g = Graphics.FromImage(bmp)) g.DrawImage(whole, new Rectangle(0, 0, c.Width, c.Height), new Rectangle(c.X - wr.X, c.Y - wr.Y, c.Width, c.Height), GraphicsUnit.Pixel);
                 // hardware-decoded video often comes back black from PrintWindow; the PiP is on top, so the screen has the real picture
                 if (!ok || Blank(bmp)) { bmp.Dispose(); return null; }
                 return bmp;
             }
             catch { if (bmp != null) bmp.Dispose(); return null; }
+            finally { if (whole != null) whole.Dispose(); }
         }
 
         // ------------------------------------------------------------ minimize (the hover title bar's button)
