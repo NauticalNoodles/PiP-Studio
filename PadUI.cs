@@ -70,19 +70,22 @@ namespace PipStudio
             tabBar = F<System.Windows.Shapes.Rectangle>("TabBar"); tabLB = F<Border>("TabLB"); tabRB = F<Border>("TabRB");
             BuildTabs();
             osk = null; oskTarget = null; dlgHost = null; dlgDone = null;
-            padVisual = false; uiScale = 1; padHeldDir = 0; ringTarget = Rect.Empty; hintsKind = null;
+            padVisual = false; kbNav = false; uiScale = 1; padHeldDir = 0; ringTarget = Rect.Empty; hintsKind = null;
             bodyGrid.LayoutTransform = new ScaleTransform(1, 1);
 
-            win.PreviewGotKeyboardFocus += (o, e) => { if (padVisual) Dispatch(() => UpdateRing(true), DispatcherPriority.Loaded); };
+            win.PreviewGotKeyboardFocus += (o, e) => { if (padVisual || kbNav) Dispatch(() => UpdateRing(true), DispatcherPriority.Loaded); };
             win.PreviewKeyDown += (o, e) =>
             {
                 if (padVisual && App.S.PadUiMode == 1) SetPadVisual(false);       // a key press: back to the normal layout
+                if (!e.Handled) KeyNav(e);
             };
+            // the mouse: the keyboard's focus ring goes away until the arrows (or Tab) are used again
+            win.PreviewMouseDown += (o, e) => { if (kbNav) { kbNav = false; if (!padVisual) { ringTimer.Stop(); UpdateRing(false); } } };
             win.Deactivated += (o, e) => padHeldDir = 0;
             // smooth-scroll focused settings into view instead of WPF's instant jump
             settingsHost.AddHandler(FrameworkElement.RequestBringIntoViewEvent, new RequestBringIntoViewEventHandler((o, e) =>
             {
-                if (!padVisual) return;
+                if (!padVisual && !kbNav) return;
                 var fe = e.TargetObject as FrameworkElement;
                 if (fe == null) return;
                 e.Handled = true;
@@ -93,6 +96,47 @@ namespace PipStudio
             ringTimer = new DispatcherTimer(DispatcherPriority.Render) { Interval = TimeSpan.FromMilliseconds(33) };
             ringTimer.Tick += (o, e) => UpdateRing(true);
             if (App.S.PadUiMode == 2) win.Loaded += (o, e) => SetPadVisual(true);
+        }
+
+        static bool kbNav;      // moving around with the keyboard: the focus ring shows, like in controller mode
+
+        /// <summary>
+        /// The arrow keys move between settings, rows and buttons (the way the D-pad does) instead of scrolling the page,
+        /// and Enter switches, opens or presses what has the focus. Text boxes keep left/right for the cursor.
+        /// </summary>
+        static void KeyNav(KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers != ModifierKeys.None) return;
+            var k = e.Key;
+            if (k == Key.Tab) { StartKbRing(); return; }                   // Tab works as always, now with the ring
+            int dir = k == Key.Up ? 1 : k == Key.Down ? 2 : k == Key.Left ? 3 : k == Key.Right ? 4 : 0;
+            var d = Focused();
+            bool typing = d is TextBox || d is PasswordBox;
+            if (dir != 0)
+            {
+                if (typing && (dir == 3 || dir == 4)) return;                // the text cursor
+                if (d == winSearch && dir == 2) return;                     // the search box's own Down: into the list
+                e.Handled = true;
+                StartKbRing();
+                if (DialogOpen) { DialogPad(0, dir == 1 ? DirUp : dir == 2 ? DirDown : dir == 3 ? DirLeft : DirRight); return; }
+                if (OskOpen) { OskMove(dir); return; }
+                PadMove(dir);
+                return;
+            }
+            if ((k == Key.Enter || k == Key.Return) && !typing && !DialogOpen && !OskOpen && FocusIsInside())
+            {
+                if (d is ListBoxItem || Up<ListBoxItem>(d) != null) return;    // the tables handle Enter themselves
+                e.Handled = true;
+                StartKbRing();
+                PadActivate();
+            }
+        }
+
+        static void StartKbRing()
+        {
+            kbNav = true;
+            if (!ringTimer.IsEnabled) ringTimer.Start();
+            Dispatch(() => UpdateRing(false), DispatcherPriority.Loaded);
         }
 
         /// <summary>Turns the controller layout on or off ("Always" keeps it on).</summary>
@@ -131,7 +175,7 @@ namespace PipStudio
             {
                 if (OskOpen) CloseOsk();
                 padBar.Visibility = Visibility.Collapsed;
-                ringTimer.Stop();
+                if (!kbNav) ringTimer.Stop();
                 Anim.Fade(padRing, 0, 120);
                 ringTarget = Rect.Empty;
             }
@@ -833,7 +877,7 @@ namespace PipStudio
         static void UpdateRing(bool animate)
         {
             if (padRing == null || padLayer == null) return;
-            if (!padVisual || w == null || !w.IsActive) { if (padRing.Opacity > 0) Anim.Fade(padRing, 0, 120); ringTarget = Rect.Empty; return; }
+            if (!(padVisual || kbNav) || w == null || !w.IsActive) { if (padRing.Opacity > 0) Anim.Fade(padRing, 0, 120); ringTarget = Rect.Empty; return; }
             var fe = Focused() as FrameworkElement;
             if (fe == null || !FocusIsInside() || !fe.IsVisible || fe.ActualWidth < 1)
             {
