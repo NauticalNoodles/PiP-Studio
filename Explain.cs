@@ -99,7 +99,7 @@ namespace PipStudio
                 "When the pointer is over a PiP", "Fade-out opacity");
             EAdd("arrows", "Move arrows", "Arrow buttons on the PiP send it to the next spot, or across to the next display.", ScArrows,
                 "Show move arrows");
-            EAdd("theme", "App theme", "Light or dark for PiP Studio's windows and menus, or follow Windows.", ScTheme,
+            EAdd("theme", "App theme", "Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.", ScTheme,
                 "App theme");
             EAdd("accent", "Accent color", "The color of highlights, switches, the focus ring and borders. Use Windows' color or pick your own.", ScAccent,
                 "Accent color", "Use my Windows accent color", "Custom accent color");
@@ -143,8 +143,6 @@ namespace PipStudio
                 "Show controls on other apps' PiPs");
             EAdd("controller", "Controller controls", "Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.", ScController,
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
-            EAdd("windowstyle", "Window style", "Windows 11 is the normal look. Xbox dresses this window like the console's dashboard: always dark, Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard. Only this window changes: your PiPs, menus and the window picker keep their look.", ScLooks,
-                "Window style");
             EAdd("phone", "Phone companion", "Your phone becomes a remote for PiP Studio: move and resize PiPs, switch what they show, and set the volume of every app, from the phone's browser on your home Wi-Fi. Nothing goes over the internet, and everything between phone and PC is encrypted.", ScPhone,
                 "Control PiP Studio from your phone");
             EAdd("pair", "Pairing a phone", "Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.", ScPair,
@@ -199,7 +197,7 @@ namespace PipStudio
                 explainCard.VerticalAlignment = VerticalAlignment.Bottom;
                 explainCard.Padding = new Thickness(0);
                 explainCard.CornerRadius = new CornerRadius(10);
-                explainCard.Effect = App.S.LiteMode ? null : new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 24, ShadowDepth = 6, Direction = 270, Opacity = Looks.Dark ? 0.5 : 0.22, Color = Colors.Black };
+                explainCard.Effect = App.S.LiteMode ? null : new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 24, ShadowDepth = 6, Direction = 270, Opacity = Theme.Dark ? 0.5 : 0.22, Color = Colors.Black };
                 frame.Height = 162; frame.CornerRadius = new CornerRadius(9, 9, 0, 0);
                 view.Margin = new Thickness(0);
                 explainTitle.Margin = new Thickness(14, 10, 14, 0); explainTitle.FontSize = 14;
@@ -523,53 +521,6 @@ namespace PipStudio
             EPut(c, ETag(tag), 6, 6);
         }
 
-        /// <summary>The window styles side by side as tiny windows, the one you picked lifted and outlined.</summary>
-        static void ScLooks(Canvas c, Storyboard sb)
-        {
-            c.Children.Clear();
-            const double w = 100, h = 72, gap = 22;
-            int n = Looks.Names.Length;
-            double x0 = (SW - (n * w + (n - 1) * gap)) / 2, y = (SH - h) / 2 + 2;
-            for (int i = 0; i < n; i++)
-            {
-                bool chosen = i == Looks.Current, xbox = i == Looks.Xbox;
-                double r = xbox ? 9 : 6;
-                Brush body = xbox ? (Brush)new LinearGradientBrush((Color)ColorConverter.ConvertFromString("#0E0E0E"), (Color)ColorConverter.ConvertFromString("#0F1A10"), 90)
-                                  : EHex(Theme.Dark ? "#202020" : "#F3F3F3");
-                Brush nav = xbox ? EHex("#141414") : body;
-                Brush tile = xbox ? EHex("#1C1C1C") : EHex(Theme.Dark ? "#2D2D2D" : "#FFFFFF");
-                Brush sel = xbox ? EHex("#107C10") : EB("Accent");
-                var g = new Grid { Width = w, Height = h };
-                var frame = new Border { CornerRadius = new CornerRadius(r), Background = body, BorderThickness = new Thickness(1), BorderBrush = EHex("#55808080"), ClipToBounds = true };
-                var inner = new Grid();
-                inner.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10) });
-                inner.RowDefinitions.Add(new RowDefinition());
-                inner.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(24) });
-                inner.ColumnDefinitions.Add(new ColumnDefinition());
-                var nv = new StackPanel { Background = nav, Margin = new Thickness(0, 0, 0, 0) };
-                for (int k = 0; k < 4; k++)                                // navigation items, the first one selected
-                    nv.Children.Add(new Border { Height = 6, Margin = new Thickness(3, 3, 3, 0), CornerRadius = new CornerRadius(xbox ? 3 : 2),
-                        Background = k == 0 ? sel : (xbox ? EHex("#2A2A2A") : EHex("#33808080")) });
-                Grid.SetRow(nv, 1); inner.Children.Add(nv);
-                var tiles = new StackPanel { Margin = new Thickness(5, 4, 5, 0) };
-                for (int k = 0; k < 3; k++)
-                {
-                    bool focused = xbox && k == 1;                         // the Xbox look's white focus outline
-                    tiles.Children.Add(new Border { Height = 12, Margin = new Thickness(0, 0, 0, 4), CornerRadius = new CornerRadius(xbox ? 4 : 2),
-                        Background = focused ? EHex("#1E9E1E") : tile, BorderThickness = new Thickness(focused ? 1.5 : 0), BorderBrush = Brushes.White });
-                }
-                Grid.SetRow(tiles, 1); Grid.SetColumn(tiles, 1); inner.Children.Add(tiles);
-                frame.Child = inner;
-                g.Children.Add(frame);
-                if (chosen) g.Children.Add(new Border { CornerRadius = new CornerRadius(r + 2), BorderThickness = new Thickness(2), BorderBrush = xbox ? EHex("#107C10") : EB("Accent"), Margin = new Thickness(-3) });
-                double x = x0 + i * (w + gap);
-                EPut(c, g, x, y);
-                var t = new TextBlock { Text = Looks.Names[i], Foreground = chosen ? (xbox ? EHex("#5FD35F") : EB("Accent")) : Brushes.Gray, FontSize = 9, FontWeight = chosen ? FontWeights.SemiBold : FontWeights.Normal, Width = w, TextAlignment = TextAlignment.Center };
-                EPut(c, t, x, y + h + 6);
-                if (chosen) EK(sb, g, Canvas.TopProperty, 0, y, 0.8, y - 6, 1.6, y);
-            }
-        }
-
         /// <summary>A phone (with a PiP card: buttons and a volume slider) next to a PC screen: tapping Corner on the phone sends
         /// the PiP to the other corner, dragging the slider turns the sound down.</summary>
         static void ScPhone(Canvas c, Storyboard sb)
@@ -891,9 +842,10 @@ namespace PipStudio
             var light = EMiniApp(false, EB("Accent")); var dark = EMiniApp(true, EB("Accent"));
             EPut(c, light, (SW - 200) / 2, (SH - 120) / 2);
             EPut(c, dark, (SW - 200) / 2, (SH - 120) / 2);
-            int mode = App.S.ThemeMode;                                // 0 follow Windows, 1 light, 2 dark
-            var tag = new TextBlock { Foreground = Brushes.White, FontSize = 10, FontWeight = FontWeights.SemiBold, Text = mode == 0 ? "Follows Windows" : mode == 1 ? "Light" : "Dark" };
+            int mode = App.S.ThemeMode;                                // 0 follow Windows, 1 light, 2 dark, 3 OLED
+            var tag = new TextBlock { Foreground = Brushes.White, FontSize = 10, FontWeight = FontWeights.SemiBold, Text = mode == 0 ? "Follows Windows" : mode == 1 ? "Light" : mode == 3 ? "OLED" : "Dark" };
             EPut(c, ETag(tag), 6, SH - 24);
+            if (mode == 3) { ((Rectangle)dark.Children[0]).Fill = Brushes.Black; return; }   // OLED: black instead of grey
             if (mode == 1) { dark.Opacity = 0; return; }
             if (mode == 2) return;
             EK(sb, dark, UIElement.OpacityProperty, 0, 0, 1.2, 0, 1.8, 1, 3.4, 1, 4.0, 0);

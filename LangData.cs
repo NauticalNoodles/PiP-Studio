@@ -122,8 +122,6 @@ namespace PipStudio
                 { "Options", "الخيارات" },
                 { "Buttons", "الأزرار" },
                 { "App theme", "سمة التطبيق" },
-                { "Light or dark for PiP Studio's windows and menus, or follow Windows.", "فاتح أو داكن لنوافذ PiP Studio وقوائمه، أو اتّباع Windows." },
-                { "Light or dark, for PiP Studio's windows and menus", "فاتح أو داكن لنوافذ PiP Studio وقوائمه" },
                 { "Use my Windows setting", "استخدم إعداد Windows" },
                 { "Light", "فاتح" },
                 { "Dark", "داكن" },
@@ -632,11 +630,6 @@ namespace PipStudio
                 { "Restore {0}'s PiP", "استعادة النافذة العائمة لـ {0}" },
                 { "PiP Studio's title bar appears", "يظهر شريط عنوان PiP Studio" },
                 { "Your video", "الفيديو الخاص بك" },
-                { "Window style", "نمط النافذة" },
-                { "How this window looks. PiPs and menus keep their look.", "شكل هذه النافذة. تحتفظ النوافذ العائمة والقوائم بشكلها." },
-                { "Windows 11", "Windows 11" },
-                { "Xbox", "Xbox" },
-                { "Windows 11 is the normal look. Xbox dresses this window like the console's dashboard: always dark, Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard. Only this window changes: your PiPs, menus and the window picker keep their look.", "Windows 11 هو الشكل العادي. أما Xbox فيُلبس هذه النافذة شكل لوحة تحكم الجهاز: داكنة دائمًا، مع إبرازات باللون الأخضر الخاص بـ Xbox، ومربعات أكثر استدارة، وأزرار تضيء بالأخضر مع إطار أبيض عند الوصول إليها بوحدة التحكم أو لوحة المفاتيح. تتغيّر هذه النافذة فقط: تحتفظ نوافذك العائمة والقوائم ومنتقي النوافذ بشكلها." },
                 { "Remove", "إزالة" },
                 { "Remove all", "إزالة الكل" },
                 { "Marked as PiPs", "المعلَّمة كنوافذ عائمة" },
@@ -705,6 +698,9 @@ namespace PipStudio
                 { "Pairing a phone", "إقران هاتف" },
                 { "Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.", "مثل إقران Moonlight مع Sunshine: امسح الرمز، واضغط «إقران» على هاتفك، واكتب رمز PIN الظاهر فيه في PiP Studio. لا يتطابق الرمز إلا إذا لم يكن هناك وسيط بين الجهازين، ولا يمكن الاتصال إلا للهواتف المقترنة. يمكنك إزالة أي هاتف في أي وقت." },
                 { "Type the phone's PIN", "اكتب رمز PIN الظاهر في الهاتف" },
+                { "Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.", "فاتح أو داكن أو OLED (أسود بدل الرمادي، رائع على شاشات OLED) لنوافذ PiP Studio وقوائمه، أو اتبع إعداد Windows." },
+                { "Light, dark or OLED black, for PiP Studio's windows and menus", "فاتح أو داكن أو أسود OLED لنوافذ PiP Studio وقوائمه" },
+                { "OLED", "OLED" },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -824,8 +820,6 @@ namespace PipStudio
                 { "Options", "选项" },
                 { "Buttons", "按钮" },
                 { "App theme", "应用主题" },
-                { "Light or dark for PiP Studio's windows and menus, or follow Windows.", "PiP Studio 的窗口和菜单使用浅色或深色，或跟随 Windows。" },
-                { "Light or dark, for PiP Studio's windows and menus", "PiP Studio 窗口和菜单的浅色或深色" },
                 { "Use my Windows setting", "使用我的 Windows 设置" },
                 { "Light", "浅色" },
                 { "Dark", "深色" },
@@ -1334,11 +1328,6 @@ namespace PipStudio
                 { "Restore {0}'s PiP", "还原 {0} 的画中画" },
                 { "PiP Studio's title bar appears", "显示 PiP Studio 的标题栏" },
                 { "Your video", "你的视频" },
-                { "Window style", "窗口样式" },
-                { "How this window looks. PiPs and menus keep their look.", "此窗口的外观。画中画和菜单保持原样。" },
-                { "Windows 11", "Windows 11" },
-                { "Xbox", "Xbox" },
-                { "Windows 11 is the normal look. Xbox dresses this window like the console's dashboard: always dark, Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard. Only this window changes: your PiPs, menus and the window picker keep their look.", "Windows 11 是默认外观。Xbox 外观让此窗口看起来像主机的仪表板：始终为深色，采用 Xbox 绿色高亮、更圆润的磁贴，用手柄或键盘选中按钮时按钮会亮起绿色并带白色轮廓。只有此窗口会改变：画中画、菜单和窗口选择器保持原样。" },
                 { "Remove", "移除" },
                 { "Remove all", "全部移除" },
                 { "Marked as PiPs", "标记为画中画的窗口" },
@@ -1407,6 +1396,9 @@ namespace PipStudio
                 { "Pairing a phone", "配对手机" },
                 { "Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.", "就像把 Moonlight 与 Sunshine 配对：扫描二维码，在手机上点按“配对”，然后把手机显示的 PIN 输入 PiP Studio。只有两者之间没有中间人时 PIN 才会匹配，且只有已配对的手机能连接。可随时移除手机。" },
                 { "Type the phone's PIN", "输入手机上的 PIN" },
+                { "Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.", "浅色、深色或 OLED（用纯黑代替灰色，适合 OLED 屏幕），用于 PiP Studio 的窗口和菜单，或跟随 Windows。" },
+                { "Light, dark or OLED black, for PiP Studio's windows and menus", "浅色、深色或 OLED 纯黑，用于 PiP Studio 的窗口和菜单" },
+                { "OLED", "OLED" },
             };
         }
     }

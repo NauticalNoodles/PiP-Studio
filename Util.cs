@@ -557,8 +557,7 @@ namespace PipStudio
         public bool FollowPreviousDefault = false;  // new PiPs follow the window you just left
         public bool AllowMultiple = false;          // off: opening a new PiP switches the one that's already open
         public bool UseSystemAccent = true;
-        public int ThemeMode = 0;                   // 0 follow Windows, 1 light, 2 dark
-        public int WindowStyle = 0;                 // the main window's look: 0 Windows 11, 1 Xbox (Looks.cs)
+        public int ThemeMode = 0;                   // 0 follow Windows, 1 light, 2 dark, 3 OLED (black)
         public bool MinimizeMemory = true;          // close the main window to the tray instead of keeping it in memory
         public bool CloseToTray = true;
         // Controller
@@ -843,6 +842,7 @@ namespace PipStudio
     static class Theme
     {
         public static bool Dark = true;
+        public static bool Oled;                    // the OLED theme: dark, with black instead of grey
         public static Color Accent, AccentBase, Bg, Layer, Card, CardHover, Stroke, Text, SubText, Disabled;
         public static event Action Changed;
 
@@ -885,7 +885,8 @@ namespace PipStudio
         public static void Refresh()
         {
             int mode = App.S != null ? App.S.ThemeMode : 0;
-            Dark = mode == 2 || (mode == 0 && SystemDark());
+            Oled = mode == 3;
+            Dark = mode == 2 || Oled || (mode == 0 && SystemDark());
             AccentBase = (App.S == null || App.S.UseSystemAccent) ? SystemAccent() : App.S.AccentColor;
             // Windows uses a lighter shade of the accent on dark surfaces and a deeper one on light surfaces
             Accent = Dark ? U.Blend(AccentBase, Color.White, 0.30) : U.Blend(AccentBase, Color.Black, 0.08);
@@ -893,6 +894,7 @@ namespace PipStudio
             {
                 Bg = Hex(0x202020); Layer = Hex(0x2C2C2C); Card = Hex(0x2B2B2B); CardHover = Hex(0x3A3A3A);
                 Stroke = Hex(0x404040); Text = Hex(0xFFFFFF); SubText = Hex(0xC8C8C8); Disabled = Hex(0x7A7A7A);
+                if (Oled) { Bg = Hex(0x000000); Layer = Hex(0x000000); Card = Hex(0x0E0E0E); CardHover = Hex(0x1C1C1C); Stroke = Hex(0x262626); }
             }
             else
             {

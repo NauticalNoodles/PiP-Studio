@@ -116,8 +116,14 @@ namespace PipStudio
             r["Smoke"] = Hex(dark ? "#4D000000" : "#33000000");
             r["Preview"] = Hex(dark ? "#33000000" : "#14000000");
             r["AppBg"] = Hex(dark ? "#202020" : "#F3F3F3");             // solid window background (Lite mode): Windows 11's own app colors
-            r["LookTitle"] = Brushes.Transparent;                         // behind the title bar and the side pane; the Xbox look
-            r["LookNav"] = Brushes.Transparent;                           // sets its own (Looks.cs)
+            if (Theme.Oled)                                               // OLED: true black behind everything; cards stay faintly lighter
+            {
+                r["AppBg"] = Hex("#000000");
+                r["Layer"] = Hex("#000000");
+                r["LayerBorder"] = Hex("#1FFFFFFF");
+                r["PaneOverlay"] = Hex("#0C0C0C");
+                r["Smoke"] = Hex("#99000000");
+            }
         }
 
         static void OnThemeChanged()
