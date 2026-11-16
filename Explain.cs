@@ -219,7 +219,19 @@ namespace PipStudio
                 explainText.Margin = new Thickness(0, 4, 0, 0); explainText.FontSize = 13;
                 foot.Visibility = Visibility.Visible;
                 x.Visibility = Visibility.Collapsed;
+                explainCard.BeginAnimation(UIElement.OpacityProperty, null);   // the panel shows even without an animation
+                explainCard.Opacity = 1; explainCard.IsHitTestVisible = true;
             }
+        }
+
+        /// <summary>The PiP only shows for settings with an animation (the panel in controller mode always shows).</summary>
+        static void ExplainPipFor(bool hasAnimation)
+        {
+            if (explainCard == null) return;
+            bool show = explainAsPip != true || hasAnimation;
+            if (explainCard.IsHitTestVisible == show && (show ? explainCard.Opacity > 0.99 : explainCard.Opacity < 0.01)) return;
+            explainCard.IsHitTestVisible = show;
+            Anim.Fade(explainCard, show ? 1 : 0, show ? 160 : 120);
         }
 
         static bool ExplainWanted() { return App.S.ShowExplainers && ExplainPages.Contains(page ?? ""); }
@@ -269,9 +281,11 @@ namespace PipStudio
                 // this setting has no animation: show just its name and description
                 if (stageBox != null) stageBox.Visibility = Visibility.Collapsed;
                 explainSb = null;
+                ExplainPipFor(false);
                 return;
             }
             if (stageBox != null) stageBox.Visibility = Visibility.Visible;
+            ExplainPipFor(true);
             var sb = new Storyboard();
             ex.Build(explainStage, sb);
             LoopAsOne(sb);
