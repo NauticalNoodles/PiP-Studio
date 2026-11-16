@@ -1,0 +1,84 @@
+# Builds the Android app (android/): a small app that opens PiP Studio's phone companion page from your PC.
+#
+# Every push that touches it uploads the APK as a build artifact (Actions tab > this run > Artifacts), and every
+# published release gets PiPStudio-Companion-<version>.apk attached next to the Windows downloads.
+#
+# Signing: Android only installs an update over an app signed with the same key. Add these repository secrets
+# (Settings > Secrets and variables > Actions > Secrets) to sign every build with your own key:
+#   ANDROID_KEYSTORE_BASE64  the keystore file, base64-encoded
+#   ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+# Without them the APK is signed with a throwaway debug key, which is fine for trying it out, but each build then has a
+# different key, so installing a newer one means uninstalling the old one first.
+
+name: Android app
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+    paths: ["android/**", ".github/workflows/android.yml", "assets/icon.png", "PiPStudio.csproj"]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+          else
+            echo "::warning::No signing key in the repository secrets: this APK uses a throwaway debug key (see android.yml)."
+          fi
+
+      - name: Build the APK
+        working-directory: android
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Name it
+        id: apk
+        run: |
+          v=$(grep -oP '(?<=<Version>)[^<]+' PiPStudio.csproj | head -1)
+          mkdir -p out
+          cp android/app/build/outputs/apk/release/app-release.apk "out/PiPStudio-Companion-$v.apk"
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PiPStudio-Companion-${{ steps.apk.outputs.version }}
+          path: out/*.apk
+
+      - name: Attach to the release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          files: out/*.apk
