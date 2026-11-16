@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Sunset timelapse</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;background:#1b1030}svg{width:100vw;height:100vh;display:block}</style></head>
+<body><!-- something colourful to show in a PiP for the screenshots workflow -->
+<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b1055"/><stop offset=".45" stop-color="#d1436b"/><stop offset=".75" stop-color="#ff9a5a"/><stop offset="1" stop-color="#ffd27a"/>
+    </linearGradient>
+    <radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6d5"/><stop offset=".6" stop-color="#ffd27a"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a5a" stop-opacity=".55"/><stop offset="1" stop-color="#2b1055"/></linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <g fill="#fff" opacity=".7"><circle cx="160" cy="90" r="2"/><circle cx="420" cy="60" r="1.5"/><circle cx="700" cy="120" r="1.8"/><circle cx="1050" cy="70" r="1.6"/><circle cx="1320" cy="140" r="2"/><circle cx="1500" cy="50" r="1.4"/><circle cx="260" cy="200" r="1.2"/><circle cx="1180" cy="210" r="1.3"/></g>
+  <circle cx="800" cy="560" r="230" fill="url(#sun)"/>
+  <circle cx="800" cy="560" r="120" fill="#fff1c4"/>
+  <path d="M0 610 L180 470 L330 560 L520 400 L700 540 L860 430 L1040 560 L1230 420 L1420 540 L1600 450 L1600 900 L0 900Z" fill="#7a2d6b"/>
+  <path d="M0 680 L220 560 L420 650 L640 540 L820 640 L1000 560 L1200 660 L1400 570 L1600 640 L1600 900 L0 900Z" fill="#4a1d5c"/>
+  <rect y="720" width="1600" height="180" fill="url(#lake)"/>
+  <g fill="#fff1c4" opacity=".5"><rect x="720" y="740" width="160" height="4" rx="2"/><rect x="750" y="770" width="100" height="3" rx="2"/><rect x="770" y="800" width="60" height="3" rx="2"/></g>
+  <path d="M0 760 L260 690 L520 760 L780 700 L1040 770 L1300 700 L1600 760 L1600 900 L0 900Z" fill="#24103a" opacity=".85"/>
+</svg>
+</body></html>

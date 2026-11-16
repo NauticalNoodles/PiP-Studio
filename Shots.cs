@@ -52,12 +52,12 @@ namespace PipStudio
             });
             // a window to show in a PiP, if the workflow opened one (Notepad). A step of its own: if it asks something,
             // the timer keeps going.
-            foreach (var app in new[] { "mspaint", "notepad" })                  // whatever the workflow opened, one PiP each
+            foreach (var title in new[] { "Sunset timelapse", "Lo-fi radio" })   // the pages the workflow opened, one PiP each
                 steps.Add(() =>
                 {
-                    var src = WinEnum.AltTab().FirstOrDefault(h => !U.IsOurs(h) && U.ProcessName(h).Equals(app, StringComparison.OrdinalIgnoreCase));
+                    var src = WinEnum.AltTab().FirstOrDefault(h => !U.IsOurs(h) && (U.WindowTitle(h) ?? "").StartsWith(title, StringComparison.OrdinalIgnoreCase));
                     if (src != IntPtr.Zero) App.I.UseWindow(src, null);
-                    Log(src != IntPtr.Zero ? "PiP of " + app : "no " + app);
+                    Log(src != IntPtr.Zero ? "PiP of " + title : "no " + title);
                 });
             Action<string, string> shot = (pg, name) =>
             {

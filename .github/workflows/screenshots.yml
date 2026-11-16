@@ -34,12 +34,14 @@ jobs:
           New-Item -ItemType Directory -Force $dir | Out-Null
           # the machine's screen is 1024x768: make it 1080p so the window has room
           try { Set-DisplayResolution -Width 1920 -Height 1080 -Force -ErrorAction Stop; Write-Host "Screen set to 1920x1080" } catch { Write-Host "Couldn't change the screen size: $_" }
-          # things to show in PiPs: some notes, and the Windows wallpaper in Paint
-          $notes = Join-Path $env:RUNNER_TEMP "Weekend plans.txt"
-          Set-Content $notes "Weekend plans`r`n`r`n- Finish the boss fight`r`n- Watch the match on Sunday`r`n- Movie night: pick something`r`n- Groceries: pasta, basil, tomatoes"
-          Start-Process notepad $notes
-          $wall = Get-ChildItem "C:\Windows\Web\Wallpaper" -Recurse -Filter *.jpg | Select-Object -First 1
-          if ($wall) { try { Start-Process mspaint "`"$($wall.FullName)`"" } catch { Write-Host "No Paint" } }
+          # things to show in PiPs: two small local pages (a sunset, a music player) in Edge app windows
+          $edge = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+          $prof = Join-Path $env:RUNNER_TEMP "edge"
+          foreach ($page in "sunset", "radio") {
+            $url = "file:///" + ((Resolve-Path ".github/screenshots/$page.html").Path -replace "\\", "/")
+            Start-Process $edge -ArgumentList "--no-first-run", "--no-default-browser-check", "--user-data-dir=`"$prof`"", "--app=$url", "--window-size=1280,760"
+            Start-Sleep -Seconds 4
+          }
           Start-Sleep -Seconds 5
           $p = Start-Process -FilePath ".\out\PiPStudio.exe" -ArgumentList "--screenshots", "`"$dir`"" -PassThru
           Start-Sleep -Seconds 25
