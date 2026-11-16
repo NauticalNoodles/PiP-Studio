@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0a0c">
+<meta name="theme-color" content="#08080a">
 <meta name="color-scheme" content="dark">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/icon.png">
@@ -23,166 +23,224 @@
   It asks for the state about once a second while it's on screen.
 -->
 <style>
-  /* Dark liquid glass, kept quiet: near-black with a faint grey light behind it, frosted panels with a thin rim, white as
-     the only highlight. Panels blur what's behind them (backdrop-filter); controls inside a panel are a light tint
-     without a second blur, which keeps it smooth on phones. Solid panels when the browser can't blur or "Reduce
-     transparency" is on, and a still background with "Reduce motion". */
+  /* After Apple's Liquid Glass (iOS 26), kept dark and quiet. Panels are glass: they blur what's behind them and their
+     rim catches the light, brightest at the top-left and bottom-right edges. Controls inside a panel are glass too
+     (lighter, with their own rim, no second blur so it stays smooth), in capsules and circles whose corners follow the
+     panel's. Switched-on controls turn solid white. Presses give a small spring. Solid panels when the browser can't
+     blur or "Reduce transparency" is on; no movement with "Reduce motion". */
   :root {
     color-scheme: dark;
-    --bg: #0a0a0c;
-    --text: #f4f4f6; --sub: rgba(244,244,246,.62); --faint: rgba(244,244,246,.40);
-    --accent: #ffffff; --on-accent: #0a0a0c; --danger: #ff5b5b; --ok: #34d399;
-    --glass: rgba(255,255,255,.06); --glass-solid: #18181b;
-    --rim: rgba(255,255,255,.10); --rim-top: rgba(255,255,255,.16);
-    --fill: rgba(255,255,255,.07); --fill-press: rgba(255,255,255,.14);
-    --blur: blur(30px) saturate(140%);
-    --radius: 18px; --radius-sm: 12px;
+    --bg: #08080a;
+    --text: #f5f5f7; --sub: rgba(235,235,245,.60); --faint: rgba(235,235,245,.32);
+    --accent: #ffffff; --on-accent: #08080a; --danger: #ff453a; --ok: #30d158;
+    --glass: linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.035));
+    --glass-solid: #1c1c1e;
+    --fill: rgba(255,255,255,.075); --fill-press: rgba(255,255,255,.16);
+    --blur: blur(28px) saturate(170%);
+    --rim: linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,.07) 32%, rgba(255,255,255,.03) 62%, rgba(255,255,255,.22));
+    --rim-soft: linear-gradient(135deg, rgba(255,255,255,.26), rgba(255,255,255,.04) 40%, rgba(255,255,255,.02) 65%, rgba(255,255,255,.12));
+    --lift: 0 10px 30px rgba(0,0,0,.40), 0 1px 3px rgba(0,0,0,.30);
+    --spring: cubic-bezier(.3, 1.45, .55, 1);
+    --r-card: 28px; --r-ctl: 18px;
   }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { background: var(--bg); }
-  html, body { margin: 0; color: var(--text); font: 15px/1.4 -apple-system, system-ui, "SF Pro Text", "Segoe UI", Roboto, sans-serif; }
-  body { min-height: 100vh; padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+  html, body { margin: 0; color: var(--text); font: 15px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+  body { min-height: 100vh; padding-bottom: calc(22px + env(safe-area-inset-bottom)); }
   button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
-  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
   .hidden { display: none !important; }
 
-  /* a faint grey light behind the glass, so there's something for it to frost */
+  /* a faint, slow light behind everything, so the glass has something to frost */
   .backdrop { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: var(--bg); }
-  .backdrop i { position: absolute; width: 90vmax; height: 90vmax; border-radius: 50%; will-change: transform; }
-  .backdrop i:nth-child(1) { background: radial-gradient(circle, rgba(255,255,255,.10), transparent 60%); left: -40vmax; top: -35vmax; animation: drift1 40s ease-in-out infinite alternate; }
-  .backdrop i:nth-child(2) { background: radial-gradient(circle, rgba(255,255,255,.06), transparent 60%); right: -45vmax; top: 30vmax; animation: drift2 50s ease-in-out infinite alternate; }
-  .backdrop i:nth-child(3) { display: none; }
+  .backdrop i { position: absolute; width: 95vmax; height: 95vmax; border-radius: 50%; will-change: transform; }
+  .backdrop i:nth-child(1) { background: radial-gradient(circle, rgba(255,255,255,.11), transparent 60%); left: -45vmax; top: -40vmax; animation: drift1 42s ease-in-out infinite alternate; }
+  .backdrop i:nth-child(2) { background: radial-gradient(circle, rgba(255,255,255,.07), transparent 60%); right: -50vmax; top: 25vmax; animation: drift2 54s ease-in-out infinite alternate; }
+  .backdrop i:nth-child(3) { background: radial-gradient(circle, rgba(255,255,255,.05), transparent 60%); left: -20vmax; bottom: -55vmax; animation: drift1 60s ease-in-out infinite alternate-reverse; }
   @keyframes drift1 { to { transform: translate(14vmax, 18vmax); } }
   @keyframes drift2 { to { transform: translate(-16vmax, -10vmax); } }
 
-  /* glass panels */
-  header, .card, .app, .empty.small, .banner, .sheet .panel, #pair {
+  /* ---- glass ---- */
+  .card, .app, .chip, .install, .sheet .panel, #pair, .empty.small, .banner {
+    position: relative; isolation: isolate;
     background: var(--glass);
     -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-    border: 1px solid var(--rim);
-    box-shadow: inset 0 1px 0 var(--rim-top);
+    box-shadow: var(--lift), inset 0 0 0 .5px rgba(255,255,255,.06);
   }
-  /* controls inside panels: a light tint, no second blur */
-  .act, .iconbtn, .chip, .secondary, .install, .close, .sheet .kbd { background: var(--fill); border: 1px solid transparent; }
-  .act:active, .iconbtn:active, .chip:active, .secondary:active, .install:active, .close:active { background: var(--fill-press); }
+  /* glass on glass: controls inside a panel */
+  .act, .iconbtn, .close, .secondary, .spot, .win, .sheet .kbd, .appicon.ph {
+    position: relative;
+    background: var(--fill);
+  }
+  /* the lit rim: a 1px gradient border, bright where the light hits */
+  .card::after, .app::after, .chip::after, .install::after, .sheet .panel::after, #pair::after, .banner::after,
+  .act::after, .iconbtn::after, .close::after, .secondary::after, .spot::after, .win::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: var(--rim);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+  .act::after, .iconbtn::after, .close::after, .secondary::after, .spot::after, .win::after { background: var(--rim-soft); }
 
-  header { position: relative; z-index: 5; padding: calc(10px + env(safe-area-inset-top)) 16px 10px; display: flex; align-items: center; gap: 12px; border-width: 0 0 1px; box-shadow: none; }
-  header img { width: 30px; height: 30px; border-radius: 8px; }
-  header h1 { font-size: 17px; margin: 0; font-weight: 650; }
-  header .pc { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 6px; }
+  /* springy presses */
+  .chip, .install, .act, .iconbtn, .close, .secondary, .primary, .spot, .win { transition: transform .35s var(--spring), background .2s ease; }
+  .chip:active, .install:active, .act:active, .iconbtn:active, .close:active, .secondary:active, .primary:active, .spot:active, .win:active { transform: scale(.94); transition-duration: .12s; }
+  .act:active, .iconbtn:active, .close:active, .secondary:active, .spot:active, .win:active { background: var(--fill-press); }
+
+  /* ---- header: a large title, like iOS ---- */
+  header { position: relative; z-index: 5; padding: calc(18px + env(safe-area-inset-top)) 20px 6px; display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto; }
+  header img { width: 40px; height: 40px; border-radius: 11px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+  header h1 { font-size: 28px; line-height: 1.1; margin: 0; font-weight: 700; letter-spacing: -.02em; }
+  header .pc { font-size: 13px; color: var(--sub); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
   header .grow { flex: 1; min-width: 0; }
   .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); display: inline-block; }
-  .dot.on { background: var(--ok); }
-  main { padding: 12px 16px 16px; max-width: 640px; margin: 0 auto; }
+  .dot.on { background: var(--ok); box-shadow: 0 0 8px rgba(48,209,88,.6); }
+  main { padding: 10px 16px 16px; max-width: 640px; margin: 0 auto; }
 
-  .install { display: flex; align-items: center; gap: 6px; border-radius: 99px; padding: 0 12px; min-height: 36px; font-size: 13px; font-weight: 600; flex: none; }
+  .install { display: flex; align-items: center; gap: 6px; border-radius: 99px; padding: 0 14px; min-height: 36px; font-size: 13px; font-weight: 600; flex: none; }
   .install svg { width: 16px; height: 16px; }
 
-  .banner { border-color: rgba(255,91,91,.35); background: rgba(255,91,91,.12); padding: 10px 14px; border-radius: var(--radius-sm); margin: 0 0 12px; font-size: 14px; }
+  .banner { background: linear-gradient(180deg, rgba(255,69,58,.22), rgba(255,69,58,.10)); padding: 11px 16px; border-radius: 18px; margin: 0 0 12px; font-size: 14px; }
 
-  /* the three things for all PiPs: compact pills */
-  .quick { display: flex; gap: 8px; margin: 0 0 6px; }
-  .chip { flex: 1; border-radius: 99px; min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 550; color: var(--text); padding: 0 8px; white-space: nowrap; }
+  /* the three things for all PiPs: glass capsules */
+  .quick { display: flex; gap: 8px; margin: 2px 0 6px; }
+  .chip { flex: 1; border-radius: 99px; min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13.5px; font-weight: 590; padding: 0 8px; white-space: nowrap; }
   .chip svg { width: 17px; height: 17px; flex: none; }
 
-  h2.sect { font-size: 13px; font-weight: 600; color: var(--sub); margin: 20px 4px 8px; display: flex; align-items: center; gap: 6px; }
+  h2.sect { font-size: 13px; font-weight: 600; color: var(--sub); margin: 22px 8px 9px; display: flex; align-items: center; gap: 6px; }
   h2.sect svg { width: 14px; height: 14px; }
 
-  /* a PiP: name and Close on top, its volume, then the main buttons (the rest behind More) */
-  .card { border-radius: var(--radius); padding: 14px 14px 12px; margin-bottom: 10px; }
-  .card .top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
+  /* ---- a PiP: icon, name and close on top, then buttons, then sliders ---- */
+  .card { border-radius: var(--r-card); padding: 14px 14px 12px; margin-bottom: 12px; }
+  .card .top { display: flex; align-items: center; gap: 12px; margin-bottom: 2px; }
   .card .names { min-width: 0; flex: 1; }
-  .card .top { align-items: center; }
-  .appicon { width: 38px; height: 38px; border-radius: 10px; flex: none; display: grid; place-items: center; overflow: hidden; }
-  .appicon img { width: 100%; height: 100%; object-fit: contain; }
-  .appicon.ph { background: var(--fill); color: var(--sub); font-weight: 650; font-size: 16px; }
-  .appicon.ph svg { width: 20px; height: 20px; }
-  .appicon.small { width: 24px; height: 24px; border-radius: 6px; font-size: 12px; }
-  .card .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .title { font-weight: 600; font-size: 16px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card .meta { font-size: 13px; color: var(--sub); }
   .close { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; color: var(--sub); }
-  .close svg { width: 16px; height: 16px; }
+  .close svg { width: 15px; height: 15px; }
   .close:active { color: var(--danger); }
 
-  .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
-  .act { border-radius: var(--radius-sm); min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11.5px; color: var(--sub); padding: 6px 2px; }
-  .act svg { width: 19px; height: 19px; color: var(--text); }
+  .appicon { width: 40px; height: 40px; border-radius: 11px; flex: none; display: grid; place-items: center; overflow: hidden; }
+  .appicon img { width: 100%; height: 100%; object-fit: contain; }
+  .appicon.ph { color: var(--sub); font-weight: 650; font-size: 16px; }
+  .appicon.ph svg { width: 20px; height: 20px; }
+  .appicon.small { width: 26px; height: 26px; border-radius: 7px; font-size: 12px; }
+
+  .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+  .act { border-radius: var(--r-ctl); min-height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11.5px; font-weight: 500; color: var(--sub); padding: 6px 2px; }
+  .act svg { width: 20px; height: 20px; color: var(--text); }
   .act[aria-expanded=true] { background: var(--fill-press); }
-  .act.on, .primary { background: var(--accent); color: var(--on-accent); }
+  .act.on, .primary { background: #fff; color: var(--on-accent); box-shadow: 0 4px 14px rgba(255,255,255,.12); }
+  .act.on::after { opacity: 0; }
   .act.on svg { color: var(--on-accent); }
-  .more { border-top: 1px solid var(--rim); margin-top: 10px; }
-  .sliders { border-top: 1px solid var(--rim); margin-top: 12px; padding-top: 2px; }
-  .preview { margin: 10px 0 2px; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,.45); border: 1px solid var(--rim); min-height: 90px; display: grid; place-items: center; position: relative; }
+  .more { margin-top: 2px; }
+  .more .actions { margin-top: 8px; }
+  .sliders { margin-top: 10px; }
+  .card.min .actions { grid-template-columns: 1fr; }
+  .card.min .act { flex-direction: row; min-height: 46px; gap: 8px; font-size: 14px; color: var(--text); border-radius: 99px; }
+
+  .preview { margin: 12px 0 2px; border-radius: 20px; overflow: hidden; background: rgba(0,0,0,.5); min-height: 90px; display: grid; place-items: center; position: relative; box-shadow: inset 0 0 0 .5px rgba(255,255,255,.14); }
   .preview img { display: none; width: 100%; height: auto; }
   .preview img.ok { display: block; }
   .preview .pmsg { position: absolute; padding: 0 16px; text-align: center; font-size: 13px; color: var(--sub); }
   .preview .pmsg:empty { display: none; }
 
-  /* Position: the screen as a 3×3 grid of spots, the PiP's spot lit */
-  .spots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; aspect-ratio: 16 / 10; margin: 4px 0 16px; padding: 10px; border-radius: 14px; border: 1px solid var(--rim); background: rgba(255,255,255,.03); }
-  .spot { border-radius: 10px; background: var(--fill); display: grid; place-items: center; }
-  .spot i { width: 34%; height: 30%; min-width: 22px; min-height: 14px; border-radius: 4px; border: 1.5px solid var(--sub); }
-  .spot.on { background: var(--accent); }
-  .spot.on i { border-color: var(--on-accent); background: var(--on-accent); }
-  .spot.screen { background: none; }
-  .spot:active { background: var(--fill-press); }
-
-  /* Window: the open windows, the one showing now marked */
-  .winlist { max-height: 55vh; overflow-y: auto; margin: 4px -4px 14px; padding: 0 4px; display: flex; flex-direction: column; gap: 6px; }
-  .win { text-align: left; border-radius: 12px; padding: 10px 12px; background: var(--fill); display: flex; flex-direction: column; min-height: 52px; }
-  .win .wt { font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .win .wa { font-size: 12.5px; color: var(--sub); }
-  .win.on { outline: 1.5px solid var(--accent); }
-  .win:active { background: var(--fill-press); }
-  .hint { color: var(--sub); margin: 8px 0 16px; }
-  .card.min .actions { grid-template-columns: 1fr; }
-  .card.min .act { flex-direction: row; min-height: 44px; gap: 8px; font-size: 13.5px; color: var(--text); }
-
-  .slider { display: grid; grid-template-columns: 40px 1fr 44px; align-items: center; gap: 10px; margin-top: 8px; }
+  .slider { display: grid; grid-template-columns: 40px 1fr 48px; align-items: center; gap: 10px; margin-top: 4px; }
   .slider .lbl { font-size: 13px; color: var(--sub); text-align: right; font-variant-numeric: tabular-nums; }
   .iconbtn { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; }
   .iconbtn svg { width: 19px; height: 19px; }
-  .iconbtn.muted { background: rgba(255,91,91,.16); }
+  .iconbtn.muted { background: rgba(255,69,58,.18); }
   .iconbtn.muted svg { color: var(--danger); }
   .iconlbl { width: 40px; display: grid; place-items: center; color: var(--sub); }
   .iconlbl svg { width: 19px; height: 19px; }
 
-  /* sliders: a thin groove, a white fill and a plain white knob */
-  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 40px; background: transparent; margin: 0; }
-  input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: linear-gradient(to right, var(--accent) var(--p, 50%), rgba(255,255,255,.14) var(--p, 50%)); }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; margin-top: -8px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
-  input[type=range]::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(255,255,255,.14); }
-  input[type=range]::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--accent); }
-  input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+  /* sliders, after Apple's Liquid Glass: a rounded groove with a white fill and a capsule of glass for a knob. While
+     you drag, the knob swells and turns clear, so the track shows through it like a lens, with light on its rim. */
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; touch-action: pan-y; }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 8px; border-radius: 99px;
+    background: linear-gradient(to right, rgba(255,255,255,.96) var(--p, 50%), rgba(255,255,255,.14) var(--p, 50%));
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.45), inset 0 -0.5px 0 rgba(255,255,255,.12);
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 40px; height: 26px; border-radius: 99px; margin-top: -9px;
+    background: linear-gradient(180deg, #ffffff 0%, #f0f2f7 55%, #dde1ea 100%);
+    box-shadow: 0 0 0 .5px rgba(255,255,255,.7), 0 3px 10px rgba(0,0,0,.38), 0 1px 2px rgba(0,0,0,.3),
+                inset 0 1px 1px rgba(255,255,255,1), inset 0 -2px 3px rgba(120,128,150,.22);
+    transition: transform .22s cubic-bezier(.3,1.5,.6,1), background .2s ease, box-shadow .2s ease;
+  }
+  input[type=range].drag::-webkit-slider-thumb, input[type=range]:active::-webkit-slider-thumb {
+    transform: scale(1.32, 1.4);
+    background: radial-gradient(120% 90% at 50% 12%, rgba(255,255,255,.42), rgba(255,255,255,.16) 55%, rgba(255,255,255,.26) 100%);
+    box-shadow: inset 0 0 0 1.2px rgba(255,255,255,.85), inset 0 2.5px 3px rgba(255,255,255,.55), inset 0 -2.5px 4px rgba(255,255,255,.3),
+                inset 3px 0 4px rgba(255,255,255,.18), inset -3px 0 4px rgba(255,255,255,.18), 0 8px 22px rgba(0,0,0,.42);
+  }
+  input[type=range]::-moz-range-track { height: 8px; border-radius: 99px; background: rgba(255,255,255,.14); box-shadow: inset 0 1px 2px rgba(0,0,0,.45); }
+  input[type=range]::-moz-range-progress { height: 8px; border-radius: 99px; background: rgba(255,255,255,.96); }
+  input[type=range]::-moz-range-thumb {
+    width: 40px; height: 26px; border: 0; border-radius: 99px;
+    background: linear-gradient(180deg, #ffffff, #dde1ea);
+    box-shadow: 0 0 0 .5px rgba(255,255,255,.7), 0 3px 10px rgba(0,0,0,.38), inset 0 1px 1px #fff, inset 0 -2px 3px rgba(120,128,150,.22);
+    transition: transform .22s cubic-bezier(.3,1.5,.6,1), background .2s ease;
+  }
+  input[type=range].drag::-moz-range-thumb, input[type=range]:active::-moz-range-thumb {
+    transform: scale(1.32, 1.4);
+    background: radial-gradient(120% 90% at 50% 12%, rgba(255,255,255,.42), rgba(255,255,255,.16) 55%, rgba(255,255,255,.26));
+    box-shadow: inset 0 0 0 1.2px rgba(255,255,255,.85), inset 0 2.5px 3px rgba(255,255,255,.55), 0 8px 22px rgba(0,0,0,.42);
+  }
+  @media (prefers-reduced-motion: reduce) { input[type=range]::-webkit-slider-thumb, input[type=range]::-moz-range-thumb { transition: none; } }
+  .slider { grid-template-columns: 40px 1fr 48px; }
 
-  /* app volume: one compact row per app */
-  .app { border-radius: var(--radius); padding: 10px 12px 4px; margin-bottom: 8px; }
-  .app .name { font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  /* ---- app volume ---- */
+  .app { border-radius: 22px; padding: 12px 14px 4px; margin-bottom: 10px; }
+  .app .name { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 10px; min-width: 0; }
   .app .name span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .app .slider { margin-top: 0; }
-  .playing { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; }
+  .playing { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); flex: none; box-shadow: 0 0 8px rgba(48,209,88,.6); }
 
   .empty { text-align: center; color: var(--sub); padding: 36px 16px; }
   .empty svg { width: 40px; height: 40px; color: var(--faint); }
   .empty p { margin: 8px 0 16px; }
-  .empty.small { padding: 14px 16px; border-radius: var(--radius); border-style: dashed; box-shadow: none; }
+  .empty.small { padding: 16px 18px; border-radius: 22px; }
   .empty.small p { margin: 0; }
-  .primary { border-radius: 99px; min-height: 48px; padding: 0 22px; font-weight: 600; }
-  .secondary { border-radius: 99px; min-height: 46px; padding: 0 20px; font-weight: 600; }
+  .primary { border-radius: 99px; min-height: 50px; padding: 0 24px; font-weight: 600; font-size: 16px; }
+  .secondary { border-radius: 99px; min-height: 48px; padding: 0 22px; font-weight: 600; }
 
-  .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.5); display: flex; align-items: flex-end; justify-content: center; padding: 0 8px calc(8px + env(safe-area-inset-bottom)); }
-  .sheet .panel { border-radius: 24px; width: 100%; max-width: 560px; padding: 22px 20px 18px; background: rgba(30,30,34,.82); }
-  .sheet h3 { margin: 0 0 6px; font-size: 19px; }
+  /* ---- sheets float above the page, like iOS ---- */
+  .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.35); display: flex; align-items: flex-end; justify-content: center; padding: 0 10px calc(10px + env(safe-area-inset-bottom)); animation: fade .2s ease; }
+  .sheet .panel { border-radius: 36px; width: 100%; max-width: 560px; padding: 24px 22px 18px; background: linear-gradient(180deg, rgba(40,40,44,.72), rgba(28,28,30,.78)); -webkit-backdrop-filter: blur(40px) saturate(180%); backdrop-filter: blur(40px) saturate(180%); animation: rise .38s var(--spring); }
+  @keyframes fade { from { opacity: 0; } }
+  @keyframes rise { from { transform: translateY(40px) scale(.97); opacity: 0; } }
+  .sheet h3 { margin: 0 0 8px; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
   .sheet p { color: var(--sub); margin: 0 0 12px; }
   .sheet ol { margin: 0 0 16px; padding-left: 22px; }
-  .sheet ol li { margin-bottom: 8px; }
+  .sheet ol li { margin-bottom: 9px; }
   .sheet .note { font-size: 13px; color: var(--faint); }
   .sheet .kbd { display: inline-flex; align-items: center; justify-content: center; vertical-align: -6px; width: 26px; height: 26px; border-radius: 8px; }
   .sheet .kbd svg { width: 16px; height: 16px; }
 
-  #pair { max-width: 420px; margin: calc(32px + env(safe-area-inset-top)) auto 20px; width: calc(100% - 32px); padding: 28px 22px 24px; text-align: center; border-radius: 24px; }
-  #pair img { width: 64px; height: 64px; border-radius: 16px; }
-  #pair h2 { margin: 14px 0 8px; font-size: 22px; }
+  /* Position: the screen with its 8 spots, the PiP's own lit */
+  .spots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; aspect-ratio: 16 / 10; margin: 6px 0 16px; padding: 10px; border-radius: 24px; background: rgba(0,0,0,.28); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.12); }
+  .spot { border-radius: 14px; display: grid; place-items: center; }
+  .spot i { width: 36%; height: 32%; min-width: 22px; min-height: 14px; border-radius: 5px; border: 1.5px solid var(--sub); }
+  .spot.on { background: #fff; }
+  .spot.on::after { opacity: 0; }
+  .spot.on i { border-color: var(--on-accent); background: var(--on-accent); }
+  .spot.screen { background: none; }
+  .spot.screen::after { display: none; }
+
+  /* Window: the open windows, the one showing now marked */
+  .winlist { max-height: 55vh; overflow-y: auto; margin: 6px -4px 14px; padding: 2px 4px; display: flex; flex-direction: column; gap: 8px; }
+  .win { text-align: left; border-radius: 18px; padding: 11px 14px; display: flex; flex-direction: column; min-height: 54px; }
+  .win .wt { font-weight: 550; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .win .wa { font-size: 12.5px; color: var(--sub); }
+  .win.on { background: rgba(255,255,255,.14); }
+  .win.on::after { background: linear-gradient(135deg, rgba(255,255,255,.8), rgba(255,255,255,.35)); }
+  .hint { color: var(--sub); margin: 8px 0 16px; }
+
+  /* ---- pairing ---- */
+  #pair { max-width: 420px; margin: calc(36px + env(safe-area-inset-top)) auto 20px; width: calc(100% - 32px); padding: 30px 22px 24px; text-align: center; border-radius: 36px; }
+  #pair img { width: 68px; height: 68px; border-radius: 17px; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
+  #pair h2 { margin: 16px 0 8px; font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
   #pair p { color: var(--sub); margin: 0 0 20px; }
   #pair ol { text-align: left; color: var(--sub); padding-left: 20px; margin: 0 0 24px; }
   #pair ol li { margin-bottom: 7px; }
@@ -190,23 +248,30 @@
   .wide { width: 100%; }
   .link { color: var(--text); font-weight: 600; text-decoration: underline; padding: 0; }
   #pair .note { color: var(--sub); font-size: 14px; }
-  .pin { font-size: 50px; font-weight: 700; letter-spacing: 6px; font-variant-numeric: tabular-nums; margin: 8px 0 12px; }
+  /* the PIN as six glass tiles */
+  .pin { display: flex; justify-content: center; gap: 7px; margin: 10px 0 16px; }
+  .pin span { width: 44px; height: 58px; border-radius: 14px; display: grid; place-items: center; font-size: 30px; font-weight: 650; font-variant-numeric: tabular-nums; background: var(--fill); position: relative; }
+  .pin span::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; background: var(--rim); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+  .pin span.gap { width: 6px; background: none; }
+  .pin span.gap::after { display: none; }
   .waiting { color: var(--sub); margin: 0 0 20px; animation: breathe 1.6s ease-in-out infinite; }
   @keyframes breathe { 50% { opacity: .45; } }
   #pairMsg { margin-top: 14px; min-height: 1.4em; color: var(--danger); }
-  .foot { text-align: center; color: var(--faint); font-size: 12px; margin-top: 22px; }
+  .foot { text-align: center; color: var(--faint); font-size: 12px; margin-top: 24px; }
   .foot button { color: var(--sub); text-decoration: underline; font-size: 12px; }
 
-  /* fallbacks: solid panels where glass can't be had or isn't wanted, and a still background */
+  /* ---- fallbacks ---- */
   @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-    header, .card, .app, .empty.small, .sheet .panel, #pair { background: var(--glass-solid); }
+    .card, .app, .chip, .install, .sheet .panel, #pair, .empty.small { background: var(--glass-solid); }
   }
   @media (prefers-reduced-transparency: reduce) {
-    header, .card, .app, .empty.small, .sheet .panel, #pair { background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+    .card, .app, .chip, .install, .sheet .panel, #pair, .empty.small { background: var(--glass-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
     .backdrop i:nth-child(n) { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .backdrop i:nth-child(n), .waiting { animation: none; }       /* :nth-child(n) to outrank the per-light rules */
+    .backdrop i:nth-child(n), .waiting, .sheet, .sheet .panel { animation: none; }       /* :nth-child(n) to outrank the per-light rules */
+    .chip, .install, .act, .iconbtn, .close, .secondary, .primary, .spot, .win { transition: none; }
+    .chip:active, .install:active, .act:active, .iconbtn:active, .close:active, .secondary:active, .primary:active, .spot:active, .win:active { transform: none; }
   }
 </style>
 </head>
@@ -404,7 +469,8 @@
       const pb = C.hkdf(shared, transcript, C.enc.encode("pin"), 4);
       const pin = String((((pb[0] << 24) | (pb[1] << 16) | (pb[2] << 8) | pb[3]) >>> 0) % 1000000).padStart(6, "0");
       const deviceKey = C.hkdf(shared, transcript, C.enc.encode("device-key"), 32);
-      $("#pinText").textContent = pin.slice(0, 3) + " " + pin.slice(3);
+      $("#pinText").innerHTML = [...pin].map((d, i) => (i === 3 ? '<span class="gap"></span>' : "") + "<span>" + d + "</span>").join("");
+      $("#pinText").setAttribute("aria-label", "PIN " + pin.split("").join(" "));
       $("#pairStart").classList.add("hidden"); $("#pairPin").classList.remove("hidden");
       // wait until you type the PIN on the PC
       for (let i = 0; i < 300 && pairing === token; i++) {
@@ -519,6 +585,9 @@
       if (Date.now() - last > 90) fire(); else timer = setTimeout(fire, 90);
     });
     input.addEventListener("change", () => { busy.set(key, Date.now()); clearTimeout(timer); fire(); });
+    const up = () => input.classList.remove("drag");
+    input.addEventListener("pointerdown", () => input.classList.add("drag"));
+    input.addEventListener("pointerup", up); input.addEventListener("pointercancel", up); input.addEventListener("blur", up);
     paint();
   }
 

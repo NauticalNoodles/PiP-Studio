@@ -23,7 +23,7 @@ Control PiP Studio from your phone:
 - It opens in your phone's browser (Android or iPhone, nothing to install) and shows every PiP, yours and other apps', with buttons to move, resize, minimize, restore and close them, plus opacity and volume sliders
 - Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound
 - Tap **Install app** to put it on your home screen, where it opens full screen like a real app
-- A clean, dark liquid glass look: each PiP shows the buttons you use most with its volume and opacity underneath, and the rest under **More** (it goes solid if your phone has Reduce transparency on)
+- A clean, dark look after Apple's Liquid Glass (glass panels with lit edges, glass capsule sliders that turn clear while you drag): each PiP shows the buttons you use most with its volume and opacity underneath, and the rest under **More** (it goes solid if your phone has Reduce transparency on)
 - Every PiP and every app in the volume list shows the app's own icon
 - Turn on **Preview** (under More) to see what a PiP is showing, live on your phone
 - **Position** puts a PiP on any corner or edge spot with one tap, **Window** switches which window it shows, and **Follow** turns "follow the window I just left" on or off
