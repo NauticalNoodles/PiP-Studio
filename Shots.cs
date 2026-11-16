@@ -39,7 +39,7 @@ namespace PipStudio
             Directory.CreateDirectory(dir);
             Log("taking screenshots");
             var S = App.S;
-            S.ThemeMode = 2; S.ShowExplainers = true; S.CompanionOn = !Packaged.IsPackaged;
+            S.ThemeMode = 2; S.ShowExplainers = true; S.CompanionOn = !Packaged.IsPackaged; S.AllowMultiple = true;
             App.I.SettingsChanged();
             var steps = new List<Action>();
             steps.Add(() =>
@@ -52,12 +52,13 @@ namespace PipStudio
             });
             // a window to show in a PiP, if the workflow opened one (Notepad). A step of its own: if it asks something,
             // the timer keeps going.
-            steps.Add(() =>
-            {
-                var src = WinEnum.AltTab().FirstOrDefault(h => !U.IsOurs(h) && U.ProcessName(h).Equals("notepad", StringComparison.OrdinalIgnoreCase));
-                if (src != IntPtr.Zero) App.I.UseWindow(src, null);
-                Log(src != IntPtr.Zero ? "PiP of Notepad" : "no Notepad");
-            });
+            foreach (var app in new[] { "mspaint", "notepad" })                  // whatever the workflow opened, one PiP each
+                steps.Add(() =>
+                {
+                    var src = WinEnum.AltTab().FirstOrDefault(h => !U.IsOurs(h) && U.ProcessName(h).Equals(app, StringComparison.OrdinalIgnoreCase));
+                    if (src != IntPtr.Zero) App.I.UseWindow(src, null);
+                    Log(src != IntPtr.Zero ? "PiP of " + app : "no " + app);
+                });
             Action<string, string> shot = (pg, name) =>
             {
                 steps.Add(() => Navigate(pg, false));
@@ -72,9 +73,9 @@ namespace PipStudio
             shot("shortcuts", "shortcuts");
             shot("settings", "settings");
             shot("phone", "phone");
-            steps.Add(() => { S.ThemeMode = 3; App.I.SettingsChanged(); Navigate("appearance", false); });   // OLED
+            steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
-            steps.Add(() => { S.ThemeMode = 1; App.I.SettingsChanged(); Navigate("behavior", false); });     // light
+            steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light
             steps.Add(() => Save(Path.Combine(dir, "behavior-light.png")));
             steps.Add(() => { S.ThemeMode = 2; App.I.SettingsChanged(); App.I.ExitApp(); });
 

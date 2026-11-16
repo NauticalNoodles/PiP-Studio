@@ -34,8 +34,13 @@ jobs:
           New-Item -ItemType Directory -Force $dir | Out-Null
           # the machine's screen is 1024x768: make it 1080p so the window has room
           try { Set-DisplayResolution -Width 1920 -Height 1080 -Force -ErrorAction Stop; Write-Host "Screen set to 1920x1080" } catch { Write-Host "Couldn't change the screen size: $_" }
-          Start-Process notepad
-          Start-Sleep -Seconds 3
+          # things to show in PiPs: some notes, and the Windows wallpaper in Paint
+          $notes = Join-Path $env:RUNNER_TEMP "Weekend plans.txt"
+          Set-Content $notes "Weekend plans`r`n`r`n- Finish the boss fight`r`n- Watch the match on Sunday`r`n- Movie night: pick something`r`n- Groceries: pasta, basil, tomatoes"
+          Start-Process notepad $notes
+          $wall = Get-ChildItem "C:\Windows\Web\Wallpaper" -Recurse -Filter *.jpg | Select-Object -First 1
+          if ($wall) { try { Start-Process mspaint "`"$($wall.FullName)`"" } catch { Write-Host "No Paint" } }
+          Start-Sleep -Seconds 5
           $p = Start-Process -FilePath ".\out\PiPStudio.exe" -ArgumentList "--screenshots", "`"$dir`"" -PassThru
           Start-Sleep -Seconds 25
           # what's on the machine's screen at this point (to see a dialog in the way, if it gets stuck)
