@@ -78,7 +78,10 @@ namespace PipStudio
             explainStage = F<Canvas>("ExplainStage");
             explainTitle = F<TextBlock>("ExplainTitle");
             explainText = F<TextBlock>("ExplainText");
-            explainShown = null;
+            explainShown = null; explainAsPip = null;
+            var xb = F<Button>("ExplainX");      // the PiP's X shows while you point at it, like on a real PiP
+            explainCard.MouseEnter += (o, e) => { if (explainAsPip == true) Anim.Fade(xb, 1, 120); };
+            explainCard.MouseLeave += (o, e) => Anim.Fade(xb, 0, 160);
             explainFirst.Clear();
             explainEls.Clear();
             HookHover();
@@ -175,6 +178,50 @@ namespace PipStudio
             explainEls[el] = show;
             // keyboard / controller focus moving onto it (the mouse is handled by EvalHover)
             el.IsKeyboardFocusWithinChanged += (o, e) => { if (el.IsKeyboardFocusWithin && Mouse.Captured == null) ShowExplainer(show); };
+        }
+
+        static bool? explainAsPip;
+
+        /// <summary>The explainer's two looks: a small PiP floating in the lower right corner of the page (the animation, then
+        /// its title and text, an X on hover), or in controller mode the panel on the right with a Hide button.</summary>
+        static void ExplainLayout()
+        {
+            if (explainCard == null) return;
+            bool pip = !padVisual;
+            if (explainAsPip == pip) return;
+            explainAsPip = pip;
+            var frame = F<Border>("ExplainFrame"); var view = F<Viewbox>("ExplainView");
+            var x = F<Button>("ExplainX"); var foot = F<DockPanel>("ExplainFoot");
+            if (pip)
+            {
+                explainCard.Width = 288;
+                explainCard.Margin = new Thickness(0, 0, 24, 20);
+                explainCard.VerticalAlignment = VerticalAlignment.Bottom;
+                explainCard.Padding = new Thickness(0);
+                explainCard.CornerRadius = new CornerRadius(10);
+                explainCard.Effect = App.S.LiteMode ? null : new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 24, ShadowDepth = 6, Direction = 270, Opacity = Looks.Dark ? 0.5 : 0.22, Color = Colors.Black };
+                frame.Height = 162; frame.CornerRadius = new CornerRadius(9, 9, 0, 0);
+                view.Margin = new Thickness(0);
+                explainTitle.Margin = new Thickness(14, 10, 14, 0); explainTitle.FontSize = 14;
+                explainText.Margin = new Thickness(14, 2, 14, 12); explainText.FontSize = 12;
+                foot.Visibility = Visibility.Collapsed;
+                x.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                explainCard.Width = 316;
+                explainCard.Margin = new Thickness(0, 22, 28, 24);
+                explainCard.VerticalAlignment = VerticalAlignment.Top;
+                explainCard.Padding = new Thickness(16, 14, 16, 16);
+                explainCard.CornerRadius = new CornerRadius(8);
+                explainCard.Effect = null;
+                frame.Height = 178; frame.CornerRadius = new CornerRadius(4);
+                view.Margin = new Thickness(6);
+                explainTitle.Margin = new Thickness(0, 14, 0, 0); explainTitle.FontSize = 16;
+                explainText.Margin = new Thickness(0, 4, 0, 0); explainText.FontSize = 13;
+                foot.Visibility = Visibility.Visible;
+                x.Visibility = Visibility.Collapsed;
+            }
         }
 
         static bool ExplainWanted() { return App.S.ShowExplainers && ExplainPages.Contains(page ?? ""); }

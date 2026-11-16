@@ -108,6 +108,7 @@ namespace PipStudio
             st.ScaleX = st.ScaleY = uiScale;
             lastColsFor = -1;
             ApplyLayout(false);
+            LayoutDetails();                     // explanations: a panel in controller mode, a PiP otherwise
             Dispatch(() => MoveIndicator(false), DispatcherPriority.Loaded);
             HideThumb();
             DelayRun(120, UpdatePreview);

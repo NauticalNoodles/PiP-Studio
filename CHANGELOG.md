@@ -4,6 +4,7 @@
 
 Game on: PiP Studio's window can now look like your Xbox.
 
+- Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. Controller mode keeps the panel. The Phone page has explanations too.
 - New **Window style** option in Settings > Appearance: Windows 11 or Xbox
 - The Xbox style is dark with Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard
 - It goes great with the controller-friendly mode

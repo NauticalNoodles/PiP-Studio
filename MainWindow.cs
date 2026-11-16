@@ -404,17 +404,21 @@ namespace PipStudio
             <WrapPanel x:Name='CmdBar' Orientation='Horizontal' Margin='-11,8,0,0'/>
           </StackPanel>
 
-          <!-- Settings pages: an animated explainer for the setting you're pointing at -->
-          <Border x:Name='ExplainCard' Grid.Row='1' Grid.RowSpan='2' Width='316' Margin='0,22,28,24' HorizontalAlignment='Right' VerticalAlignment='Top' Visibility='Collapsed' Padding='16,14,16,16' CornerRadius='8' BorderThickness='1' Background='{DynamicResource Card}' BorderBrush='{DynamicResource CardBorder}'>
-            <StackPanel>
-              <Border Height='178' CornerRadius='4' Background='#FF15161A' ClipToBounds='True'>
-                <Viewbox Stretch='Uniform' Margin='6'>
-                  <Canvas x:Name='ExplainStage' Width='264' Height='150' ClipToBounds='True'/>
-                </Viewbox>
-              </Border>
+          <!-- Settings pages: an animated explainer for the setting you're pointing at. A small PiP in the lower right corner;
+               in controller mode a panel on the right (ExplainLayout switches between the two) -->
+          <Border x:Name='ExplainCard' Panel.ZIndex='10' Grid.Row='1' Grid.RowSpan='2' Width='316' Margin='0,22,28,24' HorizontalAlignment='Right' VerticalAlignment='Top' Visibility='Collapsed' Padding='16,14,16,16' CornerRadius='8' BorderThickness='1' Background='{DynamicResource Card}' BorderBrush='{DynamicResource CardBorder}'>
+            <StackPanel x:Name='ExplainBody'>
+              <Grid>
+                <Border x:Name='ExplainFrame' Height='178' CornerRadius='4' Background='#FF15161A' ClipToBounds='True'>
+                  <Viewbox x:Name='ExplainView' Stretch='Uniform' Margin='6'>
+                    <Canvas x:Name='ExplainStage' Width='264' Height='150' ClipToBounds='True'/>
+                  </Viewbox>
+                </Border>
+                <Button x:Name='ExplainX' Visibility='Collapsed' Opacity='0' HorizontalAlignment='Right' VerticalAlignment='Top' Margin='0,6,6,0' Width='26' Height='26' Padding='0' Content='&#xE711;' FontFamily='Segoe Fluent Icons, Segoe MDL2 Assets' FontSize='10' ToolTip='Hide the explanations (you can bring them back from the top of the page)'/>
+              </Grid>
               <TextBlock x:Name='ExplainTitle' Margin='0,14,0,0' FontSize='16' FontWeight='SemiBold' Foreground='{DynamicResource Text}' TextWrapping='Wrap'/>
               <TextBlock x:Name='ExplainText' Margin='0,4,0,0' Style='{StaticResource Caption}' FontSize='13' TextWrapping='Wrap'/>
-              <DockPanel Margin='0,12,0,0'>
+              <DockPanel x:Name='ExplainFoot' Margin='0,12,0,0'>
                 <Button x:Name='ExplainHide' DockPanel.Dock='Right' Padding='10,4' Margin='8,0,0,0' Content='Hide' ToolTip='Hide the explanations (you can bring them back from the top of the page)'/>
                 <TextBlock Style='{StaticResource Caption}' FontSize='11' Foreground='{DynamicResource Tertiary}' TextWrapping='Wrap' VerticalAlignment='Center' Text='Point at a setting to see what it does.'/>
               </DockPanel>
@@ -753,6 +757,7 @@ namespace PipStudio
             PadUiInit(win);
             ExplainInit();
             F<Button>("ExplainHide").Click += (o, e) => ToggleExplainers();
+            F<Button>("ExplainX").Click += (o, e) => ToggleExplainers();
             padGlow = padRing.Effect;
             ApplyLite();
 
@@ -860,7 +865,7 @@ namespace PipStudio
 
         static bool PageHasSidePanel()
         {
-            return App.S.ShowExplainers && ExplainPages.Contains(page ?? "");      // settings with explanations (not the Windows page)
+            return padVisual && App.S.ShowExplainers && ExplainPages.Contains(page ?? "");   // controller mode: explanations are a panel; otherwise a PiP over the page
         }
 
         static void OpenPane()
@@ -1013,22 +1018,29 @@ namespace PipStudio
 
             // settings pages: the explainer panel takes the same spot
             if (explainCard == null || pageScroll == null) return;
-            bool ex = detailsWanted && ExplainWanted();
+            ExplainLayout();
+            bool ex = ExplainWanted() && (padVisual ? detailsWanted : pageScroll.ActualWidth <= 0 || pageScroll.ActualWidth >= 520);
             var ev = ex ? Visibility.Visible : Visibility.Collapsed;
             if (explainCard.Visibility != ev)
             {
                 explainCard.Visibility = ev;
-                if (ex) { Anim.Enter(explainCard, 28, 60); ExplainForPage(); }
+                if (ex) { Anim.Enter(explainCard, padVisual ? 28 : 16, 60); ExplainForPage(); }
                 else if (explainSb != null) explainSb.Stop(explainStage);   // nothing plays while it's hidden
             }
-            double sroom = ex ? 28 + 316 + 12 : 0;   // clear of the panel (and its right margin), so the scrollbar sits beside it
-            if (ex)
+            double sroom = ex && padVisual ? 28 + 316 + 12 : 0;   // the PiP floats over the page instead   // clear of the panel (and its right margin), so the scrollbar sits beside it
+            if (ex && padVisual)
             {
                 var hm2 = pageHeader.Margin;
                 if (Math.Abs(hm2.Right - (sroom + 4)) > 0.5) pageHeader.Margin = new Thickness(hm2.Left, hm2.Top, sroom + 4, hm2.Bottom);
             }
             var sm = pageScroll.Margin;
             if (Math.Abs(sm.Right - sroom) > 0.5) pageScroll.Margin = new Thickness(sm.Left, sm.Top, sroom, sm.Bottom);
+            if (settingsHost != null)   // room under the last setting, so it can scroll up past the PiP
+            {
+                double bottom = ex && !padVisual ? 36 + 250 : 36;
+                var hm3 = settingsHost.Margin;
+                if (Math.Abs(hm3.Bottom - bottom) > 0.5) settingsHost.Margin = new Thickness(hm3.Left, hm3.Top, hm3.Right, bottom);
+            }
         }
 
         static void ShowHeaderCells(Grid header, double[] widths)
