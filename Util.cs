@@ -495,6 +495,10 @@ namespace PipStudio
         public bool CheckForUpdates = true;       // look for a new version on GitHub once a day
         public string LastUpdateCheck = "";       // UTC ticks of the last successful check
         public string UpdateNotified = "";        // the version the "Update available" notification was shown for
+        // Phone companion (Companion.cs)
+        public bool CompanionOn = false;          // listen for paired phones on the local network
+        public int CompanionPort = 48765;
+        public string CompanionDevices = "";      // paired phones: "id|sha256 of its key|name;..."
         public Color AccentColor = Color.FromArgb(76, 141, 255);
         public Color BackgroundColor = Color.Black;
 

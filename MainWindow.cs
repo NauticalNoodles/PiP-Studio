@@ -123,12 +123,14 @@ namespace PipStudio
         static Button captureKbBtn;
         static Action refreshBindings;
         static Action refreshUpdates;   // the Updates card on the settings page, while the window is open
+        static Action refreshCompanion; // the Phone companion section, while the window is open
 
         public static void Init()
         {
             App.OpenMain = Open;
             App.CloseMain = () => { if (w != null && !exiting) { exiting = true; w.Close(); } };
             Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
+            Companion.Changed += () => { var r = refreshCompanion; if (r != null) r(); };
             Theme.Changed += () => { if (w != null) Looks.Apply(w); };   // keeps the look's colors on top after a light/dark or accent change
         }
 
@@ -824,7 +826,7 @@ namespace PipStudio
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
-            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null;
+            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null;
             pages.Clear(); searchIndex.Clear(); iconCache.Clear(); winSig = runSig = "";
             if (!exiting && App.S.MinimizeMemory) App.RunSoon(U.Trim, 1500);
         }
@@ -2551,6 +2553,83 @@ namespace PipStudio
             return b;
         }
 
+        /// <summary>Settings > General > Phone companion: on/off, the address, Pair a phone (QR code), and the paired phones.</summary>
+        static void BuildCompanionSettings(StackPanel ge, Settings S)
+        {
+            Section(ge, "Phone companion");
+            Card(ge, "\uE8EA", "Control PiP Studio from your phone", "Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.",
+                Switch(() => S.CompanionOn, v => { S.CompanionOn = v; Companion.Apply(); }), "phone mobile android iphone remote companion volume mixer wifi qr");
+            var pairBtn = PlainButton("Pair a phone", ShowPairing, true);
+            var pairCard = Card(ge, "\uED14", "Pair a phone", "Turn on the switch above first", pairBtn, "pair qr code connect phone scan");
+            var phonesHost = new StackPanel();
+            ge.Children.Add(phonesHost);
+
+            refreshCompanion = () =>
+            {
+                pairBtn.IsEnabled = Companion.Running;
+                string url = Companion.Url;
+                if (pairCard.Desc != null)
+                    pairCard.Desc.Text = !S.CompanionOn ? "Turn on the switch above first"
+                        : Companion.Problem ?? (url == null ? "This PC isn't on a network right now" : "Your phone opens " + url);
+                phonesHost.Children.Clear();
+                foreach (var d in Companion.Devices())
+                {
+                    var dev = d;
+                    string seen = dev.LastSeen == null ? "Not used since PiP Studio started" : "Last used " + dev.LastSeen.Value.ToString("t");
+                    var remove = PlainButton("Remove", () =>
+                        Ask("Remove " + dev.Name + "?", "It stops working right away. You can pair it again any time.", "Remove", "Cancel", ok => { if (ok) Companion.Remove(dev.Id); }));
+                    Card(phonesHost, "\uE8EA", dev.Name, seen, remove, "paired phone device remove");
+                }
+            };
+            refreshCompanion();
+        }
+
+        /// <summary>The Pair a phone dialog: a QR code with the page's address and a one-time code, valid while it's open.</summary>
+        static void ShowPairing()
+        {
+            string url = Companion.Url;
+            if (url == null)
+            {
+                Ask("No network", "PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.", "OK", null, null);
+                return;
+            }
+            string code = Companion.BeginPairing();
+            string link = url + "#pair=" + code;
+            var panel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 0) };
+            try
+            {
+                using (var gen = new QRCoder.QRCodeGenerator())
+                using (var data = gen.CreateQrCode(link, QRCoder.QRCodeGenerator.ECCLevel.M))
+                {
+                    byte[] png = new QRCoder.PngByteQRCode(data).GetGraphic(8);   // black on white, with a quiet border
+                    var img = new BitmapImage();
+                    img.BeginInit(); img.StreamSource = new MemoryStream(png); img.CacheOption = BitmapCacheOption.OnLoad; img.EndInit(); img.Freeze();
+                    var frame = new Border { Background = Brushes.White, CornerRadius = Looks.CR(8), Padding = new Thickness(6), HorizontalAlignment = HorizontalAlignment.Center,
+                        Child = new Image { Source = img, Width = 220, Height = 220, SnapsToDevicePixels = true } };
+                    RenderOptions.SetBitmapScalingMode(frame.Child, BitmapScalingMode.NearestNeighbor);   // crisp squares
+                    panel.Children.Add(frame);
+                }
+            }
+            catch (Exception ex) { App.ReportError(ex); }
+            var addr = Fluent.Label("Or open " + url + " on your phone and type the code " + code, 13, "Sub");
+            addr.TextAlignment = TextAlignment.Center;
+            addr.Margin = new Thickness(0, 12, 0, 0);
+            panel.Children.Add(addr);
+            var status = Fluent.Label("", 13, "Accent");
+            status.TextAlignment = TextAlignment.Center;
+            status.Margin = new Thickness(0, 8, 0, 0);
+            panel.Children.Add(status);
+            int before = Companion.Devices().Count;
+            Action onChange = () =>
+            {
+                var l = Companion.Devices();
+                if (l.Count > before) status.Text = "Paired with " + l[l.Count - 1].Name + ". You can close this.";
+            };
+            Companion.Changed += onChange;
+            Ask("Pair a phone", "Scan this code with your phone's camera. Your phone needs to be on the same Wi-Fi as this PC. The code works once, while this is open.",
+                "Done", null, ok => { Companion.Changed -= onChange; Companion.EndPairing(); }, false, panel);
+        }
+
         /// <summary>Settings > General > Updates: where things stand, Check now / Update now / What's new, and the daily check.</summary>
         static void BuildUpdateSettings(StackPanel ge, Settings S)
         {
@@ -2793,6 +2872,7 @@ namespace PipStudio
                 if (App.IsElevated) Card(ge, "", "Running as administrator", "PiP Studio can show windows of apps that run as administrator", null, "admin elevated uac");
                 else Card(ge, "", "Restart as administrator", "Needed only to show windows of apps that run as administrator", PlainButton("Restart", App.I.RestartElevated), "admin elevated uac");
             }
+            if (!Packaged.IsPackaged) BuildCompanionSettings(ge, S);
             if (Updater.Supported) BuildUpdateSettings(ge, S);   // the Store version gets its updates from the Store
             Section(ge, "About");
             var about = MakeExpander(ge, "", "PiP Studio", "Version " + Updater.CurrentText, PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");

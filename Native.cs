@@ -277,6 +277,82 @@ namespace PipStudio
             level = Math.Max(0f, Math.Min(1f, level));
             foreach (var v in Sessions(processName)) { try { v.SetMasterVolume(level, ref g); } catch { } }
         }
+
+        // ------------------------------------------------------------ the mixer (phone companion): every app with sound
+        /// <summary>An app in Windows' volume mixer: all its sessions on the default output, under one process name.</summary>
+        public class AppVolume
+        {
+            public string Process, Name;
+            public float Volume;
+            public bool Muted, Playing;
+        }
+
+        static readonly Dictionary<string, string> niceNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>Apps with an audio session on the default output, like Windows' volume mixer lists them.</summary>
+        public static List<AppVolume> Apps()
+        {
+            var byName = new Dictionary<string, AppVolume>(StringComparer.OrdinalIgnoreCase);
+            try
+            {
+                var en = (IMMDeviceEnumerator)new MMDeviceEnumeratorCo();
+                IMMDevice dev;
+                if (en.GetDefaultAudioEndpoint(0, 1, out dev) != 0 || dev == null) return new List<AppVolume>();
+                Guid iid = typeof(IAudioSessionManager2).GUID;
+                object o;
+                if (dev.Activate(ref iid, 23, IntPtr.Zero, out o) != 0 || o == null) return new List<AppVolume>();
+                IAudioSessionEnumerator se;
+                if (((IAudioSessionManager2)o).GetSessionEnumerator(out se) != 0 || se == null) return new List<AppVolume>();
+                int n;
+                se.GetCount(out n);
+                for (int i = 0; i < n; i++)
+                {
+                    object so;
+                    if (se.GetSession(i, out so) != 0 || so == null) continue;
+                    var c2 = so as IAudioSessionControl2;
+                    var v = so as ISimpleAudioVolume;
+                    if (c2 == null || v == null) continue;
+                    uint pid;
+                    c2.GetProcessId(out pid);
+                    if (pid == 0) continue;                                        // Windows' system sounds
+                    string proc = U.ProcessName((int)pid);
+                    if (string.IsNullOrEmpty(proc)) continue;                      // the app has closed
+                    int state;
+                    c2.GetState(out state);
+                    if (state == 2) continue;                                      // AudioSessionStateExpired
+                    AppVolume a;
+                    if (!byName.TryGetValue(proc, out a))
+                    {
+                        float f; bool m;
+                        v.GetMasterVolume(out f);
+                        v.GetMute(out m);
+                        a = new AppVolume { Process = proc, Name = NiceName(proc, (int)pid), Volume = f, Muted = m };
+                        byName[proc] = a;
+                    }
+                    if (state == 1) a.Playing = true;                              // AudioSessionStateActive
+                }
+            }
+            catch { }
+            var l = new List<AppVolume>(byName.Values);
+            l.Sort((x, y) => x.Playing != y.Playing ? (x.Playing ? -1 : 1) : string.Compare(x.Name, y.Name, StringComparison.CurrentCultureIgnoreCase));
+            return l;
+        }
+
+        /// <summary>The app's own name ("Google Chrome", "Spotify") from its program file, or its process name.</summary>
+        static string NiceName(string proc, int pid)
+        {
+            string n;
+            if (niceNames.TryGetValue(proc, out n)) return n;
+            try
+            {
+                using (var p = System.Diagnostics.Process.GetProcessById(pid))
+                    n = p.MainModule.FileVersionInfo.FileDescription;
+            }
+            catch { n = null; }                                                    // e.g. an app running as administrator
+            if (string.IsNullOrWhiteSpace(n)) n = char.ToUpper(proc[0]) + proc.Substring(1);
+            niceNames[proc] = n.Trim();
+            return niceNames[proc];
+        }
     }
 
 }

@@ -24,7 +24,13 @@
     <NoWarn>$(NoWarn);CA1416;CS0618;CS0414;CS0169;CS0649;WFAC010;WFO1000</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <!-- the phone companion's page and icon, served by PiP Studio itself (Companion.cs) -->
+    <EmbeddedResource Include="companion\index.html" LogicalName="companion.index.html" />
+    <EmbeddedResource Include="assets\icon.png" LogicalName="companion.icon.png" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="WPF-UI" Version="3.0.5" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
     <RuntimeHostConfigurationOption Include="System.GC.ConserveMemory" Value="5" />
   </ItemGroup>
 </Project>

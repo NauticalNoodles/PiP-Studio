@@ -641,3 +641,20 @@ Remove every mark?	هل تريد إزالة كل العلامات؟	移除所有
 Every window you marked with Treat as a PiP goes back to being a normal window, and comes off always on top.	تعود كل نافذة علّمتها بـ «معاملة كنافذة عائمة» نافذة عادية، ويُلغى إبقاؤها فوق النوافذ الأخرى.	你用“当作画中画”标记的每个窗口都会变回普通窗口，并取消置顶。
 Every window like this from {0}	كل نافذة مثل هذه من {0}	{0} 中所有与此类似的窗口
 {0} · this window only, until it closes	{0} · هذه النافذة فقط حتى تُغلق	{0} · 仅此窗口，直到它关闭
+Phone companion	تطبيق الهاتف المرافق	手机伴侣
+Control PiP Studio from your phone	تحكّم في PiP Studio من هاتفك	用手机控制 PiP Studio
+Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.	أدِر نوافذك العائمة وصوت كل تطبيق من متصفح هاتفك عبر شبكة Wi-Fi المنزلية. قد يطلب Windows السماح لـ PiP Studio على الشبكات الخاصة.	通过家庭 Wi-Fi，在手机浏览器中管理画中画和每个应用的音量。Windows 可能会请你允许 PiP Studio 访问专用网络。
+Pair a phone	إقران هاتف	配对手机
+Turn on the switch above first	شغّل المفتاح أعلاه أولًا	请先打开上方的开关
+This PC isn't on a network right now	هذا الكمبيوتر غير متصل بشبكة الآن	此电脑当前未连接网络
+Your phone opens {0}	يفتح هاتفك {0}	手机将打开 {0}
+Not used since PiP Studio started	لم يُستخدم منذ تشغيل PiP Studio	自 PiP Studio 启动后未使用
+Last used {0}	آخر استخدام {0}	上次使用 {0}
+Remove {0}?	هل تريد إزالة {0}؟	移除 {0}？
+It stops working right away. You can pair it again any time.	سيتوقف عن العمل فورًا. يمكنك إقرانه مجددًا في أي وقت.	它会立即停止工作。你可以随时重新配对。
+No network	لا توجد شبكة	没有网络
+PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.	لا يستطيع PiP Studio العثور على عنوان هذا الكمبيوتر على شبكتك المحلية. اتصل بشبكة Wi-Fi أو Ethernet وحاول مرة أخرى.	PiP Studio 找不到此电脑在本地网络中的地址。请连接 Wi-Fi 或以太网后重试。
+Or open {0} on your phone and type the code {1}	أو افتح {0} على هاتفك واكتب الرمز {1}	或者在手机上打开 {0} 并输入代码 {1}
+Paired with {0}. You can close this.	تم الإقران مع {0}. يمكنك إغلاق هذه النافذة.	已与 {0} 配对。现在可以关闭此窗口。
+Scan this code with your phone's camera. Your phone needs to be on the same Wi-Fi as this PC. The code works once, while this is open.	امسح هذا الرمز بكاميرا هاتفك. يجب أن يكون هاتفك على شبكة Wi-Fi نفسها التي يتصل بها هذا الكمبيوتر. يعمل الرمز مرة واحدة فقط أثناء فتح هذه النافذة.	用手机相机扫描此二维码。手机需要与此电脑连接同一个 Wi-Fi。此代码仅在此窗口打开时有效，且只能使用一次。
+Couldn't open a network port. Another app may be using it.	تعذّر فتح منفذ الشبكة. ربما يستخدمه تطبيق آخر.	无法打开网络端口。可能有其他应用正在使用它。

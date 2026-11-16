@@ -67,6 +67,12 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 - Controller controls for the PiP, with hints, continuous volume, opacity and size, and an option to release the game's focus while you steer.
 - A controller-friendly mode for the main window: bigger layout, focus ring, tabs, on-screen keyboard and button hints.
 
+**Phone companion**
+- Turn it on in Settings > General > Phone companion and pair your phone by scanning a QR code. It runs in the phone's browser (Android or iPhone), no app to install.
+- Move, resize, minimize, restore and close any PiP (yours or other apps'), change its opacity and volume, start a PiP, hide them all, or play/pause.
+- A volume mixer for every app that's playing sound.
+- Local network only: nothing goes over the internet, and only phones you paired can connect.
+
 **Main window**
 - Windows page: search, the list of windows with a live preview and the freeze warning.
 - Running PiPs page, including other apps' PiPs, with options for each one (opacity, volume, size, shape, black bars, snapping), and the windows you marked as PiPs.

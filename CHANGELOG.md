@@ -17,6 +17,13 @@ Marking windows as PiPs is clearer and easier to undo:
 - Other apps' PiPs stay on the Running PiPs page while they're minimized, with a Restore button to bring them back
 - The title bar on other apps' PiPs no longer has a maximize button
 
+Control PiP Studio from your phone:
+
+- New **Phone companion** in Settings > General: turn it on, press **Pair a phone** and scan the QR code
+- It opens in your phone's browser (Android or iPhone, nothing to install) and shows every PiP, yours and other apps', with buttons to move, resize, minimize, restore and close them, plus opacity and volume sliders
+- A **Volume** tab works like Windows' volume mixer: a slider and mute button for every app playing sound
+- It only works on your home network, only for phones you've paired, and you can remove a phone any time
+
 Behind the scenes:
 
 - Settings and your open PiPs are saved more safely, so a crash or power cut can't wipe them

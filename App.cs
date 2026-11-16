@@ -364,6 +364,7 @@ namespace PipStudio
             if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
             Updater.Start(updated);
+            Companion.Apply();                                            // the phone companion, if you turned it on
         }
 
         static void Safe(Action a) { try { a(); } catch (Exception ex) { ReportError(ex); } }
@@ -1299,6 +1300,7 @@ namespace PipStudio
             if (cleaned) return;
             cleaned = true;
             bgTimer.Stop(); padTimer.Stop(); fgTimer.Stop(); trimTimer.Stop();
+            try { Companion.Stop(); } catch { }
             try { SaveSession(); } catch { }
             try { var c = CloseMain; if (c != null) c(); } catch { }
             foreach (var p in Pips.ToArray()) { try { p.ShutdownClose(); } catch { } }

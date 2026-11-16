@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111214">
+<meta name="color-scheme" content="dark light">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<title>PiP Studio</title>
+<!--
+  PiP Studio's phone companion. Served by PiP Studio itself (Companion.cs) on the local network; no outside requests.
+  Pairing: the QR code opens this page with #pair=CODE; the page trades the code for its own key (kept in this browser).
+  Then it polls /api/state about once a second while it's on screen and sends actions as small JSON POSTs.
+-->
+<style>
+  :root {
+    --bg: #111214; --surface: #1b1c20; --surface2: #24262b; --line: #2d3036;
+    --text: #f2f3f5; --sub: #a3a8b3; --faint: #6f7480;
+    --accent: #4c8dff; --on-accent: #ffffff; --danger: #e5484d; --ok: #3dd68c;
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg: #f3f4f6; --surface: #ffffff; --surface2: #eceef1; --line: #dfe2e7; --text: #16181d; --sub: #5d6470; --faint: #8b919c; }
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { min-height: 100vh; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+  button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .hidden { display: none !important; }
+
+  header { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: calc(14px + env(safe-area-inset-top)) 16px 10px; display: flex; align-items: center; gap: 12px; }
+  header img { width: 32px; height: 32px; border-radius: 8px; }
+  header h1 { font-size: 18px; margin: 0; font-weight: 650; }
+  header .pc { font-size: 12px; color: var(--sub); display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); display: inline-block; }
+  .dot.on { background: var(--ok); }
+  main { padding: 4px 16px 16px; max-width: 640px; margin: 0 auto; }
+
+  .banner { background: color-mix(in srgb, var(--danger) 16%, var(--surface)); border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent); color: var(--text); padding: 10px 12px; border-radius: 10px; margin: 0 0 12px; font-size: 14px; }
+
+  .quick { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 16px; }
+  .chip { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 12.5px; color: var(--sub); }
+  .chip svg { width: 22px; height: 22px; color: var(--text); }
+  .chip:active { background: var(--surface2); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 12px; }
+  .card .top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .card .badge { width: 36px; height: 36px; border-radius: 10px; background: var(--surface2); display: grid; place-items: center; flex: none; }
+  .card .badge svg { width: 20px; height: 20px; }
+  .card .names { min-width: 0; flex: 1; }
+  .card .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .meta { font-size: 13px; color: var(--sub); }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--surface2); color: var(--sub); margin-left: 4px; vertical-align: 1px; }
+
+  .actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .act { background: var(--surface2); border-radius: 10px; min-height: 58px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11.5px; color: var(--sub); padding: 6px 2px; }
+  .act svg { width: 20px; height: 20px; color: var(--text); }
+  .act:active { filter: brightness(1.25); }
+  .act.danger svg { color: var(--danger); }
+  .act.on { background: var(--accent); color: var(--on-accent); }
+  .act.on svg { color: var(--on-accent); }
+
+  .slider { display: grid; grid-template-columns: 44px 1fr 46px; align-items: center; gap: 8px; margin-top: 10px; }
+  .slider .lbl { font-size: 13px; color: var(--sub); text-align: right; font-variant-numeric: tabular-nums; }
+  .iconbtn { width: 44px; height: 44px; border-radius: 10px; background: var(--surface2); display: grid; place-items: center; }
+  .iconbtn svg { width: 20px; height: 20px; }
+  .iconbtn.muted { background: color-mix(in srgb, var(--danger) 22%, var(--surface2)); }
+  .iconbtn.muted svg { color: var(--danger); }
+  .iconlbl { width: 44px; display: grid; place-items: center; color: var(--sub); }
+  .iconlbl svg { width: 20px; height: 20px; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; }
+  input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(to right, var(--accent) var(--p, 50%), var(--line) var(--p, 50%)); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; margin-top: -9px; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+  input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--line); }
+  input[type=range]::-moz-range-progress { height: 6px; border-radius: 3px; background: var(--accent); }
+  input[type=range]::-moz-range-thumb { width: 24px; height: 24px; border: 0; border-radius: 50%; background: #fff; }
+
+  .app { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px 6px; margin-bottom: 8px; }
+  .app .name { font-weight: 600; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .app .name span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app .slider { margin-top: 2px; }
+  .playing { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); flex: none; }
+
+  .empty { text-align: center; color: var(--sub); padding: 40px 16px; }
+  .empty svg { width: 44px; height: 44px; color: var(--faint); }
+  .empty p { margin: 8px 0 16px; }
+  .primary { background: var(--accent); color: var(--on-accent); border-radius: 12px; min-height: 48px; padding: 0 22px; font-weight: 600; }
+  .secondary { background: var(--surface2); border-radius: 12px; min-height: 48px; padding: 0 18px; font-weight: 600; }
+
+  nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; padding-bottom: env(safe-area-inset-bottom); }
+  nav button { min-height: 62px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 12px; color: var(--sub); }
+  nav button svg { width: 24px; height: 24px; }
+  nav button[aria-selected=true] { color: var(--accent); }
+
+  #pair { max-width: 420px; margin: 0 auto; padding: 32px 20px; text-align: center; }
+  #pair img { width: 72px; height: 72px; border-radius: 18px; }
+  #pair h2 { margin: 16px 0 8px; font-size: 22px; }
+  #pair p { color: var(--sub); margin: 0 0 20px; }
+  #pair ol { text-align: left; color: var(--sub); padding-left: 20px; margin: 0 0 24px; }
+  #pair ol li { margin-bottom: 6px; }
+  #pair b { color: var(--text); }
+  .codebox { display: flex; gap: 8px; }
+  .codebox input { flex: 1; min-width: 0; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; padding: 0 14px; }
+  #pairMsg { margin-top: 14px; min-height: 1.4em; color: var(--danger); }
+  .foot { text-align: center; color: var(--faint); font-size: 12px; margin-top: 20px; }
+  .foot button { color: var(--sub); text-decoration: underline; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<!-- not paired yet -->
+<section id="pair" class="hidden">
+  <img src="/icon.png" alt="">
+  <h2>Connect to PiP Studio</h2>
+  <p>Control your PiPs and every app's volume from this phone.</p>
+  <ol>
+    <li>On your PC, open <b>PiP Studio</b> &rsaquo; <b>Settings</b> &rsaquo; <b>General</b> &rsaquo; <b>Phone companion</b>.</li>
+    <li>Press <b>Pair a phone</b> and scan the QR code with this phone's camera.</li>
+  </ol>
+  <p style="margin-bottom:10px">Or type the code PiP Studio shows:</p>
+  <form class="codebox" id="codeForm">
+    <input id="codeInput" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" placeholder="CODE" aria-label="Pairing code">
+    <button class="primary" type="submit">Pair</button>
+  </form>
+  <div id="pairMsg" role="alert"></div>
+</section>
+
+<!-- paired -->
+<div id="appView" class="hidden">
+  <header>
+    <img src="/icon.png" alt="">
+    <div>
+      <h1>PiP Studio</h1>
+      <div class="pc"><span class="dot" id="dot"></span><span id="pcName">Connecting…</span></div>
+    </div>
+  </header>
+  <main>
+    <div class="banner hidden" id="offline" role="status">Can't reach PiP Studio. Check that this phone is on the same Wi-Fi as your PC and PiP Studio is running.</div>
+
+    <section id="tabPips" role="tabpanel" aria-labelledby="navPips">
+      <div class="quick">
+        <button class="chip" data-global="startpip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="12" y="11" width="7" height="6" rx="1" fill="currentColor"/></svg>Start a PiP</button>
+        <button class="chip" data-global="toggleall" id="hideAll"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>Hide all</span></button>
+        <button class="chip" data-global="playpause"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 4.5v15l8-7.5z"/><rect x="15" y="5" width="3" height="14" rx="1"/><rect x="19.5" y="5" width="3" height="14" rx="1" transform="translate(-1 0)"/></svg>Play / pause</button>
+      </div>
+      <div id="pipList"></div>
+    </section>
+
+    <section id="tabAudio" role="tabpanel" aria-labelledby="navAudio" class="hidden">
+      <div id="audioList"></div>
+    </section>
+
+    <div class="foot"><span id="ver"></span> · <button id="forget">Disconnect this phone</button></div>
+  </main>
+  <nav role="tablist">
+    <button role="tab" id="navPips" aria-selected="true" aria-controls="tabPips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><rect x="11.5" y="11" width="7.5" height="6" rx="1" fill="currentColor"/></svg>PiPs</button>
+    <button role="tab" id="navAudio" aria-selected="false" aria-controls="tabAudio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>Volume</button>
+  </nav>
+</div>
+
+<script>
+"use strict";
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const KEY = "pipstudio.key";
+  const store = {
+    get() { try { return localStorage.getItem(KEY); } catch (e) { return memKey; } },
+    set(v) { memKey = v; try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {} }
+  };
+  let memKey = null;
+
+  // ---------------------------------------------------------------- icons
+  const P = (d, fill) => `<svg viewBox="0 0 24 24" ${fill ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'}>${d}</svg>`;
+  const ICON = {
+    corner: P('<rect x="3" y="4" width="18" height="16" rx="2"/><rect x="12" y="12" width="6" height="5" rx="1" fill="currentColor"/>'),
+    nextmon: P('<rect x="2" y="4" width="13" height="10" rx="1.5"/><path d="M6 18h5M8.5 14v4"/><path d="M18 9h4m0 0-2-2m2 2-2 2"/>'),
+    shrink: P('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M7.5 10.5h6M20.5 20.5 15.5 15.5"/>'),
+    grow: P('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M7.5 10.5h6M10.5 7.5v6M20.5 20.5 15.5 15.5"/>'),
+    theater: P('<path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/>'),
+    show: P('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18"/>'),
+    prev: P('<path d="M15 6l-6 6 6 6"/>'),
+    next: P('<path d="M9 6l6 6-6 6"/>'),
+    close: P('<path d="M6 6l12 12M18 6 6 18"/>'),
+    minimize: P('<path d="M5 18h14"/>'),
+    restore: P('<rect x="4" y="7" width="13" height="12" rx="1.5"/><path d="M8 7V5h12v11h-3"/>'),
+    playpause: P('<path d="M5 4.5v15l8-7.5z"/><rect x="15" y="5" width="2.6" height="14" rx="1"/><rect x="19" y="5" width="2.6" height="14" rx="1"/>', true),
+    vol: P('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>'),
+    mute: P('<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9.5l5 5M22 9.5l-5 5"/>'),
+    opacity: P('<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>'),
+    pip: P('<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><rect x="11.5" y="11" width="7.5" height="6" rx="1" fill="currentColor"/>'),
+    screen: P('<rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/>'),
+    music: P('<path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>')
+  };
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const pct = (v) => Math.round((v ?? 0) * 100);
+
+  // ---------------------------------------------------------------- talking to PiP Studio
+  async function api(method, path, body) {
+    const headers = { "Content-Type": "application/json" };
+    const k = store.get();
+    if (k) headers.Authorization = "Bearer " + k;
+    const r = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
+    let data = null;
+    try { data = await r.json(); } catch (e) {}
+    if (r.status === 401) { store.set(null); showPair("This phone isn't paired any more. Pair it again in PiP Studio."); throw new Error("unpaired"); }
+    if (!r.ok) throw Object.assign(new Error((data && data.error) || ("Error " + r.status)), { status: r.status });
+    return data;
+  }
+  const act = (id, action, value) => api("POST", "/api/pip", value === undefined ? { id, action } : { id, action, value }).then(() => pollSoon(250)).catch(netError);
+  const globalAct = (action) => api("POST", "/api/global", { action }).then(() => pollSoon(250)).catch(netError);
+
+  // ---------------------------------------------------------------- pairing
+  function deviceName() {
+    const ua = navigator.userAgent || "";
+    const m = ua.match(/Android[^;]*;\s*([^;)]+?)(?:\s+Build|\))/);
+    if (m && m[1] && !/^(K|wv)$/.test(m[1].trim())) return m[1].trim();
+    if (/iPhone/.test(ua)) return "iPhone";
+    if (/iPad/.test(ua)) return "iPad";
+    if (/Android/.test(ua)) return "Android phone";
+    return "Phone";
+  }
+
+  async function pair(code) {
+    $("#pairMsg").textContent = "";
+    try {
+      const r = await api("POST", "/api/pair", { code, name: deviceName() });
+      store.set(r.token);
+      history.replaceState(null, "", "/");                        // the code is used up; don't keep it in the address
+      showApp();
+    } catch (e) {
+      if (e.message !== "unpaired") $("#pairMsg").textContent = e.status ? e.message : "Can't reach PiP Studio. Is this phone on the same Wi-Fi as your PC?";
+    }
+  }
+
+  function showPair(msg) {
+    stopPolling();
+    $("#appView").classList.add("hidden");
+    $("#pair").classList.remove("hidden");
+    $("#pairMsg").textContent = msg || "";
+  }
+
+  function showApp() {
+    $("#pair").classList.add("hidden");
+    $("#appView").classList.remove("hidden");
+    startPolling();
+  }
+
+  $("#codeForm").addEventListener("submit", (e) => { e.preventDefault(); const c = $("#codeInput").value.trim(); if (c) pair(c); });
+  $("#forget").addEventListener("click", () => {
+    if (!confirm("Disconnect this phone? You'll need to pair it again to use it. (To remove it completely, use Remove in PiP Studio's settings.)")) return;
+    store.set(null); showPair();
+  });
+
+  // ---------------------------------------------------------------- tabs
+  function tab(which) {
+    const pips = which === "pips";
+    $("#navPips").setAttribute("aria-selected", pips);
+    $("#navAudio").setAttribute("aria-selected", !pips);
+    $("#tabPips").classList.toggle("hidden", !pips);
+    $("#tabAudio").classList.toggle("hidden", pips);
+    try { sessionStorage.setItem("pipstudio.tab", which); } catch (e) {}
+  }
+  $("#navPips").addEventListener("click", () => tab("pips"));
+  $("#navAudio").addEventListener("click", () => tab("audio"));
+  try { if (sessionStorage.getItem("pipstudio.tab") === "audio") tab("audio"); } catch (e) {}
+  document.querySelectorAll("[data-global]").forEach((b) => b.addEventListener("click", () => globalAct(b.dataset.global)));
+
+  // ---------------------------------------------------------------- sliders: send while dragging, don't let polling yank them back
+  const busy = new Map();                                          // slider key -> time of the last touch
+  const isBusy = (k) => Date.now() - (busy.get(k) || 0) < 1500;
+  function wireSlider(input, key, send) {
+    let last = 0, timer = 0;
+    const paint = () => { input.style.setProperty("--p", input.value + "%"); const l = input.parentElement.querySelector(".lbl"); if (l) l.textContent = input.value + "%"; };
+    const fire = () => { last = Date.now(); send(input.value / 100); };
+    input.addEventListener("input", () => {
+      busy.set(key, Date.now()); paint();
+      clearTimeout(timer);
+      if (Date.now() - last > 90) fire(); else timer = setTimeout(fire, 90);
+    });
+    input.addEventListener("change", () => { busy.set(key, Date.now()); clearTimeout(timer); fire(); });
+    paint();
+  }
+
+  // ---------------------------------------------------------------- PiPs
+  function actionsFor(p) {
+    if (p.minimized) return [["restore", "Restore"], ["close", "Close", "danger"]];
+    const a = [["corner", "Corner"], ["nextmon", "Display"], ["shrink", "Smaller"], ["grow", "Bigger"], ["theater", "Theater"]];
+    if (p.window) a.push(["show", "Show app"]);
+    if (p.kind === "own" && p.window) a.push(["prev", "Previous"], ["next", "Next"]);
+    if (p.kind === "app") a.push(["minimize", "Minimize"]);
+    a.push(["close", "Close", "danger"]);
+    return a;
+  }
+
+  function renderPips(state) {
+    const list = $("#pipList");
+    const hide = $("#hideAll span");
+    hide.textContent = state.hidden ? "Show all" : "Hide all";
+    if (!state.pips.length) {
+      list.innerHTML = `<div class="empty">${ICON.pip}<p>No PiPs are open.</p><button class="primary" data-g="startpip">Start a PiP</button></div>`;
+      list.querySelector("[data-g]").addEventListener("click", () => globalAct("startpip"));
+      list.dataset.sig = "";
+      return;
+    }
+    // rebuild the cards only when the set of PiPs or their buttons change; otherwise just update the numbers
+    const sig = state.pips.map((p) => [p.id, p.minimized, p.window, p.kind, p.volume == null].join(",")).join("|");
+    if (list.dataset.sig !== sig) {
+      list.dataset.sig = sig;
+      list.innerHTML = state.pips.map((p) => `
+        <div class="card" data-id="${esc(p.id)}">
+          <div class="top">
+            <div class="badge">${p.window ? ICON.pip : ICON.screen}</div>
+            <div class="names">
+              <div class="title" data-f="title"></div>
+              <div class="meta"><span data-f="app"></span><span class="tag">${p.kind === "own" ? "Your PiP" : "App's own PiP"}</span>${p.minimized ? '<span class="tag">Minimized</span>' : ""}</div>
+            </div>
+          </div>
+          <div class="actions">${actionsFor(p).map(([k, label, cls]) =>
+            `<button class="act ${cls || ""}" data-a="${k}" aria-label="${label}">${ICON[k]}<span>${label}</span></button>`).join("")}</div>
+          ${p.minimized ? "" : `
+          <div class="slider"><div class="iconlbl" aria-hidden="true">${ICON.opacity}</div><input type="range" min="20" max="100" step="1" data-s="opacity" aria-label="Opacity"><div class="lbl"></div></div>`}
+          ${p.volume == null ? "" : `
+          <div class="slider"><button class="iconbtn" data-a="mute" aria-label="Mute">${ICON.vol}</button><input type="range" min="0" max="100" step="1" data-s="volume" aria-label="Volume"><div class="lbl"></div></div>`}
+        </div>`).join("");
+      list.querySelectorAll(".card").forEach((card) => {
+        const id = card.dataset.id;
+        card.querySelectorAll("[data-a]").forEach((b) => b.addEventListener("click", () => act(id, b.dataset.a)));
+        card.querySelectorAll("[data-s]").forEach((s) => wireSlider(s, id + s.dataset.s, (v) => act(id, s.dataset.s, v)));
+      });
+    }
+    for (const p of state.pips) {
+      const card = list.querySelector(`.card[data-id="${CSS.escape(p.id)}"]`);
+      if (!card) continue;
+      card.querySelector('[data-f="title"]').textContent = p.title;
+      card.querySelector('[data-f="app"]').textContent = p.app || "";
+      const th = card.querySelector('[data-a="theater"]');
+      if (th) th.classList.toggle("on", !!p.theater);
+      setSlider(card.querySelector('[data-s="opacity"]'), p.id + "opacity", p.opacity);
+      setSlider(card.querySelector('[data-s="volume"]'), p.id + "volume", p.volume);
+      setMute(card.querySelector('[data-a="mute"]'), p.muted);
+    }
+  }
+
+  function setSlider(input, key, v) {
+    if (!input || v == null || isBusy(key)) return;
+    input.value = pct(v);
+    input.style.setProperty("--p", input.value + "%");
+    const l = input.parentElement.querySelector(".lbl");
+    if (l) l.textContent = input.value + "%";
+  }
+
+  function setMute(btn, muted) {
+    if (!btn) return;
+    btn.classList.toggle("muted", !!muted);
+    btn.innerHTML = muted ? ICON.mute : ICON.vol;
+    btn.setAttribute("aria-label", muted ? "Unmute" : "Mute");
+    btn.setAttribute("aria-pressed", !!muted);
+  }
+
+  // ---------------------------------------------------------------- volume mixer
+  function renderAudio(state) {
+    const list = $("#audioList");
+    if (!state.audio.length) {
+      list.innerHTML = `<div class="empty">${ICON.music}<p>No apps are playing sound right now.</p></div>`;
+      list.dataset.sig = "";
+      return;
+    }
+    const sig = state.audio.map((a) => a.process).join("|");
+    if (list.dataset.sig !== sig) {
+      list.dataset.sig = sig;
+      list.innerHTML = state.audio.map((a) => `
+        <div class="app" data-p="${esc(a.process)}">
+          <div class="name"><i class="playing hidden" title="Playing"></i><span data-f="name"></span></div>
+          <div class="slider"><button class="iconbtn" data-a="mute" aria-label="Mute">${ICON.vol}</button><input type="range" min="0" max="100" step="1" aria-label="Volume"><div class="lbl"></div></div>
+        </div>`).join("");
+      list.querySelectorAll(".app").forEach((row) => {
+        const proc = row.dataset.p;
+        const send = (body) => api("POST", "/api/audio", Object.assign({ process: proc }, body)).then(() => pollSoon(250)).catch(netError);
+        row.querySelector("[data-a=mute]").addEventListener("click", (e) => send({ muted: !e.currentTarget.classList.contains("muted") }));
+        wireSlider(row.querySelector("input"), "a:" + proc, (v) => send({ volume: v }));
+      });
+    }
+    for (const a of state.audio) {
+      const row = list.querySelector(`.app[data-p="${CSS.escape(a.process)}"]`);
+      if (!row) continue;
+      row.querySelector('[data-f="name"]').textContent = a.name;
+      row.querySelector(".playing").classList.toggle("hidden", !a.playing);
+      setSlider(row.querySelector("input"), "a:" + a.process, a.volume);
+      setMute(row.querySelector("[data-a=mute]"), a.muted);
+    }
+  }
+
+  // ---------------------------------------------------------------- polling (only while the page is on screen)
+  let pollTimer = 0, running = false, inFlight = false;
+  function startPolling() { running = true; poll(); }
+  function stopPolling() { running = false; clearTimeout(pollTimer); }
+  function pollSoon(ms) { if (!running) return; clearTimeout(pollTimer); pollTimer = setTimeout(poll, ms); }
+
+  async function poll() {
+    if (!running || document.hidden) return;
+    if (inFlight) { pollSoon(300); return; }
+    inFlight = true;
+    try {
+      const s = await api("GET", "/api/state");
+      $("#offline").classList.add("hidden");
+      $("#dot").classList.add("on");
+      $("#pcName").textContent = "Connected to " + s.pc;
+      $("#ver").textContent = "PiP Studio " + s.version;
+      renderPips(s);
+      renderAudio(s);
+      pollSoon(1200);
+    } catch (e) {
+      if (e.message !== "unpaired") { netError(e); pollSoon(3000); }
+    } finally { inFlight = false; }
+  }
+
+  function netError(e) {
+    if (e && e.message === "unpaired") return;
+    if (e && e.status) return;                                     // PiP Studio answered (the PiP may have just closed)
+    $("#offline").classList.remove("hidden");
+    $("#dot").classList.remove("on");
+    $("#pcName").textContent = "Not connected";
+  }
+
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && running) poll(); });
+
+  // ---------------------------------------------------------------- start
+  // a QR link (#pair=CODE) pairs straight away, also when this page is already open and only the address's # part changes
+  function fromLink() {
+    const m = location.hash.match(/pair=([A-Za-z0-9]+)/);
+    if (!m) return false;
+    showPair(); $("#codeInput").value = m[1]; pair(m[1]);
+    return true;
+  }
+  window.addEventListener("hashchange", fromLink);
+  if (!fromLink()) { if (store.get()) showApp(); else showPair(); }
+})();
+</script>
+</body>
+</html>
