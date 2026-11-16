@@ -1247,7 +1247,7 @@ namespace PipStudio
             if (ExplainPages.Contains(page ?? ""))
             {
                 // the explanations panel on the right: hide it, or bring it back
-                cmdBar.Children.Add(Cmd(App.S.ShowExplainers ? "\uE7B3" : "\uE890", App.S.ShowExplainers ? "Hide explanations" : "Show explanations", ToggleExplainers));
+                cmdBar.Children.Add(Cmd(App.S.ShowExplainers ? "\uED1A" : "\uE890", App.S.ShowExplainers ? "Hide explanations" : "Show explanations", ToggleExplainers));
             }
             if (page == "windows")
             {
