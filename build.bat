@@ -15,9 +15,10 @@ if errorlevel 1 (
   exit /b 1
 )
 
-if /i "%~1"=="release" goto release
+call :close_pipstudio
+if errorlevel 1 exit /b 1
 
-taskkill /im PiPStudio.exe /f >nul 2>&1
+if /i "%~1"=="release" goto release
 
 dotnet publish PiPStudio.csproj -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o publish
 if errorlevel 1 goto failed
@@ -61,5 +62,21 @@ exit /b 0
 :failed
 echo.
 echo Build failed - see the errors above.
+pause
+exit /b 1
+
+rem A running PiP Studio locks its exe, so the build can't replace it. Close it first; if it runs as administrator
+rem (Always start as administrator), this window isn't allowed to, so say what to do instead.
+:close_pipstudio
+tasklist /fi "imagename eq PiPStudio.exe" 2>nul | find /i "PiPStudio.exe" >nul
+if errorlevel 1 exit /b 0
+echo Closing PiP Studio so it can be rebuilt...
+taskkill /im PiPStudio.exe /f >nul 2>&1
+timeout /t 1 /nobreak >nul
+tasklist /fi "imagename eq PiPStudio.exe" 2>nul | find /i "PiPStudio.exe" >nul
+if errorlevel 1 exit /b 0
+echo.
+echo PiP Studio is still running, probably as administrator, so this window can't close it.
+echo Right-click its tray icon (by the clock) and choose Exit, then run this again.
 pause
 exit /b 1
