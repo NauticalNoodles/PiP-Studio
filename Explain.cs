@@ -197,6 +197,7 @@ namespace PipStudio
                 explainCard.VerticalAlignment = VerticalAlignment.Bottom;
                 explainCard.Padding = new Thickness(0);
                 explainCard.CornerRadius = new CornerRadius(10);
+                explainCard.SetResourceReference(Border.BackgroundProperty, "Floating");   // solid, so the page doesn't show through the text
                 explainCard.Effect = App.S.LiteMode ? null : new System.Windows.Media.Effects.DropShadowEffect { BlurRadius = 24, ShadowDepth = 6, Direction = 270, Opacity = Theme.Dark ? 0.5 : 0.22, Color = Colors.Black };
                 frame.Height = 162; frame.CornerRadius = new CornerRadius(9, 9, 0, 0);
                 view.Margin = new Thickness(0);
@@ -212,6 +213,7 @@ namespace PipStudio
                 explainCard.VerticalAlignment = VerticalAlignment.Top;
                 explainCard.Padding = new Thickness(16, 14, 16, 16);
                 explainCard.CornerRadius = new CornerRadius(8);
+                explainCard.SetResourceReference(Border.BackgroundProperty, "Card");
                 explainCard.Effect = null;
                 frame.Height = 178; frame.CornerRadius = new CornerRadius(4);
                 view.Margin = new Thickness(6);
