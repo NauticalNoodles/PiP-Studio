@@ -18,6 +18,8 @@ namespace PipStudio
         static int Main(string[] args)
         {
             try { Native.SetProcessDpiAwarenessContext(new IntPtr(-4)); } catch { }
+            if (AdminStart.HandOver(args)) return 0;                      // "Always start as administrator": the elevated copy takes over
+            args = AdminStart.TakeArgs(args);
 
             bool created;
             var mutex = new Mutex(true, "PiPStudio.SingleInstance.v2", out created);

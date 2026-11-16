@@ -677,3 +677,7 @@ Copied	تم النسخ	已复制
 Controller controls on · The game runs as admin, so it still gets the controller	تحكم وحدة التحكم مفعّل · اللعبة تعمل كمسؤول، لذا ما زالت تستقبل وحدة التحكم	手柄控制已开启 · 游戏以管理员身份运行，所以它仍会收到手柄输入
 The game runs as administrator	اللعبة تعمل كمسؤول	游戏以管理员身份运行
 So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.	لذا تستمر في استقبال وحدة التحكم. انقر لإعادة تشغيل PiP Studio كمسؤول لحل ذلك.	所以它会继续收到你的手柄输入。点击以管理员身份重新启动 PiP Studio 即可解决。
+Always start as administrator	التشغيل كمسؤول دائمًا	始终以管理员身份启动
+Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.	دون السؤال في كل مرة، وعند تسجيل الدخول أيضًا. للألعاب والتطبيقات التي تعمل كمسؤول: يمكن لـ PiP Studio حينها عرض نوافذها وأخذ التركيز منها لعناصر تحكم وحدة التحكم. يسأل Windows مرة واحدة لإعداد ذلك.	无需每次询问，登录时也是如此。适用于以管理员身份运行的游戏和应用：PiP Studio 可以显示它们的窗口，并在手柄控制时夺取焦点。Windows 只会在设置时询问一次。
+Restart as administrator now?	هل تريد إعادة التشغيل كمسؤول الآن؟	现在以管理员身份重新启动？
+From now on PiP Studio starts as administrator without asking, also when it starts at sign-in.	من الآن فصاعدًا يبدأ PiP Studio كمسؤول دون السؤال، وكذلك عند بدء التشغيل مع تسجيل الدخول.	从现在起，PiP Studio 会以管理员身份启动而无需询问，登录时自动启动也是如此。

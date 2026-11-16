@@ -67,6 +67,10 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 [Run]
 Filename: "{app}\PiPStudio.exe"; Description: "Launch PiP Studio"; Flags: nowait postinstall skipifsilent
 
+[UninstallRun]
+; "Always start as administrator" (AdminStart.cs) leaves a scheduled task: remove it too (it may need permission)
+Filename: "{sys}\schtasks.exe"; Parameters: "/Delete /TN ""PiP Studio (administrator)"" /F"; Flags: runhidden; RunOnceId: "RemoveAdminTask"
+
 [Code]
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var

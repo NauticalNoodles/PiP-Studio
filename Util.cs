@@ -590,6 +590,7 @@ namespace PipStudio
         public string LastUpdateCheck = "";       // UTC ticks of the last successful check
         public string UpdateNotified = "";        // the version the "Update available" notification was shown for
         // Phone companion (Companion.cs)
+        public bool AlwaysAdmin = false;          // start through the administrator task (AdminStart.cs)
         public bool CompanionOn = false;          // listen for paired phones on the local network
         public int CompanionPort = 48765;
         public string CompanionDevices = "";      // paired phones: "id|sha256 of its key|name;..."

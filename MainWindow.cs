@@ -2898,6 +2898,19 @@ namespace PipStudio
                 Section(ge, "Administrator");
                 if (App.IsElevated) Card(ge, "", "Running as administrator", "PiP Studio can show windows of apps that run as administrator", null, "admin elevated uac");
                 else Card(ge, "", "Restart as administrator", "Needed only to show windows of apps that run as administrator", PlainButton("Restart", App.I.RestartElevated), "admin elevated uac");
+                var always = new Wpf.Ui.Controls.ToggleSwitch { IsChecked = S.AlwaysAdmin && AdminStart.TaskExists() };
+                always.Click += (o, e) =>
+                {
+                    bool want = always.IsChecked == true;
+                    bool ok = want ? AdminStart.Create() : AdminStart.Delete();   // Windows asks for permission either way
+                    if (!ok) { always.IsChecked = !want; return; }               // you said no: nothing changed
+                    S.AlwaysAdmin = want;
+                    App.I.SettingsChanged();
+                    if (want && !App.IsElevated)
+                        Ask("Restart as administrator now?", "From now on PiP Studio starts as administrator without asking, also when it starts at sign-in.",
+                            "Restart now", "Later", yes => { if (yes) AdminStart.RestartThroughTask(); });
+                };
+                Card(ge, "\uE7EF", "Always start as administrator", "Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.", always, "admin elevated uac always startup sign in task");
             }
             if (!Packaged.IsPackaged) BuildCompanionSettings(ge, S);
             if (Updater.Supported) BuildUpdateSettings(ge, S);   // the Store version gets its updates from the Store
