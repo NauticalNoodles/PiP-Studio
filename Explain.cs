@@ -70,7 +70,7 @@ namespace PipStudio
             })), true);
         }
 
-        static readonly HashSet<string> ExplainPages = new HashSet<string> { "appearance", "behavior", "controller", "settings" };
+        static readonly HashSet<string> ExplainPages = new HashSet<string> { "appearance", "behavior", "controller", "settings", "phone" };
 
         static void ExplainInit()
         {
@@ -142,6 +142,10 @@ namespace PipStudio
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
             EAdd("windowstyle", "Window style", "Windows 11 is the normal look. Xbox dresses this window like the console's dashboard: always dark, Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard. Only this window changes: your PiPs, menus and the window picker keep their look.", ScLooks,
                 "Window style");
+            EAdd("phone", "Phone companion", "Your phone becomes a remote for PiP Studio: move and resize PiPs, switch what they show, and set the volume of every app, from the phone's browser on your home Wi-Fi. Nothing goes over the internet, and everything between phone and PC is encrypted.", ScPhone,
+                "Control PiP Studio from your phone");
+            EAdd("pair", "Pairing a phone", "Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.", ScPair,
+                "Pair a phone");
             // the rows inside Title bar buttons (one per button) explain the title bar, unless they have an explanation of their own
             foreach (var t in TitleBarItems.Labels.Concat(new[] { "Reset title bar buttons" }))
                 if (!explainByTitle.ContainsKey(t)) explainByTitle[t] = "titlebar";
@@ -517,6 +521,96 @@ namespace PipStudio
                 EPut(c, t, x, y + h + 6);
                 if (chosen) EK(sb, g, Canvas.TopProperty, 0, y, 0.8, y - 6, 1.6, y);
             }
+        }
+
+        /// <summary>A phone (with a PiP card: buttons and a volume slider) next to a PC screen: tapping Corner on the phone sends
+        /// the PiP to the other corner, dragging the slider turns the sound down.</summary>
+        static void ScPhone(Canvas c, Storyboard sb)
+        {
+            c.Children.Clear();
+            // the PC screen with a game and a PiP in a corner
+            var pc = new Grid { Width = 150, Height = 92 };
+            pc.Children.Add(new Border { CornerRadius = new CornerRadius(4), Background = EHex("#2B3140"), BorderBrush = EHex("#55808080"), BorderThickness = new Thickness(1) });
+            EPut(c, pc, 14, 18);
+            EPut(c, new Rectangle { Width = 40, Height = 4, Fill = EHex("#55808080"), RadiusX = 2, RadiusY = 2 }, 69, 114);
+            var pip = EPip(44, 26);
+            EPut(c, pip, 14 + 150 - 44 - 6, 18 + 92 - 26 - 6);
+            EK(sb, pip, Canvas.LeftProperty, 0, 114, 1.3, 114, 1.7, 20, 4.2, 20);
+            EK(sb, pip, Canvas.TopProperty, 0, 78, 1.3, 78, 1.7, 24, 4.2, 24);
+            // the sound waves next to the PC, getting smaller when the slider moves
+            var wave = new TextBlock { Text = "\uE995", FontFamily = Fluent.IconFont, FontSize = 16, Foreground = Brushes.White };
+            EPut(c, wave, 132, 120);
+            EK(sb, wave, UIElement.OpacityProperty, 0, .9, 2.4, .9, 3.2, .3, 4.2, .3);
+
+            // the phone: a dark glass card with a title, three buttons and a slider
+            var phone = new Grid { Width = 66, Height = 124 };
+            phone.Children.Add(new Border { CornerRadius = new CornerRadius(12), Background = EHex("#0E0E10"), BorderBrush = EHex("#88FFFFFF"), BorderThickness = new Thickness(1.5) });
+            EPut(c, phone, 182, 12);
+            EPut(c, new Border { Width = 54, Height = 70, CornerRadius = new CornerRadius(7), Background = EHex("#26FFFFFF") }, 188, 30);
+            EPut(c, new Rectangle { Width = 30, Height = 3, Fill = Brushes.White, Opacity = .8, RadiusX = 1.5, RadiusY = 1.5 }, 193, 36);
+            var btns = new Border[3];
+            for (int i = 0; i < 3; i++)
+            {
+                btns[i] = new Border { Width = 14, Height = 12, CornerRadius = new CornerRadius(4), Background = EHex("#33FFFFFF") };
+                EPut(c, btns[i], 193 + i * 16, 46);
+            }
+            EK(sb, btns[0], UIElement.OpacityProperty, 0, 1, 1.0, 1, 1.15, .35, 1.4, 1);       // "Corner" pressed
+            var track = new Rectangle { Width = 44, Height = 3, Fill = EHex("#40FFFFFF"), RadiusX = 1.5, RadiusY = 1.5 };
+            EPut(c, track, 193, 80);
+            var fill = new Rectangle { Height = 3, Fill = Brushes.White, RadiusX = 1.5, RadiusY = 1.5 };
+            EPut(c, fill, 193, 80);
+            EK(sb, fill, FrameworkElement.WidthProperty, 0, 36, 2.4, 36, 3.2, 12, 4.2, 12);
+            var knob = new Border { Width = 11, Height = 7, CornerRadius = new CornerRadius(3.5), Background = Brushes.White };
+            EPut(c, knob, 224, 78);
+            EK(sb, knob, Canvas.LeftProperty, 0, 224, 2.4, 224, 3.2, 200, 4.2, 200);
+            // a finger: tap Corner, then drag the slider
+            var cur = ECursor(); EPut(c, cur, 236, 120);
+            EK(sb, cur, Canvas.LeftProperty, 0, 236, 0.8, 199, 2.0, 199, 2.4, 229, 3.2, 205, 4.2, 236);
+            EK(sb, cur, Canvas.TopProperty, 0, 120, 0.8, 52, 2.0, 52, 2.4, 81, 3.2, 81, 4.2, 120);
+        }
+
+        /// <summary>Pairing: the phone shows a PIN, it's typed into PiP Studio's dialog digit by digit, and both get a tick.</summary>
+        static void ScPair(Canvas c, Storyboard sb)
+        {
+            c.Children.Clear();
+            const string pin = "318472";
+            // the phone with its PIN
+            var phone = new Grid { Width = 70, Height = 124 };
+            phone.Children.Add(new Border { CornerRadius = new CornerRadius(12), Background = EHex("#0E0E10"), BorderBrush = EHex("#88FFFFFF"), BorderThickness = new Thickness(1.5) });
+            EPut(c, phone, 16, 13);
+            for (int i = 0; i < 6; i++)
+            {
+                var t = new Border { Width = 9, Height = 13, CornerRadius = new CornerRadius(3), Background = EHex("#2EFFFFFF"),
+                    Child = new TextBlock { Text = pin[i].ToString(), Foreground = Brushes.White, FontSize = 8, FontWeight = FontWeights.SemiBold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center } };
+                EPut(c, t, 22 + i * 10 + (i >= 3 ? 2 : 0), 64);
+            }
+            // PiP Studio's Pair a phone dialog: a box the digits appear in, one by one
+            var dlg = new Border { Width = 128, Height = 82, CornerRadius = new CornerRadius(6), Background = EHex("#2A2A2E"), BorderBrush = EHex("#55808080"), BorderThickness = new Thickness(1) };
+            EPut(c, dlg, 118, 34);
+            EPut(c, new TextBlock { Text = "Pair a phone", Foreground = Brushes.White, FontSize = 9, FontWeight = FontWeights.SemiBold }, 128, 42);
+            EPut(c, new Border { Width = 70, Height = 16, CornerRadius = new CornerRadius(3), BorderBrush = EB("Accent"), BorderThickness = new Thickness(1), Background = EHex("#1A1A1E") }, 128, 62);
+            for (int i = 0; i < 6; i++)
+            {
+                var d = new TextBlock { Text = pin[i].ToString(), Foreground = Brushes.White, FontSize = 9, Opacity = 0 };
+                EPut(c, d, 133 + i * 10, 64);
+                double t0 = 0.8 + i * 0.28;
+                EK(sb, d, UIElement.OpacityProperty, 0, 0, t0, 0, t0 + 0.05, 1, 4.6, 1);
+            }
+            var btn = new Border { Width = 36, Height = 16, CornerRadius = new CornerRadius(3), Background = EB("Accent"),
+                Child = new TextBlock { Text = "Pair", Foreground = Brushes.White, FontSize = 8, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center } };
+            EPut(c, btn, 204, 62);
+            EK(sb, btn, UIElement.OpacityProperty, 0, 1, 2.7, 1, 2.85, .5, 3.0, 1);
+            // a dotted line between them, and a tick on both once it's paired
+            var link = new Line { X1 = 88, Y1 = 75, X2 = 118, Y2 = 75, Stroke = Brushes.White, StrokeThickness = 1, StrokeDashArray = new DoubleCollection { 2, 3 }, Opacity = .45 };
+            c.Children.Add(link);
+            foreach (var at in new[] { new Point(44, 92), new Point(176, 90) })
+            {
+                var ok = new TextBlock { Text = "\uE73E", FontFamily = Fluent.IconFont, FontSize = 14, Foreground = EHex("#30D158"), Opacity = 0 };
+                EPut(c, ok, at.X, at.Y);
+                EK(sb, ok, UIElement.OpacityProperty, 0, 0, 3.1, 0, 3.3, 1, 4.6, 1);
+            }
+            var tag = new TextBlock { Text = "Type the phone's PIN", Foreground = Brushes.White, FontSize = 10, FontWeight = FontWeights.SemiBold, Opacity = 0.8 };
+            EPut(c, ETag(tag), 6, 6);
         }
 
         /// <summary>The eight sizes, smallest to largest, yours highlighted.</summary>
