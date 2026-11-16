@@ -41,19 +41,22 @@ namespace PipStudio
             var S = App.S;
             S.ThemeMode = 2; S.ShowExplainers = true; S.CompanionOn = !Packaged.IsPackaged;
             App.I.SettingsChanged();
-            // a window to show in a PiP, if the workflow opened one (Notepad)
-            try
+            var steps = new List<Action>();
+            steps.Add(() =>
+            {
+                Open("windows");
+                w.WindowState = WindowState.Normal;
+                w.Left = 0; w.Top = 0; w.Width = 1440; w.Height = 900;
+                Log("window open");
+            });
+            // a window to show in a PiP, if the workflow opened one (Notepad). A step of its own: if it asks something,
+            // the timer keeps going.
+            steps.Add(() =>
             {
                 var src = WinEnum.AltTab().FirstOrDefault(h => !U.IsOurs(h) && U.ProcessName(h).Equals("notepad", StringComparison.OrdinalIgnoreCase));
                 if (src != IntPtr.Zero) App.I.UseWindow(src, null);
-            }
-            catch (Exception ex) { App.ReportError(ex); }
-
-            Open("windows");
-            w.WindowState = WindowState.Normal;
-            w.Left = 0; w.Top = 0; w.Width = 1440; w.Height = 900;
-
-            var steps = new List<Action>();
+                Log(src != IntPtr.Zero ? "PiP of Notepad" : "no Notepad");
+            });
             Action<string, string> shot = (pg, name) =>
             {
                 steps.Add(() => Navigate(pg, false));
@@ -74,7 +77,7 @@ namespace PipStudio
             steps.Add(() => { S.ThemeMode = 2; App.I.SettingsChanged(); App.I.ExitApp(); });
 
             int n = 0;
-            var t = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(2200) };   // time for the page's animations to settle
+            var t = new DispatcherTimer(DispatcherPriority.Normal) { Interval = TimeSpan.FromMilliseconds(2200) };   // time for the page's animations to settle
             t.Tick += (o, e) =>
             {
                 if (n >= steps.Count) { t.Stop(); return; }
