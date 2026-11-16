@@ -58,7 +58,8 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 **Other apps' PiPs**
 - Shortcuts and the controller move, size, fade, mute and close the PiP windows of Chrome, Edge, Firefox, Discord and others. Other apps' floating video windows are found automatically; mark mistakes as Not a PiP, or add a window with Treat as a PiP.
 - They snap to the same spots and use the same sizes. Once you steer one, it stays on top.
-- Point at one to get PiP Studio's title bar over it: drag it to move the PiP, scroll for volume, and use your title bar buttons.
+- Point at one to get PiP Studio's title bar over it: drag it to move the PiP, scroll for volume, minimize it, and use your title bar buttons. Minimized ones stay on the Running PiPs page so you can bring them back.
+- Windows you add with Treat as a PiP are listed under Marked as PiPs on the Running PiPs page. Remove a mark there and the window goes back to normal, off always on top.
 - Discord pop-outs are sized to the video: black bars are found and trimmed away, and the shape is remembered while the window is open.
 
 **Controller**
@@ -68,7 +69,7 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 
 **Main window**
 - Windows page: search, the list of windows with a live preview and the freeze warning.
-- Running PiPs page, including other apps' PiPs, with options for each one (opacity, volume, size, shape, black bars, snapping).
+- Running PiPs page, including other apps' PiPs, with options for each one (opacity, volume, size, shape, black bars, snapping), and the windows you marked as PiPs.
 - Settings with animated explanations, settings search, Lite mode for slower PCs, and light and dark themes with your accent color.
 - The window picker (Ctrl+Alt+P) uses the same look.
 
