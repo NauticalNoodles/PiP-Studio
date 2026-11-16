@@ -221,6 +221,10 @@
 
   /* ---- sheets float above the page, like iOS ---- */
   .sheet { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,.35); display: flex; align-items: flex-end; justify-content: center; padding: 0 10px calc(10px + env(safe-area-inset-bottom)); animation: fade .2s ease; }
+  /* while a sheet is open the page behind it stays put; a long list scrolls inside the sheet */
+  html:has(.sheet:not(.hidden)), html:has(.sheet:not(.hidden)) body { overflow: hidden; overscroll-behavior: none; }
+  .sheet { touch-action: none; }
+  .sheet .panel { touch-action: pan-y; max-height: calc(100dvh - 30px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; }
   .sheet .panel { border-radius: 36px; width: 100%; max-width: 560px; padding: 24px 22px 18px; background: linear-gradient(180deg, rgba(40,40,44,.72), rgba(28,28,30,.78)); -webkit-backdrop-filter: blur(40px) saturate(180%); backdrop-filter: blur(40px) saturate(180%); animation: rise .38s var(--spring); }
   @keyframes fade { from { opacity: 0; } }
   @keyframes rise { from { transform: translateY(40px) scale(.97); opacity: 0; } }
