@@ -533,6 +533,7 @@ namespace PipStudio
                 case "GET /api/state": return OnUi(State);
                 case "POST /api/pip": return new { ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"), Str(body, "arg"))) };
                 case "GET /api/windows": return OnUi(Windows);
+                case "GET /api/frame": return Frame(Str(body, "id"));
                 case "GET /api/icon": return new { png = U.AppIconPng(Str(body, "p")) };   // read off the UI thread: it touches files
                 case "POST /api/global": return new { ok = OnUi(() => GlobalAction(Str(body, "action"))) };
                 case "POST /api/audio": return new { ok = OnUi(() => AudioAction(Str(body, "process"), Num(body, "volume"), Bool(body, "muted"))) };
@@ -618,6 +619,26 @@ namespace PipStudio
                 app = ExternalPip.AppName(h),
                 minimized = Native.IsIconic(h)
             }).ToList();
+        }
+
+        /// <summary>A small snapshot of what a PiP shows, for the phone's live preview (only while you have it on).</summary>
+        static object Frame(string id)
+        {
+            System.Drawing.Bitmap bmp = OnUi(() =>
+            {
+                if (string.IsNullOrEmpty(id)) return null;
+                if (id[0] == 'p')
+                {
+                    var p = App.I.Pips.FirstOrDefault(x => !x.IsClosing && PipId(x) == id);
+                    return p == null ? null : p.PreviewSnapshot();
+                }
+                long v;
+                if (id[0] != 'x' || !long.TryParse(id.Substring(1), System.Globalization.NumberStyles.HexNumber, null, out v)) return null;
+                var h = new IntPtr(v);
+                return ExternalPip.FindAll().Contains(h) ? U.CaptureWindow(h) : null;
+            });
+            if (bmp == null) return new { jpg = (string)null };
+            using (bmp) return new { jpg = U.JpegBase64(bmp, 480, 62) };          // ~15–40 KB: quick to send a few times a second
         }
 
         static readonly HashSet<string> Spots = new HashSet<string> { "TL", "T", "TR", "L", "R", "BL", "B", "BR" };

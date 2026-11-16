@@ -63,6 +63,46 @@ namespace PipStudio
             return result;
         }
 
+        /// <summary>A picture made small enough for a phone (at most <paramref name="maxWidth"/> wide) as base64 JPEG.</summary>
+        public static string JpegBase64(Bitmap src, int maxWidth, long quality)
+        {
+            double k = Math.Min(1.0, maxWidth / (double)Math.Max(1, src.Width));
+            int w = Math.Max(1, (int)Math.Round(src.Width * k)), h = Math.Max(1, (int)Math.Round(src.Height * k));
+            using (var small = new Bitmap(w, h, PixelFormat.Format24bppRgb))
+            {
+                using (var g = Graphics.FromImage(small))
+                {
+                    g.InterpolationMode = InterpolationMode.HighQualityBilinear;
+                    g.DrawImage(src, new Rectangle(0, 0, w, h));
+                }
+                var codec = ImageCodecInfo.GetImageEncoders().First(c => c.FormatID == ImageFormat.Jpeg.Guid);
+                using (var ps = new EncoderParameters(1))
+                using (var ms = new MemoryStream())
+                {
+                    ps.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+                    small.Save(ms, codec, ps);
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
+
+        /// <summary>Another app's window as it looks now (PrintWindow, so it works behind other windows), or null.</summary>
+        public static Bitmap CaptureWindow(IntPtr h)
+        {
+            if (h == IntPtr.Zero || !Native.IsWindow(h) || Native.IsIconic(h)) return null;
+            var r = WindowRect(h);
+            if (r.Width < 2 || r.Height < 2 || r.Width > 8000 || r.Height > 8000) return null;
+            var bmp = new Bitmap(r.Width, r.Height, PixelFormat.Format32bppRgb);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                IntPtr hdc = g.GetHdc();
+                try { Native.PrintWindow(h, hdc, 2); }                     // PW_RENDERFULLCONTENT: browsers and Electron apps too
+                finally { g.ReleaseHdc(hdc); }
+            }
+            if (LooksBlank(bmp)) { bmp.Dispose(); return null; }
+            return bmp;
+        }
+
         /// <summary>Writes a file so a crash or power cut mid-save can't leave it empty or half written: the text goes to a
         /// temporary file next to it first, which then takes the old file's place in one step.</summary>
         public static void SafeWrite(string path, string text)

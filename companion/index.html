@@ -112,6 +112,11 @@
   .act.on svg { color: var(--on-accent); }
   .more { border-top: 1px solid var(--rim); margin-top: 10px; }
   .sliders { border-top: 1px solid var(--rim); margin-top: 12px; padding-top: 2px; }
+  .preview { margin: 10px 0 2px; border-radius: 12px; overflow: hidden; background: rgba(0,0,0,.45); border: 1px solid var(--rim); min-height: 90px; display: grid; place-items: center; position: relative; }
+  .preview img { display: none; width: 100%; height: auto; }
+  .preview img.ok { display: block; }
+  .preview .pmsg { position: absolute; padding: 0 16px; text-align: center; font-size: 13px; color: var(--sub); }
+  .preview .pmsg:empty { display: none; }
 
   /* Position: the screen as a 3×3 grid of spots, the PiP's spot lit */
   .spots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; aspect-ratio: 16 / 10; margin: 4px 0 16px; padding: 10px; border-radius: 14px; border: 1px solid var(--rim); background: rgba(255,255,255,.03); }
@@ -317,6 +322,7 @@
     opacity: P('<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17" /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>'),
     pip: P('<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><rect x="11.5" y="11" width="7.5" height="6" rx="1" fill="currentColor"/>'),
     screen: P('<rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/>'),
+    preview: P('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
     position: P('<rect x="3" y="4" width="18" height="16" rx="2"/><rect x="5.5" y="6.5" width="4" height="3" rx=".6" fill="currentColor" stroke="none"/><rect x="14.5" y="6.5" width="4" height="3" rx=".6" opacity=".35" fill="currentColor" stroke="none"/><rect x="5.5" y="14.5" width="4" height="3" rx=".6" opacity=".35" fill="currentColor" stroke="none"/><rect x="14.5" y="14.5" width="4" height="3" rx=".6" opacity=".35" fill="currentColor" stroke="none"/>'),
     window: P('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18M7 12h6M7 15.5h9"/>'),
     follow: P('<path d="M4 12a8 8 0 0 1 13.7-5.6L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 15"/><path d="M4 20v-5h5"/>'),
@@ -553,7 +559,7 @@
   }
   function moreActions(p) {
     if (p.minimized) return [];
-    const a = [];
+    const a = [["preview", "Preview"]];
     if (p.kind === "own" && p.window) a.push(["window", "Window"], ["follow", "Follow"]);
     a.push(["theater", "Theater"], ["nextmon", "Display"]);
     if (p.window) a.push(["show", "Show app"]);
@@ -591,6 +597,7 @@
             </div>
             <button class="close" data-a="close" aria-label="Close this PiP">${ICON.close}</button>
           </div>
+          <div class="preview${previews.has(p.id) ? "" : " hidden"}"><img alt="Live preview of this PiP"><span class="pmsg">Loading preview…</span></div>
           <div class="actions">${mainActions(p).map(btn).join("")}${more.length ? `<button class="act" data-more aria-expanded="${open}">${ICON.dots}<span>More</span></button>` : ""}</div>
           ${more.length ? `
           <div class="more${open ? "" : " hidden"}"><div class="actions">${more.map(btn).join("")}</div></div>` : ""}
@@ -604,7 +611,8 @@
         const id = card.dataset.id;
         card.querySelectorAll("[data-a]").forEach((b) => b.addEventListener("click", () => {
           const a = b.dataset.a;
-          if (a === "position") openPosition(id);
+          if (a === "preview") togglePreview(id, card);
+          else if (a === "position") openPosition(id);
           else if (a === "window") openWindows(id);
           else act(id, a);
         }));
@@ -623,6 +631,8 @@
     for (const p of state.pips) {
       const card = list.querySelector(`.card[data-id="${CSS.escape(p.id)}"]`);
       if (!card) continue;
+      const pv = card.querySelector('[data-a="preview"]');
+      if (pv) { pv.classList.toggle("on", previews.has(p.id)); pv.setAttribute("aria-pressed", previews.has(p.id)); }
       const fo = card.querySelector('[data-a="follow"]');
       if (fo) { fo.classList.toggle("on", !!p.follow); fo.setAttribute("aria-pressed", !!p.follow); }
       card.querySelector('[data-f="title"]').textContent = p.title;
@@ -633,6 +643,36 @@
       setSlider(card.querySelector('[data-s="volume"]'), p.id + "volume", p.volume);
       setMute(card.querySelector('[data-a="mute"]'), p.muted);
     }
+  }
+
+  // ---------------------------------------------------------------- live preview: a small snapshot a few times a second
+  const previews = new Set();                                      // PiPs with Preview on (kept across refreshes)
+  let previewLoop = false;
+  function togglePreview(id, card) {
+    if (previews.has(id)) previews.delete(id); else previews.add(id);
+    const on = previews.has(id);
+    card.querySelector(".preview").classList.toggle("hidden", !on);
+    const b = card.querySelector('[data-a="preview"]');
+    b.classList.toggle("on", on); b.setAttribute("aria-pressed", on);
+    if (on && !previewLoop) runPreviews();
+  }
+  async function runPreviews() {
+    previewLoop = true;
+    while (previews.size && running) {
+      if (document.hidden) { await new Promise((ok) => setTimeout(ok, 1000)); continue; }   // nothing while you're not looking
+      for (const id of [...previews]) {
+        const card = document.querySelector(`.card[data-id="${CSS.escape(id)}"]`);
+        if (!card) { previews.delete(id); continue; }              // the PiP closed
+        try {
+          const r = await api("GET", "/api/frame", { id });
+          const img = card.querySelector(".preview img"), msg = card.querySelector(".pmsg");
+          if (r && r.jpg) { img.src = "data:image/jpeg;base64," + r.jpg; img.classList.add("ok"); msg.textContent = ""; }
+          else { img.classList.remove("ok"); msg.textContent = "No preview right now (the window may be minimized, or the app doesn't allow it)."; }
+        } catch (e) { if (e.message === "unpaired") { previewLoop = false; return; } }
+      }
+      await new Promise((ok) => setTimeout(ok, 300));
+    }
+    previewLoop = false;
   }
 
   // ---------------------------------------------------------------- pickers: where the PiP goes, and which window it shows

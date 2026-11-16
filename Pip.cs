@@ -1006,6 +1006,20 @@ namespace PipStudio
             Osd("Full view");
         }
 
+        /// <summary>What this PiP shows right now, cropped like the PiP, for the phone companion's preview. Never steals focus;
+        /// null when the source can't be captured (minimized, closed, or an app PrintWindow can't draw).</summary>
+        public Bitmap PreviewSnapshot()
+        {
+            var full = TakeSourceSnapshot(false);
+            if (full == null) return null;
+            var r = St.Kind == SourceKind.Screen ? new Rectangle(Point.Empty, full.Size) : CropRect(full.Size);
+            r.Intersect(new Rectangle(Point.Empty, full.Size));
+            if (r.Width < 2 || r.Height < 2 || r.Size == full.Size) return full;
+            var part = full.Clone(r, full.PixelFormat);
+            full.Dispose();
+            return part;
+        }
+
         Bitmap TakeSourceSnapshot(bool allowScreen = true)
         {
             if (St.Kind == SourceKind.Screen)
