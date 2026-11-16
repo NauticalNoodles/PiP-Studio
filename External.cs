@@ -34,6 +34,11 @@ namespace PipStudio
         public static bool IsAppPip(IntPtr h)
         {
             if (U.IsOurs(h)) return false;
+            if (U.CoversScreen(h) && !theaterRestore.ContainsKey(h))   // full screen is never a PiP, even one you marked: it would stay on top of everything
+            {
+                if (pinned.Contains(h)) Release(h);
+                return false;
+            }
             string key = AppKey(h);
             if (sessionNot.Contains(h) || NotSet().Contains(key)) return false;   // you said it isn't one
             if (sessionPip.Contains(h) || PipSet().Contains(key)) return true;      // you said it is
@@ -470,6 +475,7 @@ namespace PipStudio
             foreach (var h in new List<IntPtr>(pinned))
             {
                 if (!Native.IsWindow(h)) { pinned.Remove(h); continue; }
+                if (U.CoversScreen(h) && !theaterRestore.ContainsKey(h)) { Release(h); continue; }   // went full screen: let it be a normal window again
                 if (Native.IsWindowVisible(h) && !Native.IsIconic(h)) KeepOnTop(h);   // the app (or a game taking focus) dropped it: put it back
             }
         }

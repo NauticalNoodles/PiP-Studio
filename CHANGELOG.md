@@ -13,6 +13,8 @@ Marking windows as PiPs is clearer and easier to undo:
 - Other apps' PiPs stay on the Running PiPs page while they're minimized, with a Restore button to bring them back
 - The title bar on other apps' PiPs no longer has a maximize button
 - Discord's in-game overlay no longer counts as a PiP
+- Full-screen windows can't be treated as PiPs, and a marked window that goes full screen is no longer kept on top, so you can't get stuck under it
+- The live preview no longer covers questions PiP Studio asks you
 
 Control PiP Studio from your phone:
 

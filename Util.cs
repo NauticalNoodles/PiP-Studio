@@ -176,6 +176,18 @@ namespace PipStudio
             return Native.DwmGetWindowAttribute(h, 14, out v, 4) == 0 ? v : 0;
         }
 
+        /// <summary>A full-screen window: it covers its whole display (games, videos and presentations in full screen, borderless included).</summary>
+        public static bool CoversScreen(IntPtr h)
+        {
+            if (h == IntPtr.Zero || !Native.IsWindowVisible(h) || Native.IsIconic(h)) return false;
+            try
+            {
+                Rectangle wr = WindowRect(h), sb = System.Windows.Forms.Screen.FromHandle(h).Bounds;
+                return wr.Left <= sb.Left && wr.Top <= sb.Top && wr.Right >= sb.Right && wr.Bottom >= sb.Bottom;
+            }
+            catch { return false; }
+        }
+
         public static Rectangle WindowRect(IntPtr h) { Native.RECT r; Native.GetWindowRect(h, out r); return r.ToRectangle(); }
 
         public static Rectangle FrameRect(IntPtr h)

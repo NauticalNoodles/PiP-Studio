@@ -701,6 +701,8 @@ namespace PipStudio
                 { "Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.", "فاتح أو داكن أو OLED (أسود بدل الرمادي، رائع على شاشات OLED) لنوافذ PiP Studio وقوائمه، أو اتبع إعداد Windows." },
                 { "Light, dark or OLED black, for PiP Studio's windows and menus", "فاتح أو داكن أو أسود OLED لنوافذ PiP Studio وقوائمه" },
                 { "OLED", "OLED" },
+                { "Full-screen windows can't be PiPs", "لا يمكن أن تكون النوافذ بملء الشاشة نوافذ عائمة" },
+                { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "ستبقى فوق كل شيء آخر على تلك الشاشة. حوّلها إلى وضع النافذة أولًا، ثم حاول مرة أخرى." },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1399,6 +1401,8 @@ namespace PipStudio
                 { "Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.", "浅色、深色或 OLED（用纯黑代替灰色，适合 OLED 屏幕），用于 PiP Studio 的窗口和菜单，或跟随 Windows。" },
                 { "Light, dark or OLED black, for PiP Studio's windows and menus", "浅色、深色或 OLED 纯黑，用于 PiP Studio 的窗口和菜单" },
                 { "OLED", "OLED" },
+                { "Full-screen windows can't be PiPs", "全屏窗口不能作为画中画" },
+                { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "它会一直停留在该显示器上所有内容的上方。请先将其切换为窗口模式，然后重试。" },
             };
         }
     }

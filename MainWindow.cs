@@ -1263,6 +1263,12 @@ namespace PipStudio
                     if (s2 == null || s2.IsDisplay || s2.IsAuto || s2.Hwnd == IntPtr.Zero) return;
                     IntPtr mh = s2.Hwnd;
                     string app = ExternalPip.AppName(mh);
+                    if (U.CoversScreen(mh))
+                    {
+                        // a full-screen window kept on top of everything would leave you stuck under it
+                        Ask("Full-screen windows can't be PiPs", "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "OK", null, null);
+                        return;
+                    }
                     // say what it means first: it changes how the window behaves (it stays on top, snaps, follows your shortcuts)
                     string which = ExternalPip.MarksWholeKind(mh)
                         ? "This applies to every window like this one from " + app + ", now and later."
