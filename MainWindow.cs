@@ -854,17 +854,8 @@ namespace PipStudio
         static bool IsWide()
         {
             double wd = (w.ActualWidth > 0 ? w.ActualWidth : w.Width) / uiScale;   // controller mode zooms the layout
-            // NavigationView expands at 1008 epx. Pages with a panel on the right (the Windows page preview, the settings
-            // explanations) need much more room, so there the menu folds to icons earlier and the page keeps its space.
-            if (PageHasSidePanel() || (App.S.ShowExplainers && (page == "windows" || page == "running"))) return wd >= PaneOpen + ContentChrome + SidePanelPageMin + 28 + 316 + 16;
-            return wd >= PaneOpen + ContentChrome + DetailsMin;   // Windows page and every other page fold at the same width (~1010)
-        }
-
-        const double SidePanelPageMin = 700;   // settings/table width wanted next to the right-hand panel
-
-        static bool PageHasSidePanel()
-        {
-            return padVisual && App.S.ShowExplainers && ExplainPages.Contains(page ?? "");   // controller mode: explanations are a panel; otherwise a PiP over the page
+            // one width for every page, explanations or not (~1010, like NavigationView's 1008): narrower, the menu folds to icons
+            return wd >= PaneOpen + ContentChrome + DetailsMin;
         }
 
         static void OpenPane()

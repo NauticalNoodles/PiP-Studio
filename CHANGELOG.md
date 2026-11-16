@@ -4,6 +4,7 @@
 
 - New **OLED** theme in Settings > Appearance > App theme, next to Light and Dark: true black instead of grey, for PiP Studio's window and menus
 - Easier with the keyboard: the arrow keys move between settings, rows and buttons (with a focus ring, like controller mode) instead of just scrolling, and Enter switches, opens or presses the one you're on
+- The side menu folds into icons at the same window width on every page, whether explanations are on or not
 - Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. Controller mode keeps the panel. The Phone page has explanations too.
 
 Marking windows as PiPs is clearer and easier to undo:

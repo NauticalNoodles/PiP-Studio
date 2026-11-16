@@ -243,7 +243,7 @@ namespace PipStudio
         {
             App.S.ShowExplainers = !App.S.ShowExplainers;
             App.I.SettingsChanged();
-            ApplyLayout(true);                                      // with the panel gone the menu can open again (and the other way round)
+            ApplyLayout(true);
             LayoutDetails();
             BuildCommands();
             if (padVisual) BuildPadHints();
