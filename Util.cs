@@ -103,6 +103,25 @@ namespace PipStudio
             return bmp;
         }
 
+        /// <summary>True when the window's program runs as administrator (elevated). A normal program isn't allowed to look
+        /// inside an elevated one's token, and that refusal is itself the answer.</summary>
+        public static bool IsElevatedWindow(IntPtr h)
+        {
+            int pid = Pid(h);
+            if (pid <= 0) return false;
+            IntPtr proc = Native.OpenProcess(0x1000, false, pid);              // PROCESS_QUERY_LIMITED_INFORMATION
+            if (proc == IntPtr.Zero) return false;                              // can't tell: assume it isn't
+            try
+            {
+                IntPtr tok;
+                if (!Native.OpenProcessToken(proc, 0x0008, out tok))            // TOKEN_QUERY
+                    return Marshal.GetLastWin32Error() == 5;                    // access denied: it's elevated and we aren't
+                try { int elevated, len; return Native.GetTokenInformation(tok, 20, out elevated, 4, out len) && elevated != 0; }   // TokenElevation
+                finally { Native.CloseHandle(tok); }
+            }
+            finally { Native.CloseHandle(proc); }
+        }
+
         /// <summary>Writes a file so a crash or power cut mid-save can't leave it empty or half written: the text goes to a
         /// temporary file next to it first, which then takes the old file's place in one step.</summary>
         public static void SafeWrite(string path, string text)

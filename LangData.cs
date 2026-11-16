@@ -685,6 +685,9 @@ namespace PipStudio
                 { "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", "يفتح بلاغًا عن خطأ على GitHub مع إصدار PiP Studio وإصدار Windows والأخطاء الأخيرة" },
                 { "Report", "إبلاغ" },
                 { "Copied", "تم النسخ" },
+                { "Controller controls on · The game runs as admin, so it still gets the controller", "تحكم وحدة التحكم مفعّل · اللعبة تعمل كمسؤول، لذا ما زالت تستقبل وحدة التحكم" },
+                { "The game runs as administrator", "اللعبة تعمل كمسؤول" },
+                { "So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.", "لذا تستمر في استقبال وحدة التحكم. انقر لإعادة تشغيل PiP Studio كمسؤول لحل ذلك." },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1367,6 +1370,9 @@ namespace PipStudio
                 { "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", "在 GitHub 上打开错误报告，并自动填入 PiP Studio 和 Windows 版本以及最近的错误" },
                 { "Report", "报告" },
                 { "Copied", "已复制" },
+                { "Controller controls on · The game runs as admin, so it still gets the controller", "手柄控制已开启 · 游戏以管理员身份运行，所以它仍会收到手柄输入" },
+                { "The game runs as administrator", "游戏以管理员身份运行" },
+                { "So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.", "所以它会继续收到你的手柄输入。点击以管理员身份重新启动 PiP Studio 即可解决。" },
             };
         }
     }

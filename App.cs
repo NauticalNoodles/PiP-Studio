@@ -505,6 +505,7 @@ namespace PipStudio
 
         public void OnHotkey(int id)
         {
+            if (id == FocusKeyId) { OnFocusKey(); return; }
             int i = id - 100;
             if (i < 0 || i >= Actions.Length) return;
             RunAction(Actions[i].Key);
@@ -584,8 +585,8 @@ namespace PipStudio
                     {
                         savedFg = f;
                         if (sink == null) sink = new FocusSink();
-                        sink.Grab();                       // the game stops reacting to the controller while it isn't focused
-                        RetryGrab(3);
+                        gameIsAdmin = !IsElevated && U.IsElevatedWindow(f);
+                        TakeFocusForPad();                 // the game stops reacting to the controller while it isn't focused
                     }
                 }
                 else
@@ -597,17 +598,74 @@ namespace PipStudio
             }
             RefreshPadVisuals();
             var p = CurrentPip();
+            if (on && gameIsAdmin && was != on && PadConnected) WarnAdminGame();
             if (p != null && was != on && PadConnected)
-                p.Osd(on ? "Controller controls on · " + Pad.Name(PadMask["padoff"] != 0 ? PadMask["padoff"] : PadMask["pad"], PadKind) + " turns them off" : "Controller controls off");
+                p.Osd(!on ? "Controller controls off"
+                    : gameIsAdmin ? "Controller controls on · The game runs as admin, so it still gets the controller"
+                    : "Controller controls on · " + Pad.Name(PadMask["padoff"] != 0 ? PadMask["padoff"] : PadMask["pad"], PadKind) + " turns them off");
             else if (was != on && !PadConnected && on) Balloon("No controller found", "Connect an Xbox, PlayStation or Switch controller to use controller controls.", true, "controller");
             RaiseState();
         }
 
-        /// <summary>Some games take focus straight back (or Windows refuses the first try): check again a few times.</summary>
+        // ---------------------------------------------------------------- taking focus from the game for controller controls
+        // Windows only lets a program take the focus when your latest input went to it. A controller isn't input as far as
+        // Windows is concerned (PiP Studio reads it directly), so after Start + Select it usually refuses, unless you happened
+        // not to touch the keyboard or mouse for a few minutes. A shortcut does count (that's why Ctrl+Alt+G worked), so
+        // PiP Studio briefly registers F24, a key no keyboard has and no game uses, sends itself that key, and takes the
+        // focus when it arrives as a shortcut. A game running as administrator blocks all of this unless PiP Studio does too.
+        const int FocusKeyId = 90;
+        const ushort VK_F24 = 0x87;
+        bool focusKeyArmed, gameIsAdmin;
+        readonly HashSet<string> warnedAdmin = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        void TakeFocusForPad()
+        {
+            if (!gameIsAdmin && !focusKeyArmed && Native.RegisterHotKey(host.Handle, FocusKeyId, 0x4000, VK_F24))   // MOD_NOREPEAT
+            {
+                focusKeyArmed = true;
+                var inputs = new Native.INPUT[2];
+                inputs[0].type = inputs[1].type = 1;                               // INPUT_KEYBOARD
+                inputs[0].u.ki.wVk = inputs[1].u.ki.wVk = VK_F24;
+                inputs[1].u.ki.dwFlags = 2;                                        // KEYEVENTF_KEYUP
+                if (Native.SendInput(2, inputs, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Native.INPUT))) == 2)
+                {
+                    RunSoon(() => { if (focusKeyArmed) { DisarmFocusKey(); sink.Grab(); RetryGrab(8); } }, 400);   // it never came: try anyway
+                    return;
+                }
+                DisarmFocusKey();
+            }
+            sink.Grab();                                                           // F24 belongs to another app, or the game is admin
+            RetryGrab(8);
+        }
+
+        void OnFocusKey()
+        {
+            if (!focusKeyArmed) return;
+            DisarmFocusKey();
+            if (!PadOn || sink == null || savedFg == IntPtr.Zero) return;
+            sink.Grab();                                                           // allowed now: the latest input was ours
+            RetryGrab(8);
+        }
+
+        void DisarmFocusKey()
+        {
+            focusKeyArmed = false;
+            try { Native.UnregisterHotKey(host.Handle, FocusKeyId); } catch { }
+        }
+
+        /// <summary>Once per game per session: a notification that offers to restart PiP Studio as administrator.</summary>
+        void WarnAdminGame()
+        {
+            string game = U.ProcessName(savedFg) ?? "";
+            if (Packaged.IsPackaged || !warnedAdmin.Add(game)) return;              // the Store version can't run as administrator
+            Balloon("The game runs as administrator", "So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.", true, null, RestartElevated);
+        }
+
+        /// <summary>Some games take focus straight back (or Windows refuses the first try): check again for about a second.</summary>
         void RetryGrab(int left)
         {
             if (left <= 0) return;
-            var t = new Timer { Interval = 120 };
+            var t = new Timer { Interval = 150 };
             t.Tick += (o, e) =>
             {
                 t.Stop(); t.Dispose();

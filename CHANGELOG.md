@@ -30,6 +30,11 @@ Control PiP Studio from your phone:
 - **Position** puts a PiP on any corner or edge spot with one tap, **Window** switches which window it shows, and **Follow** turns "follow the window I just left" on or off
 - It only works on your home network, only for phones you've paired, and everything between your phone and PC is encrypted. You can remove a phone any time
 
+Controller fixes:
+
+- "Release the game's focus" now works reliably when you turn controller controls on with your controller, not only with the keyboard shortcut (Windows used to refuse it unless you hadn't touched the keyboard or mouse for a few minutes)
+- If a game runs as administrator, PiP Studio tells you it can't take the game's focus, and offers to restart as administrator, which fixes it
+
 Crash reports:
 
 - If PiP Studio ever crashes, it notices the next time it starts and offers to send a crash report. It opens a bug report on GitHub with the details filled in, so you can see exactly what's sent before you send it
