@@ -6,6 +6,7 @@
 - Easier with the keyboard: the arrow keys move between settings, rows and buttons (with a focus ring, like controller mode) instead of just scrolling, and Enter switches, opens or presses the one you're on
 - The side menu folds into icons at the same window width on every page, whether explanations are on or not
 - A custom accent color now also colors the switches, sliders and main buttons, not only PiP Studio's own highlights
+- Phone companion: adding it to your phone's home screen names the shortcut after your PC ("PiP Studio (Your-PC)"), so you can tell PCs apart
 - Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. Controller mode keeps the panel. The Phone page has explanations too.
 
 Marking windows as PiPs is clearer and easier to undo:

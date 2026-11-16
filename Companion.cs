@@ -378,6 +378,9 @@ namespace PipStudio
             await s.WriteAsync(body, 0, body.Length);
         }
 
+        /// <summary>"PiP Studio (PC name)": the installed web app's name, so phones paired with several PCs can tell them apart.</summary>
+        static string AppTitle() { return "PiP Studio (" + Environment.MachineName + ")"; }
+
         static Task Json(NetworkStream s, object o, int code = 200) { return Send(s, code, "application/json; charset=utf-8", JsonSerializer.SerializeToUtf8Bytes(o)); }
 
         static async Task Respond(NetworkStream s, Request r)
@@ -390,14 +393,23 @@ namespace PipStudio
             if (!IPAddress.TryParse(host, out hostIp) && host != "localhost") { await Send(s, 403, "text/plain", Encoding.UTF8.GetBytes("Use the address PiP Studio shows.")); return; }
 
             string path = r.Path.Split('?')[0];
-            if (r.Method == "GET" && (path == "/" || path == "/index.html")) { await Send(s, 200, "text/html; charset=utf-8", Resource("companion.index.html")); return; }
+            if (r.Method == "GET" && (path == "/" || path == "/index.html"))
+            {
+                // the name a home screen shortcut gets (iPhone reads these two), with this PC's name so you can tell PCs apart
+                string page = Encoding.UTF8.GetString(Resource("companion.index.html"));
+                string title = System.Net.WebUtility.HtmlEncode(AppTitle());
+                page = page.Replace("<meta name=\"apple-mobile-web-app-title\" content=\"PiP Studio\">", "<meta name=\"apple-mobile-web-app-title\" content=\"" + title + "\">")
+                           .Replace("<title>PiP Studio</title>", "<title>" + title + "</title>");
+                await Send(s, 200, "text/html; charset=utf-8", Encoding.UTF8.GetBytes(page));
+                return;
+            }
             if (r.Method == "GET" && path == "/crypto.js") { await Send(s, 200, "text/javascript; charset=utf-8", Resource("companion.crypto.js")); return; }
             if (r.Method == "GET" && path == "/icon.png") { await Send(s, 200, "image/png", Resource("companion.icon.png"), true); return; }
             if (r.Method == "GET" && path == "/manifest.webmanifest")
             {
                 var m = new Dictionary<string, object>
                 {
-                    ["name"] = "PiP Studio", ["short_name"] = "PiP Studio", ["start_url"] = "/", ["display"] = "standalone",
+                    ["name"] = AppTitle(), ["short_name"] = AppTitle(), ["start_url"] = "/", ["display"] = "standalone",
                     ["background_color"] = "#08080a", ["theme_color"] = "#08080a",
                     ["icons"] = new[] { new Dictionary<string, string> { ["src"] = "/icon.png", ["sizes"] = "256x256", ["type"] = "image/png" } }
                 };
