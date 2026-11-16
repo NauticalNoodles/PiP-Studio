@@ -32,6 +32,8 @@ jobs:
         run: |
           $dir = Join-Path $env:RUNNER_TEMP "shots"
           New-Item -ItemType Directory -Force $dir | Out-Null
+          # the machine's screen is 1024x768: make it 1080p so the window has room
+          try { Set-DisplayResolution -Width 1920 -Height 1080 -Force -ErrorAction Stop; Write-Host "Screen set to 1920x1080" } catch { Write-Host "Couldn't change the screen size: $_" }
           Start-Process notepad
           Start-Sleep -Seconds 3
           $p = Start-Process -FilePath ".\out\PiPStudio.exe" -ArgumentList "--screenshots", "`"$dir`"" -PassThru

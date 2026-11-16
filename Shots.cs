@@ -46,8 +46,9 @@ namespace PipStudio
             {
                 Open("windows");
                 w.WindowState = WindowState.Normal;
-                w.Left = 0; w.Top = 0; w.Width = 1440; w.Height = 900;
-                Log("window open");
+                var wa = SystemParameters.WorkArea;                       // never bigger than the screen (Windows would squeeze it back)
+                w.Left = wa.Left; w.Top = wa.Top; w.Width = Math.Min(1440, wa.Width); w.Height = Math.Min(900, wa.Height);
+                Log("window open, " + w.Width + "x" + w.Height + " of " + wa.Width + "x" + wa.Height);
             });
             // a window to show in a PiP, if the workflow opened one (Notepad). A step of its own: if it asks something,
             // the timer keeps going.
@@ -76,15 +77,20 @@ namespace PipStudio
             steps.Add(() => Save(Path.Combine(dir, "behavior-light.png")));
             steps.Add(() => { S.ThemeMode = 2; App.I.SettingsChanged(); App.I.ExitApp(); });
 
-            int n = 0;
-            var t = new DispatcherTimer(DispatcherPriority.Normal) { Interval = TimeSpan.FromMilliseconds(2200) };   // time for the page's animations to settle
-            t.Tick += (o, e) =>
+            // each step on the window's thread, from a thread of its own at top priority: nothing on the window can hold it up
+            var ui = Dispatcher.CurrentDispatcher;                          // the window isn't open yet: this thread's
+            var th = new System.Threading.Thread(() =>
             {
-                if (n >= steps.Count) { t.Stop(); return; }
-                Log("step " + n);
-                try { steps[n++](); } catch (Exception ex) { App.ReportError(ex); File.AppendAllText(Path.Combine(dir, "errors.txt"), ex + "\r\n"); }
-            };
-            t.Start();
+                for (int n = 0; n < steps.Count; n++)
+                {
+                    System.Threading.Thread.Sleep(2200);                    // time for the page's animations to settle
+                    Log("step " + n);
+                    int k = n;
+                    try { ui.Invoke(steps[k], DispatcherPriority.Send); }
+                    catch (Exception ex) { try { File.AppendAllText(Path.Combine(dir, "errors.txt"), ex + "\r\n"); } catch { } }
+                }
+            }) { IsBackground = true };
+            th.Start();
         }
 
         /// <summary>The window drawn at twice its size on its own solid background (Mica can't be captured this way).</summary>
