@@ -1,0 +1,38 @@
+# Checks that PiP Studio still builds, on every push and pull request. It publishes nothing: a red X on the commit
+# means something is broken before anyone runs build.bat or makes a release. Releases are built by release.yml.
+
+name: Build check
+
+on:
+  push:
+    branches: ["main", "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build
+        run: dotnet build PiPStudio.csproj -c Release
+
+      # LangData.cs is made from strings.tsv; if someone edits one without regenerating the other, say so
+      - name: Translations are up to date
+        shell: pwsh
+        run: |
+          python make_langdata.py
+          git diff --exit-code -- LangData.cs
+          if ($LASTEXITCODE -ne 0) { throw "LangData.cs doesn't match strings.tsv: run python make_langdata.py and commit the result" }

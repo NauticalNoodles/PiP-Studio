@@ -8,7 +8,7 @@
 #   PiPStudio-Setup-<version>.exe            installer (per user, no admin, includes .NET)
 #   PiPStudio-<version>-win-x64-portable.zip  the same app as a single exe, no install needed
 #   SHA256SUMS.txt                            fingerprints of both, which the app's updater checks
-# and the matching section of CHANGELOG.md as its notes.
+# and the matching section of CHANGELOG.md as its notes (below anything you typed in the release's description).
 
 name: Release
 
@@ -111,8 +111,13 @@ jobs:
           name: PiPStudio-${{ steps.ver.outputs.version }}-Store
           path: out/*.msix
 
+      # Anything you typed in the release's description is kept, with the changelog section added below it. The marker
+      # line lets a second run (publishing a release and pushing its tag both start this workflow) replace the changelog
+      # part instead of adding it twice.
       - name: Release notes from CHANGELOG.md
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           $v = "${{ steps.ver.outputs.version }}"
           $lines = Get-Content CHANGELOG.md
@@ -123,7 +128,21 @@ jobs:
             $end = ($rest | Select-String -Pattern '^(#{1,2} |---\s*$)' | Select-Object -First 1).LineNumber
             $body = if ($end) { $rest[0..($end - 2)] } else { $rest }
           } else { $body = @("PiP Studio $v") }
-          $body | Set-Content out\notes.md -Encoding utf8
+          $marker = "<!-- changelog -->"
+          $typed = ""
+          $existing = gh release view "v$v" --json body -q .body 2>$null
+          if ($LASTEXITCODE -eq 0 -and $existing) {
+            $existing = ($existing -join "`n")
+            $at = $existing.IndexOf($marker)
+            $typed = if ($at -ge 0) { $existing.Substring(0, $at) } else { $existing }
+            $typed = $typed.Trim()
+          }
+          $global:LASTEXITCODE = 0
+          $out = @()
+          if ($typed) { $out += $typed; $out += "" }
+          $out += $marker
+          $out += $body
+          $out | Set-Content out\notes.md -Encoding utf8
 
       - name: Attach to the release
         if: github.event_name != 'workflow_dispatch'
