@@ -1502,7 +1502,7 @@ namespace PipStudio
         {
             if (w == null || previewBox == null) return;
             var it = SelItem();
-            bool want = !App.S.LiteMode && !sizing && w.IsActive && page == "windows" && it != null && !it.IsDisplay && previewBox.IsVisible && w.WindowState != WindowState.Minimized
+            bool want = !App.S.LiteMode && !sizing && !DialogOpen && !OskOpen && w.IsActive && page == "windows" && it != null && !it.IsDisplay && previewBox.IsVisible && w.WindowState != WindowState.Minimized
                         && Native.IsWindow(it.Hwnd) && !Native.IsIconic(it.Hwnd)
                         && pageWindows.Opacity > 0.99 && detailsCard.Opacity > 0.99 && !IsMoving(pageWindows) && !IsMoving(detailsCard);
             if (!want) { HideThumb(); return; }
