@@ -140,7 +140,7 @@ namespace PipStudio
                 "Show controls on other apps' PiPs");
             EAdd("controller", "Controller controls", "Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.", ScController,
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
-            EAdd("windowstyle", "Window style", "Dress this window like Windows 11, Windows 10 (flat, square corners) or Windows 7 (Aero: light blue glass and glossy buttons, always light). Only this window changes: your PiPs, menus and the window picker keep their look.", ScLooks,
+            EAdd("windowstyle", "Window style", "Windows 11 is the normal look. Xbox dresses this window like the console's dashboard: always dark, Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard. Only this window changes: your PiPs, menus and the window picker keep their look.", ScLooks,
                 "Window style");
             // the rows inside Title bar buttons (one per button) explain the title bar, unless they have an explanation of their own
             foreach (var t in TitleBarItems.Labels.Concat(new[] { "Reset title bar buttons" }))
@@ -472,61 +472,48 @@ namespace PipStudio
             EPut(c, ETag(tag), 6, 6);
         }
 
-        /// <summary>The three window styles side by side as tiny windows, the one you picked lifted and outlined.</summary>
+        /// <summary>The window styles side by side as tiny windows, the one you picked lifted and outlined.</summary>
         static void ScLooks(Canvas c, Storyboard sb)
         {
             c.Children.Clear();
-            const double w = 78, h = 60, gap = 10;
-            double x0 = (SW - (3 * w + 2 * gap)) / 2, y = (SH - h) / 2 + 6;
-            for (int i = 0; i < 3; i++)
+            const double w = 100, h = 72, gap = 22;
+            int n = Looks.Names.Length;
+            double x0 = (SW - (n * w + (n - 1) * gap)) / 2, y = (SH - h) / 2 + 2;
+            for (int i = 0; i < n; i++)
             {
-                bool chosen = i == Looks.Current;
+                bool chosen = i == Looks.Current, xbox = i == Looks.Xbox;
+                double r = xbox ? 9 : 6;
+                Brush body = xbox ? (Brush)new LinearGradientBrush((Color)ColorConverter.ConvertFromString("#0E0E0E"), (Color)ColorConverter.ConvertFromString("#0F1A10"), 90)
+                                  : EHex(Theme.Dark ? "#202020" : "#F3F3F3");
+                Brush nav = xbox ? EHex("#141414") : body;
+                Brush tile = xbox ? EHex("#1C1C1C") : EHex(Theme.Dark ? "#2D2D2D" : "#FFFFFF");
+                Brush sel = xbox ? EHex("#107C10") : EB("Accent");
                 var g = new Grid { Width = w, Height = h };
-                Brush body, title, card, nav;
-                double r;
-                if (i == Looks.Win7)
-                {
-                    r = 3;
-                    body = Brushes.White;
-                    title = new LinearGradientBrush((Color)ColorConverter.ConvertFromString("#DCE9F8"), (Color)ColorConverter.ConvertFromString("#B4CDEB"), 90);
-                    nav = new LinearGradientBrush((Color)ColorConverter.ConvertFromString("#E9F1FB"), (Color)ColorConverter.ConvertFromString("#D6E5F6"), 90);
-                    card = EHex("#D5DFEA");
-                }
-                else if (i == Looks.Win10)
-                {
-                    r = 0;
-                    body = EHex(Theme.Dark ? "#1F1F1F" : "#FFFFFF"); title = body; nav = body;
-                    card = EHex(Theme.Dark ? "#2B2B2B" : "#E9E9E9");
-                }
-                else
-                {
-                    r = 6;
-                    body = EHex(Theme.Dark ? "#202020" : "#F3F3F3"); title = body; nav = body;
-                    card = EHex(Theme.Dark ? "#2D2D2D" : "#FFFFFF");
-                }
                 var frame = new Border { CornerRadius = new CornerRadius(r), Background = body, BorderThickness = new Thickness(1), BorderBrush = EHex("#55808080"), ClipToBounds = true };
                 var inner = new Grid();
-                inner.RowDefinitions.Add(new RowDefinition { Height = new GridLength(11) });
+                inner.RowDefinitions.Add(new RowDefinition { Height = new GridLength(10) });
                 inner.RowDefinitions.Add(new RowDefinition());
-                inner.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18) });
+                inner.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(24) });
                 inner.ColumnDefinitions.Add(new ColumnDefinition());
-                var tb = new Border { Background = title }; Grid.SetColumnSpan(tb, 2); inner.Children.Add(tb);
-                if (i == Looks.Win7)                                       // the red Close button
-                {
-                    var close = new Border { Width = 12, Height = 7, CornerRadius = new CornerRadius(0, 0, 2, 2), Background = EHex("#C9483C"), HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top, Margin = new Thickness(0, 0, 3, 0) };
-                    Grid.SetColumnSpan(close, 2); inner.Children.Add(close);
-                }
-                var nv = new Border { Background = nav }; Grid.SetRow(nv, 1); inner.Children.Add(nv);
-                var cards = new StackPanel { Margin = new Thickness(4, 4, 4, 0) };
+                var nv = new StackPanel { Background = nav, Margin = new Thickness(0, 0, 0, 0) };
+                for (int k = 0; k < 4; k++)                                // navigation items, the first one selected
+                    nv.Children.Add(new Border { Height = 6, Margin = new Thickness(3, 3, 3, 0), CornerRadius = new CornerRadius(xbox ? 3 : 2),
+                        Background = k == 0 ? sel : (xbox ? EHex("#2A2A2A") : EHex("#33808080")) });
+                Grid.SetRow(nv, 1); inner.Children.Add(nv);
+                var tiles = new StackPanel { Margin = new Thickness(5, 4, 5, 0) };
                 for (int k = 0; k < 3; k++)
-                    cards.Children.Add(new Border { Height = 9, Margin = new Thickness(0, 0, 0, 3), CornerRadius = new CornerRadius(Math.Min(r, 2)), Background = i == Looks.Win7 ? Brushes.White : card, BorderThickness = new Thickness(i == Looks.Win7 ? 1 : 0), BorderBrush = card });
-                Grid.SetRow(cards, 1); Grid.SetColumn(cards, 1); inner.Children.Add(cards);
+                {
+                    bool focused = xbox && k == 1;                         // the Xbox look's white focus outline
+                    tiles.Children.Add(new Border { Height = 12, Margin = new Thickness(0, 0, 0, 4), CornerRadius = new CornerRadius(xbox ? 4 : 2),
+                        Background = focused ? EHex("#1E9E1E") : tile, BorderThickness = new Thickness(focused ? 1.5 : 0), BorderBrush = Brushes.White });
+                }
+                Grid.SetRow(tiles, 1); Grid.SetColumn(tiles, 1); inner.Children.Add(tiles);
                 frame.Child = inner;
                 g.Children.Add(frame);
-                if (chosen) g.Children.Add(new Border { CornerRadius = new CornerRadius(r + 2), BorderThickness = new Thickness(2), BorderBrush = EB("Accent"), Margin = new Thickness(-3) });
+                if (chosen) g.Children.Add(new Border { CornerRadius = new CornerRadius(r + 2), BorderThickness = new Thickness(2), BorderBrush = xbox ? EHex("#107C10") : EB("Accent"), Margin = new Thickness(-3) });
                 double x = x0 + i * (w + gap);
                 EPut(c, g, x, y);
-                var t = new TextBlock { Text = Looks.Names[i], Foreground = chosen ? EB("Accent") : Brushes.Gray, FontSize = 9, FontWeight = chosen ? FontWeights.SemiBold : FontWeights.Normal, Width = w, TextAlignment = TextAlignment.Center };
+                var t = new TextBlock { Text = Looks.Names[i], Foreground = chosen ? (xbox ? EHex("#5FD35F") : EB("Accent")) : Brushes.Gray, FontSize = 9, FontWeight = chosen ? FontWeights.SemiBold : FontWeights.Normal, Width = w, TextAlignment = TextAlignment.Center };
                 EPut(c, t, x, y + h + 6);
                 if (chosen) EK(sb, g, Canvas.TopProperty, 0, y, 0.8, y - 6, 1.6, y);
             }

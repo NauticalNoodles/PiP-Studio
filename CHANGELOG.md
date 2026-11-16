@@ -2,11 +2,11 @@
 
 ## 1.0.4
 
-Feeling nostalgic? PiP Studio's window can now dress up as an older Windows.
+Game on: PiP Studio's window can now look like your Xbox.
 
-- New **Window style** option in Settings > Appearance: Windows 11, Windows 10 or Windows 7
-- Windows 10 is flat with square corners, and follows your light or dark setting
-- Windows 7 brings back the Aero look: light blue glass, a blue side pane and those glossy buttons (it's always light, just like the real thing)
+- New **Window style** option in Settings > Appearance: Windows 11 or Xbox
+- The Xbox style is dark with Xbox green highlights, rounder tiles, and buttons that light up green with a white outline when you reach them with a controller or the keyboard
+- It goes great with the controller-friendly mode
 - Only the main window changes; your PiPs and menus look the same as before
 
 ## 1.0.3

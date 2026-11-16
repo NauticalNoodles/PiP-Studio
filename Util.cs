@@ -453,7 +453,7 @@ namespace PipStudio
         public bool AllowMultiple = false;          // off: opening a new PiP switches the one that's already open
         public bool UseSystemAccent = true;
         public int ThemeMode = 0;                   // 0 follow Windows, 1 light, 2 dark
-        public int WindowStyle = 0;                 // the main window's look: 0 Windows 11, 1 Windows 10, 2 Windows 7 (Looks.cs)
+        public int WindowStyle = 0;                 // the main window's look: 0 Windows 11, 1 Xbox (Looks.cs)
         public bool MinimizeMemory = true;          // close the main window to the tray instead of keeping it in memory
         public bool CloseToTray = true;
         // Controller

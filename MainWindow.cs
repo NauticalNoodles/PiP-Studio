@@ -126,7 +126,7 @@ namespace PipStudio
             App.OpenMain = Open;
             App.CloseMain = () => { if (w != null && !exiting) { exiting = true; w.Close(); } };
             Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
-            Theme.Changed += () => { if (w != null) Looks.Apply(w); };   // the Windows 10 look follows light and dark
+            Theme.Changed += () => { if (w != null) Looks.Apply(w); };   // keeps the look's colors on top after a light/dark or accent change
         }
 
         // ----------------------------------------------------------------------------- XAML
@@ -744,7 +744,6 @@ namespace PipStudio
             win.SourceInitialized += (o, e) =>
             {
                 try { if (App.S.ThemeMode == 0) Wpf.Ui.Appearance.SystemThemeWatcher.Watch(win); } catch { }
-                Looks.ApplyFrame(win);
                 // while the user drags the window edge, hide the live preview: the DWM thumbnail can't keep pace with WPF's layout and shakes
                 try
                 {
@@ -885,7 +884,7 @@ namespace PipStudio
             }
             else
             {
-                navPane.SetResourceReference(Border.BackgroundProperty, "LookNav");   // transparent, or the Windows 7 side pane
+                navPane.SetResourceReference(Border.BackgroundProperty, "LookNav");   // transparent, or the Xbox look's pane
                 navPane.BorderThickness = new Thickness(0);
                 navPane.Effect = null;
             }
@@ -1495,7 +1494,7 @@ namespace PipStudio
             if (w == null) return;
             bool lite = App.S.LiteMode;
             var fw = w as Wpf.Ui.Controls.FluentWindow;
-            bool solid = Looks.Solid;                                     // Lite mode, or the Windows 10 / 7 looks (no Mica there)
+            bool solid = Looks.Solid;                                     // Lite mode, or the Xbox look (no Mica there)
             try { if (fw != null) fw.WindowBackdropType = solid ? Wpf.Ui.Controls.WindowBackdropType.None : Wpf.Ui.Controls.WindowBackdropType.Mica; } catch { }
             if (solid) w.SetResourceReference(Control.BackgroundProperty, "AppBg");
             else w.Background = Brushes.Transparent;
@@ -2495,7 +2494,7 @@ namespace PipStudio
                     S.WindowStyle = v;
                     App.I.SettingsChanged();
                     w.Dispatcher.BeginInvoke(new Action(SwitchLanguage), DispatcherPriority.Background);   // rebuilds the window in the new look
-                }), "windows 11 10 7 aero classic old look skin style theme retro");
+                }), "windows 11 xbox console green look skin style theme dark");
             Button colorBtn = null;
             var accent = MakeExpander(ap, "", "Accent color", "Borders, highlights and controller hints", null, false, "color colour highlight");
             Row(accent, "Use my Windows accent color", null, Switch(() => S.UseSystemAccent, v => { S.UseSystemAccent = v; if (colorBtn != null) colorBtn.IsEnabled = !v; }), "system automatic");
