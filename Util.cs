@@ -28,6 +28,41 @@ namespace PipStudio
     {
         public static readonly CultureInfo CI = CultureInfo.InvariantCulture;
 
+        // ------------------------------------------------------------ app icons as PNG (phone companion)
+        static readonly Dictionary<string, string> iconPngs = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>A running app's icon (from its program file, 64 px) as base64 PNG, or null when it can't be read
+        /// (an app running as administrator, a system process). Cached by process name.</summary>
+        public static string AppIconPng(string processName)
+        {
+            if (string.IsNullOrEmpty(processName)) return null;
+            string cached;
+            lock (iconPngs) if (iconPngs.TryGetValue(processName, out cached)) return cached;
+            string result = null;
+            foreach (var p in Process.GetProcessesByName(processName))
+            {
+                try
+                {
+                    string exe = p.MainModule.FileName;
+                    using (var ico = Icon.ExtractIcon(exe, 0, 64) ?? Icon.ExtractAssociatedIcon(exe))
+                    {
+                        if (ico == null) continue;
+                        using (var bmp = ico.ToBitmap())
+                        using (var ms = new MemoryStream())
+                        {
+                            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                            result = Convert.ToBase64String(ms.ToArray());
+                        }
+                    }
+                    break;
+                }
+                catch { }
+                finally { p.Dispose(); }
+            }
+            lock (iconPngs) iconPngs[processName] = result;
+            return result;
+        }
+
         /// <summary>Writes a file so a crash or power cut mid-save can't leave it empty or half written: the text goes to a
         /// temporary file next to it first, which then takes the old file's place in one step.</summary>
         public static void SafeWrite(string path, string text)

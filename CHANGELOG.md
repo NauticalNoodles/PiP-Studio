@@ -24,6 +24,7 @@ Control PiP Studio from your phone:
 - Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound
 - Tap **Install app** to put it on your home screen, where it opens full screen like a real app
 - A clean, dark liquid glass look: each PiP shows the buttons you use most with its volume and opacity underneath, and the rest under **More** (it goes solid if your phone has Reduce transparency on)
+- Every PiP and every app in the volume list shows the app's own icon
 - **Position** puts a PiP on any corner or edge spot with one tap, **Window** switches which window it shows, and **Follow** turns "follow the window I just left" on or off
 - It only works on your home network, only for phones you've paired, and everything between your phone and PC is encrypted. You can remove a phone any time
 

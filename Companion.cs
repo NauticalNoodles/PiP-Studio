@@ -533,6 +533,7 @@ namespace PipStudio
                 case "GET /api/state": return OnUi(State);
                 case "POST /api/pip": return new { ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"), Str(body, "arg"))) };
                 case "GET /api/windows": return OnUi(Windows);
+                case "GET /api/icon": return new { png = U.AppIconPng(Str(body, "p")) };   // read off the UI thread: it touches files
                 case "POST /api/global": return new { ok = OnUi(() => GlobalAction(Str(body, "action"))) };
                 case "POST /api/audio": return new { ok = OnUi(() => AudioAction(Str(body, "process"), Num(body, "volume"), Bool(body, "muted"))) };
             }
@@ -574,7 +575,7 @@ namespace PipStudio
                 bool win = p.St.Kind == SourceKind.Window && !string.IsNullOrEmpty(p.St.ProcessName);
                 pips.Add(new
                 {
-                    id = PipId(p), kind = "own", title = p.DisplayName,
+                    id = PipId(p), kind = "own", title = p.DisplayName, proc = win ? p.St.ProcessName : null,
                     app = !win ? "Screen" : p.Src != IntPtr.Zero ? ExternalPip.AppName(p.Src) : char.ToUpper(p.St.ProcessName[0]) + p.St.ProcessName.Substring(1),
                     window = win, minimized = false, theater = p.InTheater,
                     spot = p.InTheater ? "" : p.NearestSpot(true), follow = win && p.St.Follow,
@@ -599,7 +600,7 @@ namespace PipStudio
             string proc = U.ProcessName(h);
             return new
             {
-                id = ExtId(h), kind = "app", title = ExternalPip.AppName(h) + "'s own PiP", app = ExternalPip.AppName(h),
+                id = ExtId(h), kind = "app", title = ExternalPip.AppName(h) + "'s own PiP", app = ExternalPip.AppName(h), proc,
                 window = true, minimized, theater = false,
                 spot = minimized ? "" : ExternalPip.SpotKey(h), follow = false, source = (string)null,
                 opacity = Math.Round(ExternalPip.OpacityOf(h), 2),

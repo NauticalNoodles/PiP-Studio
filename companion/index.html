@@ -92,6 +92,12 @@
   .card { border-radius: var(--radius); padding: 14px 14px 12px; margin-bottom: 10px; }
   .card .top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 4px; }
   .card .names { min-width: 0; flex: 1; }
+  .card .top { align-items: center; }
+  .appicon { width: 38px; height: 38px; border-radius: 10px; flex: none; display: grid; place-items: center; overflow: hidden; }
+  .appicon img { width: 100%; height: 100%; object-fit: contain; }
+  .appicon.ph { background: var(--fill); color: var(--sub); font-weight: 650; font-size: 16px; }
+  .appicon.ph svg { width: 20px; height: 20px; }
+  .appicon.small { width: 24px; height: 24px; border-radius: 6px; font-size: 12px; }
   .card .title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card .meta { font-size: 13px; color: var(--sub); }
   .close { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none; color: var(--sub); }
@@ -505,6 +511,35 @@
     paint();
   }
 
+  // ---------------------------------------------------------------- app icons (from PiP Studio, once per app, then kept)
+  const icons = new Map();                                         // process -> data: URL, null (none), or a pending promise
+  function appIcon(proc, label, small) {
+    const letter = esc(((label || proc || "?").trim()[0] || "?").toUpperCase());
+    return `<span class="appicon ph${small ? " small" : ""}" data-proc="${esc(proc || "")}" aria-hidden="true">${letter}</span>`;
+  }
+  function showIcon(el, url) {
+    if (!url || el.querySelector("img")) return;
+    el.classList.remove("ph");
+    el.innerHTML = `<img src="${url}" alt="">`;
+  }
+  function loadIcons(root) {
+    root.querySelectorAll(".appicon[data-proc]").forEach((el) => {
+      const proc = el.dataset.proc;
+      if (!proc) return;
+      const have = icons.get(proc);
+      if (typeof have === "string") { showIcon(el, have); return; }
+      if (have === null || have instanceof Promise) return;       // none to show, or already on its way
+      const job = api("GET", "/api/icon", { p: proc })
+        .then((r) => {
+          const url = r && r.png ? "data:image/png;base64," + r.png : null;
+          icons.set(proc, url);
+          if (url) document.querySelectorAll(`.appicon[data-proc="${CSS.escape(proc)}"]`).forEach((x) => showIcon(x, url));
+        })
+        .catch(() => icons.delete(proc));                          // try again on the next refresh
+      icons.set(proc, job);
+    });
+  }
+
   // ---------------------------------------------------------------- PiPs
   // what a card shows right away (the things you use most), and what's behind More
   function mainActions(p) {
@@ -544,6 +579,7 @@
         return `
         <div class="card${p.minimized ? " min" : ""}" data-id="${esc(p.id)}">
           <div class="top">
+            ${p.window ? appIcon(p.proc, p.app) : `<span class="appicon ph">${ICON.screen}</span>`}
             <div class="names">
               <div class="title" data-f="title"></div>
               <div class="meta"><span data-f="app"></span> · ${p.minimized ? "Minimized" : p.kind === "own" ? "Your PiP" : "App's own PiP"}</div>
@@ -576,6 +612,7 @@
         });
         card.querySelectorAll("[data-s]").forEach((s) => wireSlider(s, id + s.dataset.s, (v) => act(id, s.dataset.s, v)));
       });
+      loadIcons(list);
     }
     lastPips = new Map(state.pips.map((p) => [p.id, p]));
     for (const p of state.pips) {
@@ -652,7 +689,7 @@
       list.dataset.sig = sig;
       list.innerHTML = state.audio.map((a) => `
         <div class="app" data-p="${esc(a.process)}">
-          <div class="name"><i class="playing hidden" title="Playing"></i><span data-f="name"></span></div>
+          <div class="name">${appIcon(a.process, a.name, true)}<span data-f="name"></span><i class="playing hidden" title="Playing"></i></div>
           <div class="slider"><button class="iconbtn" data-a="mute" aria-label="Mute">${ICON.vol}</button><input type="range" min="0" max="100" step="1" aria-label="Volume"><div class="lbl"></div></div>
         </div>`).join("");
       list.querySelectorAll(".app").forEach((row) => {
@@ -661,6 +698,7 @@
         row.querySelector("[data-a=mute]").addEventListener("click", (e) => send({ muted: !e.currentTarget.classList.contains("muted") }));
         wireSlider(row.querySelector("input"), "a:" + proc, (v) => send({ volume: v }));
       });
+      loadIcons(list);
     }
     for (const a of state.audio) {
       const row = list.querySelector(`.app[data-p="${CSS.escape(a.process)}"]`);
