@@ -9,6 +9,14 @@ Game on: PiP Studio's window can now look like your Xbox.
 - It goes great with the controller-friendly mode
 - Only the main window changes; your PiPs and menus look the same as before
 
+Marking windows as PiPs is clearer and easier to undo:
+
+- "Treat as a PiP" now asks first and explains what it does (the window stays on top, snaps to PiP spots and follows your PiP shortcuts)
+- Every window you marked is listed under **Marked as PiPs** on the Running PiPs page, with a Remove button for each (or Remove all)
+- Removing a mark makes it a normal window again and takes it off always on top
+- Other apps' PiPs stay on the Running PiPs page while they're minimized, with a Restore button to bring them back
+- The title bar on other apps' PiPs no longer has a maximize button
+
 ## 1.0.3
 
 Other apps' PiPs get the PiP Studio treatment when you point at them.

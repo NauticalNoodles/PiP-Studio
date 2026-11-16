@@ -75,6 +75,9 @@ namespace PipStudio
         static bool exiting, closedHintShown;
 
         static ListBox winList, runList, autoList;
+        static StackPanel markedList;          // Running PiPs > Marked as PiPs
+        static Border markedBox;
+        static string markedSig = "";
         static bool syncingSel, sizing;
         static string autoSig = "";
         static Border navPane, previewBox, chromiumCard, detailsCard, contentLayer;
@@ -474,6 +477,17 @@ namespace PipStudio
                   <Grid.ColumnDefinitions><ColumnDefinition Width='*' MinWidth='120'/><ColumnDefinition Width='{DynamicResource RColApp}'/><ColumnDefinition Width='{DynamicResource RColPos}'/><ColumnDefinition Width='{DynamicResource RColSize}'/><ColumnDefinition Width='{DynamicResource RColOpacity}'/><ColumnDefinition Width='{DynamicResource RColMode}'/><ColumnDefinition Width='40'/></Grid.ColumnDefinitions>
                 </Grid>
                 <Border DockPanel.Dock='Top' Height='1' Background='{DynamicResource Divider}' Margin='0,0,0,4'/>
+                <!-- windows you marked with Treat as a PiP: below the running PiPs, so they're easy to find and undo -->
+                <Border x:Name='MarkedBox' DockPanel.Dock='Bottom' Visibility='Collapsed' Margin='0,16,0,0'>
+                  <StackPanel>
+                    <Grid Margin='2,0,0,4'>
+                      <TextBlock Text='Marked as PiPs' FontSize='16' FontWeight='SemiBold' Foreground='{DynamicResource Text}' VerticalAlignment='Center'/>
+                      <Button x:Name='MarkedClear' Content='Remove all' HorizontalAlignment='Right' Padding='14,4'/>
+                    </Grid>
+                    <TextBlock Text='Windows you chose to treat as PiPs. Removing one makes it a normal window again and takes it off always on top.' FontSize='12' Foreground='{DynamicResource Sub}' TextWrapping='Wrap' Margin='2,0,0,8'/>
+                    <ScrollViewer x:Name='MarkedScroll' MaxHeight='212' VerticalScrollBarVisibility='Auto' HorizontalScrollBarVisibility='Disabled'><StackPanel x:Name='MarkedList'/></ScrollViewer>
+                  </StackPanel>
+                </Border>
                 <ListBox x:Name='RunList' Background='Transparent' BorderThickness='0' Padding='0' ItemTemplate='{StaticResource RunRow}' ItemContainerStyle='{StaticResource RowItem}' HorizontalContentAlignment='Stretch' ScrollViewer.HorizontalScrollBarVisibility='Disabled' VirtualizingPanel.ScrollUnit='Pixel'/>
               </DockPanel>
               <StackPanel x:Name='RunEmptyPanel' HorizontalAlignment='Center' VerticalAlignment='Center' Margin='20' Visibility='Collapsed'>
@@ -592,6 +606,16 @@ namespace PipStudio
 
             winList = F<ListBox>("WinList"); runList = F<ListBox>("RunList"); autoList = F<ListBox>("AutoList"); autoSig = ""; winFilter = ""; lastColsFor = -1;
             SmoothScroll.AttachInside(winList); SmoothScroll.AttachInside(runList);
+            markedList = F<StackPanel>("MarkedList"); markedBox = F<Border>("MarkedBox"); markedSig = "";
+            SmoothScroll.Attach(F<ScrollViewer>("MarkedScroll"));
+            F<Button>("MarkedClear").Click += (o, e) => Ask("Remove every mark?",
+                "Every window you marked with Treat as a PiP goes back to being a normal window, and comes off always on top.",
+                "Remove all", "Cancel", ok =>
+                {
+                    if (!ok) return;
+                    foreach (var m in ExternalPip.Marks()) ExternalPip.Unmark(m);
+                    runSig = ""; winSig = ""; RefreshRunning(); RefreshMarked(); BuildCommands();
+                });
             SmoothScroll.Attach(F<ScrollViewer>("DetailsScroll"));
             navPane = F<Border>("NavPane"); previewBox = F<Border>("PreviewBox"); chromiumCard = F<Border>("ChromiumCard"); detailsCard = F<Border>("DetailsCard"); pageHeader = F<StackPanel>("PageHeader");
             contentLayer = F<Border>("ContentLayer");
@@ -796,7 +820,7 @@ namespace PipStudio
             HideThumb();
             if (captureKb != null) EndKeyCapture();
             if (App.I != null) App.I.CancelPadCapture();
-            w = null; winList = runList = autoList = null; navPane = previewBox = chromiumCard = detailsCard = contentLayer = null; explainCard = null; explainStage = null; if (explainSb != null) { explainSb = null; } pageHeader = null;
+            w = null; winList = runList = autoList = null; markedList = null; markedBox = null; navPane = previewBox = chromiumCard = detailsCard = contentLayer = null; explainCard = null; explainStage = null; if (explainSb != null) { explainSb = null; } pageHeader = null;
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
@@ -1223,9 +1247,33 @@ namespace PipStudio
                 {
                     var s2 = SelItem();
                     if (s2 == null || s2.IsDisplay || s2.IsAuto || s2.Hwnd == IntPtr.Zero) return;
-                    ExternalPip.MarkPip(s2.Hwnd);                           // it moves to Running PiPs, where PiP Studio can steer it
-                    winSig = ""; RefreshWindows(); BuildCommands();
+                    IntPtr mh = s2.Hwnd;
+                    string app = ExternalPip.AppName(mh);
+                    // say what it means first: it changes how the window behaves (it stays on top, snaps, follows your shortcuts)
+                    string which = ExternalPip.MarksWholeKind(mh)
+                        ? "This applies to every window like this one from " + app + ", now and later."
+                        : "This applies to this window only, until it closes.";
+                    Ask("Treat this window as a PiP?",
+                        "PiP Studio will handle it like another app's picture-in-picture window:\n\n" +
+                        "•  It moves to Running PiPs and snaps to PiP spots\n" +
+                        "•  It stays on top of your other windows once you move or steer it\n" +
+                        "•  Your PiP shortcuts and controller move, resize, fade and close it\n\n" +
+                        which + " You can undo it any time under Running PiPs > Marked as PiPs, which also takes it off always on top.",
+                        "Treat as a PiP", "Cancel", ok =>
+                        {
+                            if (!ok || !Native.IsWindow(mh)) return;
+                            ExternalPip.MarkPip(mh);                        // it moves to Running PiPs, where PiP Studio can steer it
+                            winSig = ""; runSig = ""; RefreshWindows(); BuildCommands();
+                        });
                 }, real));
+            }
+            else if (page == "running" && SelectedExternal() != IntPtr.Zero && Native.IsIconic(SelectedExternal()))
+            {
+                // another app's PiP that's minimized: bring it back, or stop treating it as a PiP
+                Func<IntPtr> x = SelectedExternal;
+                cmdBar.Children.Add(Cmd("\uE923", "Restore", () => { ExternalPip.Restore(x()); DelayRun(250, () => { runSig = ""; RefreshRunning(); BuildCommands(); }); }, true));
+                cmdBar.Children.Add(Cmd("\uE711", "Close", () => { ExternalPip.Handle("close", x()); DelayRun(300, () => { runSig = ""; RefreshRunning(); BuildCommands(); }); }, true));
+                cmdBar.Children.Add(Cmd("\uE894", "Not a PiP", () => { ExternalPip.MarkNotPip(x()); runSig = ""; RefreshRunning(); RefreshMarked(); BuildCommands(); }, true));
             }
             else if (page == "running" && SelectedExternal() != IntPtr.Zero)
             {
@@ -1237,7 +1285,7 @@ namespace PipStudio
                 cmdBar.Children.Add(Cmd("\uE767", "Mute", () => ExternalPip.Handle("mute", x()), true));
                 cmdBar.Children.Add(Cmd("\uE711", "Close", () => { ExternalPip.Handle("close", x()); DelayRun(300, () => { runSig = ""; RefreshRunning(); BuildCommands(); }); }, true));
                 cmdBar.Children.Add(Cmd("\uE712", "Options", () => { var r = runList.SelectedItem as PipRowItem; if (r != null) ShowPipOptions(r); }, true));
-                cmdBar.Children.Add(Cmd("\uE894", "Not a PiP", () => { ExternalPip.MarkNotPip(x()); runSig = ""; RefreshRunning(); BuildCommands(); }, true));
+                cmdBar.Children.Add(Cmd("\uE894", "Not a PiP", () => { ExternalPip.MarkNotPip(x()); runSig = ""; RefreshRunning(); RefreshMarked(); BuildCommands(); }, true));
             }
             else if (page == "running")
             {
@@ -1761,9 +1809,48 @@ namespace PipStudio
             }
         }
 
+        /// <summary>Running PiPs > Marked as PiPs: one row per Treat as a PiP you chose, each with Remove.</summary>
+        static void RefreshMarked()
+        {
+            if (markedList == null) return;
+            var marks = ExternalPip.Marks();
+            string sig = string.Join("|", marks.Select(m => m.Hwnd.ToInt64() + m.Key + m.Title));
+            markedBox.Visibility = marks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+            if (sig == markedSig) return;
+            markedSig = sig;
+            markedList.Children.Clear();
+            foreach (var mk in marks)
+            {
+                var m = mk;
+                var row = new Grid { Margin = new Thickness(0, 0, 0, 4) };
+                row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                row.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                var bg = new Border { CornerRadius = Looks.CR(4), BorderThickness = new Thickness(1), Padding = new Thickness(14, 10, 12, 10) };
+                bg.SetResourceReference(Border.BackgroundProperty, "Card");
+                bg.SetResourceReference(Border.BorderBrushProperty, "CardBorder");
+                Grid.SetColumnSpan(bg, 2);
+                row.Children.Add(bg);
+                var text = new StackPanel { VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(14, 8, 12, 8) };
+                text.Children.Add(Fluent.Label(m.Title, 14, "Text", false));
+                text.Children.Add(Fluent.Label(m.WholeKind ? "Every window like this from " + m.App : m.App + " · this window only, until it closes", 12, "Sub", false));
+                row.Children.Add(text);
+                var remove = PlainButton("Remove", () =>
+                {
+                    ExternalPip.Unmark(m);                                   // a normal window again, off always on top
+                    runSig = ""; winSig = ""; RefreshRunning(); RefreshMarked(); BuildCommands();
+                });
+                remove.VerticalAlignment = VerticalAlignment.Center;
+                remove.Margin = new Thickness(0, 0, 12, 0);
+                Grid.SetColumn(remove, 1);
+                row.Children.Add(remove);
+                markedList.Children.Add(row);
+            }
+        }
+
         static void RefreshRunning()
         {
             if (runList == null) return;
+            RefreshMarked();
             var items = new List<PipRowItem>();
             string q = "";
             foreach (var p in App.I.Pips.Where(x => !x.IsClosing))
@@ -1810,6 +1897,20 @@ namespace PipStudio
                         Icon = IconFor(h)
                     });
                 }
+            // ...and the ones that are minimized: still yours, just out of sight (Restore brings them back)
+            if (App.S.ControlOtherPips)
+                foreach (var h in ExternalPip.MinimizedPips())
+                    items.Add(new PipRowItem
+                    {
+                        External = h,
+                        Title = ExternalPip.AppName(h) + "'s own PiP",
+                        App = U.ProcessName(h),
+                        Position = "—",
+                        SizeText = "—",
+                        OpacityText = (int)Math.Round(ExternalPip.OpacityOf(h) * 100) + "%",
+                        Mode = "Minimized",
+                        Icon = IconFor(h)
+                    });
             // never empty: "" means "refresh needed", and an empty list must still replace the old rows
             string sig = "n" + items.Count + "|" + string.Join("|", items.Select(x => (x.Pip != null ? x.Pip.GetHashCode() : x.External.ToInt64()) + x.Title + x.Position + x.SizeText + x.OpacityText + x.Mode));
             // the empty message only when the list really is empty

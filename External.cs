@@ -130,8 +130,10 @@ namespace PipStudio
         {
             if (h == IntPtr.Zero) return;
             string key = AppKey(h);
-            bool wasMarked = sessionPip.Remove(h) | PipSet().Contains(key);
+            bool appMark = PipSet().Contains(key);
+            bool wasMarked = sessionPip.Remove(h) | appMark;
             App.S.PipApps = Without(App.S.PipApps, key);
+            if (wasMarked) { Release(h); if (appMark) foreach (var o in WindowsOf(key)) Release(o); }   // your mark made it stay on top: undo that
             if (!wasMarked || IsAppPip(h))                                    // still detected on its own: remember that it isn't one
             {
                 if (SharedClass(h)) sessionNot.Add(h); else App.S.NotPipApps = With(App.S.NotPipApps, key);
@@ -142,10 +144,82 @@ namespace PipStudio
 
         public static void ClearMarks()
         {
+            foreach (var m in Marks()) ReleaseMark(m);
             App.S.PipApps = ""; App.S.NotPipApps = "";
             sessionPip.Clear(); sessionNot.Clear();
             App.I.SettingsChanged();
         }
+
+        // ------------------------------------------------------------ the windows you marked (Running PiPs > Marked as PiPs)
+        /// <summary>One "Treat as a PiP" you chose: a single window (browsers and other apps that share one window class), or
+        /// every window of that kind from an app.</summary>
+        public class Mark
+        {
+            public IntPtr Hwnd;          // a single window, or zero for a whole kind
+            public string Key;           // "process|class"
+            public string Title, App;
+            public bool WholeKind { get { return Hwnd == IntPtr.Zero; } }
+        }
+
+        public static List<Mark> Marks()
+        {
+            var l = new List<Mark>();
+            sessionPip.RemoveWhere(h => !Native.IsWindow(h));              // closed windows lose their mark
+            foreach (var h in sessionPip)
+                l.Add(new Mark { Hwnd = h, Key = AppKey(h), Title = Titled(h), App = AppName(h) });
+            foreach (var key in PipSet())
+            {
+                var live = WindowsOf(key).FirstOrDefault();
+                string proc = key.Split('|')[0];
+                string app = live != IntPtr.Zero ? AppName(live) : (proc.Length > 0 ? char.ToUpper(proc[0]) + proc.Substring(1) : key);
+                l.Add(new Mark { Key = key, Title = live != IntPtr.Zero ? Titled(live) : app, App = app });
+            }
+            return l;
+        }
+
+        static string Titled(IntPtr h) { string t = U.WindowTitle(h); return string.IsNullOrWhiteSpace(t) ? AppName(h) : t; }
+
+        /// <summary>Takes away a mark: the window (or every window of that kind) stops being a PiP and stops staying on top.</summary>
+        public static void Unmark(Mark m)
+        {
+            if (m == null) return;
+            ReleaseMark(m);
+            if (m.WholeKind) App.S.PipApps = Without(App.S.PipApps, m.Key);
+            else sessionPip.Remove(m.Hwnd);
+            App.I.SettingsChanged();
+        }
+
+        static void ReleaseMark(Mark m)
+        {
+            if (m.WholeKind) foreach (var h in WindowsOf(m.Key)) Release(h);
+            else Release(m.Hwnd);
+        }
+
+        /// <summary>Top-level windows of one kind ("process|class").</summary>
+        static List<IntPtr> WindowsOf(string key)
+        {
+            var l = new List<IntPtr>();
+            Native.EnumWindows((h, x) =>
+            {
+                if (!U.IsOurs(h) && string.Equals(AppKey(h), key, StringComparison.OrdinalIgnoreCase)) l.Add(h);
+                return true;
+            }, IntPtr.Zero);
+            return l;
+        }
+
+        /// <summary>No longer a PiP: PiP Studio stops keeping it on top, and it goes back to being a normal window.</summary>
+        static void Release(IntPtr h)
+        {
+            pinned.Remove(h);
+            minimized.Remove(h);
+            wentIconic.Remove(h);
+            if (h == IntPtr.Zero || !Native.IsWindow(h)) return;
+            if ((Native.GetWindowLong(h, Native.GWL_EXSTYLE) & Native.WS_EX_TOPMOST) != 0)
+                Native.SetWindowPos(h, Native.HWND_NOTOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE);
+        }
+
+        /// <summary>What "Treat as a PiP" will do to this window, for the question asked before marking it.</summary>
+        public static bool MarksWholeKind(IntPtr h) { return !SharedClass(h); }
 
         /// <summary>
         /// Discord's popped-out call/stream window. Its main window's title always ends in "Discord" ("Friends - Discord",
@@ -257,7 +331,6 @@ namespace PipStudio
                 case "grow": StepSize(h, 1); return true;
                 case "shrink": StepSize(h, -1); return true;
                 case "theater": Theater(h); return true;
-                case "maximize": Maximize(h); return true;
                 case "minimize": Minimize(h); return true;
                 case "opup": Opacity(h, 26); return true;
                 case "opdown": Opacity(h, -26); return true;
@@ -380,7 +453,8 @@ namespace PipStudio
             if (!App.S.ControlOtherPips) { lastRect.Clear(); moved.Clear(); appControlled.Clear(); return; }
             bool mouseDown = (Native.GetAsyncKeyState(0x01) & 0x8000) != 0;
             var now = FindAll();
-            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); maximized.Remove(gone); theaterRestore.Remove(gone); }
+            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone) && Native.IsWindow(gone) && Native.IsIconic(gone)) wentIconic.Add(gone);
+            foreach (var gone in new List<IntPtr>(lastRect.Keys)) if (!now.Contains(gone)) { lastRect.Remove(gone); moved.Remove(gone); appControlled.Remove(gone); freeAspect.Remove(gone); trimToken.Remove(gone); minWidth.Remove(gone); trimChoice.Remove(gone); aspectChoice.Remove(gone); snapChoice.Remove(gone); theaterRestore.Remove(gone); }
             foreach (var h in now)
             {
                 if (theaterRestore.ContainsKey(h)) continue;              // theater: leave it centered
@@ -753,39 +827,16 @@ namespace PipStudio
             catch { if (bmp != null) bmp.Dispose(); return null; }
         }
 
-        // ------------------------------------------------------------ maximize and minimize (the hover title bar's buttons)
-        static readonly HashSet<IntPtr> maximized = new HashSet<IntPtr>();
+        // ------------------------------------------------------------ minimize (the hover title bar's button)
         static readonly List<IntPtr> minimized = new List<IntPtr>();
-
-        public static bool IsMaximized(IntPtr h) { return maximized.Contains(h); }
-
-        /// <summary>As big as the display allows while keeping its shape, centered; again puts it back. Shares theater mode's
-        /// way back, so either button returns it to where it was.</summary>
-        static void Maximize(IntPtr h)
-        {
-            Rectangle back;
-            if (maximized.Contains(h) && theaterRestore.TryGetValue(h, out back))
-            {
-                theaterRestore.Remove(h); maximized.Remove(h);
-                Place(h, back);
-                return;
-            }
-            var b = Bounds(h); var wa = Work(h);
-            if (!theaterRestore.ContainsKey(h)) theaterRestore[h] = b;   // from theater mode: still go back to the spot before it
-            maximized.Add(h);
-            double aspect = b.Height > 0 ? b.Width / (double)b.Height : 16.0 / 9;
-            int w = wa.Width, hgt = (int)Math.Round(w / aspect);
-            if (hgt > wa.Height) { hgt = wa.Height; w = (int)Math.Round(hgt * aspect); }
-            Place(h, new Rectangle(wa.Left + (wa.Width - w) / 2, wa.Top + (wa.Height - hgt) / 2, w, hgt));
-        }
 
         /// <summary>Minimizes it without taking focus. Some PiPs have no taskbar button, so the tray menu lists them to bring back.</summary>
         static void Minimize(IntPtr h)
         {
             Rectangle back;
-            if (theaterRestore.TryGetValue(h, out back))                // maximized or theater: put it back first, so it comes back normal
+            if (theaterRestore.TryGetValue(h, out back))                // theater mode: put it back first, so it comes back normal
             {
-                theaterRestore.Remove(h); maximized.Remove(h);
+                theaterRestore.Remove(h);
                 Place(h, back);
             }
             if (!minimized.Contains(h)) minimized.Add(h);
@@ -799,6 +850,25 @@ namespace PipStudio
             return new List<IntPtr>(minimized);
         }
 
+        // PiPs that were minimized (by you, the app or PiP Studio): they drop out of FindAll, but the Running PiPs page keeps them
+        static readonly HashSet<IntPtr> wentIconic = new HashSet<IntPtr>();
+
+        /// <summary>Other apps' PiPs that are minimized right now, for the Running PiPs page.</summary>
+        public static List<IntPtr> MinimizedPips()
+        {
+            wentIconic.RemoveWhere(h => !Native.IsWindow(h) || !Native.IsIconic(h) || sessionNot.Contains(h) || NotSet().Contains(AppKey(h)));
+            var l = new List<IntPtr>(wentIconic);
+            foreach (var h in Minimized()) if (!l.Contains(h)) l.Add(h);
+            return l;
+        }
+
+        /// <summary>Brings a minimized PiP back without taking focus.</summary>
+        public static void Restore(IntPtr h)
+        {
+            wentIconic.Remove(h);
+            RestoreMinimized(h);
+        }
+
         public static void RestoreMinimized(IntPtr h)
         {
             minimized.Remove(h);
@@ -810,7 +880,7 @@ namespace PipStudio
         static void Theater(IntPtr h)
         {
             Rectangle back;
-            if (theaterRestore.TryGetValue(h, out back)) { theaterRestore.Remove(h); maximized.Remove(h); Place(h, back); return; }
+            if (theaterRestore.TryGetValue(h, out back)) { theaterRestore.Remove(h); Place(h, back); return; }
             var b = Bounds(h); var wa = Work(h);
             theaterRestore[h] = b;
             double aspect = b.Height > 0 ? b.Width / (double)b.Height : 16.0 / 9;
@@ -972,7 +1042,7 @@ namespace PipStudio
 
     /// <summary>
     /// PiP Studio's title bar over another app's PiP while you point at it: the app's name and the title bar buttons you picked
-    /// in Settings (the ones that make sense for a window PiP Studio doesn't own), plus mute, minimize and maximize. Drag the bar to move the PiP,
+    /// in Settings (the ones that make sense for a window PiP Studio doesn't own), plus mute and minimize. Drag the bar to move the PiP,
     /// scroll on it to change the volume. Only the bar takes clicks; everything under it stays the app's own.
     /// PiP Studio can't see the mouse inside another app's window, so it watches the pointer's position instead.
     /// </summary>
@@ -1098,11 +1168,9 @@ namespace PipStudio
                 HBtn b = Make(k);
                 if (b != null) defs.Add(b);
             }
-            // minimize and maximize, next to Close like on any window
+            // minimize, next to Close like on any window
             int ci = defs.FindIndex(b => b.Key == "close");
             if (ci < 0) ci = defs.Count;
-            bool max = ExternalPip.IsMaximized(target);
-            defs.Insert(ci, new HBtn { Key = "maximize", Glyph = max ? "\uE923" : "\uE922", Tip = max ? "Restore" : "Maximize" });
             defs.Insert(ci, new HBtn { Key = "minimize", Glyph = "\uE921", Tip = "Minimize" });
             bool? muted = Audio.GetMute(U.ProcessName(target));
             defs.Insert(0, new HBtn { Key = "mute", Glyph = muted == true ? "" : "", Tip = "Mute — scroll to change volume", On = muted == true });

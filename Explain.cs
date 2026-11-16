@@ -136,7 +136,7 @@ namespace PipStudio
                 "Allow more than one PiP at a time");
             EAdd("external", "Other apps' PiPs", "When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture windows of Chrome, Edge, Firefox, Discord and other apps. They also land on the same spots as your PiPs, when they open and when you let go after dragging them.", ScExternal,
                 "Control other apps' PiP windows", "Snap other apps' PiPs to spots");
-            EAdd("exthover", "Controls on other apps' PiPs", "Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize or maximize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.", ScExtHover,
+            EAdd("exthover", "Controls on other apps' PiPs", "Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.", ScExtHover,
                 "Show controls on other apps' PiPs");
             EAdd("controller", "Controller controls", "Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.", ScController,
                 "Use game controllers", "Release the game's focus while controls are on", "Show button hints on the PiP", "Controller options");
@@ -419,7 +419,7 @@ namespace PipStudio
         }
 
         /// <summary>Like the real title bars: when the buttons don't fit, the ones on the left make room first, but the last two
-        /// (More options and Close, or Maximize and Close) stay.</summary>
+        /// (More options and Close, or Minimize and Close) stay.</summary>
         static List<string> EFitBar(List<string> glyphs, double barWidth, double each)
         {
             int max = Math.Max(2, (int)((barWidth - 30) / each));
@@ -429,7 +429,7 @@ namespace PipStudio
         }
 
         /// <summary>The pointer reaches another app's PiP and PiP Studio's title bar fades in over its top edge, with the
-        /// buttons it would really have there: mute, your title bar buttons that work on other apps' PiPs, minimize, maximize.</summary>
+        /// buttons it would really have there: mute, your title bar buttons that work on other apps' PiPs, minimize.</summary>
         static void ScExtHover(Canvas c, Storyboard sb)
         {
             const double w = 150, h = 86;
@@ -449,7 +449,7 @@ namespace PipStudio
                 if (keep.Contains(k) && (k != "display" || System.Windows.Forms.Screen.AllScreens.Length > 1)) glyphs.Add(TitleBarItems.Glyph(k));
             int ci = glyphs.IndexOf(TitleBarItems.Glyph("close"));
             if (ci < 0) ci = glyphs.Count;
-            glyphs.InsertRange(ci, new[] { "\uE921", "\uE922" });                              // minimize, maximize
+            glyphs.Insert(ci, "\uE921");                                                         // minimize
 
             var bar = new Grid { Width = w, Height = 17, Opacity = 0 };
             bar.Children.Add(new Rectangle { Fill = EHex("#F0141418") });
