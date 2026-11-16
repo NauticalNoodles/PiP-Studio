@@ -304,6 +304,28 @@ namespace PipStudio
         public static double OpacityOf(IntPtr h) { byte a; return alpha.TryGetValue(h, out a) ? a / 255.0 : 1; }
 
         /// <summary>Where it sits, in the same words as PiP Studio's own PiPs.</summary>
+        static readonly string[] SpotKeys = { "TL", "T", "TR", "L", "R", "BL", "B", "BR" };   // same names as PipWindow's
+        static readonly int[,] SpotCells = { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 1 }, { 2, 1 }, { 0, 2 }, { 1, 2 }, { 2, 2 } };
+
+        /// <summary>Where it sits as a spot name ("TL", "B"...), or "" in the middle.</summary>
+        public static string SpotKey(IntPtr h)
+        {
+            int cx, cy; Cell(h, out cx, out cy);
+            for (int i = 0; i < SpotKeys.Length; i++) if (SpotCells[i, 0] == cx && SpotCells[i, 1] == cy) return SpotKeys[i];
+            return "";
+        }
+
+        /// <summary>Puts it on one spot (the phone companion's position picker).</summary>
+        public static bool SnapToSpot(IntPtr h, string key)
+        {
+            int i = Array.IndexOf(SpotKeys, key);
+            if (i < 0 || !Native.IsWindow(h)) return false;
+            Pin(h);
+            theaterRestore.Remove(h);
+            SnapTo(h, SpotCells[i, 0], SpotCells[i, 1], Work(h));
+            return true;
+        }
+
         public static string SpotName(IntPtr h)
         {
             int cx, cy; Cell(h, out cx, out cy);

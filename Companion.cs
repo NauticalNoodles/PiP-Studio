@@ -531,7 +531,8 @@ namespace PipStudio
             switch ((method ?? "") + " " + (path ?? ""))
             {
                 case "GET /api/state": return OnUi(State);
-                case "POST /api/pip": return new { ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"))) };
+                case "POST /api/pip": return new { ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"), Str(body, "arg"))) };
+                case "GET /api/windows": return OnUi(Windows);
                 case "POST /api/global": return new { ok = OnUi(() => GlobalAction(Str(body, "action"))) };
                 case "POST /api/audio": return new { ok = OnUi(() => AudioAction(Str(body, "process"), Num(body, "volume"), Bool(body, "muted"))) };
             }
@@ -576,6 +577,8 @@ namespace PipStudio
                     id = PipId(p), kind = "own", title = p.DisplayName,
                     app = !win ? "Screen" : p.Src != IntPtr.Zero ? ExternalPip.AppName(p.Src) : char.ToUpper(p.St.ProcessName[0]) + p.St.ProcessName.Substring(1),
                     window = win, minimized = false, theater = p.InTheater,
+                    spot = p.InTheater ? "" : p.NearestSpot(true), follow = win && p.St.Follow,
+                    source = win && p.Src != IntPtr.Zero ? ExtId(p.Src).Substring(1) : null,
                     opacity = Math.Round(p.St.Opacity, 2),
                     volume = win ? Audio.GetVolume(p.St.ProcessName) : null,
                     muted = win ? Audio.GetMute(p.St.ProcessName) : null
@@ -598,12 +601,27 @@ namespace PipStudio
             {
                 id = ExtId(h), kind = "app", title = ExternalPip.AppName(h) + "'s own PiP", app = ExternalPip.AppName(h),
                 window = true, minimized, theater = false,
+                spot = minimized ? "" : ExternalPip.SpotKey(h), follow = false, source = (string)null,
                 opacity = Math.Round(ExternalPip.OpacityOf(h), 2),
                 volume = Audio.GetVolume(proc), muted = Audio.GetMute(proc)
             };
         }
 
-        static bool PipAction(string id, string action, double? value)
+        /// <summary>The windows a PiP can show, for the phone's window list (the same ones as PiP Studio's window picker).</summary>
+        static object Windows()
+        {
+            return WinEnum.AltTab().Where(h => !U.IsOurs(h) && !ExternalPip.IsKnown(h)).Take(60).Select(h => new
+            {
+                id = h.ToInt64().ToString("x"),
+                title = string.IsNullOrWhiteSpace(U.WindowTitle(h)) ? ExternalPip.AppName(h) : U.WindowTitle(h),
+                app = ExternalPip.AppName(h),
+                minimized = Native.IsIconic(h)
+            }).ToList();
+        }
+
+        static readonly HashSet<string> Spots = new HashSet<string> { "TL", "T", "TR", "L", "R", "BL", "B", "BR" };
+
+        static bool PipAction(string id, string action, double? value, string arg)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(action)) return false;
             if (id[0] == 'p')
@@ -613,6 +631,17 @@ namespace PipStudio
                 switch (action)
                 {
                     case "corner": p.CycleCorner(); return true;
+                    case "spot": if (arg == null || !Spots.Contains(arg)) return false; p.SnapToSpot(arg, true); return true;
+                    case "follow": if (p.St.Kind != SourceKind.Window) return false; p.SetFollow(!p.St.Follow); return true;
+                    case "source":
+                        {
+                            long hv;                                                 // only a window from the list the phone was given
+                            if (arg == null || !long.TryParse(arg, System.Globalization.NumberStyles.HexNumber, null, out hv)) return false;
+                            var w = new IntPtr(hv);
+                            if (!WinEnum.AltTab().Contains(w) || U.IsOurs(w)) return false;
+                            App.I.UseWindow(w, p);
+                            return true;
+                        }
                     case "nextmon": p.NextMonitor(); return true;
                     case "grow": p.StepSize(1); return true;
                     case "shrink": p.StepSize(-1); return true;
@@ -638,6 +667,7 @@ namespace PipStudio
                 switch (action)
                 {
                     case "restore": ExternalPip.Restore(h); return true;
+                    case "spot": return arg != null && Spots.Contains(arg) && ExternalPip.SnapToSpot(h, arg);
                     case "show": return ExternalPip.Handle("swap", h);
                     case "playpause": U.MediaKey(0xB3); return true;
                     case "opacity": if (value == null) return false; ExternalPip.SetOpacityPercent(h, (int)Math.Round(Math.Max(0.2, Math.Min(1, value.Value)) * 100)); return true;
