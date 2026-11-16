@@ -95,7 +95,7 @@ namespace PipStudio
         public static string ExePath(IntPtr hwnd)
         {
             if (hwnd == IntPtr.Zero || !Native.IsWindow(hwnd)) return null;
-            try { using (var p = Process.GetProcessById(U.Pid(hwnd))) return p.MainModule.FileName; } catch { return null; }
+            return U.ExePathOf(U.Pid(hwnd));                                 // also for apps running as administrator
         }
 
         /// <summary>True when the app looks Chromium/Electron/CEF based (these are the ones that freeze).</summary>

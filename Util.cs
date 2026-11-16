@@ -43,24 +43,58 @@ namespace PipStudio
             {
                 try
                 {
-                    string exe = p.MainModule.FileName;
-                    using (var ico = Icon.ExtractIcon(exe, 0, 64) ?? Icon.ExtractAssociatedIcon(exe))
+                    // the exe's own icon (its path can be read even for apps running as administrator) ...
+                    string exe = ExePathOf(p.Id);
+                    Bitmap bmp = null;
+                    if (exe != null)
+                        using (var ico = Icon.ExtractIcon(exe, 0, 64) ?? Icon.ExtractAssociatedIcon(exe))
+                            if (ico != null) bmp = ico.ToBitmap();
+                    // ... or, when even that is blocked (games with anti-cheat), the icon on one of its windows
+                    if (bmp == null) bmp = WindowIconOf(p.Id);
+                    if (bmp == null) continue;
+                    using (bmp)
+                    using (var ms = new MemoryStream())
                     {
-                        if (ico == null) continue;
-                        using (var bmp = ico.ToBitmap())
-                        using (var ms = new MemoryStream())
-                        {
-                            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                            result = Convert.ToBase64String(ms.ToArray());
-                        }
+                        bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                        result = Convert.ToBase64String(ms.ToArray());
                     }
                     break;
                 }
                 catch { }
                 finally { p.Dispose(); }
             }
-            lock (iconPngs) iconPngs[processName] = result;
+            if (result != null) lock (iconPngs) iconPngs[processName] = result;   // not found yet: try again next time
             return result;
+        }
+
+        /// <summary>A process's exe path. Needs only "limited" access, so it works for apps running as administrator too
+        /// (Process.MainModule doesn't).</summary>
+        public static string ExePathOf(int pid)
+        {
+            IntPtr hp = Native.OpenProcess(0x1000, false, pid);      // PROCESS_QUERY_LIMITED_INFORMATION
+            if (hp == IntPtr.Zero) return null;
+            try
+            {
+                var sb = new System.Text.StringBuilder(1024);
+                int n = sb.Capacity;
+                return Native.QueryFullProcessImageName(hp, 0, sb, ref n) ? sb.ToString(0, n) : null;
+            }
+            finally { Native.CloseHandle(hp); }
+        }
+
+        /// <summary>The big icon of a visible window of this process, or null.</summary>
+        static Bitmap WindowIconOf(int pid)
+        {
+            Bitmap found = null;
+            Native.EnumWindows((h, l) =>
+            {
+                if (Pid(h) != pid || !Native.IsWindowVisible(h)) return true;
+                IntPtr hi = WindowIconHandle(h, true);
+                if (hi == IntPtr.Zero) return true;
+                try { using (var ico = Icon.FromHandle(hi)) found = ico.ToBitmap(); } catch { return true; }
+                return false;
+            }, IntPtr.Zero);
+            return found;
         }
 
         /// <summary>A picture made small enough for a phone (at most <paramref name="maxWidth"/> wide) as base64 JPEG.</summary>
