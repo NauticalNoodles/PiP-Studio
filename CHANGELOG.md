@@ -30,6 +30,11 @@ Control PiP Studio from your phone:
 - **Position** puts a PiP on any corner or edge spot with one tap, **Window** switches which window it shows, and **Follow** turns "follow the window I just left" on or off
 - It only works on your home network, only for phones you've paired, and everything between your phone and PC is encrypted. You can remove a phone any time
 
+Crash reports:
+
+- If PiP Studio ever crashes, it notices the next time it starts and offers to send a crash report. It opens a bug report on GitHub with the details filled in, so you can see exactly what's sent before you send it
+- **Report a problem** in Settings > General > About does the same for anything else that isn't working right
+
 Behind the scenes:
 
 - Settings and your open PiPs are saved more safely, so a crash or power cut can't wipe them

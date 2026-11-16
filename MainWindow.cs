@@ -2904,6 +2904,7 @@ namespace PipStudio
             Section(ge, "About");
             var about = MakeExpander(ge, "", "PiP Studio", "Version " + Updater.CurrentText, PlainButton("Exit PiP Studio", App.I.ExitApp), false, "version about exit quit");
             Row(about, "Settings folder", Packaged.RealPath(Settings.Dir), PlainButton("Open", () => { try { Directory.CreateDirectory(Settings.Dir); Process.Start("explorer.exe", "\"" + Packaged.RealPath(Settings.Dir) + "\""); } catch { } }), "folder files log");
+            Row(about, "Report a problem", "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", PlainButton("Report", CrashReports.ReportProblem), "bug report problem crash issue feedback github");
             Row(about, "Picture-in-picture for any window or part of the screen", "Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.", null, "about");
 
             NewPage("search");

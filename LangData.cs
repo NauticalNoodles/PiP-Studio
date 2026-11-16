@@ -676,6 +676,15 @@ namespace PipStudio
                 { "1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.", "1. امسح هذا الرمز بكاميرا هاتفك (يجب أن يكون على شبكة Wi-Fi نفسها التي يتصل بها هذا الكمبيوتر) ثم اضغط «إقران»." },
                 { "2. Your phone shows a 6-digit PIN. Type it below.", "2. يعرض هاتفك رمز PIN من 6 أرقام. اكتبه أدناه." },
                 { "Pair", "إقران" },
+                { "PiP Studio closed unexpectedly", "أُغلق PiP Studio بشكل غير متوقع" },
+                { "Click to send a crash report, so it can be fixed.", "انقر لإرسال تقرير الأعطال حتى يمكن إصلاحه." },
+                { "Sending this report helps get it fixed. It opens a new issue on GitHub in your browser with this already filled in, so you can check it, add what you were doing, and send it yourself. Your Windows user name and PC name are left out.", "إرسال هذا التقرير يساعد على إصلاح المشكلة. سيفتح بلاغًا جديدًا على GitHub في متصفحك وقد مُلئ بهذه المعلومات، لتتحقق منه وتضيف ما كنت تفعله وترسله بنفسك. لا يُضمَّن اسم مستخدم Windows ولا اسم الكمبيوتر." },
+                { "Send report", "إرسال التقرير" },
+                { "Copy report", "نسخ التقرير" },
+                { "Report a problem", "الإبلاغ عن مشكلة" },
+                { "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", "يفتح بلاغًا عن خطأ على GitHub مع إصدار PiP Studio وإصدار Windows والأخطاء الأخيرة" },
+                { "Report", "إبلاغ" },
+                { "Copied", "تم النسخ" },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1349,6 +1358,15 @@ namespace PipStudio
                 { "1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.", "1. 用手机相机扫描此二维码（手机需与此电脑连接同一个 Wi-Fi），然后点按“配对”。" },
                 { "2. Your phone shows a 6-digit PIN. Type it below.", "2. 手机会显示一个 6 位 PIN。请在下方输入。" },
                 { "Pair", "配对" },
+                { "PiP Studio closed unexpectedly", "PiP Studio 意外关闭" },
+                { "Click to send a crash report, so it can be fixed.", "点击发送崩溃报告，以便修复问题。" },
+                { "Sending this report helps get it fixed. It opens a new issue on GitHub in your browser with this already filled in, so you can check it, add what you were doing, and send it yourself. Your Windows user name and PC name are left out.", "发送此报告有助于修复问题。它会在浏览器中打开一个已填好这些内容的 GitHub 新问题，你可以检查、补充当时在做什么，然后自己提交。报告不包含你的 Windows 用户名和电脑名。" },
+                { "Send report", "发送报告" },
+                { "Copy report", "复制报告" },
+                { "Report a problem", "报告问题" },
+                { "Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in", "在 GitHub 上打开错误报告，并自动填入 PiP Studio 和 Windows 版本以及最近的错误" },
+                { "Report", "报告" },
+                { "Copied", "已复制" },
             };
         }
     }

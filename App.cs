@@ -349,7 +349,7 @@ namespace PipStudio
             trimTimer.Tick += (o, e) => { if (S.MinimizeMemory) U.Trim(); };
             trimTimer.Start();
 
-            SystemEvents.SessionEnding += (o, e) => { try { SaveSession(); } catch { } };
+            SystemEvents.SessionEnding += (o, e) => { try { SaveSession(); } catch { } CrashReports.CleanExit(); };   // Windows shutting down isn't a crash
 
             bool restored = S.RestoreSessions && RestoreSession();
             bool silent = args.Any(a => a.Equals("--startup", StringComparison.OrdinalIgnoreCase))
@@ -365,6 +365,7 @@ namespace PipStudio
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
             Updater.Start(updated);
             Companion.Apply();                                            // the phone companion, if you turned it on
+            CrashReports.CheckLastRun();                                  // offer to report it if the last run crashed
         }
 
         static void Safe(Action a) { try { a(); } catch (Exception ex) { ReportError(ex); } }
@@ -1301,6 +1302,7 @@ namespace PipStudio
             cleaned = true;
             bgTimer.Stop(); padTimer.Stop(); fgTimer.Stop(); trimTimer.Stop();
             try { Companion.Stop(); } catch { }
+            CrashReports.CleanExit();
             try { SaveSession(); } catch { }
             try { var c = CloseMain; if (c != null) c(); } catch { }
             foreach (var p in Pips.ToArray()) { try { p.ShutdownClose(); } catch { } }

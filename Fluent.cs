@@ -37,6 +37,7 @@ namespace PipStudio
             System.Windows.Forms.Application.SetUnhandledExceptionMode(System.Windows.Forms.UnhandledExceptionMode.CatchException);
             System.Windows.Forms.Application.ThreadException += (o, e) => App.ReportError(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += (o, e) => App.ReportError(e.ExceptionObject as Exception);
+            CrashReports.Install();                                       // a fatal error writes a crash report
 
             var wapp = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
             wapp.DispatcherUnhandledException += (o, e) =>
