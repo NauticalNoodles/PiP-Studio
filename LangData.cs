@@ -665,10 +665,17 @@ namespace PipStudio
                 { "It stops working right away. You can pair it again any time.", "سيتوقف عن العمل فورًا. يمكنك إقرانه مجددًا في أي وقت." },
                 { "No network", "لا توجد شبكة" },
                 { "PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.", "لا يستطيع PiP Studio العثور على عنوان هذا الكمبيوتر على شبكتك المحلية. اتصل بشبكة Wi-Fi أو Ethernet وحاول مرة أخرى." },
-                { "Or open {0} on your phone and type the code {1}", "أو افتح {0} على هاتفك واكتب الرمز {1}" },
                 { "Paired with {0}. You can close this.", "تم الإقران مع {0}. يمكنك إغلاق هذه النافذة." },
-                { "Scan this code with your phone's camera. Your phone needs to be on the same Wi-Fi as this PC. The code works once, while this is open.", "امسح هذا الرمز بكاميرا هاتفك. يجب أن يكون هاتفك على شبكة Wi-Fi نفسها التي يتصل بها هذا الكمبيوتر. يعمل الرمز مرة واحدة فقط أثناء فتح هذه النافذة." },
                 { "Couldn't open a network port. Another app may be using it.", "تعذّر فتح منفذ الشبكة. ربما يستخدمه تطبيق آخر." },
+                { "Or open {0} on your phone", "أو افتح {0} على هاتفك" },
+                { "Waiting for your phone…", "في انتظار هاتفك…" },
+                { "That PIN doesn't match. Check the PIN on your phone.", "رمز PIN غير مطابق. تحقّق من الرمز الظاهر على هاتفك." },
+                { "Too many wrong PINs. Start pairing again on your phone.", "محاولات خاطئة كثيرة. ابدأ الإقران من جديد على هاتفك." },
+                { "No phone is showing a PIN yet. Open the page on your phone and tap Pair.", "لا يوجد هاتف يعرض رمز PIN بعد. افتح الصفحة على هاتفك واضغط «إقران»." },
+                { "Your phone is showing a PIN. Type it here.", "يعرض هاتفك رمز PIN. اكتبه هنا." },
+                { "1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.", "1. امسح هذا الرمز بكاميرا هاتفك (يجب أن يكون على شبكة Wi-Fi نفسها التي يتصل بها هذا الكمبيوتر) ثم اضغط «إقران»." },
+                { "2. Your phone shows a 6-digit PIN. Type it below.", "2. يعرض هاتفك رمز PIN من 6 أرقام. اكتبه أدناه." },
+                { "Pair", "إقران" },
             };
         }
         public static Dictionary<string, string> Chinese()
@@ -1331,10 +1338,17 @@ namespace PipStudio
                 { "It stops working right away. You can pair it again any time.", "它会立即停止工作。你可以随时重新配对。" },
                 { "No network", "没有网络" },
                 { "PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.", "PiP Studio 找不到此电脑在本地网络中的地址。请连接 Wi-Fi 或以太网后重试。" },
-                { "Or open {0} on your phone and type the code {1}", "或者在手机上打开 {0} 并输入代码 {1}" },
                 { "Paired with {0}. You can close this.", "已与 {0} 配对。现在可以关闭此窗口。" },
-                { "Scan this code with your phone's camera. Your phone needs to be on the same Wi-Fi as this PC. The code works once, while this is open.", "用手机相机扫描此二维码。手机需要与此电脑连接同一个 Wi-Fi。此代码仅在此窗口打开时有效，且只能使用一次。" },
                 { "Couldn't open a network port. Another app may be using it.", "无法打开网络端口。可能有其他应用正在使用它。" },
+                { "Or open {0} on your phone", "或者在手机上打开 {0}" },
+                { "Waiting for your phone…", "正在等待你的手机…" },
+                { "That PIN doesn't match. Check the PIN on your phone.", "PIN 不匹配。请核对手机上显示的 PIN。" },
+                { "Too many wrong PINs. Start pairing again on your phone.", "错误的 PIN 次数过多。请在手机上重新开始配对。" },
+                { "No phone is showing a PIN yet. Open the page on your phone and tap Pair.", "还没有手机显示 PIN。请在手机上打开页面并点按“配对”。" },
+                { "Your phone is showing a PIN. Type it here.", "你的手机正在显示 PIN。请在此输入。" },
+                { "1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.", "1. 用手机相机扫描此二维码（手机需与此电脑连接同一个 Wi-Fi），然后点按“配对”。" },
+                { "2. Your phone shows a 6-digit PIN. Type it below.", "2. 手机会显示一个 6 位 PIN。请在下方输入。" },
+                { "Pair", "配对" },
             };
         }
     }

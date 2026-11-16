@@ -26,6 +26,7 @@
   <ItemGroup>
     <!-- the phone companion's page and icon, served by PiP Studio itself (Companion.cs) -->
     <EmbeddedResource Include="companion\index.html" LogicalName="companion.index.html" />
+    <EmbeddedResource Include="companion\crypto.js" LogicalName="companion.crypto.js" />
     <EmbeddedResource Include="assets\icon.png" LogicalName="companion.icon.png" />
   </ItemGroup>
   <ItemGroup>

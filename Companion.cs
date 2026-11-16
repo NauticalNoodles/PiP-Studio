@@ -19,9 +19,15 @@ namespace PipStudio
     /// Phone companion (Settings > General > Phone companion): control PiPs and every app's volume from a phone's browser.
     /// - Off by default. When on, PiP Studio listens on one port (48765, or the next free one) and answers only devices on
     ///   the local network (private and link-local addresses); nothing goes over the internet.
-    /// - Pairing: "Pair a phone" shows a QR code with a one-time code that works once, only while that dialog is open. The
-    ///   phone trades it for its own key, which it keeps; PiP Studio keeps only a SHA-256 of each key, and Remove forgets one.
-    /// - The phone page (companion\index.html) is served by PiP Studio itself and polls /api/state about once a second.
+    /// - Pairing works like Moonlight and Sunshine: the phone shows a 6-digit PIN and you type it into PiP Studio's Pair a
+    ///   phone dialog (phones can only start pairing while it's open). Behind the PIN is an X25519 key exchange, so the PIN
+    ///   only matches when nobody sat in between (CompanionCrypto). Each phone then has its own key; PiP Studio keeps it
+    ///   locked to your Windows account (DPAPI), and Remove forgets it.
+    /// - Every request after that is encrypted and authenticated (ChaCha20-Poly1305) through /api/call, answers too, with
+    ///   a timestamp and a list of recent nonces so old messages can't be replayed.
+    /// - The phone page (companion\index.html + crypto.js) is served by PiP Studio itself and asks for the state about once
+    ///   a second. It travels unencrypted (the browser needs it before any keys exist), so someone able to tamper with your
+    ///   Wi-Fi traffic could swap the page itself; reading or forging the messages isn't possible.
     /// - A plain TcpListener with a tiny HTTP/1.1 reader, because HttpListener needs administrator rights to listen on the
     ///   network. Requests are small JSON; everything that touches PiPs or audio runs on the UI thread.
     /// </summary>
@@ -150,27 +156,61 @@ namespace PipStudio
             return false;
         }
 
-        // ------------------------------------------------------------ pairing
-        static string pairCode;
-        static DateTime pairUntil;
+        // ------------------------------------------------------------ pairing (see CompanionCrypto for how the PIN works)
+        static bool pairingOpen;
+        static readonly List<PairSession> sessions = new List<PairSession>();
+        static int wrongPins;
         static readonly Dictionary<string, DateTime> lastSeen = new Dictionary<string, DateTime>();
         static readonly Dictionary<string, List<DateTime>> failures = new Dictionary<string, List<DateTime>>();
+        static readonly Dictionary<string, byte[]> keyCache = new Dictionary<string, byte[]>();
 
-        /// <summary>A paired phone. Only a hash of its key is kept.</summary>
-        public class Device { public string Id, Hash, Name; public DateTime? LastSeen; }
-
-        /// <summary>Starts pairing: returns the one-time code for the QR (valid for 10 minutes, once, until EndPairing).</summary>
-        public static string BeginPairing()
+        /// <summary>One phone partway through pairing.</summary>
+        class PairSession
         {
-            const string letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";              // no 0/O or 1/I, in case it's typed
-            var b = RandomNumberGenerator.GetBytes(8);
-            var sb = new StringBuilder();
-            foreach (var x in b) sb.Append(letters[x % letters.Length]);
-            lock (gate) { pairCode = sb.ToString(); pairUntil = DateTime.UtcNow.AddMinutes(10); }
-            return pairCode;
+            public string Id, Name, Pin, DeviceId;
+            public byte[] Commit, PcPriv, PcPub, PcNonce, Key;
+            public DateTime Started = DateTime.UtcNow;
+            public bool Expired { get { return (DateTime.UtcNow - Started).TotalMinutes > 10; } }
         }
 
-        public static void EndPairing() { lock (gate) pairCode = null; }
+        /// <summary>A paired phone. Its key is kept locked to this Windows account (DPAPI).</summary>
+        public class Device { public string Id, Sealed, Name; public DateTime? LastSeen; }
+
+        /// <summary>The Pair a phone dialog opened: phones may start pairing until EndPairing.</summary>
+        public static void BeginPairing() { lock (gate) { pairingOpen = true; sessions.Clear(); wrongPins = 0; } }
+
+        public static void EndPairing() { lock (gate) { pairingOpen = false; sessions.Clear(); } }
+
+        public enum PinResult { Paired, Wrong, NoPhone, TooMany }
+
+        /// <summary>You typed the PIN a phone shows. The phone whose exchange gives that PIN is paired.</summary>
+        public static PinResult ConfirmPin(string pin, out string phoneName)
+        {
+            phoneName = null;
+            pin = new string((pin ?? "").Where(char.IsDigit).ToArray());
+            PairSession match = null;
+            lock (gate)
+            {
+                sessions.RemoveAll(x => x.Expired);
+                var waiting = sessions.Where(x => x.Pin != null && x.DeviceId == null).ToList();
+                if (waiting.Count == 0) return PinResult.NoPhone;
+                var hits = waiting.Where(x => SameText(x.Pin, pin)).ToList();
+                if (hits.Count != 1)                                                // no match (or, absurdly, two): not paired
+                {
+                    if (++wrongPins >= 5) { sessions.Clear(); wrongPins = 0; return PinResult.TooMany; }
+                    return PinResult.Wrong;
+                }
+                match = hits[0];
+                match.DeviceId = Convert.ToHexString(RandomNumberGenerator.GetBytes(6)).ToLowerInvariant();
+                foreach (var other in waiting) if (other != match) sessions.Remove(other);   // one phone per PIN typed
+            }
+            var d = new Device { Id = match.DeviceId, Sealed = CompanionCrypto.Protect(match.Key), Name = match.Name };
+            var l = Devices(); l.Add(d); SaveDevices(l);
+            lock (gate) { keyCache[d.Id] = match.Key; lastSeen[d.Id] = DateTime.Now; }
+            phoneName = d.Name;
+            Raise();
+            return PinResult.Paired;
+        }
 
         public static List<Device> Devices()
         {
@@ -182,14 +222,14 @@ namespace PipStudio
                 DateTime seen;
                 bool known;
                 lock (gate) known = lastSeen.TryGetValue(f[0], out seen);
-                l.Add(new Device { Id = f[0], Hash = f[1], Name = Uri.UnescapeDataString(f[2]), LastSeen = known ? seen : (DateTime?)null });
+                l.Add(new Device { Id = f[0], Sealed = f[1], Name = Uri.UnescapeDataString(f[2]), LastSeen = known ? seen : (DateTime?)null });
             }
             return l;
         }
 
         static void SaveDevices(List<Device> l)
         {
-            App.S.CompanionDevices = string.Join(";", l.Select(d => d.Id + "|" + d.Hash + "|" + Uri.EscapeDataString(d.Name ?? "Phone")));
+            App.S.CompanionDevices = string.Join(";", l.Select(d => d.Id + "|" + d.Sealed + "|" + Uri.EscapeDataString(d.Name ?? "Phone")));
             App.I.SaveSettingsSoon();
         }
 
@@ -197,10 +237,20 @@ namespace PipStudio
         public static void Remove(string id)
         {
             OnUi(() => { SaveDevices(Devices().Where(d => d.Id != id).ToList()); return 0; });
+            lock (gate) keyCache.Remove(id);
             Raise();
         }
 
-        static string Sha(string s) { return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(s))).ToLowerInvariant(); }
+        /// <summary>A paired phone's key, or null.</summary>
+        static byte[] KeyFor(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            lock (gate) { byte[] k; if (keyCache.TryGetValue(id, out k)) return k; }
+            var d = OnUi(Devices).FirstOrDefault(x => x.Id == id);
+            var key = d == null ? null : CompanionCrypto.Unprotect(d.Sealed);
+            if (key != null) lock (gate) keyCache[id] = key;
+            return key;
+        }
 
         static bool SameText(string a, string b)
         {
@@ -230,7 +280,7 @@ namespace PipStudio
         }
 
         // ------------------------------------------------------------ HTTP
-        class Request { public string Method, Path, Host, Auth, Ip; public byte[] Body; }
+        class Request { public string Method, Path, Host, Ip; public byte[] Body; }
 
         static async Task AcceptLoop(TcpListener l, CancellationToken token)
         {
@@ -287,7 +337,6 @@ namespace PipStudio
                     if (colon <= 0) continue;
                     string k = line.Substring(0, colon).Trim().ToLowerInvariant(), v = line.Substring(colon + 1).Trim();
                     if (k == "host") r.Host = v;
-                    else if (k == "authorization") r.Auth = v;
                     else if (k == "content-length") int.TryParse(v, out len);
                 }
                 if (len < 0 || len > MaxBody) return null;
@@ -332,6 +381,7 @@ namespace PipStudio
 
             string path = r.Path.Split('?')[0];
             if (r.Method == "GET" && (path == "/" || path == "/index.html")) { await Send(s, 200, "text/html; charset=utf-8", Resource("companion.index.html")); return; }
+            if (r.Method == "GET" && path == "/crypto.js") { await Send(s, 200, "text/javascript; charset=utf-8", Resource("companion.crypto.js")); return; }
             if (r.Method == "GET" && path == "/icon.png") { await Send(s, 200, "image/png", Resource("companion.icon.png"), true); return; }
             if (r.Method == "GET" && path == "/manifest.webmanifest")
             {
@@ -354,45 +404,138 @@ namespace PipStudio
                 catch { await Json(s, new { error = "Bad request" }, 400); return; }
             }
 
-            if (r.Method == "POST" && path == "/api/pair") { await Pair(s, r, body); return; }
-
-            var device = Authorize(r);
-            if (device == null) { Failed(r.Ip); await Json(s, new { error = "Not paired" }, 401); return; }
-            lock (gate) lastSeen[device.Id] = DateTime.Now;
-
-            if (r.Method == "GET" && path == "/api/state") { await Json(s, OnUi(State)); return; }
-            if (r.Method == "POST" && path == "/api/pip") { bool ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"))); await Json(s, new { ok }); return; }
-            if (r.Method == "POST" && path == "/api/global") { bool ok = OnUi(() => GlobalAction(Str(body, "action"))); await Json(s, new { ok }); return; }
-            if (r.Method == "POST" && path == "/api/audio") { bool ok = OnUi(() => AudioAction(Str(body, "process"), Num(body, "volume"), Bool(body, "muted"))); await Json(s, new { ok }); return; }
+            if (r.Method == "POST" && path == "/api/pair/start") { await PairStart(s, r, body); return; }
+            if (r.Method == "POST" && path == "/api/pair/reveal") { await PairReveal(s, r, body); return; }
+            if (r.Method == "POST" && path == "/api/pair/status") { await PairStatus(s, body); return; }
+            if (r.Method == "POST" && path == "/api/call") { await Call(s, r, body); return; }
             await Json(s, new { error = "Not found" }, 404);
         }
 
-        static async Task Pair(NetworkStream s, Request r, JsonElement body)
+        static byte[] B64(string s) { if (string.IsNullOrEmpty(s)) return null; try { return Convert.FromBase64String(s); } catch { return null; } }
+        static byte[] Utf8(string s) { return Encoding.UTF8.GetBytes(s); }
+
+        // ------------------------------------------------------------ pairing over the network
+        /// <summary>Step 1: the phone commits to its key; PiP Studio answers with a fresh key of its own.</summary>
+        static async Task PairStart(NetworkStream s, Request r, JsonElement body)
         {
-            string code = (Str(body, "code") ?? "").Trim().ToUpperInvariant();
-            bool ok;
-            lock (gate)
-            {
-                ok = pairCode != null && DateTime.UtcNow < pairUntil && SameText(code, pairCode);
-                if (ok) pairCode = null;                                             // works once
-            }
-            if (!ok) { Failed(r.Ip); await Json(s, new { error = "That code didn't work. Check it, or press Pair a phone in PiP Studio again for a new one." }, 403); return; }
-            string key = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+            var commit = B64(Str(body, "commit"));
+            if (commit == null || commit.Length != 32) { Failed(r.Ip); await Json(s, new { error = "Bad request" }, 400); return; }
             string name = (Str(body, "name") ?? "Phone").Trim();
             if (name.Length == 0) name = "Phone";
             if (name.Length > 40) name = name.Substring(0, 40);
-            var d = new Device { Id = Convert.ToHexString(RandomNumberGenerator.GetBytes(6)).ToLowerInvariant(), Hash = Sha(key), Name = name };
-            OnUi(() => { var l = Devices(); l.Add(d); SaveDevices(l); return 0; });
-            lock (gate) lastSeen[d.Id] = DateTime.Now;
-            Raise();
-            await Json(s, new { token = key, pc = Environment.MachineName });
+            PairSession ps;
+            lock (gate)
+            {
+                if (!pairingOpen) { ps = null; }
+                else
+                {
+                    sessions.RemoveAll(x => x.Expired);
+                    while (sessions.Count >= 4) sessions.RemoveAt(0);               // a few phones at once at most
+                    byte[] priv, pub;
+                    CompanionCrypto.KeyPair(out priv, out pub);
+                    ps = new PairSession { Id = Convert.ToHexString(RandomNumberGenerator.GetBytes(12)).ToLowerInvariant(), Name = name, Commit = commit, PcPriv = priv, PcPub = pub, PcNonce = RandomNumberGenerator.GetBytes(16) };
+                    sessions.Add(ps);
+                }
+            }
+            if (ps == null) { await Json(s, new { error = "not-open" }, 403); return; }
+            await Json(s, new { session = ps.Id, spub = Convert.ToBase64String(ps.PcPub), ns = Convert.ToBase64String(ps.PcNonce) });
         }
 
-        static Device Authorize(Request r)
+        /// <summary>Step 2: the phone shows its key (it must match its commitment). Both sides now know the PIN.</summary>
+        static async Task PairReveal(NetworkStream s, Request r, JsonElement body)
         {
-            if (r.Auth == null || !r.Auth.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase)) return null;
-            string h = Sha(r.Auth.Substring(7).Trim());
-            return OnUi(Devices).FirstOrDefault(d => SameText(d.Hash, h));
+            string id = Str(body, "session");
+            var cpub = B64(Str(body, "cpub"));
+            var nc = B64(Str(body, "nc"));
+            bool ok = false;
+            lock (gate)
+            {
+                var ps = sessions.FirstOrDefault(x => x.Id == id && !x.Expired && x.Pin == null);
+                if (ps != null && cpub != null && cpub.Length == 32 && nc != null && nc.Length == 16
+                    && CryptographicOperations.FixedTimeEquals(CompanionCrypto.Commit(cpub, nc), ps.Commit))
+                {
+                    var shared = CompanionCrypto.Shared(ps.PcPriv, cpub);
+                    if (shared != null)
+                    {
+                        ps.Pin = CompanionCrypto.Pin(shared, cpub, ps.PcPub, nc, ps.PcNonce);
+                        ps.Key = CompanionCrypto.DeviceKey(shared, cpub, ps.PcPub, nc, ps.PcNonce);
+                        ps.PcPriv = null;                                            // done with it
+                        ok = true;
+                    }
+                }
+            }
+            if (!ok) { Failed(r.Ip); await Json(s, new { error = "Pairing failed. Start again." }, 403); return; }
+            Raise();                                                                 // the dialog: a phone is showing a PIN
+            await Json(s, new { ok = true });
+        }
+
+        /// <summary>The phone waits here until you type its PIN in PiP Studio.</summary>
+        static async Task PairStatus(NetworkStream s, JsonElement body)
+        {
+            string id = Str(body, "session");
+            object answer;
+            lock (gate)
+            {
+                var ps = sessions.FirstOrDefault(x => x.Id == id && !x.Expired);
+                if (ps == null) answer = new { state = "gone" };
+                else if (ps.DeviceId != null) { answer = new { state = "paired", id = ps.DeviceId, pc = Environment.MachineName }; sessions.Remove(ps); }
+                else answer = new { state = "waiting" };
+            }
+            await Json(s, answer);
+        }
+
+        /// <summary>True while a phone shows a PIN and waits for you to type it.</summary>
+        public static bool PhoneWaiting { get { lock (gate) return sessions.Any(x => x.Pin != null && x.DeviceId == null && !x.Expired); } }
+
+        // ------------------------------------------------------------ encrypted calls from paired phones
+        static readonly Dictionary<string, Dictionary<string, DateTime>> seenNonces = new Dictionary<string, Dictionary<string, DateTime>>();
+        const double ClockSlackMinutes = 5;
+
+        /// <summary>Every request from a paired phone: {id, n, c} where c is the sealed {m, p, b, t}. The answer is sealed too.</summary>
+        static async Task Call(NetworkStream s, Request r, JsonElement body)
+        {
+            string id = Str(body, "id"), nB64 = Str(body, "n");
+            var key = KeyFor(id);
+            var nonce = B64(nB64);
+            var sealedReq = B64(Str(body, "c"));
+            var plain = key == null || nonce == null || sealedReq == null ? null
+                : CompanionCrypto.Open(CompanionCrypto.Direction(key, "c2s"), nonce, sealedReq, Utf8("c2s|" + id));
+            if (plain == null) { Failed(r.Ip); await Json(s, new { error = "Not paired" }, 401); return; }
+
+            JsonElement req;
+            try { req = JsonDocument.Parse(plain).RootElement.Clone(); }
+            catch { await Json(s, new { error = "Bad request" }, 400); return; }
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            double t = Num(req, "t") ?? 0;
+            if (Math.Abs(now - t) > ClockSlackMinutes * 60000) { await Json(s, new { error = "clock", now }, 409); return; }   // the phone corrects its clock and tries again
+            bool fresh;
+            lock (gate)
+            {
+                Dictionary<string, DateTime> seen;
+                if (!seenNonces.TryGetValue(id, out seen)) seenNonces[id] = seen = new Dictionary<string, DateTime>();
+                foreach (var old in seen.Where(x => (DateTime.UtcNow - x.Value).TotalMinutes > ClockSlackMinutes * 2).Select(x => x.Key).ToList()) seen.Remove(old);
+                fresh = !seen.ContainsKey(nB64);                                     // a message seen before is a replay
+                if (fresh) { seen[nB64] = DateTime.UtcNow; lastSeen[id] = DateTime.Now; }
+            }
+            if (!fresh) { await Json(s, new { error = "replay" }, 409); return; }
+
+            object result = Route(Str(req, "m"), Str(req, "p"), req.TryGetProperty("b", out var b) ? b : default(JsonElement));
+            var answer = JsonSerializer.SerializeToUtf8Bytes(result ?? new { error = "Not found" });
+            var rn = RandomNumberGenerator.GetBytes(12);
+            var sealedAnswer = CompanionCrypto.Seal(CompanionCrypto.Direction(key, "s2c"), rn, answer, Utf8("s2c|" + id + "|" + nB64));
+            await Json(s, new { n = Convert.ToBase64String(rn), c = Convert.ToBase64String(sealedAnswer) });
+        }
+
+        static object Route(string method, string path, JsonElement body)
+        {
+            switch ((method ?? "") + " " + (path ?? ""))
+            {
+                case "GET /api/state": return OnUi(State);
+                case "POST /api/pip": return new { ok = OnUi(() => PipAction(Str(body, "id"), Str(body, "action"), Num(body, "value"))) };
+                case "POST /api/global": return new { ok = OnUi(() => GlobalAction(Str(body, "action"))) };
+                case "POST /api/audio": return new { ok = OnUi(() => AudioAction(Str(body, "process"), Num(body, "volume"), Bool(body, "muted"))) };
+            }
+            return null;
         }
 
         static byte[] Resource(string name)

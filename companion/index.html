@@ -9,10 +9,13 @@
 <link rel="icon" href="/icon.png">
 <link rel="apple-touch-icon" href="/icon.png">
 <title>PiP Studio</title>
+<script src="/crypto.js"></script>
 <!--
   PiP Studio's phone companion. Served by PiP Studio itself (Companion.cs) on the local network; no outside requests.
-  Pairing: the QR code opens this page with #pair=CODE; the page trades the code for its own key (kept in this browser).
-  Then it polls /api/state about once a second while it's on screen and sends actions as small JSON POSTs.
+  Pairing (like Moonlight): this page and PiP Studio agree on a key with X25519 and both work out a 6-digit PIN from it;
+  you type the PIN into PiP Studio, which only accepts it if nobody sat in between (see crypto.js and CompanionCrypto.cs).
+  After that every request and answer is encrypted and authenticated (ChaCha20-Poly1305) through /api/call.
+  It asks for the state about once a second while it's on screen.
 -->
 <style>
   :root {
@@ -102,8 +105,11 @@
   #pair ol { text-align: left; color: var(--sub); padding-left: 20px; margin: 0 0 24px; }
   #pair ol li { margin-bottom: 6px; }
   #pair b { color: var(--text); }
-  .codebox { display: flex; gap: 8px; }
-  .codebox input { flex: 1; min-width: 0; min-height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font: inherit; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; padding: 0 14px; }
+  .wide { width: 100%; }
+  .pin { font-size: 52px; font-weight: 700; letter-spacing: 6px; font-variant-numeric: tabular-nums; margin: 8px 0 12px; }
+  .waiting { color: var(--sub); margin: 0 0 20px; animation: breathe 1.6s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .45; } }
+  @media (prefers-reduced-motion: reduce) { .waiting { animation: none; } }
   #pairMsg { margin-top: 14px; min-height: 1.4em; color: var(--danger); }
   .foot { text-align: center; color: var(--faint); font-size: 12px; margin-top: 20px; }
   .foot button { color: var(--sub); text-decoration: underline; font-size: 12px; }
@@ -111,20 +117,25 @@
 </head>
 <body>
 
-<!-- not paired yet -->
+<!-- not paired yet: like Moonlight, this phone shows a PIN and you type it into PiP Studio -->
 <section id="pair" class="hidden">
   <img src="/icon.png" alt="">
   <h2>Connect to PiP Studio</h2>
-  <p>Control your PiPs and every app's volume from this phone.</p>
-  <ol>
-    <li>On your PC, open <b>PiP Studio</b> &rsaquo; <b>Settings</b> &rsaquo; <b>General</b> &rsaquo; <b>Phone companion</b>.</li>
-    <li>Press <b>Pair a phone</b> and scan the QR code with this phone's camera.</li>
-  </ol>
-  <p style="margin-bottom:10px">Or type the code PiP Studio shows:</p>
-  <form class="codebox" id="codeForm">
-    <input id="codeInput" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="8" placeholder="CODE" aria-label="Pairing code">
-    <button class="primary" type="submit">Pair</button>
-  </form>
+  <div id="pairStart">
+    <p>Control your PiPs and every app's volume from this phone.</p>
+    <ol>
+      <li>On your PC, open <b>PiP Studio</b> &rsaquo; <b>Settings</b> &rsaquo; <b>General</b> &rsaquo; <b>Phone companion</b> and press <b>Pair a phone</b>.</li>
+      <li>Tap <b>Pair</b> below.</li>
+      <li>Type the PIN this phone shows into PiP Studio.</li>
+    </ol>
+    <button class="primary wide" id="pairBtn">Pair</button>
+  </div>
+  <div id="pairPin" class="hidden">
+    <p>Type this PIN in PiP Studio on your PC:</p>
+    <div class="pin" id="pinText" aria-live="polite"></div>
+    <p class="waiting">Waiting for PiP Studio…</p>
+    <button class="secondary" id="pairCancel">Cancel</button>
+  </div>
   <div id="pairMsg" role="alert"></div>
 </section>
 
@@ -165,12 +176,15 @@
 "use strict";
 (() => {
   const $ = (s) => document.querySelector(s);
-  const KEY = "pipstudio.key";
+  const C = window.PipCrypto;
+  // what pairing left in this browser: the device id PiP Studio gave us and our shared key (base64)
+  const KEY = "pipstudio.device";
+  let memDev = null;
   const store = {
-    get() { try { return localStorage.getItem(KEY); } catch (e) { return memKey; } },
-    set(v) { memKey = v; try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {} }
+    get() { try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : null; } catch (e) { return memDev; } },
+    set(v) { memDev = v; try { v ? localStorage.setItem(KEY, JSON.stringify(v)) : localStorage.removeItem(KEY); } catch (e) {} }
   };
-  let memKey = null;
+  try { localStorage.removeItem("pipstudio.key"); } catch (e) {}   // the old, unencrypted kind of pairing
 
   // ---------------------------------------------------------------- icons
   const P = (d, fill) => `<svg viewBox="0 0 24 24" ${fill ? 'fill="currentColor"' : 'fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"'}>${d}</svg>`;
@@ -198,15 +212,38 @@
   const pct = (v) => Math.round((v ?? 0) * 100);
 
   // ---------------------------------------------------------------- talking to PiP Studio
-  async function api(method, path, body) {
-    const headers = { "Content-Type": "application/json" };
-    const k = store.get();
-    if (k) headers.Authorization = "Bearer " + k;
-    const r = await fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: "no-store" });
+  async function postJson(path, body) {
+    const r = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), cache: "no-store" });
     let data = null;
     try { data = await r.json(); } catch (e) {}
-    if (r.status === 401) { store.set(null); showPair("This phone isn't paired any more. Pair it again in PiP Studio."); throw new Error("unpaired"); }
-    if (!r.ok) throw Object.assign(new Error((data && data.error) || ("Error " + r.status)), { status: r.status });
+    return { status: r.status, data };
+  }
+
+  // every request to PiP Studio is sealed with this phone's key, and so is every answer
+  let keys = null, clockOffset = 0;
+  function deriveKeys(dev) {
+    const k = C.unb64(dev.key), none = new Uint8Array(0);
+    return { id: dev.id, c2s: C.hkdf(k, none, C.enc.encode("c2s"), 32), s2c: C.hkdf(k, none, C.enc.encode("s2c"), 32) };
+  }
+
+  async function api(method, path, body, retry) {
+    const dev = store.get();
+    if (!dev) { showPair(); throw new Error("unpaired"); }
+    if (!keys || keys.id !== dev.id) keys = deriveKeys(dev);
+    const nonce = C.random(12), nB64 = C.b64(nonce);
+    const plain = C.enc.encode(JSON.stringify({ m: method, p: path, b: body || null, t: Date.now() + clockOffset }));
+    const sealed = C.seal(keys.c2s, nonce, plain, C.enc.encode("c2s|" + dev.id));
+    const r = await postJson("/api/call", { id: dev.id, n: nB64, c: C.b64(sealed) });
+    if (r.status === 401) { store.set(null); keys = null; showPair("This phone isn't paired any more. Pair it again."); throw new Error("unpaired"); }
+    if (r.status === 409 && !retry) {                              // our clock is off (or a hiccup): fix and try once more
+      if (r.data && r.data.error === "clock" && r.data.now) clockOffset = r.data.now - Date.now();
+      return api(method, path, body, true);
+    }
+    if (r.status !== 200 || !r.data || !r.data.c) throw Object.assign(new Error((r.data && r.data.error) || ("Error " + r.status)), { status: r.status });
+    const opened = C.open(keys.s2c, C.unb64(r.data.n), C.unb64(r.data.c), C.enc.encode("s2c|" + dev.id + "|" + nB64));
+    if (!opened) throw Object.assign(new Error("PiP Studio's answer couldn't be verified"), { status: 400 });
+    const data = JSON.parse(C.dec.decode(opened));
+    if (data && data.error) throw Object.assign(new Error(data.error), { status: 404 });
     return data;
   }
   const act = (id, action, value) => api("POST", "/api/pip", value === undefined ? { id, action } : { id, action, value }).then(() => pollSoon(250)).catch(netError);
@@ -223,22 +260,50 @@
     return "Phone";
   }
 
-  async function pair(code) {
+  // like Moonlight: commit to our key, get PiP Studio's, reveal ours, both work out the PIN, you type it on the PC
+  let pairing = null;
+  async function pair() {
     $("#pairMsg").textContent = "";
+    const me = C.keyPair(), nc = C.random(16);
+    const token = pairing = {};
     try {
-      const r = await api("POST", "/api/pair", { code, name: deviceName() });
-      store.set(r.token);
-      history.replaceState(null, "", "/");                        // the code is used up; don't keep it in the address
-      showApp();
+      const st = await postJson("/api/pair/start", { commit: C.b64(C.sha256(C.concat(me.pub, nc))), name: deviceName() });
+      if (st.status === 403) throw new Error("PiP Studio isn't ready to pair. On your PC, press Pair a phone first, then tap Pair again.");
+      if (st.status !== 200) throw new Error((st.data && st.data.error) || "Pairing didn't start. Try again.");
+      const spub = C.unb64(st.data.spub), ns = C.unb64(st.data.ns), session = st.data.session;
+      const rv = await postJson("/api/pair/reveal", { session, cpub: C.b64(me.pub), nc: C.b64(nc) });
+      if (rv.status !== 200) throw new Error((rv.data && rv.data.error) || "Pairing failed. Try again.");
+      const shared = C.x25519(me.priv, spub);
+      const transcript = C.sha256(C.concat(C.enc.encode("pipstudio-pair-v1"), me.pub, spub, nc, ns));
+      const pb = C.hkdf(shared, transcript, C.enc.encode("pin"), 4);
+      const pin = String((((pb[0] << 24) | (pb[1] << 16) | (pb[2] << 8) | pb[3]) >>> 0) % 1000000).padStart(6, "0");
+      const deviceKey = C.hkdf(shared, transcript, C.enc.encode("device-key"), 32);
+      $("#pinText").textContent = pin.slice(0, 3) + " " + pin.slice(3);
+      $("#pairStart").classList.add("hidden"); $("#pairPin").classList.remove("hidden");
+      // wait until you type the PIN on the PC
+      for (let i = 0; i < 300 && pairing === token; i++) {
+        await new Promise((ok) => setTimeout(ok, 1000));
+        if (pairing !== token) return;
+        const ss = await postJson("/api/pair/status", { session }).catch(() => ({ status: 0 }));
+        if (ss.status !== 200) continue;
+        if (ss.data.state === "paired") { store.set({ id: ss.data.id, key: C.b64(deviceKey), pc: ss.data.pc }); keys = null; pairing = null; showApp(); return; }
+        if (ss.data.state === "gone") throw new Error("Pairing was cancelled or timed out. Tap Pair to try again.");
+      }
+      if (pairing === token) throw new Error("Pairing timed out. Tap Pair to try again.");
     } catch (e) {
-      if (e.message !== "unpaired") $("#pairMsg").textContent = e.status ? e.message : "Can't reach PiP Studio. Is this phone on the same Wi-Fi as your PC?";
+      if (pairing !== token) return;
+      pairing = null;
+      $("#pairPin").classList.add("hidden"); $("#pairStart").classList.remove("hidden");
+      $("#pairMsg").textContent = e instanceof TypeError ? "Can't reach PiP Studio. Is this phone on the same Wi-Fi as your PC?" : e.message;
     }
   }
 
   function showPair(msg) {
     stopPolling();
+    pairing = null;
     $("#appView").classList.add("hidden");
     $("#pair").classList.remove("hidden");
+    $("#pairPin").classList.add("hidden"); $("#pairStart").classList.remove("hidden");
     $("#pairMsg").textContent = msg || "";
   }
 
@@ -248,7 +313,8 @@
     startPolling();
   }
 
-  $("#codeForm").addEventListener("submit", (e) => { e.preventDefault(); const c = $("#codeInput").value.trim(); if (c) pair(c); });
+  $("#pairBtn").addEventListener("click", pair);
+  $("#pairCancel").addEventListener("click", () => showPair());
   $("#forget").addEventListener("click", () => {
     if (!confirm("Disconnect this phone? You'll need to pair it again to use it. (To remove it completely, use Remove in PiP Studio's settings.)")) return;
     store.set(null); showPair();
@@ -428,15 +494,9 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden && running) poll(); });
 
   // ---------------------------------------------------------------- start
-  // a QR link (#pair=CODE) pairs straight away, also when this page is already open and only the address's # part changes
-  function fromLink() {
-    const m = location.hash.match(/pair=([A-Za-z0-9]+)/);
-    if (!m) return false;
-    showPair(); $("#codeInput").value = m[1]; pair(m[1]);
-    return true;
-  }
-  window.addEventListener("hashchange", fromLink);
-  if (!fromLink()) { if (store.get()) showApp(); else showPair(); }
+  if (!C || !window.crypto || !crypto.getRandomValues) showPair("This browser can't do the encryption PiP Studio needs. Try Chrome, Edge, Firefox or Safari.");
+  else if (store.get()) showApp();
+  else showPair();
 })();
 </script>
 </body>

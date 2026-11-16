@@ -2584,7 +2584,8 @@ namespace PipStudio
             refreshCompanion();
         }
 
-        /// <summary>The Pair a phone dialog: a QR code with the page's address and a one-time code, valid while it's open.</summary>
+        /// <summary>The Pair a phone dialog, like Moonlight and Sunshine: the phone shows a 6-digit PIN and you type it here.
+        /// The QR code only carries the page's address; phones can start pairing only while this dialog is open.</summary>
         static void ShowPairing()
         {
             string url = Companion.Url;
@@ -2593,41 +2594,67 @@ namespace PipStudio
                 Ask("No network", "PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.", "OK", null, null);
                 return;
             }
-            string code = Companion.BeginPairing();
-            string link = url + "#pair=" + code;
-            var panel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 0) };
+            Companion.BeginPairing();
+            var panel = new StackPanel { HorizontalAlignment = HorizontalAlignment.Center, Margin = new Thickness(0, 4, 0, 0), MinWidth = 300 };
             try
             {
                 using (var gen = new QRCoder.QRCodeGenerator())
-                using (var data = gen.CreateQrCode(link, QRCoder.QRCodeGenerator.ECCLevel.M))
+                using (var data = gen.CreateQrCode(url, QRCoder.QRCodeGenerator.ECCLevel.M))
                 {
                     byte[] png = new QRCoder.PngByteQRCode(data).GetGraphic(8);   // black on white, with a quiet border
                     var img = new BitmapImage();
                     img.BeginInit(); img.StreamSource = new MemoryStream(png); img.CacheOption = BitmapCacheOption.OnLoad; img.EndInit(); img.Freeze();
                     var frame = new Border { Background = Brushes.White, CornerRadius = Looks.CR(8), Padding = new Thickness(6), HorizontalAlignment = HorizontalAlignment.Center,
-                        Child = new Image { Source = img, Width = 220, Height = 220, SnapsToDevicePixels = true } };
+                        Child = new Image { Source = img, Width = 180, Height = 180, SnapsToDevicePixels = true } };
                     RenderOptions.SetBitmapScalingMode(frame.Child, BitmapScalingMode.NearestNeighbor);   // crisp squares
                     panel.Children.Add(frame);
                 }
             }
             catch (Exception ex) { App.ReportError(ex); }
-            var addr = Fluent.Label("Or open " + url + " on your phone and type the code " + code, 13, "Sub");
+            var addr = Fluent.Label("Or open " + url + " on your phone", 13, "Sub");
             addr.TextAlignment = TextAlignment.Center;
-            addr.Margin = new Thickness(0, 12, 0, 0);
+            addr.Margin = new Thickness(0, 10, 0, 14);
             panel.Children.Add(addr);
-            var status = Fluent.Label("", 13, "Accent");
+
+            var pinRow = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
+            var pinBox = new TextBox { Width = 150, FontSize = 22, MaxLength = 7, TextAlignment = TextAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Padding = new Thickness(6, 4, 6, 4) };
+            var pairBtn = PlainButton("Pair", () => { }, true);
+            pairBtn.Margin = new Thickness(8, 0, 0, 0);
+            pinRow.Children.Add(pinBox); pinRow.Children.Add(pairBtn);
+            panel.Children.Add(pinRow);
+            var status = Fluent.Label("Waiting for your phone…", 13, "Sub");
             status.TextAlignment = TextAlignment.Center;
-            status.Margin = new Thickness(0, 8, 0, 0);
+            status.Margin = new Thickness(0, 10, 0, 0);
             panel.Children.Add(status);
-            int before = Companion.Devices().Count;
+
+            bool done = false;
+            Action tryPin = () =>
+            {
+                if (done) return;
+                string name;
+                switch (Companion.ConfirmPin(pinBox.Text, out name))
+                {
+                    case Companion.PinResult.Paired:
+                        done = true;
+                        status.Text = "Paired with " + name + ". You can close this.";
+                        status.SetResourceReference(TextBlock.ForegroundProperty, "Accent");
+                        pinBox.IsEnabled = pairBtn.IsEnabled = false;
+                        break;
+                    case Companion.PinResult.Wrong: status.Text = "That PIN doesn't match. Check the PIN on your phone."; pinBox.SelectAll(); break;
+                    case Companion.PinResult.TooMany: status.Text = "Too many wrong PINs. Start pairing again on your phone."; pinBox.Clear(); break;
+                    default: status.Text = "No phone is showing a PIN yet. Open the page on your phone and tap Pair."; break;
+                }
+            };
+            pairBtn.Click += (o, e) => tryPin();
+            pinBox.KeyDown += (o, e) => { if (e.Key == Key.Enter) { tryPin(); e.Handled = true; } };
             Action onChange = () =>
             {
-                var l = Companion.Devices();
-                if (l.Count > before) status.Text = "Paired with " + l[l.Count - 1].Name + ". You can close this.";
+                if (!done && Companion.PhoneWaiting) status.Text = "Your phone is showing a PIN. Type it here.";
             };
             Companion.Changed += onChange;
-            Ask("Pair a phone", "Scan this code with your phone's camera. Your phone needs to be on the same Wi-Fi as this PC. The code works once, while this is open.",
-                "Done", null, ok => { Companion.Changed -= onChange; Companion.EndPairing(); }, false, panel);
+            Ask("Pair a phone",
+                "1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.\n2. Your phone shows a 6-digit PIN. Type it below.",
+                "Close", null, ok => { Companion.Changed -= onChange; Companion.EndPairing(); }, false, panel, pinBox);
         }
 
         /// <summary>Settings > General > Updates: where things stand, Check now / Update now / What's new, and the daily check.</summary>
