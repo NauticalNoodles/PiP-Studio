@@ -800,29 +800,54 @@
   }
 
   // ---------------------------------------------------------------- volume mixer
+  // The list follows PiP Studio's order (most sound lately first), but calmly: it re-sorts at most every 30 seconds and
+  // never while you're on a slider. New apps join at the bottom, closed ones leave right away. Rows are kept and moved,
+  // not rebuilt, so a slider you're holding never jumps.
+  let audioOrder = [], lastReorder = 0;
+  const REORDER_MS = 30000;
+  function calmOrder(apps) {
+    const names = apps.map((a) => a.process);
+    let order = audioOrder.filter((p) => names.includes(p));
+    for (const p of names) if (!order.includes(p)) order.push(p);
+    const touching = [...busy.keys()].some((k) => k.startsWith("a:") && isBusy(k)) || !!document.querySelector("#audioList input.drag");
+    if (!touching && Date.now() - lastReorder > REORDER_MS) { order = names; lastReorder = Date.now(); }
+    audioOrder = order;
+    return order;
+  }
+
+  function audioRow(a) {
+    const t = document.createElement("template");
+    t.innerHTML = `
+        <div class="app" data-p="${esc(a.process)}">
+          <div class="name">${appIcon(a.process, a.name, true)}<span data-f="name"></span><i class="playing hidden" title="Playing"></i></div>
+          <div class="slider"><button class="iconbtn" data-a="mute" aria-label="Mute">${ICON.vol}</button><div class="range"><i class="rfill"></i><input type="range" min="0" max="100" step="1" aria-label="Volume"></div><div class="lbl"></div></div>
+        </div>`.trim();
+    const row = t.content.firstChild, proc = a.process;
+    const send = (body) => api("POST", "/api/audio", Object.assign({ process: proc }, body)).then(() => pollSoon(250)).catch(netError);
+    row.querySelector("[data-a=mute]").addEventListener("click", (e) => send({ muted: !e.currentTarget.classList.contains("muted") }));
+    wireSlider(row.querySelector("input"), "a:" + proc, (v) => send({ volume: v }));
+    return row;
+  }
+
   function renderAudio(state) {
     const list = $("#audioList");
     if (!state.audio.length) {
       list.innerHTML = `<div class="empty small"><p>No apps are playing sound right now.</p></div>`;
-      list.dataset.sig = "";
+      audioOrder = [];
       return;
     }
-    const sig = state.audio.map((a) => a.process).join("|");
-    if (list.dataset.sig !== sig) {
-      list.dataset.sig = sig;
-      list.innerHTML = state.audio.map((a) => `
-        <div class="app" data-p="${esc(a.process)}">
-          <div class="name">${appIcon(a.process, a.name, true)}<span data-f="name"></span><i class="playing hidden" title="Playing"></i></div>
-          <div class="slider"><button class="iconbtn" data-a="mute" aria-label="Mute">${ICON.vol}</button><div class="range"><i class="rfill"></i><input type="range" min="0" max="100" step="1" aria-label="Volume"></div><div class="lbl"></div></div>
-        </div>`).join("");
-      list.querySelectorAll(".app").forEach((row) => {
-        const proc = row.dataset.p;
-        const send = (body) => api("POST", "/api/audio", Object.assign({ process: proc }, body)).then(() => pollSoon(250)).catch(netError);
-        row.querySelector("[data-a=mute]").addEventListener("click", (e) => send({ muted: !e.currentTarget.classList.contains("muted") }));
-        wireSlider(row.querySelector("input"), "a:" + proc, (v) => send({ volume: v }));
-      });
-      loadIcons(list);
-    }
+    const empty = list.querySelector(".empty");
+    if (empty) empty.remove();
+    const byProc = new Map(state.audio.map((a) => [a.process, a]));
+    const rows = new Map([...list.querySelectorAll(".app")].map((r) => [r.dataset.p, r]));
+    for (const [p, r] of rows) if (!byProc.has(p)) { r.remove(); rows.delete(p); }   // apps that closed
+    let added = false;
+    calmOrder(state.audio).forEach((p, i) => {
+      let row = rows.get(p);
+      if (!row) { row = audioRow(byProc.get(p)); added = true; }
+      if (list.children[i] !== row) list.insertBefore(row, list.children[i] || null);   // only moves what's out of place
+    });
+    if (added) loadIcons(list);
     for (const a of state.audio) {
       const row = list.querySelector(`.app[data-p="${CSS.escape(a.process)}"]`);
       if (!row) continue;

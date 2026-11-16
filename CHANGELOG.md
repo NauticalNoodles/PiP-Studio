@@ -21,7 +21,7 @@ Control PiP Studio from your phone:
 
 - New **Phone companion** in Settings > General: turn it on, press **Pair a phone**, scan the QR code, and type the PIN your phone shows (just like pairing Moonlight with Sunshine)
 - It opens in your phone's browser (Android or iPhone, nothing to install) and shows every PiP, yours and other apps', with buttons to move, resize, minimize, restore and close them, plus opacity and volume sliders
-- Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound
+- Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound, with the apps you actually hear at the top and quiet ones at the bottom (it re-sorts calmly, never while you're using a slider)
 - Tap **Install app** to put it on your home screen, where it opens full screen like a real app
 - A clean, dark look after Apple's Liquid Glass (glass panels with lit edges, glass capsule sliders that turn clear while you drag): each PiP shows the buttons you use most with its volume and opacity underneath, and the rest under **More** (it goes solid if your phone has Reduce transparency on)
 - Every PiP and every app in the volume list shows the app's own icon

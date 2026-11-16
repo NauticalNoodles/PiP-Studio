@@ -212,6 +212,13 @@ namespace PipStudio
         [PreserveSig] int GetMute([MarshalAs(UnmanagedType.Bool)] out bool mute);
     }
 
+    /// <summary>How loud an audio session is right now (the meter Windows' volume mixer shows).</summary>
+    [ComImport, Guid("C02216F6-8C67-4B5B-9D00-D008E73E0064"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    interface IAudioMeterInformation
+    {
+        [PreserveSig] int GetPeakValue(out float peak);
+    }
+
     static class Audio
     {
         static List<ISimpleAudioVolume> Sessions(string processName)
@@ -285,7 +292,14 @@ namespace PipStudio
             public string Process, Name;
             public float Volume;
             public bool Muted, Playing;
+            public double Score;          // how much it has made sound lately (seconds, fading over ~10 minutes)
         }
+
+        // how much each app has made sound lately: playing time that fades away, so apps you listen to rise to the top
+        // and ones that only hold an audio stream open (or played long ago) sink to the bottom
+        static readonly Dictionary<string, double> soundScore = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
+        static DateTime lastScored = DateTime.MinValue;
+        const double ScoreFadeSeconds = 600;
 
         static readonly Dictionary<string, string> niceNames = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
@@ -329,12 +343,32 @@ namespace PipStudio
                         a = new AppVolume { Process = proc, Name = NiceName(proc, (int)pid), Volume = f, Muted = m };
                         byName[proc] = a;
                     }
-                    if (state == 1) a.Playing = true;                              // AudioSessionStateActive
+                    float peak = 0;
+                    var meter = so as IAudioMeterInformation;
+                    if (state == 1 && meter != null) { try { meter.GetPeakValue(out peak); } catch { } }   // AudioSessionStateActive
+                    if (peak > 0.002f) a.Playing = true;                           // actually making sound, not just holding a stream open
                 }
             }
             catch { }
+            lock (soundScore)
+            {
+                var now = DateTime.UtcNow;
+                double dt = lastScored == DateTime.MinValue ? 0 : Math.Min(10, (now - lastScored).TotalSeconds);   // a long gap counts as a short one
+                lastScored = now;
+                double keep = Math.Exp(-dt / ScoreFadeSeconds);
+                foreach (var k in new List<string>(soundScore.Keys)) soundScore[k] *= keep;
+                foreach (var a in byName.Values)
+                {
+                    double sc;
+                    soundScore.TryGetValue(a.Process, out sc);
+                    if (a.Playing) sc += Math.Max(dt, 0.5);
+                    soundScore[a.Process] = sc;
+                    a.Score = sc;
+                }
+            }
             var l = new List<AppVolume>(byName.Values);
-            l.Sort((x, y) => x.Playing != y.Playing ? (x.Playing ? -1 : 1) : string.Compare(x.Name, y.Name, StringComparison.CurrentCultureIgnoreCase));
+            // most sound lately first; apps that never made a sound at the bottom, by name
+            l.Sort((x, y) => x.Score != y.Score ? y.Score.CompareTo(x.Score) : string.Compare(x.Name, y.Name, StringComparison.CurrentCultureIgnoreCase));
             return l;
         }
 
