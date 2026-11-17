@@ -1,0 +1,694 @@
+Windows	Окна
+Running PiPs	Открытые PiP
+Appearance	Внешний вид
+Behavior	Поведение
+Controller	Геймпад
+Shortcuts	Сочетания клавиш
+Settings	Параметры
+Find a setting	Найти параметр
+Search windows	Поиск окон
+Search results	Результаты поиска
+Open or close navigation	Открыть или закрыть навигацию
+Hide explanations	Скрыть пояснения
+Show explanations	Показать пояснения
+Hide the explanations (you can bring them back from the top of the page)	Скрыть пояснения (их можно вернуть в верхней части страницы)
+Point at a setting to see what it does.	Наведите на параметр, чтобы увидеть, что он делает.
+Explanations	Пояснения
+Open in PiP	Открыть в PiP
+Open in picture-in-picture	Открыть в режиме «картинка в картинке»
+Click a window	Щёлкнуть по окну
+Screen region	Область экрана
+Refresh	Обновить
+Next corner	Следующий угол
+Bigger	Больше
+Smaller	Меньше
+Change source	Сменить источник
+Show source	Показать источник
+Show all	Показать все
+Hide all	Скрыть все
+Name	Имя
+Status	Состояние
+Showing	Показывает
+Mode	Режим
+App	Приложение
+Size	Размер
+Position	Положение
+Opacity	Непрозрачность
+Volume	Громкость
+Source	Источник
+In PiP	В PiP
+Minimized	Свёрнуто
+Whole screen	Весь экран
+Auto	Авто
+Starts on the first available window, then switches to the one you last used. Skips minimized and closed windows.	Начинает с первого доступного окна, а затем переключается на окно, которым вы пользовались последним. Пропускает свёрнутые и закрытые окна.
+Starts on the first available window, then switches to the one you were last using, even with Follow turned off.	Начинает с первого доступного окна, а затем переключается на окно, которым вы пользовались, даже если «Следовать» выключено.
+Nothing selected	Ничего не выбрано
+Pick a window in the list.	Выберите окно в списке.
+Mirrors this whole display	Повторяет весь этот экран
+Live preview	Живой предпросмотр
+Waiting for a window	Ожидание окна
+Minimized — it will be restored	Свёрнуто — оно будет восстановлено
+Display {0} (main)	Экран {0} (основной)
+Display {0}	Экран {0}
+Whole screen · {0}	Весь экран · {0}
+PiP Studio is still running	PiP Studio всё ещё работает
+Your shortcuts keep working. Click the tray icon to open it again.	Ваши сочетания клавиш продолжают работать. Щёлкните значок в области уведомлений, чтобы открыть его снова.
+No controller	Нет геймпада
+The picture may freeze. Click for the fix.	Изображение может зависнуть. Щёлкните, чтобы исправить.
+The picture may freeze	Изображение может зависнуть
+This app stops drawing while another window covers it. Restart it with the fix to keep it moving.	Это приложение перестаёт отрисовываться, когда его закрывает другое окно. Перезапустите его с исправлением, чтобы оно продолжало двигаться.
+Restart with the fix	Перезапустить с исправлением
+Always start it with the fix	Всегда запускать с исправлением
+Always start {0} with the fix	Всегда запускать {0} с исправлением
+Fix frozen picture	Исправить зависшее изображение
+Frozen preview	Зависший предпросмотр
+Looking for this app's shortcuts…	Поиск ярлыков этого приложения…
+No desktop, Start or taskbar shortcut was found for this app.	Ярлыки этого приложения не найдены ни на рабочем столе, ни в меню «Пуск», ни на панели задач.
+Adding the fix to the shortcuts…	Добавление исправления в ярлыки…
+Removing the fix from the shortcuts…	Удаление исправления из ярлыков…
+Added the fix to {0} shortcut.	Исправление добавлено в ярлыков: {0}.
+Added the fix to {0} shortcuts.	Исправление добавлено в ярлыков: {0}.
+Removed the fix from {0} shortcut.	Исправление удалено из ярлыков: {0}.
+Removed the fix from {0} shortcuts.	Исправление удалено из ярлыков: {0}.
+Restart {0}?	Перезапустить {0}?
+Restart {0}	Перезапустить {0}
+This closes {0} and starts it again with a setting that keeps its window drawing while other windows cover it.	{0} будет закрыто и снова запущено с параметром, который позволяет окну отрисовываться, даже когда его закрывают другие окна.
+Anything unsaved in it will be lost. It only helps Chromium-based apps (Chrome, Edge, Spotify, Discord, ...).	Всё несохранённое будет потеряно. Помогает только приложениям на основе Chromium (Chrome, Edge, Spotify, Discord, ...).
+{0} stops drawing while other windows cover it, so its PiP can freeze. Restarting it with a fix keeps it drawing. Anything unsaved in it will be lost.	{0} перестаёт отрисовываться, когда его закрывают другие окна, поэтому его PiP может зависнуть. Перезапуск с исправлением позволяет ему отрисовываться дальше. Всё несохранённое будет потеряно.
+This app's program file can't be read (it may be running as administrator), so it can't be restarted from here.	Не удаётся прочитать файл программы этого приложения (возможно, оно запущено от имени администратора), поэтому его нельзя перезапустить отсюда.
+Cancel	Отмена
+OK	ОК
+Not now	Не сейчас
+Restart	Перезапустить
+Restart now	Перезапустить сейчас
+Later	Позже
+Restart PiP Studio?	Перезапустить PiP Studio?
+The new language shows after PiP Studio restarts. Your PiPs come back afterwards.	Новый язык появится после перезапуска PiP Studio. Ваши PiP затем вернутся.
+Language	Язык
+PiP Studio restarts to switch	PiP Studio перезапустится для смены
+Use my Windows language	Язык Windows
+No PiPs are open.\nPick a window on the Windows page, or press {0} anywhere.	Нет открытых PiP.\nВыберите окно на странице «Окна» или нажмите {0} где угодно.
+No settings match “{0}”. Try a different word.	Нет параметров по запросу «{0}». Попробуйте другое слово.
+Add Ctrl, Alt or Win…	Добавьте Ctrl, Alt или Win…
+Press keys…	Нажмите клавиши…
+Not set	Не задано
+Choose	Выбрать
+Colors	Цвета
+PiP window	Окно PiP
+Effects	Эффекты
+New PiPs	Новые PiP
+Placement	Расположение
+Mouse	Мышь
+Smart hiding	Умное скрытие
+Sources	Источники
+Screen regions	Области экрана
+Startup	Запуск
+Notifications	Уведомления
+Privacy	Конфиденциальность
+Performance	Производительность
+Administrator	Администратор
+About	О программе
+Options	Параметры
+Buttons	Кнопки
+App theme	Тема приложения
+Use my Windows setting	Как в Windows
+Light	Светлая
+Dark	Тёмная
+Accent color	Цвет акцента
+The color of highlights, switches, the focus ring and borders. Use Windows' color or pick your own.	Цвет выделения, переключателей, рамки фокуса и границ. Используйте цвет Windows или выберите свой.
+Borders, highlights and controller hints	Границы, выделение и подсказки геймпада
+Use my Windows accent color	Использовать цвет акцента Windows
+Custom accent color	Свой цвет акцента
+Used when the Windows accent color is off	Используется, когда цвет акцента Windows выключен
+Rounded corners	Скруглённые углы
+Square or rounded corners, like other Windows 11 windows.	Прямые или скруглённые углы, как у других окон Windows 11.
+Windows 11 only	Только Windows 11
+Border	Граница
+A thin outline around each PiP, in your accent color or one you pick.	Тонкая рамка вокруг каждого PiP — цвета акцента или выбранного вами.
+A thin outline around each PiP, in your accent color or one you pick	Тонкая рамка вокруг каждого PiP — цвета акцента или выбранного вами
+An outline around each PiP	Рамка вокруг каждого PiP
+Border color	Цвет границы
+Match accent color	Как цвет акцента
+Used when Match accent color is off	Используется, когда «Как цвет акцента» выключено
+Width	Толщина
+Messages under the PiP	Сообщения под PiP
+When you switch sources or change a mode, the message shows below the PiP instead of over the picture	Когда вы меняете источник или режим, сообщение появляется под PiP, а не поверх изображения
+When you switch sources or change a mode, the message shows in a small caption below the PiP instead of over the picture. Volume changes show a level bar there too.	Когда вы меняете источник или режим, сообщение появляется в небольшой подписи под PiP, а не поверх изображения. При изменении громкости там же показывается шкала уровня.
+Show messages below the PiP, not on it	Показывать сообщения под PiP, а не на нём
+Lite mode	Облегчённый режим
+For slower PCs: turns off animations, the Mica background, shadows and live previews	Для медленных ПК: отключает анимацию, фон Mica, тени и живой предпросмотр
+For slower PCs: turns off animations, the Mica background, shadows and live previews. PiPs themselves work the same.	Для медленных ПК: отключает анимацию, фон Mica, тени и живой предпросмотр. Сами PiP работают так же.
+Fewer effects, for slower PCs	Меньше эффектов, для медленных ПК
+Animation effects	Анимация
+Glide, fade and slide effects in PiP Studio and on PiPs	Эффекты скольжения и затухания в PiP Studio и у PiP
+Glide, fade and slide effects in PiP Studio and on PiPs. Off, things jump straight into place.	Эффекты скольжения и затухания в PiP Studio и у PiP. Если выключить, всё сразу встаёт на место.
+Glide and fade effects	Эффекты скольжения и затухания
+Where and how they open	Где и как они открываются
+Small	Маленький
+Medium	Средний
+Large	Большой
+Extra large	Очень большой
+Top left	Вверху слева
+Top middle	Вверху по центру
+Top right	Вверху справа
+Left middle	Слева по центру
+Right middle	Справа по центру
+Bottom left	Внизу слева
+Bottom middle	Внизу по центру
+Bottom right	Внизу справа
+Top	Вверху
+Middle	По центру
+Bottom	Внизу
+Left	Слева
+Right	Справа
+Up	Вверх
+Down	Вниз
+Size limits	Ограничения размера
+Keep tall or wide apps from getting too big. Applies to new PiPs, size presets, resizing and source changes (theater mode ignores them).	Не даёт высоким или широким приложениям становиться слишком большими. Действует для новых PiP, готовых размеров, изменения размера и смены источника (режим кинотеатра их игнорирует).
+Tall or wide apps stop growing at the size you set, as a share of the screen. Applies to new PiPs, size presets, resizing and source changes. Theater mode ignores them.	Высокие или широкие приложения перестают расти на заданном размере — доле экрана. Действует для новых PiP, готовых размеров, изменения размера и смены источника. Режим кинотеатра их игнорирует.
+Stop tall or wide apps getting too big	Не давать высоким или широким приложениям становиться слишком большими
+Limit width	Ограничить ширину
+Maximum width	Максимальная ширина
+Limit height	Ограничить высоту
+Maximum height	Максимальная высота
+Share of the screen	Доля экрана
+Control other apps' PiP windows	Управлять окнами PiP других приложений
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture window of Chrome, Edge, Firefox and other apps.	Когда не открыто ни одного PiP из PiP Studio, ваши сочетания клавиш и геймпад перемещают, меняют размер, затемняют, выключают звук и закрывают окно «картинка в картинке» Chrome, Edge, Firefox и других приложений.
+Steer browser and app PiPs too	Управляет и PiP браузеров и приложений
+Snap other apps' PiPs to spots	Привязывать PiP других приложений к позициям
+Other apps' PiP windows land on the same corners and edge spots as PiP Studio's PiPs, when they open and when you let go of them after dragging.	Окна PiP других приложений встают в те же углы и места у краёв, что и PiP из PiP Studio, — при открытии и когда вы отпускаете их после перетаскивания.
+They land on the same spots as yours	Они встают в те же позиции, что и ваши
+Allow more than one PiP at a time	Разрешить несколько PiP одновременно
+When off, opening a new PiP switches the one that's already open	Если выключено, новый PiP заменяет содержимое уже открытого
+Off: a new PiP replaces the open one	Выкл.: новый PiP заменяет открытый
+Follow the window I just left	Следовать за окном, которое я только что покинул
+When you switch windows, the PiP switches to the one you were on	Когда вы переключаете окна, PiP переключается на то, в котором вы были
+The PiP shows the window you just left	PiP показывает окно, которое вы только что покинули
+Snap after moving	Привязка после перемещения
+Glides to the nearest spot when you let go	Скользит к ближайшей позиции, когда вы отпускаете
+Middle of each edge too	И середина каждого края
+8 spots instead of 4 corners — also used by the arrow keys and D-pad	8 позиций вместо 4 углов — их же используют стрелки и крестовина
+Gap from the screen edges	Отступ от краёв экрана
+Gap from the edges	Отступ от краёв
+Stay on one display	Оставаться на одном экране
+Moving past the edge won't hop to the next display	Выход за край не переносит на следующий экран
+Don't hop to the next display	Не переходить на следующий экран
+When the pointer is over a PiP	Когда указатель над PiP
+What a PiP does when you point at it	Что делает PiP, когда вы на него наводите
+Move out of the way slides it aside — hold Ctrl to grab it instead	«Уйти с дороги» сдвигает его в сторону — удерживайте Ctrl, чтобы взять его
+Show controls	Показать элементы управления
+Fade out	Затухнуть
+Do nothing	Ничего не делать
+Move out of the way	Уйти с дороги
+Show move arrows	Показать стрелки перемещения
+Arrow buttons send the PiP to the next spot — or the next display	Кнопки со стрелками переносят PiP на следующую позицию — или на следующий экран
+Arrow buttons that hop to the next spot	Кнопки со стрелками для перехода на следующую позицию
+Fade-out opacity	Непрозрачность при затухании
+How visible a PiP stays while it fades under the pointer	Насколько PiP остаётся видимым, пока он затухает под указателем
+How see-through it gets	Насколько он становится прозрачным
+Click-through opacity	Непрозрачность при сквозных щелчках
+How visible a ghost-mode PiP is under the pointer	Насколько виден PiP в режиме призрака под указателем
+How see-through ghost mode is	Насколько прозрачен режим призрака
+Right-click on a PiP	Щелчок правой кнопкой по PiP
+Show the menu	Показать меню
+Close it	Закрыть его
+Bring its source to the front	Вывести источник на передний план
+Theater mode	Режим кинотеатра
+Middle-click closes a PiP	Щелчок средней кнопкой закрывает PiP
+Hide a PiP while its window is in front	Скрывать PiP, пока его окно на переднем плане
+It would only repeat what's already on screen	Он лишь повторял бы то, что уже на экране
+Hide PiPs while a fullscreen app is on the same display	Скрывать PiP, пока на том же экране открыто полноэкранное приложение
+Borderless games still show PiPs unless this is on	В играх без рамки PiP видны, если это не включено
+Includes borderless games	Включая игры без рамки
+Keep minimized sources playing	Продолжать воспроизведение свёрнутых источников
+The PiP keeps moving when you minimize	PiP продолжает двигаться, когда вы сворачиваете окно
+Reconnect when a closed app opens again	Переподключаться, когда закрытое приложение снова открывается
+Window sources always run at full speed	Источники-окна всегда работают на полной скорости
+Frame rate	Частота кадров
+Show the pointer	Показывать указатель
+Use game controllers	Использовать игровые контроллеры
+Xbox, PlayStation, Switch and most others	Xbox, PlayStation, Switch и большинство других
+Turn controls on when PiP Studio starts	Включать управление при запуске PiP Studio
+Release the game's focus while controls are on	Забирать фокус у игры, пока управление включено
+The game ignores the controller while you move the PiP, and gets focus back afterwards	Игра не реагирует на геймпад, пока вы двигаете PiP, а затем снова получает фокус
+The game ignores the controller meanwhile	Игра в это время не реагирует на геймпад
+Show button hints on the PiP	Показывать подсказки кнопок на PiP
+Controller-friendly mode	Режим для геймпада
+Bigger layout and button hints	Крупный интерфейс и подсказки кнопок
+Bigger layout, a focus ring and button hints, so you can use this window with a controller. Pressing a key on the keyboard switches back.	Крупный интерфейс, рамка фокуса и подсказки кнопок, чтобы пользоваться этим окном с геймпада. Нажатие клавиши на клавиатуре возвращает обычный вид.
+When I use a controller	Когда я пользуюсь геймпадом
+Always	Всегда
+Off	Выкл.
+Fade controller hints when idle	Скрывать подсказки геймпада при бездействии
+Hints fade after a few seconds	Подсказки исчезают через несколько секунд
+The PiP's name and button hints fade after a few seconds without input. Any button brings them back. Less for Windows to draw over your game.	Название PiP и подсказки кнопок исчезают через несколько секунд без действий. Любая кнопка возвращает их. Windows меньше рисует поверх вашей игры.
+Controller options	Параметры геймпада
+Button assignments	Назначение кнопок
+Click, then press a button. Right-click clears it.	Щёлкните, затем нажмите кнопку. Правый щелчок очищает назначение.
+Click a binding, then press the button or combination. Right-click clears it. Trigger: press, double press or hold.	Щёлкните назначение, затем нажмите кнопку или сочетание. Правый щелчок очищает. Срабатывание: нажатие, двойное нажатие или удержание.
+Click, then press the button(s). Right-click to clear.	Щёлкните, затем нажмите кнопку (кнопки). Правый щелчок — очистить.
+Press once, press twice quickly, or hold	Нажать один раз, дважды быстро или удерживать
+Press	Нажатие
+Double press	Двойное нажатие
+Hold	Удержание
+Reset	Сбросить
+Connect a controller	Подключите геймпад
+Press button(s)…	Нажмите кнопку (кнопки)…
+No controller connected	Геймпад не подключён
+No controller found	Геймпад не найден
+Connect an Xbox, PlayStation or Switch controller by USB or Bluetooth.	Подключите геймпад Xbox, PlayStation или Switch по USB или Bluetooth.
+Connect an Xbox, PlayStation or Switch controller to use controller controls.	Подключите геймпад Xbox, PlayStation или Switch, чтобы управлять с геймпада.
+Controls are on — the PiP has an accent outline. {0} turns them off.	Управление включено — у PiP рамка цвета акцента. {0} выключает его.
+Press {0} to turn controls on.	Нажмите {0}, чтобы включить управление.
+Controller controls	Управление с геймпада
+Controller controls on · {0} turns them off	Управление с геймпада включено · {0} выключает его
+Controller controls off	Управление с геймпада выключено
+Controller controls ({0})	Управление с геймпада ({0})
+Xbox controller	Геймпад Xbox
+PlayStation controller	Геймпад PlayStation
+Switch controller	Геймпад Switch
+These work anywhere in Windows. Click a shortcut, then press the new keys (Backspace clears, Esc cancels). Right-click clears it. They act on the PiP you used or pointed at most recently.	Они работают везде в Windows. Щёлкните сочетание и нажмите новые клавиши (Backspace очищает, Esc отменяет). Правый щелчок очищает. Они действуют на PiP, которым вы пользовались или на который наводили последним.
+Open and choose	Открыть и выбрать
+Move and size	Перемещение и размер
+Look and visibility	Вид и видимость
+Source and media	Источник и медиа
+Click, then press keys. Right-click to clear.	Щёлкните, затем нажмите клавиши. Правый щелчок — очистить.
+Reset shortcuts	Сбросить сочетания клавиш
+Puts every shortcut back to its default	Возвращает все сочетания клавиш к значениям по умолчанию
+Start PiP Studio when I sign in	Запускать PiP Studio при входе в систему
+It starts quietly in the tray	Он тихо запускается в области уведомлений
+Bring back my PiPs when PiP Studio starts	Возвращать мои PiP при запуске PiP Studio
+Tips and alerts from the tray icon	Советы и предупреждения из значка в области уведомлений
+Hide PiPs from screenshots, recordings and screen sharing	Скрывать PiP со снимков экрана, записей и демонстрации экрана
+OBS, Discord, Teams and the Snipping Tool won't see them. Costs a little performance, so leave it off unless you stream or share your screen.	OBS, Discord, Teams и «Ножницы» их не увидят. Немного снижает производительность, поэтому не включайте, если не стримите и не показываете экран.
+Costs a little performance	Немного снижает производительность
+Keep running in the tray when I close this window	Оставаться в области уведомлений при закрытии этого окна
+Otherwise closing this window quits PiP Studio	Иначе закрытие этого окна завершает PiP Studio
+Release memory while idle	Освобождать память при бездействии
+Gives unused memory back to Windows while PiP Studio sits in the tray	Возвращает Windows неиспользуемую память, пока PiP Studio находится в области уведомлений
+Give memory back while in the tray	Освобождать память в области уведомлений
+Running as administrator	Запущено от имени администратора
+PiP Studio can show windows of apps that run as administrator	PiP Studio может показывать окна приложений, запущенных от имени администратора
+Can show admin apps' windows	Может показывать окна приложений администратора
+Restart as administrator	Перезапустить от имени администратора
+Needed only to show windows of apps that run as administrator	Нужно только для показа окон приложений, запущенных от имени администратора
+Only needed for admin apps' windows	Нужно только для окон приложений администратора
+Needs administrator	Требуются права администратора
+Version {0}	Версия {0}
+Exit PiP Studio	Выйти из PiP Studio
+Settings folder	Папка параметров
+Open	Открыть
+Picture-in-picture for any window or part of the screen	«Картинка в картинке» для любого окна или части экрана
+Uses Windows' own live thumbnails	Использует живые миниатюры Windows
+Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.	Живое отображение окон использует систему миниатюр самой Windows, поэтому почти не тратит ресурсов.
+Select	Выбрать
+Back	Назад
+Tabs	Вкладки
+Search	Поиск
+Scroll	Прокрутка
+Type	Ввод
+Space	Пробел
+Clear	Очистить
+Done	Готово
+Snap spots	Позиции привязки
+When you let go of a PiP it glides to the nearest spot: the 4 corners, plus the middle of each edge with 8 spots on. The arrow keys and D-pad use the same spots.	Когда вы отпускаете PiP, он скользит к ближайшей позиции: 4 угла, а с 8 позициями — ещё и середина каждого края. Стрелки и крестовина используют те же позиции.
+How far a PiP sits from the edges of the screen.	Как далеко PiP находится от краёв экрана.
+Where new PiPs open	Где открываются новые PiP
+A new PiP pops up in the corner you pick here.	Новый PiP появляется в углу, который вы выберете здесь.
+Size of new PiPs	Размер новых PiP
+A PiP can show its controls, fade, do nothing, or slide out of the way when the pointer reaches it. When it slides aside, hold Ctrl to grab it instead. Fade-out opacity sets how see-through it gets.	PiP может показывать свои элементы управления, затухать, ничего не делать или уходить с дороги, когда к нему подходит указатель. Когда он отъезжает, удерживайте Ctrl, чтобы взять его. Непрозрачность при затухании задаёт, насколько он становится прозрачным.
+Move arrows	Стрелки перемещения
+Arrow buttons on the PiP send it to the next spot, or across to the next display.	Кнопки со стрелками на PiP переносят его на следующую позицию или на следующий экран.
+Ghost mode	Режим призрака
+Clicks go straight through the PiP to the window behind it.	Щелчки проходят сквозь PiP прямо в окно за ним.
+Follow the window you left	Следовать за покинутым окном
+When you switch windows, the PiP switches to the one you were just on, so the window you left stays in view. Auto PiPs always do this.	Когда вы переключаете окна, PiP переключается на то, в котором вы только что были, поэтому покинутое окно остаётся на виду. PiP в режиме «Авто» делают так всегда.
+Hide while its window is in front	Скрывать, пока его окно на переднем плане
+No point showing a window twice: the PiP steps away while you're in its window.	Нет смысла показывать окно дважды: PiP отходит в сторону, пока вы в его окне.
+Hide over full-screen apps	Скрывать над полноэкранными приложениями
+PiPs on a display get out of the way while a full-screen app or game runs there.	PiP на экране уходят с дороги, пока на нём работает полноэкранное приложение или игра.
+How see-through a new PiP is.	Насколько прозрачен новый PiP.
+A big, centered PiP for when you want to watch properly. Press again to go back.	Большой PiP по центру, когда хочется смотреть как следует. Нажмите ещё раз, чтобы вернуться.
+Minimizing a source tucks it off-screen so the PiP keeps moving. Click it in the taskbar to bring it back.	Свёрнутый источник прячется за пределами экрана, чтобы PiP продолжал двигаться. Щёлкните его на панели задач, чтобы вернуть.
+What a right-click on a PiP does: open its menu, close it, show its window, theater mode, or nothing.	Что делает щелчок правой кнопкой по PiP: открывает меню, закрывает его, показывает его окно, режим кинотеатра или ничего.
+More than one PiP	Несколько PiP
+On: each new PiP opens alongside the others. Off: opening a new PiP switches the one that's already open to the new window.	Вкл.: каждый новый PiP открывается рядом с остальными. Выкл.: новый PiP переключает уже открытый на новое окно.
+Other apps' PiPs	PiP других приложений
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture windows of Chrome, Edge, Firefox, Discord and other apps. They also land on the same spots as your PiPs, when they open and when you let go after dragging them.	Когда не открыто ни одного PiP из PiP Studio, ваши сочетания клавиш и геймпад перемещают, меняют размер, затемняют, выключают звук и закрывают окна «картинка в картинке» Chrome, Edge, Firefox, Discord и других приложений. Они также встают в те же позиции, что и ваши PiP, — при открытии и когда вы отпускаете их после перетаскивания.
+Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.	Перемещайте, меняйте размер и переключайте PiP с геймпада Xbox, PlayStation, Switch или почти любого другого. Если «Забирать фокус у игры» включено, игра не реагирует на геймпад, пока вы управляете PiP, а затем снова получает фокус. Подсказки показывают, что делает каждая кнопка, и исчезают через несколько секунд без действий.
+Shows controls	Показывает элементы управления
+Fades to {0}%	Затухает до {0}%
+Nothing happens	Ничего не происходит
+Moves out of the way	Уходит с дороги
+Glides into place	Плавно встаёт на место
+Jumps into place	Сразу встаёт на место
+Max height {0}%	Макс. высота {0}%
+Max width {0}%	Макс. ширина {0}%
+A second PiP opens	Открывается второй PiP
+The PiP switches to the new window	PiP переключается на новое окно
+Right-click: menu	Правый щелчок: меню
+Right-click: close	Правый щелчок: закрыть
+Right-click: show its window	Правый щелчок: показать его окно
+Right-click: theater mode	Правый щелчок: режим кинотеатра
+Right-click: nothing	Правый щелчок: ничего
+Follows Windows	Как в Windows
+Lite	Облегчённый
+Rounded	Скруглённые
+Square	Прямые
+Volume 60%	Громкость 60%
+Browser's own PiP	Собственный PiP браузера
+This app	Это приложение
+Accent	Акцент
+{0}'s own PiP	Собственный PiP {0}
+App's own PiP	Собственный PiP приложения
+{0} isn't available for {1}'s own PiP	{0} недоступно для собственного PiP {1}
+Couldn't find {0}'s window	Не удалось найти окно {0}
+Showing {0}	Показывает {0}
+Opacity {0}%	Непрозрачность {0}%
+Volume {0}%	Громкость {0}%
+Muted	Звук выключен
+Sound on	Звук включён
+Unmuted	Звук включён
+That	Это
+Hiding	Скрытие
+Cropping	Обрезка
+Follows	Следует
+Source hidden	Источник скрыт
+Locked	Закреплено
+Waiting	Ожидание
+Hidden	Скрыто
+Screen	Экран
+Normal	Обычный
+PiP Studio is running	PiP Studio работает
+Press {0} any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.	Нажмите {0} в любой момент, чтобы открыть окно в режиме «картинка в картинке». Щёлкните этот значок в области уведомлений, чтобы открыть PiP Studio.
+Something went wrong	Что-то пошло не так
+Some shortcuts are taken by another app	Некоторые сочетания клавиш заняты другим приложением
+No PiP is open	Нет открытых PiP
+Press {0} to open one.	Нажмите {0}, чтобы открыть.
+PiPs hidden	PiP скрыты
+Press {0} or click here to bring them back.	Нажмите {0} или щёлкните здесь, чтобы вернуть их.
+Nothing to PiP	Нечего открыть в PiP
+Click the window you want first, then press {0}.	Сначала щёлкните нужное окно, затем нажмите {0}.
+Drag to select the part of the screen you want to watch	Перетащите, чтобы выделить часть экрана, которую хотите смотреть
+A PiP is already open	PiP уже открыт
+Open a window first — Auto picks it up from there.	Сначала откройте окно — «Авто» подхватит его.
+Moves out of the mouse's way · hold Ctrl to grab it	Уходит от мыши · удерживайте Ctrl, чтобы взять его
+Stays put under the mouse	Остаётся на месте под мышью
+Choose a window…	Выбрать окно…
+Click a window on screen…	Щёлкнуть по окну на экране…
+Mirror a screen region…	Отображать область экрана…
+Change source…	Сменить источник…
+Crop…	Обрезать…
+Click-through	Сквозные щелчки
+Move back to the default spot	Вернуть на позицию по умолчанию
+Hide all PiPs	Скрыть все PiP
+Turn off click-through everywhere	Выключить сквозные щелчки везде
+Close all PiPs	Закрыть все PiP
+Exit	Выход
+Open PiP Studio	Открыть PiP Studio
+Close	Закрыть
+New PiP…	Новый PiP…
+Choose a window to PiP	Выбрать окно для PiP
+PiP the active window	Открыть активное окно в PiP
+PiP a region of the screen	Открыть область экрана в PiP
+Hide / show all PiPs	Скрыть / показать все PiP
+Click-through (ghost mode)	Сквозные щелчки (режим призрака)
+Move PiP up	Переместить PiP вверх
+Move PiP down	Переместить PiP вниз
+Move PiP left	Переместить PiP влево
+Move PiP right	Переместить PiP вправо
+Move PiP to the next corner	Переместить PiP в следующий угол
+Move PiP to the next display	Переместить PiP на следующий экран
+Make PiP bigger	Увеличить PiP
+Make PiP smaller	Уменьшить PiP
+More opaque	Менее прозрачный
+More transparent	Более прозрачный
+Theater mode on / off	Включить / выключить режим кинотеатра
+Show the previous window (wraps around through Auto)	Показать предыдущее окно (по кругу через «Авто»)
+Show the next window (wraps around through Auto)	Показать следующее окно (по кругу через «Авто»)
+Follow the window I just left (on / off)	Следовать за окном, которое я только что покинул (вкл. / выкл.)
+Move out of the mouse's way (on / off)	Уходить от мыши (вкл. / выкл.)
+Bring the source window to the front	Вывести окно источника на передний план
+Mute / unmute the source app	Выключить / включить звук приложения-источника
+Turn the source app's volume up	Громче для приложения-источника
+Turn the source app's volume down	Тише для приложения-источника
+Media play / pause	Воспроизведение / пауза
+Crop the PiP	Обрезать PiP
+Close the PiP	Закрыть PiP
+Controller controls on / off	Включить / выключить управление с геймпада
+Start a PiP on Auto (when none is open)	Открыть PiP в режиме «Авто» (если ни одного нет)
+Turn controller controls off	Выключить управление с геймпада
+Pick	Выбор
+Region	Область
+Hide	Скрыть
+Ghost	Призрак
+Corner	Угол
+Display	Экран
+Size +	Размер +
+Size −	Размер −
+Opacity +	Непрозр. +
+Opacity −	Непрозр. −
+Theater	Кинотеатр
+Prev	Пред.
+Next	След.
+Follow	Следовать
+Dodge	Уклониться
+Show	Показать
+Mute	Без звука
+Volume +	Громкость +
+Volume −	Громкость −
+Play	Пуск
+Crop	Обрезать
+Controls	Управление
+Start	Старт
+Move	Переместить
+D-pad	Крестовина
+Click any window to open it in PiP  ·  Esc to cancel	Щёлкните любое окно, чтобы открыть его в PiP  ·  Esc — отмена
+Enter opens the selected window  ·  Arrow keys move  ·  Type to search  ·  Esc closes	Enter открывает выбранное окно  ·  Стрелки перемещают  ·  Печатайте для поиска  ·  Esc закрывает
+Free	Свободно
+Screen region {0}	Область экрана {0}
+Can't show this window	Не удаётся показать это окно
+Windows refused to mirror this window (error 0x{0}). Try another window.	Windows отказалась отображать это окно (ошибка 0x{0}). Попробуйте другое окно.
+This PiP shows a screen region	Этот PiP показывает область экрана
+No other windows	Других окон нет
+Auto off	«Авто» выключено
+Auto — {0}	Авто — {0}
+Follows the window you just left	Следует за окном, которое вы только что покинули
+Stays on {0}	Остаётся на {0}
+Auto — waiting for a window	Авто — ожидание окна
+Source closed — waiting for it to come back	Источник закрыт — ожидание его возвращения
+Source hidden — still playing	Источник скрыт — воспроизведение продолжается
+Source restored	Источник восстановлен
+Original size	Исходный размер
+Only one display	Только один экран
+Locked to this display	Закреплено на этом экране
+No source to crop	Нет источника для обрезки
+Couldn't capture the source to crop it	Не удалось захватить источник для обрезки
+Crop — drag to choose the part of {0} to show	Обрезка — перетащите, чтобы выбрать часть {0} для показа
+Full view	Полный вид
+Zoom {0}	Масштаб {0}
+Click-through on · {0} turns it off	Сквозные щелчки включены · {0} выключает их
+Click-through off	Сквозные щелчки выключены
+Always on top	Поверх всех окон
+Not on top	Не поверх окон
+Fit	Вписать
+Fill	Заполнить
+Stretch	Растянуть
+Position locked	Положение закреплено
+Position unlocked	Положение откреплено
+No app audio for this source	Нет звука приложения для этого источника
+Waiting for {0}…	Ожидание {0}…
+Source closed	Источник закрыт
+It will reconnect automatically when it reopens.	Он переподключится автоматически, когда откроется снова.
+Right-click › Source › Change source…	Правый щелчок › Источник › Сменить источник…
+Source is minimized	Источник свёрнут
+Restore it, or use right-click › Source › Hide source window to keep it playing out of sight.	Восстановите его или выберите правый щелчок › Источник › Скрыть окно источника, чтобы он воспроизводился незаметно.
+Mirror a screen region instead…	Вместо этого отображать область экрана…
+Show everything (reset crop & zoom)	Показать всё (сбросить обрезку и масштаб)
+Hide the source's title bar	Скрыть заголовок окна источника
+Bring source to front	Вывести источник на передний план
+Hide source window (keeps playing)	Скрыть окно источника (воспроизведение продолжится)
+Previous window	Предыдущее окно
+Next window	Следующее окно
+Auto (first window, then the one you just left)	Авто (первое окно, затем то, которое вы только что покинули)
+Fix frozen picture (restart {0})…	Исправить зависшее изображение (перезапустить {0})…
+Previous display	Предыдущий экран
+Next display	Следующий экран
+Original size (1:1 pixels)	Исходный размер (пиксели 1:1)
+Move to next display	Переместить на следующий экран
+Snap to the middle of edges too	Привязывать и к середине краёв
+Move out of the mouse's way	Уходить от мыши
+Lock position & size	Закрепить положение и размер
+Scaling	Масштабирование
+Fit (keep shape)	Вписать (сохранить форму)
+Fill (crop edges to fill)	Заполнить (обрезать края)
+Media & audio	Медиа и звук
+Play / pause	Воспроизведение / пауза
+Next track	Следующий трек
+Previous track	Предыдущий трек
+Mute {0}	Выключить звук {0}
+Duplicate this PiP	Дублировать этот PiP
+More options	Другие параметры
+Exit theater mode	Выйти из режима кинотеатра
+Mute — scroll to change volume	Без звука — прокрутите, чтобы изменить громкость
+Move left	Влево
+Move right	Вправо
+Move up	Вверх
+Move down	Вниз
+Change what this PiP shows	Изменить, что показывает этот PiP
+Tools	Инструменты
+PiP controls	Управление PiP
+Unbound	Не назначено
+Enter or double-click to confirm  ·  Esc to cancel  ·  F = everything  ·  Shape: 1 Free  2 16:9  3 4:3  4 1:1  5 9:16  (now: {0})	Enter или двойной щелчок — подтвердить  ·  Esc — отмена  ·  F = всё  ·  Форма: 1 Свободно  2 16:9  3 4:3  4 1:1  5 9:16  (сейчас: {0})
+8 spots instead of 4 corners	8 позиций вместо 4 углов
+Small+	Маленький+
+Medium+	Средний+
+Large+	Большой+
+Largest size	Самый большой размер
+Smallest size	Самый маленький размер
+Eight sizes from Extra small to Extra large, set by width so a PiP keeps its shape. Bigger and Smaller step through the same sizes. Your choice is highlighted.	Восемь размеров от «Очень маленький» до «Очень большой», заданных по ширине, чтобы PiP сохранял форму. «Больше» и «Меньше» перебирают те же размеры. Ваш выбор выделен.
+Extra small	Очень маленький
+Pick a window or a display for this PiP	Выберите окно или экран для этого PiP
+Show in this PiP	Показать в этом PiP
+No preview for this window	Нет предпросмотра для этого окна
+This window has closed	Это окно закрыто
+It opens in a floating picture-in-picture window	Оно открывается в плавающем окне «картинка в картинке»
+No matching windows	Нет подходящих окон
+Choose a window	Выбрать окно
+Title bar buttons	Кнопки заголовка
+Pick the buttons on a PiP's title bar and their order	Выберите кнопки на заголовке PiP и их порядок
+Always shown, so the full menu is never out of reach	Всегда видна, чтобы полное меню было под рукой
+Reset title bar buttons	Сбросить кнопки заголовка
+Back to the default buttons and order	Вернуть кнопки и порядок по умолчанию
+The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.	Кнопки, которые показывает заголовок PiP при наведении, в вашем порядке. «Предыдущее окно» и «Следующее окно» меняют то, что показывает PiP, а «Больше» и «Меньше» перебирают размеры. «Другие параметры» остаётся всегда, чтобы полное меню было под рукой. На узком PiP первыми уступают место кнопки слева.
+Treat as a PiP	Считать PiP
+Not a PiP	Не PiP
+Find other apps' PiPs automatically	Находить PiP других приложений автоматически
+Small always-on-top windows, like video players' mini modes, count as PiPs. Mark one as Not a PiP on the Running PiPs page.	Небольшие окна поверх всех окон, например мини-режимы видеоплееров, считаются PiP. Отметьте окно как «Не PiP» на странице «Открытые PiP».
+Windows you marked	Отмеченные вами окна
+Forget every Treat as a PiP and Not a PiP you chose	Забыть все «Считать PiP» и «Не PiP», которые вы выбрали
+Find other apps' PiPs	Находить PiP других приложений
+PiP options	Параметры PiP
+Shape	Форма
+Black bars	Чёрные полосы
+Snapping	Привязка
+Match the picture	Как у изображения
+Follow my setting	Как в моих параметрах
+Always snap to spots	Всегда привязывать к позициям
+Never snap	Никогда не привязывать
+No sound from this app right now	Сейчас нет звука из этого приложения
+Crops away the bars around the video	Обрезает полосы вокруг видео
+Fits the window to the video so the bars disappear	Подгоняет окно под видео, чтобы полосы исчезли
+Snapping follows Settings	Привязка как в параметрах
+Snaps to spots	Привязывается к позициям
+Doesn't snap	Не привязывается
+Showing the whole picture	Показано всё изображение
+Couldn't look at the source right now	Сейчас не удалось посмотреть на источник
+No black bars found	Чёрные полосы не найдены
+Black bars removed	Чёрные полосы удалены
+Removing black bars	Удаление чёрных полос
+Black bars left alone	Чёрные полосы оставлены
+Updates	Обновления
+What's new	Что нового
+Check now	Проверить сейчас
+Update now	Обновить сейчас
+Check for updates automatically	Проверять обновления автоматически
+Once a day, on GitHub. Nothing about you or your PC is sent.	Раз в день, на GitHub. Никаких данных о вас или вашем ПК не отправляется.
+Checking for updates…	Проверка обновлений…
+You're up to date (version {0})	У вас последняя версия ({0})
+Version {0} is available	Доступна версия {0}
+Downloading the update… {0}%	Загрузка обновления… {0}%
+Installing the update…	Установка обновления…
+You have version {0}	У вас версия {0}
+The update didn't work	Обновление не удалось
+Update available	Доступно обновление
+PiP Studio {0} is out. Click to update.	Вышел PiP Studio {0}. Щёлкните, чтобы обновить.
+PiP Studio was updated	PiP Studio обновлён
+You're now on version {0}.	Теперь у вас версия {0}.
+Update to version {0}…	Обновить до версии {0}…
+Couldn't reach GitHub. Check your internet connection and try again.	Не удалось связаться с GitHub. Проверьте подключение к интернету и попробуйте снова.
+The download was damaged (its fingerprint doesn't match). Please try again.	Загруженный файл повреждён (контрольная сумма не совпадает). Попробуйте снова.
+Show controls on other apps' PiPs	Показывать элементы управления на PiP других приложений
+Point at another app's PiP to get PiP Studio's title bar over it: drag it to move the PiP, scroll on it to change the volume, and use the title bar buttons you picked.	Наведите на PiP другого приложения, и над ним появится заголовок PiP Studio: перетаскивайте его, чтобы двигать PiP, прокручивайте на нём, чтобы менять громкость, и пользуйтесь выбранными кнопками заголовка.
+Controls on other apps' PiPs	Управление PiP других приложений
+Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.	Наведите на окно PiP Chrome, Firefox, Discord или другого приложения, и у его верхнего края появится заголовок PiP Studio. Перетаскивайте заголовок, чтобы двигать PiP, прокручивайте на нём, чтобы менять громкость, сворачивайте его и пользуйтесь теми же кнопками, что и на заголовке ваших PiP: показать приложение, режим кинотеатра, больше, меньше, следующий угол, закрыть и другие. Остальная часть PiP работает как обычно.
+Show {0}	Показать {0}
+Options in PiP Studio	Параметры в PiP Studio
+Minimize	Свернуть
+Restore	Восстановить
+Restore {0}'s PiP	Восстановить PiP {0}
+PiP Studio's title bar appears	Появляется заголовок PiP Studio
+Your video	Ваше видео
+Remove	Удалить
+Remove all	Удалить все
+Marked as PiPs	Отмечены как PiP
+Windows you chose to treat as PiPs. Removing one makes it a normal window again and takes it off always on top.	Окна, которые вы решили считать PiP. Если удалить окно отсюда, оно снова станет обычным и перестанет быть поверх всех окон.
+Treat this window as a PiP?	Считать это окно PiP?
+PiP Studio will handle it like another app's picture-in-picture window:	PiP Studio будет работать с ним как с окном «картинка в картинке» другого приложения:
+•  It moves to Running PiPs and snaps to PiP spots	•  Оно появится в «Открытых PiP» и будет привязываться к позициям PiP
+•  It stays on top of your other windows once you move or steer it	•  Оно будет поверх других окон, как только вы его переместите или начнёте им управлять
+•  Your PiP shortcuts and controller move, resize, fade and close it	•  Ваши сочетания клавиш для PiP и геймпад будут перемещать его, менять размер, затемнять и закрывать
+This applies to every window like this one from {0}, now and later. You can undo it any time under Running PiPs > Marked as PiPs, which also takes it off always on top.	Это относится ко всем таким окнам {0}, сейчас и потом. Отменить можно в любой момент в «Открытые PiP» > «Отмечены как PiP» — тогда окно также перестанет быть поверх всех.
+This applies to this window only, until it closes. You can undo it any time under Running PiPs > Marked as PiPs, which also takes it off always on top.	Это относится только к этому окну, пока оно не закроется. Отменить можно в любой момент в «Открытые PiP» > «Отмечены как PiP» — тогда окно также перестанет быть поверх всех.
+Remove every mark?	Удалить все отметки?
+Every window you marked with Treat as a PiP goes back to being a normal window, and comes off always on top.	Все окна, отмеченные как «Считать PiP», снова станут обычными и перестанут быть поверх всех окон.
+Every window like this from {0}	Все такие окна {0}
+{0} · this window only, until it closes	{0} · только это окно, пока оно не закроется
+Phone companion	Компаньон на телефоне
+Control PiP Studio from your phone	Управляйте PiP Studio с телефона
+Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.	Управляйте PiP и громкостью каждого приложения из браузера телефона через домашний Wi-Fi. Windows может попросить разрешить PiP Studio в частных сетях.
+Pair a phone	Подключить телефон
+Turn on the switch above first	Сначала включите переключатель выше
+This PC isn't on a network right now	Этот ПК сейчас не подключён ни к одной сети
+Your phone opens {0}	Ваш телефон открывает {0}
+Not used since PiP Studio started	Не использовался с запуска PiP Studio
+Last used {0}	Последнее использование: {0}
+Remove {0}?	Удалить {0}?
+It stops working right away. You can pair it again any time.	Он сразу перестанет работать. Подключить его снова можно в любой момент.
+No network	Нет сети
+PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.	PiP Studio не может найти адрес этого ПК в вашей локальной сети. Подключитесь к Wi-Fi или Ethernet и попробуйте снова.
+Paired with {0}. You can close this.	Подключён к {0}. Это окно можно закрыть.
+Couldn't open a network port. Another app may be using it.	Не удалось открыть сетевой порт. Возможно, его использует другое приложение.
+Or open {0} on your phone	Или откройте {0} на телефоне
+Waiting for your phone…	Ожидание телефона…
+That PIN doesn't match. Check the PIN on your phone.	PIN не совпадает. Проверьте PIN на телефоне.
+Too many wrong PINs. Start pairing again on your phone.	Слишком много неверных PIN. Начните подключение на телефоне заново.
+No phone is showing a PIN yet. Open the page on your phone and tap Pair.	Ни один телефон ещё не показывает PIN. Откройте страницу на телефоне и нажмите «Подключить».
+Your phone is showing a PIN. Type it here.	Ваш телефон показывает PIN. Введите его здесь.
+1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.	1. Отсканируйте этот код камерой телефона (он должен быть в той же сети Wi-Fi, что и этот ПК) и нажмите «Подключить».
+2. Your phone shows a 6-digit PIN. Type it below.	2. Телефон покажет 6-значный PIN. Введите его ниже.
+Pair	Подключить
+PiP Studio closed unexpectedly	PiP Studio неожиданно закрылся
+Click to send a crash report, so it can be fixed.	Щёлкните, чтобы отправить отчёт о сбое и помочь его исправить.
+Sending this report helps get it fixed. It opens a new issue on GitHub in your browser with this already filled in, so you can check it, add what you were doing, and send it yourself. Your Windows user name and PC name are left out.	Этот отчёт помогает исправить проблему. Он открывает в браузере новую задачу на GitHub с уже заполненными данными, чтобы вы могли проверить их, добавить, что вы делали, и отправить сами. Имя пользователя Windows и имя ПК в него не попадают.
+Send report	Отправить отчёт
+Copy report	Скопировать отчёт
+Report a problem	Сообщить о проблеме
+Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in	Открывает отчёт об ошибке на GitHub с уже указанными версиями PiP Studio и Windows и недавними ошибками
+Report	Сообщить
+Copied	Скопировано
+Controller controls on · The game runs as admin, so it still gets the controller	Управление с геймпада включено · Игра запущена от имени администратора, поэтому всё ещё получает геймпад
+The game runs as administrator	Игра запущена от имени администратора
+So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.	Поэтому она продолжает получать ваш геймпад. Щёлкните, чтобы перезапустить PiP Studio от имени администратора, — это всё исправит.
+Always start as administrator	Всегда запускать от имени администратора
+Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.	Без вопросов каждый раз, в том числе при входе в систему. Для игр и приложений, запущенных от имени администратора: так PiP Studio сможет показывать их окна и забирать у них фокус для управления с геймпада. Windows спросит один раз при настройке.
+Restart as administrator now?	Перезапустить от имени администратора сейчас?
+From now on PiP Studio starts as administrator without asking, also when it starts at sign-in.	Теперь PiP Studio будет запускаться от имени администратора без вопросов, в том числе при входе в систему.
+Phone	Телефон
+Paired phones	Подключённые телефоны
+No phones are paired yet. Press Pair a phone above to add one.	Подключённых телефонов пока нет. Нажмите «Подключить телефон» выше, чтобы добавить.
+Rename	Переименовать
+Rename phone	Переименовать телефон
+The name shows here, so you can tell your phones apart.	Имя показывается здесь, чтобы различать ваши телефоны.
+Save	Сохранить
+Not in the Microsoft Store version	Нет в версии из Microsoft Store
+The phone companion needs network access the Store version doesn't have. The installer and portable versions from GitHub include it.	Компаньону на телефоне нужен доступ к сети, которого нет у версии из Store. Он есть в версиях с установщиком и в портативной версии с GitHub.
+Your phone becomes a remote for PiP Studio: move and resize PiPs, switch what they show, and set the volume of every app, from the phone's browser on your home Wi-Fi. Nothing goes over the internet, and everything between phone and PC is encrypted.	Телефон превращается в пульт для PiP Studio: перемещайте PiP и меняйте их размер, переключайте, что они показывают, и регулируйте громкость каждого приложения из браузера телефона в домашнем Wi-Fi. Ничего не идёт через интернет, а всё, что передаётся между телефоном и ПК, зашифровано.
+Pairing a phone	Подключение телефона
+Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.	Как подключение Moonlight к Sunshine: отсканируйте код, нажмите «Подключить» на телефоне и введите в PiP Studio PIN, который он покажет. PIN совпадёт, только если между устройствами никого нет, и подключаться могут только подключённые телефоны. Удалить телефон можно в любой момент.
+Type the phone's PIN	Введите PIN телефона
+Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.	Светлая, тёмная или OLED (чёрный вместо серого, отлично для OLED-экранов) для окон и меню PiP Studio, или как в Windows.
+Light, dark or OLED black, for PiP Studio's windows and menus	Светлая, тёмная или чёрная OLED, для окон и меню PiP Studio
+OLED	OLED
+Full-screen windows can't be PiPs	Полноэкранные окна не могут быть PiP
+It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Оно оставалось бы поверх всего остального на этом экране. Сначала переключите его в оконный режим и попробуйте снова.
