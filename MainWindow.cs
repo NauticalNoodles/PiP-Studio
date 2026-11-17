@@ -593,7 +593,7 @@ namespace PipStudio
         {
             exiting = false;
             Fluent.PickBrushes();
-            var win = (Window)XamlReader.Parse(App.S.LiteMode || Theme.Oled ? LiteXaml(Xaml) : Xaml);
+            var win = (Window)XamlReader.Parse((App.S.LiteMode || Theme.Oled ? LiteXaml(Xaml) : Xaml).Replace("Microsoft YaHei UI", L.Cjk));   // the right font for the language's characters
             w = win;
             L.Watch(win);
             ImageSource appIcon = null;
@@ -2915,7 +2915,7 @@ namespace PipStudio
                     if (L.Codes[v] == (S.Language ?? "")) return;
                     S.Language = L.Codes[v];
                     w.Dispatcher.BeginInvoke(new Action(SwitchLanguage), DispatcherPriority.Background);
-                }), "language arabic chinese english translate عربي 中文 语言 اللغة");
+                }), "language arabic chinese english spanish portuguese french german russian japanese translate idioma idioma langue sprache язык 言語 عربي 中文 语言 اللغة");
             Section(ge, "Startup");
             Card(ge, "", "Start PiP Studio when I sign in", "It starts quietly in the tray", Switch(() => App.StartupEnabled, v => { try { App.StartupEnabled = v; } catch { } }), "boot login windows startup");
             Card(ge, "", "Bring back my PiPs when PiP Studio starts", null, Switch(() => S.RestoreSessions, v => S.RestoreSessions = v), "restore session remember layout");

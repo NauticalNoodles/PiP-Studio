@@ -1,0 +1,694 @@
+Windows	Janelas
+Running PiPs	PiPs abertos
+Appearance	Aparência
+Behavior	Comportamento
+Controller	Controle
+Shortcuts	Atalhos
+Settings	Configurações
+Find a setting	Procurar uma configuração
+Search windows	Procurar janelas
+Search results	Resultados da pesquisa
+Open or close navigation	Abrir ou fechar a navegação
+Hide explanations	Ocultar explicações
+Show explanations	Mostrar explicações
+Hide the explanations (you can bring them back from the top of the page)	Ocultar as explicações (você pode trazê-las de volta no topo da página)
+Point at a setting to see what it does.	Aponte para uma configuração para ver o que ela faz.
+Explanations	Explicações
+Open in PiP	Abrir em PiP
+Open in picture-in-picture	Abrir em picture-in-picture
+Click a window	Clicar em uma janela
+Screen region	Região da tela
+Refresh	Atualizar
+Next corner	Próximo canto
+Bigger	Maior
+Smaller	Menor
+Change source	Trocar origem
+Show source	Mostrar origem
+Show all	Mostrar tudo
+Hide all	Ocultar tudo
+Name	Nome
+Status	Status
+Showing	Mostrando
+Mode	Modo
+App	App
+Size	Tamanho
+Position	Posição
+Opacity	Opacidade
+Volume	Volume
+Source	Origem
+In PiP	Em PiP
+Minimized	Minimizada
+Whole screen	Tela inteira
+Auto	Automático
+Starts on the first available window, then switches to the one you last used. Skips minimized and closed windows.	Começa na primeira janela disponível e depois muda para a última que você usou. Ignora janelas minimizadas e fechadas.
+Starts on the first available window, then switches to the one you were last using, even with Follow turned off.	Começa na primeira janela disponível e depois muda para a que você estava usando, mesmo com Seguir desativado.
+Nothing selected	Nada selecionado
+Pick a window in the list.	Escolha uma janela na lista.
+Mirrors this whole display	Espelha esta tela inteira
+Live preview	Prévia ao vivo
+Waiting for a window	Aguardando uma janela
+Minimized — it will be restored	Minimizada — será restaurada
+Display {0} (main)	Tela {0} (principal)
+Display {0}	Tela {0}
+Whole screen · {0}	Tela inteira · {0}
+PiP Studio is still running	O PiP Studio continua em execução
+Your shortcuts keep working. Click the tray icon to open it again.	Seus atalhos continuam funcionando. Clique no ícone da bandeja para abri-lo de novo.
+No controller	Sem controle
+The picture may freeze. Click for the fix.	A imagem pode congelar. Clique para ver a correção.
+The picture may freeze	A imagem pode congelar
+This app stops drawing while another window covers it. Restart it with the fix to keep it moving.	Este app para de desenhar quando outra janela o cobre. Reinicie-o com a correção para mantê-lo em movimento.
+Restart with the fix	Reiniciar com a correção
+Always start it with the fix	Sempre iniciar com a correção
+Always start {0} with the fix	Sempre iniciar {0} com a correção
+Fix frozen picture	Corrigir imagem congelada
+Frozen preview	Prévia congelada
+Looking for this app's shortcuts…	Procurando os atalhos deste app…
+No desktop, Start or taskbar shortcut was found for this app.	Nenhum atalho deste app foi encontrado na área de trabalho, no Iniciar ou na barra de tarefas.
+Adding the fix to the shortcuts…	Adicionando a correção aos atalhos…
+Removing the fix from the shortcuts…	Removendo a correção dos atalhos…
+Added the fix to {0} shortcut.	A correção foi adicionada a {0} atalho.
+Added the fix to {0} shortcuts.	A correção foi adicionada a {0} atalhos.
+Removed the fix from {0} shortcut.	A correção foi removida de {0} atalho.
+Removed the fix from {0} shortcuts.	A correção foi removida de {0} atalhos.
+Restart {0}?	Reiniciar {0}?
+Restart {0}	Reiniciar {0}
+This closes {0} and starts it again with a setting that keeps its window drawing while other windows cover it.	Isso fecha {0} e o abre de novo com uma configuração que mantém a janela desenhando enquanto outras janelas a cobrem.
+Anything unsaved in it will be lost. It only helps Chromium-based apps (Chrome, Edge, Spotify, Discord, ...).	Tudo o que não estiver salvo será perdido. Só ajuda apps baseados no Chromium (Chrome, Edge, Spotify, Discord, ...).
+{0} stops drawing while other windows cover it, so its PiP can freeze. Restarting it with a fix keeps it drawing. Anything unsaved in it will be lost.	{0} para de desenhar quando outras janelas o cobrem, então o PiP dele pode congelar. Reiniciá-lo com uma correção o mantém desenhando. Tudo o que não estiver salvo será perdido.
+This app's program file can't be read (it may be running as administrator), so it can't be restarted from here.	Não é possível ler o arquivo do programa deste app (ele pode estar rodando como administrador), então ele não pode ser reiniciado daqui.
+Cancel	Cancelar
+OK	OK
+Not now	Agora não
+Restart	Reiniciar
+Restart now	Reiniciar agora
+Later	Mais tarde
+Restart PiP Studio?	Reiniciar o PiP Studio?
+The new language shows after PiP Studio restarts. Your PiPs come back afterwards.	O novo idioma aparece depois que o PiP Studio reinicia. Seus PiPs voltam em seguida.
+Language	Idioma
+PiP Studio restarts to switch	O PiP Studio reinicia para trocar
+Use my Windows language	Usar o idioma do Windows
+No PiPs are open.\nPick a window on the Windows page, or press {0} anywhere.	Nenhum PiP aberto.\nEscolha uma janela na página Janelas ou pressione {0} em qualquer lugar.
+No settings match “{0}”. Try a different word.	Nenhuma configuração corresponde a “{0}”. Tente outra palavra.
+Add Ctrl, Alt or Win…	Adicione Ctrl, Alt ou Win…
+Press keys…	Pressione as teclas…
+Not set	Não definido
+Choose	Escolher
+Colors	Cores
+PiP window	Janela PiP
+Effects	Efeitos
+New PiPs	Novos PiPs
+Placement	Posicionamento
+Mouse	Mouse
+Smart hiding	Ocultação inteligente
+Sources	Origens
+Screen regions	Regiões da tela
+Startup	Inicialização
+Notifications	Notificações
+Privacy	Privacidade
+Performance	Desempenho
+Administrator	Administrador
+About	Sobre
+Options	Opções
+Buttons	Botões
+App theme	Tema do app
+Use my Windows setting	Usar a configuração do Windows
+Light	Claro
+Dark	Escuro
+Accent color	Cor de destaque
+The color of highlights, switches, the focus ring and borders. Use Windows' color or pick your own.	A cor dos destaques, botões de alternância, anel de foco e bordas. Use a cor do Windows ou escolha a sua.
+Borders, highlights and controller hints	Bordas, destaques e dicas do controle
+Use my Windows accent color	Usar a cor de destaque do Windows
+Custom accent color	Cor de destaque personalizada
+Used when the Windows accent color is off	Usada quando a cor de destaque do Windows está desativada
+Rounded corners	Cantos arredondados
+Square or rounded corners, like other Windows 11 windows.	Cantos retos ou arredondados, como outras janelas do Windows 11.
+Windows 11 only	Somente Windows 11
+Border	Borda
+A thin outline around each PiP, in your accent color or one you pick.	Um contorno fino em volta de cada PiP, na sua cor de destaque ou em uma que você escolher.
+A thin outline around each PiP, in your accent color or one you pick	Um contorno fino em volta de cada PiP, na sua cor de destaque ou em uma que você escolher
+An outline around each PiP	Um contorno em volta de cada PiP
+Border color	Cor da borda
+Match accent color	Igual à cor de destaque
+Used when Match accent color is off	Usada quando Igual à cor de destaque está desativado
+Width	Espessura
+Messages under the PiP	Mensagens abaixo do PiP
+When you switch sources or change a mode, the message shows below the PiP instead of over the picture	Quando você troca de origem ou muda um modo, a mensagem aparece abaixo do PiP em vez de sobre a imagem
+When you switch sources or change a mode, the message shows in a small caption below the PiP instead of over the picture. Volume changes show a level bar there too.	Quando você troca de origem ou muda um modo, a mensagem aparece em uma pequena legenda abaixo do PiP em vez de sobre a imagem. Mudanças de volume também mostram uma barra de nível ali.
+Show messages below the PiP, not on it	Mostrar mensagens abaixo do PiP, não sobre ele
+Lite mode	Modo leve
+For slower PCs: turns off animations, the Mica background, shadows and live previews	Para PCs mais lentos: desativa animações, o fundo Mica, sombras e prévias ao vivo
+For slower PCs: turns off animations, the Mica background, shadows and live previews. PiPs themselves work the same.	Para PCs mais lentos: desativa animações, o fundo Mica, sombras e prévias ao vivo. Os PiPs funcionam do mesmo jeito.
+Fewer effects, for slower PCs	Menos efeitos, para PCs mais lentos
+Animation effects	Animações
+Glide, fade and slide effects in PiP Studio and on PiPs	Efeitos de deslizar e esmaecer no PiP Studio e nos PiPs
+Glide, fade and slide effects in PiP Studio and on PiPs. Off, things jump straight into place.	Efeitos de deslizar e esmaecer no PiP Studio e nos PiPs. Desativados, tudo pula direto para o lugar.
+Glide and fade effects	Efeitos de deslizar e esmaecer
+Where and how they open	Onde e como eles abrem
+Small	Pequeno
+Medium	Médio
+Large	Grande
+Extra large	Extragrande
+Top left	Superior esquerdo
+Top middle	Superior central
+Top right	Superior direito
+Left middle	Centro à esquerda
+Right middle	Centro à direita
+Bottom left	Inferior esquerdo
+Bottom middle	Inferior central
+Bottom right	Inferior direito
+Top	Topo
+Middle	Meio
+Bottom	Base
+Left	Esquerda
+Right	Direita
+Up	Para cima
+Down	Para baixo
+Size limits	Limites de tamanho
+Keep tall or wide apps from getting too big. Applies to new PiPs, size presets, resizing and source changes (theater mode ignores them).	Impede que apps altos ou largos fiquem grandes demais. Vale para novos PiPs, tamanhos predefinidos, redimensionamento e troca de origem (o modo cinema os ignora).
+Tall or wide apps stop growing at the size you set, as a share of the screen. Applies to new PiPs, size presets, resizing and source changes. Theater mode ignores them.	Apps altos ou largos param de crescer no tamanho que você definir, como fração da tela. Vale para novos PiPs, tamanhos predefinidos, redimensionamento e troca de origem. O modo cinema os ignora.
+Stop tall or wide apps getting too big	Impedir que apps altos ou largos fiquem grandes demais
+Limit width	Limitar a largura
+Maximum width	Largura máxima
+Limit height	Limitar a altura
+Maximum height	Altura máxima
+Share of the screen	Fração da tela
+Control other apps' PiP windows	Controlar as janelas PiP de outros apps
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture window of Chrome, Edge, Firefox and other apps.	Quando nenhum PiP do PiP Studio está aberto, seus atalhos e seu controle movem, redimensionam, esmaecem, silenciam e fecham a janela picture-in-picture do Chrome, Edge, Firefox e outros apps.
+Steer browser and app PiPs too	Controla também os PiPs de navegadores e apps
+Snap other apps' PiPs to spots	Encaixar os PiPs de outros apps nas posições
+Other apps' PiP windows land on the same corners and edge spots as PiP Studio's PiPs, when they open and when you let go of them after dragging.	As janelas PiP de outros apps vão para os mesmos cantos e bordas que os PiPs do PiP Studio, ao abrir e quando você as solta depois de arrastar.
+They land on the same spots as yours	Elas vão para as mesmas posições que os seus
+Allow more than one PiP at a time	Permitir mais de um PiP ao mesmo tempo
+When off, opening a new PiP switches the one that's already open	Desativado, abrir um novo PiP troca o que já está aberto
+Off: a new PiP replaces the open one	Desativado: um novo PiP substitui o aberto
+Follow the window I just left	Seguir a janela que acabei de deixar
+When you switch windows, the PiP switches to the one you were on	Quando você troca de janela, o PiP muda para a que você estava usando
+The PiP shows the window you just left	O PiP mostra a janela que você acabou de deixar
+Snap after moving	Encaixar depois de mover
+Glides to the nearest spot when you let go	Desliza para a posição mais próxima quando você solta
+Middle of each edge too	Também o meio de cada borda
+8 spots instead of 4 corners — also used by the arrow keys and D-pad	8 posições em vez de 4 cantos — também usadas pelas setas e pelo direcional
+Gap from the screen edges	Distância das bordas da tela
+Gap from the edges	Distância das bordas
+Stay on one display	Ficar em uma tela
+Moving past the edge won't hop to the next display	Passar da borda não pula para a próxima tela
+Don't hop to the next display	Não pular para a próxima tela
+When the pointer is over a PiP	Quando o ponteiro está sobre um PiP
+What a PiP does when you point at it	O que um PiP faz quando você aponta para ele
+Move out of the way slides it aside — hold Ctrl to grab it instead	Sair do caminho o desliza para o lado — segure Ctrl para pegá-lo
+Show controls	Mostrar controles
+Fade out	Esmaecer
+Do nothing	Não fazer nada
+Move out of the way	Sair do caminho
+Show move arrows	Mostrar setas de movimento
+Arrow buttons send the PiP to the next spot — or the next display	Botões de seta mandam o PiP para a próxima posição — ou para a próxima tela
+Arrow buttons that hop to the next spot	Botões de seta que pulam para a próxima posição
+Fade-out opacity	Opacidade ao esmaecer
+How visible a PiP stays while it fades under the pointer	O quanto um PiP continua visível enquanto esmaece sob o ponteiro
+How see-through it gets	O quanto ele fica transparente
+Click-through opacity	Opacidade ao deixar passar cliques
+How visible a ghost-mode PiP is under the pointer	O quanto um PiP no modo fantasma fica visível sob o ponteiro
+How see-through ghost mode is	O quanto o modo fantasma é transparente
+Right-click on a PiP	Clique direito em um PiP
+Show the menu	Mostrar o menu
+Close it	Fechar
+Bring its source to the front	Trazer a origem para a frente
+Theater mode	Modo cinema
+Middle-click closes a PiP	Clique do meio fecha um PiP
+Hide a PiP while its window is in front	Ocultar um PiP enquanto a janela dele está na frente
+It would only repeat what's already on screen	Ele só repetiria o que já está na tela
+Hide PiPs while a fullscreen app is on the same display	Ocultar PiPs enquanto um app em tela cheia está na mesma tela
+Borderless games still show PiPs unless this is on	Jogos sem borda continuam mostrando PiPs, a menos que isto esteja ativado
+Includes borderless games	Inclui jogos sem borda
+Keep minimized sources playing	Manter origens minimizadas reproduzindo
+The PiP keeps moving when you minimize	O PiP continua se movendo quando você minimiza
+Reconnect when a closed app opens again	Reconectar quando um app fechado abrir de novo
+Window sources always run at full speed	Origens de janela sempre rodam na velocidade máxima
+Frame rate	Taxa de quadros
+Show the pointer	Mostrar o ponteiro
+Use game controllers	Usar controles de jogo
+Xbox, PlayStation, Switch and most others	Xbox, PlayStation, Switch e a maioria dos outros
+Turn controls on when PiP Studio starts	Ativar os controles quando o PiP Studio iniciar
+Release the game's focus while controls are on	Tirar o foco do jogo enquanto os controles estão ativados
+The game ignores the controller while you move the PiP, and gets focus back afterwards	O jogo ignora o controle enquanto você move o PiP e recebe o foco de volta depois
+The game ignores the controller meanwhile	O jogo ignora o controle enquanto isso
+Show button hints on the PiP	Mostrar dicas de botões no PiP
+Controller-friendly mode	Modo para controle
+Bigger layout and button hints	Layout maior e dicas de botões
+Bigger layout, a focus ring and button hints, so you can use this window with a controller. Pressing a key on the keyboard switches back.	Um layout maior, um anel de foco e dicas de botões, para usar esta janela com um controle. Pressionar uma tecla do teclado volta ao normal.
+When I use a controller	Quando eu uso um controle
+Always	Sempre
+Off	Desativado
+Fade controller hints when idle	Esmaecer as dicas do controle quando ocioso
+Hints fade after a few seconds	As dicas esmaecem depois de alguns segundos
+The PiP's name and button hints fade after a few seconds without input. Any button brings them back. Less for Windows to draw over your game.	O nome do PiP e as dicas de botões esmaecem depois de alguns segundos sem uso. Qualquer botão as traz de volta. Menos coisa para o Windows desenhar sobre o seu jogo.
+Controller options	Opções do controle
+Button assignments	Atribuição de botões
+Click, then press a button. Right-click clears it.	Clique e pressione um botão. O clique direito limpa.
+Click a binding, then press the button or combination. Right-click clears it. Trigger: press, double press or hold.	Clique em uma atribuição e pressione o botão ou a combinação. O clique direito limpa. Acionamento: pressionar, pressionar duas vezes ou segurar.
+Click, then press the button(s). Right-click to clear.	Clique e pressione o(s) botão(ões). Clique direito para limpar.
+Press once, press twice quickly, or hold	Pressionar uma vez, pressionar duas vezes rápido ou segurar
+Press	Pressionar
+Double press	Pressionar duas vezes
+Hold	Segurar
+Reset	Redefinir
+Connect a controller	Conecte um controle
+Press button(s)…	Pressione o(s) botão(ões)…
+No controller connected	Nenhum controle conectado
+No controller found	Nenhum controle encontrado
+Connect an Xbox, PlayStation or Switch controller by USB or Bluetooth.	Conecte um controle de Xbox, PlayStation ou Switch por USB ou Bluetooth.
+Connect an Xbox, PlayStation or Switch controller to use controller controls.	Conecte um controle de Xbox, PlayStation ou Switch para usar os controles pelo controle.
+Controls are on — the PiP has an accent outline. {0} turns them off.	Os controles estão ativados — o PiP tem um contorno na cor de destaque. {0} os desativa.
+Press {0} to turn controls on.	Pressione {0} para ativar os controles.
+Controller controls	Controles pelo controle
+Controller controls on · {0} turns them off	Controles pelo controle ativados · {0} os desativa
+Controller controls off	Controles pelo controle desativados
+Controller controls ({0})	Controles pelo controle ({0})
+Xbox controller	Controle de Xbox
+PlayStation controller	Controle de PlayStation
+Switch controller	Controle de Switch
+These work anywhere in Windows. Click a shortcut, then press the new keys (Backspace clears, Esc cancels). Right-click clears it. They act on the PiP you used or pointed at most recently.	Funcionam em qualquer lugar do Windows. Clique em um atalho e pressione as novas teclas (Backspace limpa, Esc cancela). O clique direito limpa. Eles agem no PiP que você usou ou apontou por último.
+Open and choose	Abrir e escolher
+Move and size	Mover e redimensionar
+Look and visibility	Aparência e visibilidade
+Source and media	Origem e mídia
+Click, then press keys. Right-click to clear.	Clique e pressione as teclas. Clique direito para limpar.
+Reset shortcuts	Redefinir atalhos
+Puts every shortcut back to its default	Volta cada atalho ao padrão
+Start PiP Studio when I sign in	Iniciar o PiP Studio quando eu entrar
+It starts quietly in the tray	Ele inicia discretamente na bandeja
+Bring back my PiPs when PiP Studio starts	Trazer meus PiPs de volta quando o PiP Studio iniciar
+Tips and alerts from the tray icon	Dicas e avisos do ícone da bandeja
+Hide PiPs from screenshots, recordings and screen sharing	Ocultar PiPs de capturas de tela, gravações e compartilhamento de tela
+OBS, Discord, Teams and the Snipping Tool won't see them. Costs a little performance, so leave it off unless you stream or share your screen.	OBS, Discord, Teams e a Ferramenta de Captura não vão vê-los. Custa um pouco de desempenho, então deixe desativado a menos que você transmita ou compartilhe a tela.
+Costs a little performance	Custa um pouco de desempenho
+Keep running in the tray when I close this window	Continuar na bandeja quando eu fechar esta janela
+Otherwise closing this window quits PiP Studio	Senão, fechar esta janela encerra o PiP Studio
+Release memory while idle	Liberar memória quando ocioso
+Gives unused memory back to Windows while PiP Studio sits in the tray	Devolve ao Windows a memória sem uso enquanto o PiP Studio está na bandeja
+Give memory back while in the tray	Devolver memória enquanto está na bandeja
+Running as administrator	Executando como administrador
+PiP Studio can show windows of apps that run as administrator	O PiP Studio pode mostrar janelas de apps executados como administrador
+Can show admin apps' windows	Pode mostrar janelas de apps de administrador
+Restart as administrator	Reiniciar como administrador
+Needed only to show windows of apps that run as administrator	Só é necessário para mostrar janelas de apps executados como administrador
+Only needed for admin apps' windows	Só é necessário para janelas de apps de administrador
+Needs administrator	Requer administrador
+Version {0}	Versão {0}
+Exit PiP Studio	Sair do PiP Studio
+Settings folder	Pasta de configurações
+Open	Abrir
+Picture-in-picture for any window or part of the screen	Picture-in-picture para qualquer janela ou parte da tela
+Uses Windows' own live thumbnails	Usa as miniaturas ao vivo do próprio Windows
+Live window mirroring uses Windows' own thumbnail system, so it costs almost nothing to run.	O espelhamento de janelas ao vivo usa o sistema de miniaturas do próprio Windows, então quase não gasta recursos.
+Select	Selecionar
+Back	Voltar
+Tabs	Abas
+Search	Pesquisar
+Scroll	Rolar
+Type	Digitar
+Space	Espaço
+Clear	Limpar
+Done	Concluído
+Snap spots	Posições de encaixe
+When you let go of a PiP it glides to the nearest spot: the 4 corners, plus the middle of each edge with 8 spots on. The arrow keys and D-pad use the same spots.	Quando você solta um PiP, ele desliza para a posição mais próxima: os 4 cantos, mais o meio de cada borda com 8 posições ativadas. As setas e o direcional usam as mesmas posições.
+How far a PiP sits from the edges of the screen.	A que distância das bordas da tela um PiP fica.
+Where new PiPs open	Onde os novos PiPs abrem
+A new PiP pops up in the corner you pick here.	Um novo PiP aparece no canto que você escolher aqui.
+Size of new PiPs	Tamanho dos novos PiPs
+A PiP can show its controls, fade, do nothing, or slide out of the way when the pointer reaches it. When it slides aside, hold Ctrl to grab it instead. Fade-out opacity sets how see-through it gets.	Um PiP pode mostrar seus controles, esmaecer, não fazer nada ou sair do caminho quando o ponteiro chega nele. Quando ele sai do caminho, segure Ctrl para pegá-lo. A opacidade ao esmaecer define o quanto ele fica transparente.
+Move arrows	Setas de movimento
+Arrow buttons on the PiP send it to the next spot, or across to the next display.	Os botões de seta no PiP o mandam para a próxima posição ou para a próxima tela.
+Ghost mode	Modo fantasma
+Clicks go straight through the PiP to the window behind it.	Os cliques atravessam o PiP direto para a janela atrás dele.
+Follow the window you left	Seguir a janela que você deixou
+When you switch windows, the PiP switches to the one you were just on, so the window you left stays in view. Auto PiPs always do this.	Quando você troca de janela, o PiP muda para a que você estava usando, então a janela que você deixou continua à vista. PiPs automáticos sempre fazem isso.
+Hide while its window is in front	Ocultar enquanto a janela dele está na frente
+No point showing a window twice: the PiP steps away while you're in its window.	Não faz sentido mostrar uma janela duas vezes: o PiP sai de cena enquanto você está na janela dele.
+Hide over full-screen apps	Ocultar sobre apps em tela cheia
+PiPs on a display get out of the way while a full-screen app or game runs there.	Os PiPs de uma tela saem do caminho enquanto um app ou jogo em tela cheia roda nela.
+How see-through a new PiP is.	O quanto um novo PiP é transparente.
+A big, centered PiP for when you want to watch properly. Press again to go back.	Um PiP grande e centralizado para quando você quer assistir direito. Pressione de novo para voltar.
+Minimizing a source tucks it off-screen so the PiP keeps moving. Click it in the taskbar to bring it back.	Minimizar uma origem a esconde fora da tela para que o PiP continue se movendo. Clique nela na barra de tarefas para trazê-la de volta.
+What a right-click on a PiP does: open its menu, close it, show its window, theater mode, or nothing.	O que um clique direito em um PiP faz: abrir o menu, fechá-lo, mostrar a janela dele, modo cinema ou nada.
+More than one PiP	Mais de um PiP
+On: each new PiP opens alongside the others. Off: opening a new PiP switches the one that's already open to the new window.	Ativado: cada novo PiP abre ao lado dos outros. Desativado: abrir um novo PiP troca o que já está aberto para a nova janela.
+Other apps' PiPs	PiPs de outros apps
+When no PiP Studio PiP is open, your shortcuts and controller move, resize, fade, mute and close the picture-in-picture windows of Chrome, Edge, Firefox, Discord and other apps. They also land on the same spots as your PiPs, when they open and when you let go after dragging them.	Quando nenhum PiP do PiP Studio está aberto, seus atalhos e seu controle movem, redimensionam, esmaecem, silenciam e fecham as janelas picture-in-picture do Chrome, Edge, Firefox, Discord e outros apps. Elas também vão para as mesmas posições que os seus PiPs, ao abrir e quando você as solta depois de arrastar.
+Move, size and switch PiPs with an Xbox, PlayStation, Switch or most other controllers. With Release the game's focus on, the game ignores the controller while you steer the PiP and gets focus back afterwards. Hints show which button does what, and fade after a few idle seconds.	Mova, redimensione e troque PiPs com um controle de Xbox, PlayStation, Switch ou quase qualquer outro. Com Tirar o foco do jogo ativado, o jogo ignora o controle enquanto você move o PiP e recebe o foco de volta depois. As dicas mostram o que cada botão faz e esmaecem depois de alguns segundos parado.
+Shows controls	Mostra controles
+Fades to {0}%	Esmaece para {0}%
+Nothing happens	Nada acontece
+Moves out of the way	Sai do caminho
+Glides into place	Desliza para o lugar
+Jumps into place	Pula para o lugar
+Max height {0}%	Altura máx. {0}%
+Max width {0}%	Largura máx. {0}%
+A second PiP opens	Um segundo PiP abre
+The PiP switches to the new window	O PiP muda para a nova janela
+Right-click: menu	Clique direito: menu
+Right-click: close	Clique direito: fechar
+Right-click: show its window	Clique direito: mostrar a janela
+Right-click: theater mode	Clique direito: modo cinema
+Right-click: nothing	Clique direito: nada
+Follows Windows	Segue o Windows
+Lite	Leve
+Rounded	Arredondados
+Square	Retos
+Volume 60%	Volume 60%
+Browser's own PiP	PiP do próprio navegador
+This app	Este app
+Accent	Destaque
+{0}'s own PiP	PiP do próprio {0}
+App's own PiP	PiP do próprio app
+{0} isn't available for {1}'s own PiP	{0} não está disponível para o PiP do próprio {1}
+Couldn't find {0}'s window	Não foi possível encontrar a janela de {0}
+Showing {0}	Mostrando {0}
+Opacity {0}%	Opacidade {0}%
+Volume {0}%	Volume {0}%
+Muted	Sem som
+Sound on	Som ativado
+Unmuted	Som ativado
+That	Isso
+Hiding	Ocultando
+Cropping	Recortando
+Follows	Segue
+Source hidden	Origem oculta
+Locked	Bloqueado
+Waiting	Aguardando
+Hidden	Oculto
+Screen	Tela
+Normal	Normal
+PiP Studio is running	O PiP Studio está em execução
+Press {0} any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.	Pressione {0} a qualquer momento para colocar uma janela em picture-in-picture. Clique neste ícone da bandeja para abrir o PiP Studio.
+Something went wrong	Algo deu errado
+Some shortcuts are taken by another app	Alguns atalhos já são usados por outro app
+No PiP is open	Nenhum PiP aberto
+Press {0} to open one.	Pressione {0} para abrir um.
+PiPs hidden	PiPs ocultos
+Press {0} or click here to bring them back.	Pressione {0} ou clique aqui para trazê-los de volta.
+Nothing to PiP	Nada para colocar em PiP
+Click the window you want first, then press {0}.	Clique primeiro na janela que você quer e depois pressione {0}.
+Drag to select the part of the screen you want to watch	Arraste para selecionar a parte da tela que você quer assistir
+A PiP is already open	Já há um PiP aberto
+Open a window first — Auto picks it up from there.	Abra uma janela primeiro — o Automático continua a partir dela.
+Moves out of the mouse's way · hold Ctrl to grab it	Sai do caminho do mouse · segure Ctrl para pegá-lo
+Stays put under the mouse	Fica parado sob o mouse
+Choose a window…	Escolher uma janela…
+Click a window on screen…	Clicar em uma janela na tela…
+Mirror a screen region…	Espelhar uma região da tela…
+Change source…	Trocar origem…
+Crop…	Recortar…
+Click-through	Deixar passar cliques
+Move back to the default spot	Voltar para a posição padrão
+Hide all PiPs	Ocultar todos os PiPs
+Turn off click-through everywhere	Desativar a passagem de cliques em todos
+Close all PiPs	Fechar todos os PiPs
+Exit	Sair
+Open PiP Studio	Abrir o PiP Studio
+Close	Fechar
+New PiP…	Novo PiP…
+Choose a window to PiP	Escolher uma janela para o PiP
+PiP the active window	PiP da janela ativa
+PiP a region of the screen	PiP de uma região da tela
+Hide / show all PiPs	Ocultar / mostrar todos os PiPs
+Click-through (ghost mode)	Deixar passar cliques (modo fantasma)
+Move PiP up	Mover o PiP para cima
+Move PiP down	Mover o PiP para baixo
+Move PiP left	Mover o PiP para a esquerda
+Move PiP right	Mover o PiP para a direita
+Move PiP to the next corner	Mover o PiP para o próximo canto
+Move PiP to the next display	Mover o PiP para a próxima tela
+Make PiP bigger	Aumentar o PiP
+Make PiP smaller	Diminuir o PiP
+More opaque	Mais opaco
+More transparent	Mais transparente
+Theater mode on / off	Ativar / desativar o modo cinema
+Show the previous window (wraps around through Auto)	Mostrar a janela anterior (dá a volta passando pelo Automático)
+Show the next window (wraps around through Auto)	Mostrar a próxima janela (dá a volta passando pelo Automático)
+Follow the window I just left (on / off)	Seguir a janela que acabei de deixar (ativar / desativar)
+Move out of the mouse's way (on / off)	Sair do caminho do mouse (ativar / desativar)
+Bring the source window to the front	Trazer a janela de origem para a frente
+Mute / unmute the source app	Silenciar / ativar o som do app de origem
+Turn the source app's volume up	Aumentar o volume do app de origem
+Turn the source app's volume down	Diminuir o volume do app de origem
+Media play / pause	Reproduzir / pausar mídia
+Crop the PiP	Recortar o PiP
+Close the PiP	Fechar o PiP
+Controller controls on / off	Ativar / desativar os controles pelo controle
+Start a PiP on Auto (when none is open)	Abrir um PiP no Automático (quando nenhum está aberto)
+Turn controller controls off	Desativar os controles pelo controle
+Pick	Escolher
+Region	Região
+Hide	Ocultar
+Ghost	Fantasma
+Corner	Canto
+Display	Tela
+Size +	Tamanho +
+Size −	Tamanho −
+Opacity +	Opacidade +
+Opacity −	Opacidade −
+Theater	Cinema
+Prev	Anterior
+Next	Próxima
+Follow	Seguir
+Dodge	Desviar
+Show	Mostrar
+Mute	Silenciar
+Volume +	Volume +
+Volume −	Volume −
+Play	Reproduzir
+Crop	Recortar
+Controls	Controles
+Start	Iniciar
+Move	Mover
+D-pad	Direcional
+Click any window to open it in PiP  ·  Esc to cancel	Clique em qualquer janela para abri-la em PiP  ·  Esc para cancelar
+Enter opens the selected window  ·  Arrow keys move  ·  Type to search  ·  Esc closes	Enter abre a janela selecionada  ·  As setas movem  ·  Digite para pesquisar  ·  Esc fecha
+Free	Livre
+Screen region {0}	Região da tela {0}
+Can't show this window	Não é possível mostrar esta janela
+Windows refused to mirror this window (error 0x{0}). Try another window.	O Windows se recusou a espelhar esta janela (erro 0x{0}). Tente outra janela.
+This PiP shows a screen region	Este PiP mostra uma região da tela
+No other windows	Nenhuma outra janela
+Auto off	Automático desativado
+Auto — {0}	Automático — {0}
+Follows the window you just left	Segue a janela que você acabou de deixar
+Stays on {0}	Fica em {0}
+Auto — waiting for a window	Automático — aguardando uma janela
+Source closed — waiting for it to come back	Origem fechada — aguardando ela voltar
+Source hidden — still playing	Origem oculta — continua reproduzindo
+Source restored	Origem restaurada
+Original size	Tamanho original
+Only one display	Só há uma tela
+Locked to this display	Preso a esta tela
+No source to crop	Nenhuma origem para recortar
+Couldn't capture the source to crop it	Não foi possível capturar a origem para recortá-la
+Crop — drag to choose the part of {0} to show	Recortar — arraste para escolher a parte de {0} a mostrar
+Full view	Visão completa
+Zoom {0}	Zoom {0}
+Click-through on · {0} turns it off	Passagem de cliques ativada · {0} a desativa
+Click-through off	Passagem de cliques desativada
+Always on top	Sempre visível
+Not on top	Não fica por cima
+Fit	Ajustar
+Fill	Preencher
+Stretch	Esticar
+Position locked	Posição bloqueada
+Position unlocked	Posição desbloqueada
+No app audio for this source	Sem áudio de app para esta origem
+Waiting for {0}…	Aguardando {0}…
+Source closed	Origem fechada
+It will reconnect automatically when it reopens.	Ela vai se reconectar automaticamente quando abrir de novo.
+Right-click › Source › Change source…	Clique direito › Origem › Trocar origem…
+Source is minimized	A origem está minimizada
+Restore it, or use right-click › Source › Hide source window to keep it playing out of sight.	Restaure-a ou use clique direito › Origem › Ocultar a janela de origem para que ela continue reproduzindo fora de vista.
+Mirror a screen region instead…	Espelhar uma região da tela em vez disso…
+Show everything (reset crop & zoom)	Mostrar tudo (redefinir recorte e zoom)
+Hide the source's title bar	Ocultar a barra de título da origem
+Bring source to front	Trazer a origem para a frente
+Hide source window (keeps playing)	Ocultar a janela de origem (continua reproduzindo)
+Previous window	Janela anterior
+Next window	Próxima janela
+Auto (first window, then the one you just left)	Automático (primeira janela, depois a que você acabou de deixar)
+Fix frozen picture (restart {0})…	Corrigir imagem congelada (reiniciar {0})…
+Previous display	Tela anterior
+Next display	Próxima tela
+Original size (1:1 pixels)	Tamanho original (pixels 1:1)
+Move to next display	Mover para a próxima tela
+Snap to the middle of edges too	Encaixar também no meio das bordas
+Move out of the mouse's way	Sair do caminho do mouse
+Lock position & size	Bloquear posição e tamanho
+Scaling	Dimensionamento
+Fit (keep shape)	Ajustar (manter a forma)
+Fill (crop edges to fill)	Preencher (cortar as bordas para preencher)
+Media & audio	Mídia e áudio
+Play / pause	Reproduzir / pausar
+Next track	Próxima faixa
+Previous track	Faixa anterior
+Mute {0}	Silenciar {0}
+Duplicate this PiP	Duplicar este PiP
+More options	Mais opções
+Exit theater mode	Sair do modo cinema
+Mute — scroll to change volume	Silenciar — role para mudar o volume
+Move left	Mover para a esquerda
+Move right	Mover para a direita
+Move up	Mover para cima
+Move down	Mover para baixo
+Change what this PiP shows	Mudar o que este PiP mostra
+Tools	Ferramentas
+PiP controls	Controles do PiP
+Unbound	Sem atribuição
+Enter or double-click to confirm  ·  Esc to cancel  ·  F = everything  ·  Shape: 1 Free  2 16:9  3 4:3  4 1:1  5 9:16  (now: {0})	Enter ou clique duplo para confirmar  ·  Esc para cancelar  ·  F = tudo  ·  Forma: 1 Livre  2 16:9  3 4:3  4 1:1  5 9:16  (agora: {0})
+8 spots instead of 4 corners	8 posições em vez de 4 cantos
+Small+	Pequeno+
+Medium+	Médio+
+Large+	Grande+
+Largest size	Maior tamanho
+Smallest size	Menor tamanho
+Eight sizes from Extra small to Extra large, set by width so a PiP keeps its shape. Bigger and Smaller step through the same sizes. Your choice is highlighted.	Oito tamanhos, de Extrapequeno a Extragrande, definidos pela largura para que o PiP mantenha a forma. Maior e Menor passam pelos mesmos tamanhos. Sua escolha fica destacada.
+Extra small	Extrapequeno
+Pick a window or a display for this PiP	Escolha uma janela ou uma tela para este PiP
+Show in this PiP	Mostrar neste PiP
+No preview for this window	Sem prévia para esta janela
+This window has closed	Esta janela foi fechada
+It opens in a floating picture-in-picture window	Ela abre em uma janela picture-in-picture flutuante
+No matching windows	Nenhuma janela correspondente
+Choose a window	Escolher uma janela
+Title bar buttons	Botões da barra de título
+Pick the buttons on a PiP's title bar and their order	Escolha os botões da barra de título de um PiP e a ordem deles
+Always shown, so the full menu is never out of reach	Sempre mostrado, para que o menu completo esteja sempre ao alcance
+Reset title bar buttons	Redefinir os botões da barra de título
+Back to the default buttons and order	Volta aos botões e à ordem padrão
+The buttons a PiP's title bar shows when you point at it, in your order. Previous and Next window switch what the PiP shows, and Bigger and Smaller step through the sizes. More options always stays, so the full menu is never out of reach. On a narrow PiP, buttons on the left make room first.	Os botões que a barra de título de um PiP mostra quando você aponta para ele, na sua ordem. Janela anterior e Próxima janela mudam o que o PiP mostra, e Maior e Menor passam pelos tamanhos. Mais opções sempre fica, para que o menu completo esteja sempre ao alcance. Em um PiP estreito, os botões da esquerda abrem espaço primeiro.
+Treat as a PiP	Tratar como PiP
+Not a PiP	Não é um PiP
+Find other apps' PiPs automatically	Encontrar PiPs de outros apps automaticamente
+Small always-on-top windows, like video players' mini modes, count as PiPs. Mark one as Not a PiP on the Running PiPs page.	Janelas pequenas sempre visíveis, como os minimodos de players de vídeo, contam como PiPs. Marque uma como Não é um PiP na página PiPs abertos.
+Windows you marked	Janelas que você marcou
+Forget every Treat as a PiP and Not a PiP you chose	Esquecer todos os Tratar como PiP e Não é um PiP que você escolheu
+Find other apps' PiPs	Encontrar PiPs de outros apps
+PiP options	Opções do PiP
+Shape	Forma
+Black bars	Barras pretas
+Snapping	Encaixe
+Match the picture	Igual à imagem
+Follow my setting	Seguir minha configuração
+Always snap to spots	Sempre encaixar nas posições
+Never snap	Nunca encaixar
+No sound from this app right now	Nenhum som deste app agora
+Crops away the bars around the video	Corta as barras em volta do vídeo
+Fits the window to the video so the bars disappear	Ajusta a janela ao vídeo para que as barras sumam
+Snapping follows Settings	O encaixe segue as Configurações
+Snaps to spots	Encaixa nas posições
+Doesn't snap	Não encaixa
+Showing the whole picture	Mostrando a imagem inteira
+Couldn't look at the source right now	Não foi possível olhar a origem agora
+No black bars found	Nenhuma barra preta encontrada
+Black bars removed	Barras pretas removidas
+Removing black bars	Removendo barras pretas
+Black bars left alone	Barras pretas mantidas
+Updates	Atualizações
+What's new	Novidades
+Check now	Verificar agora
+Update now	Atualizar agora
+Check for updates automatically	Verificar atualizações automaticamente
+Once a day, on GitHub. Nothing about you or your PC is sent.	Uma vez por dia, no GitHub. Nada sobre você ou seu PC é enviado.
+Checking for updates…	Verificando atualizações…
+You're up to date (version {0})	Você está atualizado (versão {0})
+Version {0} is available	A versão {0} está disponível
+Downloading the update… {0}%	Baixando a atualização… {0}%
+Installing the update…	Instalando a atualização…
+You have version {0}	Você tem a versão {0}
+The update didn't work	A atualização não funcionou
+Update available	Atualização disponível
+PiP Studio {0} is out. Click to update.	O PiP Studio {0} saiu. Clique para atualizar.
+PiP Studio was updated	O PiP Studio foi atualizado
+You're now on version {0}.	Agora você está na versão {0}.
+Update to version {0}…	Atualizar para a versão {0}…
+Couldn't reach GitHub. Check your internet connection and try again.	Não foi possível acessar o GitHub. Verifique sua conexão com a internet e tente de novo.
+The download was damaged (its fingerprint doesn't match). Please try again.	O download veio danificado (a impressão digital não confere). Tente de novo.
+Show controls on other apps' PiPs	Mostrar controles nos PiPs de outros apps
+Point at another app's PiP to get PiP Studio's title bar over it: drag it to move the PiP, scroll on it to change the volume, and use the title bar buttons you picked.	Aponte para o PiP de outro app para que a barra de título do PiP Studio apareça sobre ele: arraste-a para mover o PiP, role sobre ela para mudar o volume e use os botões da barra de título que você escolheu.
+Controls on other apps' PiPs	Controles nos PiPs de outros apps
+Point at the PiP window of Chrome, Firefox, Discord or another app and PiP Studio's title bar appears over its top edge. Drag the bar to move the PiP, scroll on it to change the volume, minimize it, and use the same buttons as your own PiPs' title bar: show the app, theater mode, bigger, smaller, next corner, close and more. The rest of the PiP keeps working as usual.	Aponte para a janela PiP do Chrome, Firefox, Discord ou outro app e a barra de título do PiP Studio aparece sobre a borda superior dela. Arraste a barra para mover o PiP, role sobre ela para mudar o volume, minimize-o e use os mesmos botões da barra de título dos seus PiPs: mostrar o app, modo cinema, maior, menor, próximo canto, fechar e mais. O resto do PiP continua funcionando normalmente.
+Show {0}	Mostrar {0}
+Options in PiP Studio	Opções no PiP Studio
+Minimize	Minimizar
+Restore	Restaurar
+Restore {0}'s PiP	Restaurar o PiP de {0}
+PiP Studio's title bar appears	A barra de título do PiP Studio aparece
+Your video	Seu vídeo
+Remove	Remover
+Remove all	Remover todos
+Marked as PiPs	Marcadas como PiPs
+Windows you chose to treat as PiPs. Removing one makes it a normal window again and takes it off always on top.	Janelas que você escolheu tratar como PiPs. Remover uma a torna uma janela normal de novo e ela deixa de ficar sempre visível.
+Treat this window as a PiP?	Tratar esta janela como um PiP?
+PiP Studio will handle it like another app's picture-in-picture window:	O PiP Studio vai lidar com ela como a janela picture-in-picture de outro app:
+•  It moves to Running PiPs and snaps to PiP spots	•  Ela vai para PiPs abertos e se encaixa nas posições de PiP
+•  It stays on top of your other windows once you move or steer it	•  Ela fica acima das suas outras janelas assim que você a move ou a controla
+•  Your PiP shortcuts and controller move, resize, fade and close it	•  Seus atalhos de PiP e seu controle a movem, redimensionam, esmaecem e fecham
+This applies to every window like this one from {0}, now and later. You can undo it any time under Running PiPs > Marked as PiPs, which also takes it off always on top.	Isso vale para todas as janelas como esta de {0}, agora e depois. Você pode desfazer a qualquer momento em PiPs abertos > Marcadas como PiPs, o que também tira ela de sempre visível.
+This applies to this window only, until it closes. You can undo it any time under Running PiPs > Marked as PiPs, which also takes it off always on top.	Isso vale só para esta janela, até ela fechar. Você pode desfazer a qualquer momento em PiPs abertos > Marcadas como PiPs, o que também tira ela de sempre visível.
+Remove every mark?	Remover todas as marcações?
+Every window you marked with Treat as a PiP goes back to being a normal window, and comes off always on top.	Todas as janelas que você marcou com Tratar como PiP voltam a ser janelas normais e deixam de ficar sempre visíveis.
+Every window like this from {0}	Todas as janelas como esta de {0}
+{0} · this window only, until it closes	{0} · só esta janela, até ela fechar
+Phone companion	Companheiro no celular
+Control PiP Studio from your phone	Controle o PiP Studio pelo celular
+Manage your PiPs and every app's volume from your phone's browser, over your home Wi-Fi. Windows may ask you to allow PiP Studio on private networks.	Gerencie seus PiPs e o volume de cada app pelo navegador do celular, pelo Wi-Fi de casa. O Windows pode pedir para permitir o PiP Studio em redes privadas.
+Pair a phone	Parear um celular
+Turn on the switch above first	Ative primeiro a opção acima
+This PC isn't on a network right now	Este PC não está em nenhuma rede agora
+Your phone opens {0}	Seu celular abre {0}
+Not used since PiP Studio started	Não usado desde que o PiP Studio iniciou
+Last used {0}	Usado pela última vez {0}
+Remove {0}?	Remover {0}?
+It stops working right away. You can pair it again any time.	Ele para de funcionar na hora. Você pode pareá-lo de novo quando quiser.
+No network	Sem rede
+PiP Studio can't find this PC's address on your local network. Connect to Wi-Fi or Ethernet and try again.	O PiP Studio não encontra o endereço deste PC na sua rede local. Conecte-se ao Wi-Fi ou à Ethernet e tente de novo.
+Paired with {0}. You can close this.	Pareado com {0}. Você já pode fechar isto.
+Couldn't open a network port. Another app may be using it.	Não foi possível abrir uma porta de rede. Outro app pode estar usando.
+Or open {0} on your phone	Ou abra {0} no seu celular
+Waiting for your phone…	Aguardando o seu celular…
+That PIN doesn't match. Check the PIN on your phone.	Esse PIN não confere. Verifique o PIN no seu celular.
+Too many wrong PINs. Start pairing again on your phone.	PINs errados demais. Comece o pareamento de novo no seu celular.
+No phone is showing a PIN yet. Open the page on your phone and tap Pair.	Nenhum celular está mostrando um PIN ainda. Abra a página no celular e toque em Parear.
+Your phone is showing a PIN. Type it here.	Seu celular está mostrando um PIN. Digite-o aqui.
+1. Scan this code with your phone's camera (it needs to be on the same Wi-Fi as this PC) and tap Pair.	1. Escaneie este código com a câmera do celular (ele precisa estar no mesmo Wi-Fi que este PC) e toque em Parear.
+2. Your phone shows a 6-digit PIN. Type it below.	2. Seu celular mostra um PIN de 6 dígitos. Digite-o abaixo.
+Pair	Parear
+PiP Studio closed unexpectedly	O PiP Studio fechou inesperadamente
+Click to send a crash report, so it can be fixed.	Clique para enviar um relatório de erro, para que isso possa ser corrigido.
+Sending this report helps get it fixed. It opens a new issue on GitHub in your browser with this already filled in, so you can check it, add what you were doing, and send it yourself. Your Windows user name and PC name are left out.	Enviar este relatório ajuda a corrigir o problema. Ele abre uma nova issue no GitHub no seu navegador com isto já preenchido, para que você confira, conte o que estava fazendo e envie você mesmo. Seu nome de usuário do Windows e o nome do PC ficam de fora.
+Send report	Enviar relatório
+Copy report	Copiar relatório
+Report a problem	Relatar um problema
+Opens a bug report on GitHub with your PiP Studio and Windows versions and recent errors filled in	Abre um relatório de bug no GitHub com as versões do PiP Studio e do Windows e os erros recentes já preenchidos
+Report	Relatar
+Copied	Copiado
+Controller controls on · The game runs as admin, so it still gets the controller	Controles pelo controle ativados · O jogo roda como administrador, então ele ainda recebe o controle
+The game runs as administrator	O jogo roda como administrador
+So it keeps getting your controller. Click to restart PiP Studio as administrator, which fixes that.	Por isso ele continua recebendo o seu controle. Clique para reiniciar o PiP Studio como administrador, o que resolve isso.
+Always start as administrator	Sempre iniciar como administrador
+Without asking each time, also at sign-in. For games and apps that run as administrator: PiP Studio can then show their windows and take their focus for controller controls. Windows asks once to set it up.	Sem perguntar toda vez, também ao entrar. Para jogos e apps que rodam como administrador: assim o PiP Studio pode mostrar as janelas deles e tirar o foco deles para os controles pelo controle. O Windows pergunta uma vez para configurar.
+Restart as administrator now?	Reiniciar como administrador agora?
+From now on PiP Studio starts as administrator without asking, also when it starts at sign-in.	De agora em diante o PiP Studio inicia como administrador sem perguntar, também quando inicia ao entrar.
+Phone	Celular
+Paired phones	Celulares pareados
+No phones are paired yet. Press Pair a phone above to add one.	Nenhum celular pareado ainda. Pressione Parear um celular acima para adicionar um.
+Rename	Renomear
+Rename phone	Renomear celular
+The name shows here, so you can tell your phones apart.	O nome aparece aqui, para você distinguir seus celulares.
+Save	Salvar
+Not in the Microsoft Store version	Não está na versão da Microsoft Store
+The phone companion needs network access the Store version doesn't have. The installer and portable versions from GitHub include it.	O companheiro no celular precisa de um acesso à rede que a versão da Store não tem. As versões instalador e portátil do GitHub o incluem.
+Your phone becomes a remote for PiP Studio: move and resize PiPs, switch what they show, and set the volume of every app, from the phone's browser on your home Wi-Fi. Nothing goes over the internet, and everything between phone and PC is encrypted.	Seu celular vira um controle remoto do PiP Studio: mova e redimensione PiPs, troque o que eles mostram e ajuste o volume de cada app, pelo navegador do celular no Wi-Fi de casa. Nada passa pela internet, e tudo entre o celular e o PC é criptografado.
+Pairing a phone	Pareando um celular
+Like pairing Moonlight with Sunshine: scan the code, tap Pair on your phone, and type the PIN it shows into PiP Studio. The PIN only matches when nothing sits between the two, and only paired phones can connect. Remove a phone any time.	Como parear o Moonlight com o Sunshine: escaneie o código, toque em Parear no celular e digite no PiP Studio o PIN que ele mostra. O PIN só confere quando não há nada entre os dois, e só celulares pareados podem se conectar. Remova um celular quando quiser.
+Type the phone's PIN	Digite o PIN do celular
+Light, dark or OLED (black instead of grey, great on OLED screens) for PiP Studio's windows and menus, or follow Windows.	Claro, escuro ou OLED (preto em vez de cinza, ótimo em telas OLED) para as janelas e os menus do PiP Studio, ou seguir o Windows.
+Light, dark or OLED black, for PiP Studio's windows and menus	Claro, escuro ou preto OLED, para as janelas e os menus do PiP Studio
+OLED	OLED
+Full-screen windows can't be PiPs	Janelas em tela cheia não podem ser PiPs
+It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Ela ficaria por cima de todo o resto nessa tela. Coloque-a no modo janela primeiro e tente de novo.

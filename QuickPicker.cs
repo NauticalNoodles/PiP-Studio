@@ -167,7 +167,7 @@ namespace PipStudio
             changing = changingSource;
             Fluent.PickBrushes();
             lite = App.S.LiteMode;
-            win = (Window)XamlReader.Parse(lite ? MainUI.LiteXaml(Xaml) : Xaml);
+            win = (Window)XamlReader.Parse((lite ? MainUI.LiteXaml(Xaml) : Xaml).Replace("Microsoft YaHei UI", L.Cjk));
             L.Watch(win);
             list = (ListBox)win.FindName("List");
             search = (TextBox)win.FindName("Search");

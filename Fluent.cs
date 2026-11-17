@@ -72,7 +72,16 @@ namespace PipStudio
     {
         public static Application App;
         public static readonly FontFamily IconFont = new FontFamily("Segoe Fluent Icons, Segoe MDL2 Assets");
-        public static readonly FontFamily TextFont = new FontFamily("Segoe UI Variable Text, Segoe UI, Microsoft YaHei UI");
+        static FontFamily textFont; static string textFontFor;
+        /// <summary>Segoe UI, with the right font for Chinese, Japanese or Korean characters in the current language.</summary>
+        public static FontFamily TextFont
+        {
+            get
+            {
+                if (textFont == null || textFontFor != L.Cjk) { textFontFor = L.Cjk; textFont = new FontFamily("Segoe UI Variable Text, Segoe UI, " + L.Cjk); }
+                return textFont;
+            }
+        }
         static bool appliedDark;
 
         public static void Init(Application a)

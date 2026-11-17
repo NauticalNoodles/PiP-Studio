@@ -23,8 +23,11 @@ namespace PipStudio
         static readonly Dictionary<string, string> cache = new Dictionary<string, string>();
 
         /// <summary>Codes and native names offered in Settings. "" follows Windows.</summary>
-        public static readonly string[] Codes = { "", "en", "ar", "zh" };
-        public static readonly string[] Names = { "Use my Windows language", "English", "العربية", "中文（简体）" };
+        public static readonly string[] Codes = { "", "en", "es", "pt", "fr", "de", "ru", "ja", "ar", "zh" };
+        public static readonly string[] Names = { "Use my Windows language", "English", "Español", "Português (Brasil)", "Français", "Deutsch", "Русский", "日本語", "العربية", "中文（简体）" };
+
+        /// <summary>The font for Chinese, Japanese and Korean characters (each language writes the same characters its own way).</summary>
+        public static string Cjk { get { return Code == "ja" ? "Yu Gothic UI, Meiryo UI" : Code == "ko" ? "Malgun Gothic" : "Microsoft YaHei UI"; } }
 
         public static void Init(string setting)
         {
@@ -32,10 +35,10 @@ namespace PipStudio
             if (c == "")
             {
                 string sys = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-                c = sys == "ar" || sys == "zh" ? sys : "en";
+                c = Array.IndexOf(LangData.Codes, sys) >= 0 ? sys : "en";
             }
             Code = c;
-            map = c == "ar" ? LangData.Arabic() : c == "zh" ? LangData.Chinese() : null;
+            map = LangData.For(c);
             Rtl = c == "ar";
             patterns.Clear(); cache.Clear();
             if (map == null) return;
