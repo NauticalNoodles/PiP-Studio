@@ -692,3 +692,5 @@ Light, dark or OLED black, for PiP Studio's windows and menus	Светлая, т
 OLED	OLED
 Full-screen windows can't be PiPs	Полноэкранные окна не могут быть PiP
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Оно оставалось бы поверх всего остального на этом экране. Сначала переключите его в оконный режим и попробуйте снова.
+Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Нажмите {0} в любой момент, чтобы открыть окно в режиме «картинка в картинке». Запустите PiP Studio снова, чтобы открыть его окно.
+Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Сочетания клавиш и геймпад продолжают работать. Запустите PiP Studio снова, чтобы открыть это окно.

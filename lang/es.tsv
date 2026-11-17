@@ -692,3 +692,5 @@ Light, dark or OLED black, for PiP Studio's windows and menus	Claro, oscuro o ne
 OLED	OLED
 Full-screen windows can't be PiPs	Las ventanas a pantalla completa no pueden ser PiP
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Se quedaría por encima de todo lo demás en esa pantalla. Ponla primero en modo ventana y vuelve a intentarlo.
+Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Pulsa {0} en cualquier momento para poner una ventana en imagen en imagen. Vuelve a abrir PiP Studio para ver su ventana.
+Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Tus atajos y tu mando siguen funcionando. Vuelve a abrir PiP Studio para ver esta ventana.

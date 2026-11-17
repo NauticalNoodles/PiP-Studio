@@ -544,6 +544,7 @@ namespace PipStudio
             w.Activate();
             try { U.ForceForeground(new WindowInteropHelper(w).Handle); } catch { }
             if (pageKey != null) Navigate(pageKey);
+            if (U.XboxMode && App.S.PadUiMode == 1 && !padVisual) Dispatch(() => SetPadVisual(true), DispatcherPriority.Loaded);   // Xbox mode: you're on a controller
         }
 
         static T F<T>(string name) where T : class { return (T)w.FindName(name); }
@@ -804,7 +805,9 @@ namespace PipStudio
                 if (!exiting && !closedHintShown && App.S.ShowTips)
                 {
                     closedHintShown = true;
-                    App.I.Balloon("PiP Studio is still running", "Your shortcuts keep working. Click the tray icon to open it again.");
+                    App.I.Balloon("PiP Studio is still running", U.XboxMode
+                        ? "Your shortcuts and controller keep working. Start PiP Studio again to open this window."   // Xbox mode has no tray
+                        : "Your shortcuts keep working. Click the tray icon to open it again.");
                 }
             };
             win.Closed += (o, e) => OnClosed(win);

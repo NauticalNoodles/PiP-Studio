@@ -210,6 +210,26 @@ namespace PipStudio
             return Native.DwmGetWindowAttribute(h, 14, out v, 4) == 0 ? v : 0;
         }
 
+        static bool xboxMode; static DateTime xboxChecked = DateTime.MinValue;
+
+        /// <summary>Windows' Xbox mode (the full screen experience on handhelds and gaming PCs): the Xbox app is the home
+        /// screen, every app runs full screen and there's no taskbar, so no tray icon either. Checked every few seconds.</summary>
+        public static bool XboxMode
+        {
+            get
+            {
+                if ((DateTime.UtcNow - xboxChecked).TotalSeconds < 3) return xboxMode;
+                xboxChecked = DateTime.UtcNow;
+                bool noTaskbar;
+                IntPtr tray = Native.FindWindow("Shell_TrayWnd", null);
+                noTaskbar = tray == IntPtr.Zero || !Native.IsWindowVisible(tray) || CloakState(tray) != 0;
+                bool xboxApp = false;
+                if (noTaskbar)
+                    foreach (var p in Process.GetProcessesByName("XboxPcApp")) { xboxApp = true; p.Dispose(); }
+                return xboxMode = noTaskbar && xboxApp;
+            }
+        }
+
         /// <summary>A full-screen window: it covers its whole display (games, videos and presentations in full screen, borderless included).</summary>
         public static bool CoversScreen(IntPtr h)
         {

@@ -722,6 +722,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "لا يمكن أن تكون النوافذ بملء الشاشة نوافذ عائمة" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "ستبقى فوق كل شيء آخر على تلك الشاشة. حوّلها إلى وضع النافذة أولًا، ثم حاول مرة أخرى." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "اضغط {0} في أي وقت لوضع نافذة في وضع الصورة داخل الصورة. شغّل PiP Studio مرة أخرى لفتح نافذته." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "تظل اختصاراتك ووحدة التحكم تعمل. شغّل PiP Studio مرة أخرى لفتح هذه النافذة." },
             };
         }
 
@@ -1423,6 +1425,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "全屏窗口不能作为画中画" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "它会一直停留在该显示器上所有内容的上方。请先将其切换为窗口模式，然后重试。" },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "随时按 {0} 即可将窗口放入画中画。再次启动 PiP Studio 即可打开它的窗口。" },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "快捷键和控制器仍然可用。再次启动 PiP Studio 即可打开此窗口。" },
             };
         }
 
@@ -2124,6 +2128,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "Vollbildfenster können keine PiPs sein" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Es würde auf diesem Bildschirm über allem anderen bleiben. Schalte es zuerst in den Fenstermodus und versuch es dann noch einmal." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Drück jederzeit {0}, um ein Fenster als Bild-in-Bild zu zeigen. Starte PiP Studio erneut, um sein Fenster zu öffnen." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Deine Tastenkürzel und dein Controller funktionieren weiter. Starte PiP Studio erneut, um dieses Fenster zu öffnen." },
             };
         }
 
@@ -2825,6 +2831,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "Las ventanas a pantalla completa no pueden ser PiP" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Se quedaría por encima de todo lo demás en esa pantalla. Ponla primero en modo ventana y vuelve a intentarlo." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Pulsa {0} en cualquier momento para poner una ventana en imagen en imagen. Vuelve a abrir PiP Studio para ver su ventana." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Tus atajos y tu mando siguen funcionando. Vuelve a abrir PiP Studio para ver esta ventana." },
             };
         }
 
@@ -3526,6 +3534,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "Les fenêtres en plein écran ne peuvent pas être des PiP" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Elle resterait au-dessus de tout le reste sur cet écran. Passez-la d'abord en mode fenêtré, puis réessayez." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Appuyez sur {0} à tout moment pour mettre une fenêtre en picture-in-picture. Relancez PiP Studio pour ouvrir sa fenêtre." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Vos raccourcis et votre manette fonctionnent toujours. Relancez PiP Studio pour ouvrir cette fenêtre." },
             };
         }
 
@@ -4227,6 +4237,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "全画面のウィンドウは PiP にできません" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "そのディスプレイの他のすべてより手前に表示されたままになってしまいます。先にウィンドウ モードに切り替えてから、もう一度お試しください。" },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "いつでも {0} を押すと、ウィンドウをピクチャー イン ピクチャーにできます。もう一度 PiP Studio を起動するとウィンドウが開きます。" },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "ショートカットとコントローラーは引き続き使えます。もう一度 PiP Studio を起動するとこのウィンドウが開きます。" },
             };
         }
 
@@ -4928,6 +4940,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "Janelas em tela cheia não podem ser PiPs" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Ela ficaria por cima de todo o resto nessa tela. Coloque-a no modo janela primeiro e tente de novo." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Pressione {0} a qualquer momento para colocar uma janela em picture-in-picture. Abra o PiP Studio de novo para ver a janela dele." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Seus atalhos e seu controle continuam funcionando. Abra o PiP Studio de novo para ver esta janela." },
             };
         }
 
@@ -5629,6 +5643,8 @@ namespace PipStudio
                 { "OLED", "OLED" },
                 { "Full-screen windows can't be PiPs", "Полноэкранные окна не могут быть PiP" },
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Оно оставалось бы поверх всего остального на этом экране. Сначала переключите его в оконный режим и попробуйте снова." },
+                { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Нажмите {0} в любой момент, чтобы открыть окно в режиме «картинка в картинке». Запустите PiP Studio снова, чтобы открыть его окно." },
+                { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Сочетания клавиш и геймпад продолжают работать. Запустите PiP Studio снова, чтобы открыть это окно." },
             };
         }
     }

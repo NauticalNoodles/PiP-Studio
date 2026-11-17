@@ -51,6 +51,7 @@ Control PiP Studio from your phone:
 
 Controller fixes:
 
+- Better in Windows' Xbox mode (the full screen experience on handhelds and gaming PCs): PiP Studio opens straight into its controller layout, Hide PiPs over full-screen apps no longer hides them all the time (every app is full screen there), and its tips say to start PiP Studio again instead of clicking a tray icon that isn't there
 - "Release the game's focus" now works reliably when you turn controller controls on with your controller, not only with the keyboard shortcut (Windows used to refuse it unless you hadn't touched the keyboard or mouse for a few minutes)
 - If a game runs as administrator, PiP Studio tells you it can't take the game's focus, and offers to restart as administrator, which fixes it
 - New **Always start as administrator** in Settings > General: PiP Studio then starts as administrator every time, also at sign-in, without asking (Windows asks once to set it up)

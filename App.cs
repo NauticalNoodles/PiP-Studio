@@ -358,7 +358,9 @@ namespace PipStudio
             {
                 S.FirstRun = false;
                 S.Save();
-                Balloon("PiP Studio is running", "Press " + HK.Display("HK_NewPip") + " any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.", true);
+                Balloon("PiP Studio is running", U.XboxMode
+                    ? "Press " + HK.Display("HK_NewPip") + " any time to put a window in picture-in-picture. Start PiP Studio again to open its window."   // Xbox mode has no tray
+                    : "Press " + HK.Display("HK_NewPip") + " any time to put a window in picture-in-picture. Click this tray icon to open PiP Studio.", true);
             }
             bool updated = args.Any(a => a.Equals("--updated", StringComparison.OrdinalIgnoreCase));   // restarted by Updater.Install
             string shots = MainUI.ShotsDir(args);
@@ -1164,6 +1166,7 @@ namespace PipStudio
         public bool FullscreenOn(PipWindow p)
         {
             if (FullscreenWindow == IntPtr.Zero || FullscreenWindow == p.Src) return false;
+            if (U.XboxMode) return false;                                 // there every app is full screen: PiPs would never show
             try { return Screen.FromHandle(FullscreenWindow).Bounds.IntersectsWith(p.Bounds); } catch { return false; }
         }
 

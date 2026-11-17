@@ -692,3 +692,5 @@ Light, dark or OLED black, for PiP Studio's windows and menus	فاتح أو دا
 OLED	OLED	OLED
 Full-screen windows can't be PiPs	لا يمكن أن تكون النوافذ بملء الشاشة نوافذ عائمة	全屏窗口不能作为画中画
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	ستبقى فوق كل شيء آخر على تلك الشاشة. حوّلها إلى وضع النافذة أولًا، ثم حاول مرة أخرى.	它会一直停留在该显示器上所有内容的上方。请先将其切换为窗口模式，然后重试。
+Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	اضغط {0} في أي وقت لوضع نافذة في وضع الصورة داخل الصورة. شغّل PiP Studio مرة أخرى لفتح نافذته.	随时按 {0} 即可将窗口放入画中画。再次启动 PiP Studio 即可打开它的窗口。
+Your shortcuts and controller keep working. Start PiP Studio again to open this window.	تظل اختصاراتك ووحدة التحكم تعمل. شغّل PiP Studio مرة أخرى لفتح هذه النافذة.	快捷键和控制器仍然可用。再次启动 PiP Studio 即可打开此窗口。
