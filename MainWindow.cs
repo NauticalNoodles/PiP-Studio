@@ -1008,8 +1008,14 @@ namespace PipStudio
             var dv = show ? Visibility.Visible : Visibility.Collapsed;
             if (detailsCard.Visibility != dv) { detailsCard.Visibility = dv; if (!show) HideThumb(); }
             double room = show ? 28 + 316 + 16 : 28;
+            // the preview sits below the title and commands (they get the full width); controller mode keeps it level with the title
+            bool below = !padVisual;
+            if (Grid.GetRow(detailsCard) != (below ? 2 : 1)) { Grid.SetRow(detailsCard, below ? 2 : 1); Grid.SetRowSpan(detailsCard, below ? 1 : 2); }
+            var want = below ? new Thickness(0, 0, 28, 24) : new Thickness(0, 22, 28, 24);
+            if (detailsCard.Margin != want) detailsCard.Margin = want;
+            double headRoom = below ? 28 : room;
             var hm = pageHeader.Margin;
-            if (Math.Abs(hm.Right - room) > 0.5) pageHeader.Margin = new Thickness(hm.Left, hm.Top, room, hm.Bottom);
+            if (Math.Abs(hm.Right - headRoom) > 0.5) pageHeader.Margin = new Thickness(hm.Left, hm.Top, headRoom, hm.Bottom);
             var pm = pageWindows.Margin;
             if (Math.Abs(pm.Right - room) > 0.5) pageWindows.Margin = new Thickness(pm.Left, pm.Top, room, pm.Bottom);
 
