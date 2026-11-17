@@ -223,6 +223,10 @@ namespace PipStudio
             sv.PreviewMouseWheel += (o, e) =>
             {
                 if (!Anim.On || sv.ScrollableHeight <= 0 || e.Handled) return;
+                // a drop-down's list (or any pop-up) opened from the page: it scrolls itself, the page stays put
+                var d = e.OriginalSource as DependencyObject;
+                while (d != null && !(d is Visual)) d = LogicalTreeHelper.GetParent(d);   // text runs aren't visuals: their element is
+                if (d != null && PresentationSource.FromVisual((Visual)d) != PresentationSource.FromVisual(sv)) return;
                 if (!st.Running) { st.Target = sv.VerticalOffset; st.Current = sv.VerticalOffset; }
                 st.Target = Math.Max(0, Math.Min(sv.ScrollableHeight, st.Target - e.Delta * 0.85));   // ~100 px a notch, like Windows 11 apps
                 e.Handled = true;
