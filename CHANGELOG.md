@@ -33,6 +33,11 @@ Marking windows as PiPs is clearer and easier to undo:
 
 Control PiP Studio from your phone:
 
+<p>
+  <img src="https://github.com/NauticalNoodles/PiP-Studio/raw/main/docs/screenshots/phone-companion.png" width="100%" alt="The phone companion on a phone: a PiP's controls, all of them, and the Position picker">
+  <img src="https://github.com/NauticalNoodles/PiP-Studio/raw/main/docs/screenshots/phone-companion-desktop.png" width="100%" alt="The phone companion in a computer's browser">
+</p>
+
 - New **Phone** page in PiP Studio: turn the phone companion on, press **Pair a phone**, scan the QR code, and type the PIN your phone shows (just like pairing Moonlight with Sunshine)
 - It opens in your phone's browser (Android or iPhone, nothing to install) and shows every PiP, yours and other apps', with buttons to move, resize, minimize, restore and close them, plus opacity and volume sliders
 - Under your PiPs, **App volume** works like Windows' volume mixer: a slider and mute button for every app playing sound, with the apps you actually hear at the top and quiet ones at the bottom: an app that starts playing jumps to the top, the rest re-sorts calmly, and nothing moves while you're using a slider
