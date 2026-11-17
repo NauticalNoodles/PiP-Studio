@@ -12,13 +12,6 @@
   <img src="docs/screenshots/settings-explanations.png" width="49%" alt="Settings with an animated explanation">
   <img src="docs/screenshots/controller-mode.png" width="49%" alt="Controller-friendly mode">
 </p>
-<p align="center">
-  <img src="docs/screenshots/running-pips.png" width="49%" alt="The Running PiPs page">
-  <img src="docs/screenshots/oled-theme.png" width="49%" alt="The OLED theme">
-</p>
-<p align="center">
-  <img src="docs/screenshots/phone-companion.png" width="80%" alt="The phone companion: PiP controls, more controls and the Position picker">
-</p>
 
 > **Vibecoded:** PiP Studio was built with the help of AI (Claude). It works well for me, but expect the odd rough edge, and please [report anything weird](../../issues/new/choose).
 
