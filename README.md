@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://apps.microsoft.com/detail/9nwjlmr7pfth?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="56" alt="Get it from Microsoft"></a>
   &nbsp;
-  <a href="../../releases/latest"><img src="assets/get-it-on-github.svg" height="56" alt="Get it on GitHub"></a>
+  <a href="https://github.com/NauticalNoodles/PiP-Studio/releases/latest"><img src="assets/get-it-on-github.svg" height="56" alt="Get it on GitHub"></a>
 </p>
 
 <p align="center">
