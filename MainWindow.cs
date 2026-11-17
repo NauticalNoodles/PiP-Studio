@@ -1228,6 +1228,8 @@ namespace PipStudio
             {
                 Content = sp,
                 Height = 36,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                HorizontalContentAlignment = HorizontalAlignment.Left,     // the commands line up in columns (AlignCommands)
                 Margin = new Thickness(0, 0, 4, 2),
                 Padding = new Thickness(11, 4, 11, 4),
                 Appearance = Wpf.Ui.Controls.ControlAppearance.Transparent,
@@ -1238,10 +1240,26 @@ namespace PipStudio
             return b;
         }
 
+        /// <summary>Every command as wide as the widest, so when they wrap onto a second line they line up in columns.
+        /// Measured once the text is in place (after translation).</summary>
+        static void AlignCommands()
+        {
+            if (cmdBar == null) return;
+            double max = 0;
+            foreach (UIElement c in cmdBar.Children)
+            {
+                c.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+                max = Math.Max(max, c.DesiredSize.Width);
+            }
+            cmdBar.ItemWidth = max > 0 ? Math.Ceiling(max) : double.NaN;
+        }
+
         static void BuildCommands()
         {
             if (cmdBar == null) return;
             cmdBar.Children.Clear();
+            cmdBar.ItemWidth = double.NaN;
+            Dispatch(AlignCommands, DispatcherPriority.Loaded);
             if (ExplainPages.Contains(page ?? ""))
             {
                 // the explanations panel on the right: hide it, or bring it back
