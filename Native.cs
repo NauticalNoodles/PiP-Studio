@@ -233,8 +233,53 @@ namespace PipStudio
         [PreserveSig] int GetPeakValue(out float peak);
     }
 
+    [ComImport, Guid("5CDF2C82-841E-4546-9722-0CF74078229A"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    interface IAudioEndpointVolume
+    {
+        [PreserveSig] int RegisterControlChangeNotify(IntPtr notify);
+        [PreserveSig] int UnregisterControlChangeNotify(IntPtr notify);
+        [PreserveSig] int GetChannelCount(out uint count);
+        [PreserveSig] int SetMasterVolumeLevel(float levelDb, ref Guid ctx);
+        [PreserveSig] int SetMasterVolumeLevelScalar(float level, ref Guid ctx);
+        [PreserveSig] int GetMasterVolumeLevel(out float levelDb);
+        [PreserveSig] int GetMasterVolumeLevelScalar(out float level);
+        [PreserveSig] int SetChannelVolumeLevel(uint channel, float levelDb, ref Guid ctx);
+        [PreserveSig] int SetChannelVolumeLevelScalar(uint channel, float level, ref Guid ctx);
+        [PreserveSig] int GetChannelVolumeLevel(uint channel, out float levelDb);
+        [PreserveSig] int GetChannelVolumeLevelScalar(uint channel, out float level);
+        [PreserveSig] int SetMute([MarshalAs(UnmanagedType.Bool)] bool mute, ref Guid ctx);
+        [PreserveSig] int GetMute([MarshalAs(UnmanagedType.Bool)] out bool mute);
+    }
+
     static class Audio
     {
+        // ------------------------------------------------------------ the speakers' own volume (the taskbar's volume)
+        static IAudioEndpointVolume Endpoint()
+        {
+            try
+            {
+                var en = (IMMDeviceEnumerator)new MMDeviceEnumeratorCo();
+                IMMDevice dev;
+                if (en.GetDefaultAudioEndpoint(0, 1, out dev) != 0 || dev == null) return null;
+                Guid iid = typeof(IAudioEndpointVolume).GUID;
+                object o;
+                if (dev.Activate(ref iid, 23, IntPtr.Zero, out o) != 0) return null;
+                return o as IAudioEndpointVolume;
+            }
+            catch { return null; }
+        }
+
+        public static float? GetMasterVolume() { var e = Endpoint(); float f; return e != null && e.GetMasterVolumeLevelScalar(out f) == 0 ? f : (float?)null; }
+        public static bool? GetMasterMute() { var e = Endpoint(); bool m; return e != null && e.GetMute(out m) == 0 ? m : (bool?)null; }
+        public static void SetMasterVolume(float level)
+        {
+            var e = Endpoint(); if (e == null) return;
+            Guid g = Guid.Empty;
+            e.SetMasterVolumeLevelScalar(Math.Max(0f, Math.Min(1f, level)), ref g);
+            if (level > 0) { bool m; if (e.GetMute(out m) == 0 && m) e.SetMute(false, ref g); }
+        }
+        public static void SetMasterMute(bool mute) { var e = Endpoint(); if (e == null) return; Guid g = Guid.Empty; e.SetMute(mute, ref g); }
+
         static List<ISimpleAudioVolume> Sessions(string processName)
         {
             var list = new List<ISimpleAudioVolume>();

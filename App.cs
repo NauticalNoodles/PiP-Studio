@@ -453,8 +453,9 @@ namespace PipStudio
         /// <summary>One PiP at a time: keeps the one you used last and closes the rest.</summary>
         void KeepOnlyOnePip()
         {
-            var keep = CurrentPip();
-            foreach (var p in Pips.ToArray()) if (p != keep && !p.IsClosing) p.CloseAnimated();
+            // utility PiPs (volume, clock...) aren't counted: they sit beside the one PiP you watch
+            var keep = Current != null && !Current.IsWidget && !Current.IsClosing ? Current : Pips.LastOrDefault(p => !p.IsClosing && !p.IsWidget);
+            foreach (var p in Pips.ToArray()) if (p != keep && !p.IsClosing && !p.IsWidget) p.CloseAnimated();
         }
 
         /// <summary>The open PiP to reuse when only one is allowed (null when more are allowed or none is open).</summary>
@@ -462,6 +463,7 @@ namespace PipStudio
         {
             if (S.AllowMultiple) return null;
             var p = CurrentPip();
+            if (p != null && p.IsWidget) p = Pips.LastOrDefault(x => !x.IsClosing && !x.IsWidget);   // never turn a utility PiP into a window
             if (p == null) return null;
             if (HiddenAll) HiddenAll = false;
             return p;
@@ -1095,6 +1097,20 @@ namespace PipStudio
             return CreatePip(st, h);
         }
 
+        /// <summary>Opens a utility PiP (Widget.Ids), or brings forward the one that's already open. It opens alongside
+        /// your other PiPs, also when only one PiP at a time is allowed.</summary>
+        public PipWindow CreatePipForWidget(string id)
+        {
+            var open = Pips.FirstOrDefault(p => !p.IsClosing && p.IsWidget && p.St.Widget == id);
+            if (open != null) { Current = open; if (HiddenAll) HiddenAll = false; open.Osd(Widget.NameOf(id)); RaiseState(); return open; }
+            var st = new PipState();
+            st.Kind = SourceKind.Widget;
+            st.Widget = id;
+            st.ClientOnly = false;
+            st.Opacity = S.DefaultOpacityPercent / 100.0;
+            return CreatePip(st, IntPtr.Zero);
+        }
+
         public PipWindow CreatePipForScreen(Rectangle r)
         {
             var reuse = ReusablePip();
@@ -1193,6 +1209,19 @@ namespace PipStudio
         }
 
         // ---------------------------------------------------------------- tray menu
+        /// <summary>"Utility PiPs ›" with each utility (ticked when it's open); picking one opens it, or brings it forward.</summary>
+        public static ToolStripMenuItem UtilityMenu()
+        {
+            var m = Menus.Item("Utility PiPs", null);
+            for (int i = 0; i < Widget.Ids.Length; i++)
+            {
+                string id = Widget.Ids[i];
+                bool open = I.Pips.Any(p => !p.IsClosing && p.IsWidget && p.St.Widget == id);
+                m.DropDownItems.Add(Menus.Check(Widget.Names[i], open, () => I.CreatePipForWidget(id)));
+            }
+            return m;
+        }
+
         void BuildTrayMenu()
         {
             var menu = tray.ContextMenuStrip;
@@ -1211,6 +1240,7 @@ namespace PipStudio
             items.Add(Menus.Item("Choose a window…", () => ShowPicker(null), "HK_NewPip"));
             items.Add(Menus.Item("Click a window on screen…", () => PickOnScreen(null)));
             items.Add(Menus.Item("Mirror a screen region…", () => PipScreenRegion(null), "HK_ScreenRegion"));
+            items.Add(UtilityMenu());
 
             var live = Pips.Where(p => !p.IsClosing).ToList();
             if (live.Count > 0)
@@ -1326,12 +1356,23 @@ namespace PipStudio
                     else if (cur != null) cur.Add(t);
                 }
                 int n = 0;
-                if (!S.AllowMultiple && blocks.Count > 1) blocks = blocks.Take(1).ToList();
+                if (!S.AllowMultiple && blocks.Count > 1)
+                {
+                    // one PiP, plus any utility PiPs
+                    var first = blocks.FirstOrDefault(b => !b.Any(l => l.StartsWith("Kind=Widget")));
+                    blocks = blocks.Where(b => b == first || b.Any(l => l.StartsWith("Kind=Widget"))).ToList();
+                }
                 foreach (var b in blocks)
                 {
                     var st = new PipState();
                     Ser.Read(st, Ser.ParseKv(b));
-                    if (st.Kind == SourceKind.Screen)
+                    if (st.Kind == SourceKind.Widget)
+                    {
+                        if (Pips.Any(p => !p.IsClosing && p.IsWidget && p.St.Widget == st.Widget)) continue;
+                        CreatePip(st, IntPtr.Zero);
+                        n++;
+                    }
+                    else if (st.Kind == SourceKind.Screen)
                     {
                         if (st.ScreenRect.Width < 8 || st.ScreenRect.Height < 8) continue;
                         CreatePip(st, IntPtr.Zero);

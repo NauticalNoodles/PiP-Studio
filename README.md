@@ -63,6 +63,9 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 - Smart hiding: while the source window is in front, over full-screen apps, or when you point at it (fade, or slide out of the way).
 - Freeze fix for Chromium apps that stop drawing when covered.
 
+**Utility PiPs**
+- Small PiPs PiP Studio draws itself: Volume (main and per-app sliders), System monitor (CPU, GPU, memory, network), Clock and Now playing (with play/pause and skip). They snap, resize and fade like any PiP.
+
 **Other apps' PiPs**
 - Shortcuts and the controller move, size, fade, mute and close the PiP windows of Chrome, Edge, Firefox, Discord and others. Other apps' floating video windows are found automatically; mark mistakes as Not a PiP, or add a window with Treat as a PiP.
 - They snap to the same spots and use the same sizes. Once you steer one, it stays on top.

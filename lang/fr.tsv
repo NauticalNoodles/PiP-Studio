@@ -694,3 +694,16 @@ Full-screen windows can't be PiPs	Les fenêtres en plein écran ne peuvent pas �
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Elle resterait au-dessus de tout le reste sur cet écran. Passez-la d'abord en mode fenêtré, puis réessayez.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Appuyez sur {0} à tout moment pour mettre une fenêtre en picture-in-picture. Relancez PiP Studio pour ouvrir sa fenêtre.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Vos raccourcis et votre manette fonctionnent toujours. Relancez PiP Studio pour ouvrir cette fenêtre.
+Utility PiP	PiP utilitaire
+Utility PiPs	PiP utilitaires
+System monitor	Moniteur système
+Clock	Horloge
+Now playing	En cours de lecture
+Main volume	Volume général
+No app is making sound right now	Aucune application n'émet de son pour l'instant
+CPU	Processeur
+GPU	GPU
+Memory	Mémoire
+Network	Réseau
+Nothing is playing	Aucune lecture en cours
+Unknown title	Titre inconnu

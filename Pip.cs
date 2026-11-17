@@ -73,13 +73,20 @@ namespace PipStudio
         public double OsdLevel { get { return OsdActive ? osdLevel : -1; } }
         public bool OsdActive { get { return DateTime.Now < osdUntil && osdText.Length > 0; } }
         public Rectangle TargetBounds { get { return animating ? animTo : Bounds; } }
-        public bool HasSource { get { return St.Kind == SourceKind.Screen || (Src != IntPtr.Zero && !sourceLost); } }
+        public bool HasSource { get { return St.Kind != SourceKind.Window || (Src != IntPtr.Zero && !sourceLost); } }
+
+        Widget widget;
+        /// <summary>The utility PiP's content, for SourceKind.Widget (null otherwise).</summary>
+        Widget W { get { if (St.Kind != SourceKind.Widget) return null; if (widget == null) widget = Widget.Create(St.Widget); return widget; } }
+        void DropWidget() { if (widget != null) { try { widget.Dispose(); } catch { } widget = null; } }
+        public bool IsWidget { get { return St.Kind == SourceKind.Widget; } }
 
         public string DisplayName
         {
             get
             {
                 if (St.Kind == SourceKind.Screen) return "Screen region " + St.ScreenRect.Width + "×" + St.ScreenRect.Height;
+                if (St.Kind == SourceKind.Widget) return Widget.NameOf(St.Widget);
                 if (!string.IsNullOrEmpty(St.Title)) return St.Title;
                 return string.IsNullOrEmpty(St.ProcessName) ? "PiP" : St.ProcessName;
             }
@@ -158,8 +165,8 @@ namespace PipStudio
                 else Native.ShowWindow(Src, 4);
             }
             lastIconic = Src != IntPtr.Zero && Native.IsIconic(Src);
-            capTimer.Interval = Math.Max(10, 1000 / Math.Max(1, App.S.CaptureFps));
-            if (St.Kind == SourceKind.Screen) capTimer.Start();
+            capTimer.Interval = St.Kind == SourceKind.Widget ? W.Interval : Math.Max(10, 1000 / Math.Max(1, App.S.CaptureFps));
+            if (St.Kind != SourceKind.Window) capTimer.Start();
             uiTimer.Start();
             slowTimer.Start();
             if (St.ClickThrough) ApplyClickThrough();
@@ -172,7 +179,7 @@ namespace PipStudio
             var S = App.S;
             BackColor = S.BackgroundColor;
             ApplyWindowChrome();
-            capTimer.Interval = Math.Max(10, 1000 / Math.Max(1, S.CaptureFps));
+            if (St.Kind != SourceKind.Widget) capTimer.Interval = Math.Max(10, 1000 / Math.Max(1, S.CaptureFps));
             ComputeAspect();
             UpdateThumb();
             if (overlay != null) overlay.ApplySettings();
@@ -213,6 +220,7 @@ namespace PipStudio
         Size FullSourceSize()
         {
             if (St.Kind == SourceKind.Screen) return St.ScreenRect.Size;
+            if (St.Kind == SourceKind.Widget) return new Size(1000, (int)Math.Round(1000 / W.Aspect));
             return U.SourceSize(Src, St.ClientOnly);
         }
 
@@ -309,6 +317,12 @@ namespace PipStudio
         public void CycleSource(int dir)
         {
             App.I.Current = this;
+            if (St.Kind == SourceKind.Widget)
+            {
+                int wi = Array.IndexOf(Widget.Ids, St.Widget);
+                SetWidgetSource(Widget.Ids[((wi + dir) % Widget.Ids.Length + Widget.Ids.Length) % Widget.Ids.Length]);
+                return;
+            }
             if (St.Kind == SourceKind.Screen)
             {
                 var screens = Screen.AllScreens;
@@ -438,6 +452,7 @@ namespace PipStudio
             if (parked) Unpark(false, true);
             capTimer.Stop();
             DisposeCapture();
+            DropWidget();
             St.Kind = SourceKind.Window;
             Src = h;
             sourceLost = false;
@@ -468,6 +483,7 @@ namespace PipStudio
             UnregisterThumb();
             Src = IntPtr.Zero;
             sourceLost = false;
+            DropWidget();
             St.Kind = SourceKind.Screen;
             St.ScreenRect = r;
             St.ClientOnly = false;
@@ -480,6 +496,33 @@ namespace PipStudio
             capTimer.Interval = Math.Max(10, 1000 / Math.Max(1, App.S.CaptureFps));
             capTimer.Start();
             Invalidate();
+            App.I.SaveSoon();
+        }
+
+        /// <summary>Shows a utility PiP (Widget.Ids) instead of a window or a screen region.</summary>
+        public void SetWidgetSource(string id)
+        {
+            ClearAuto();
+            if (parked) Unpark(false, true);
+            UnregisterThumb();
+            Src = IntPtr.Zero;
+            sourceLost = false;
+            DropWidget();
+            DisposeCapture();
+            St.Kind = SourceKind.Widget;
+            St.Widget = id;
+            St.ClientOnly = false;
+            St.Crop = new RectangleF(0, 0, 1, 1);
+            St.Title = "";
+            St.ProcessName = "";
+            St.Follow = false;
+            ComputeAspect();
+            FitToAspect(true);
+            ApplyWindowChrome();
+            capTimer.Interval = W.Interval;
+            capTimer.Start();
+            CaptureTick();
+            Osd(Widget.NameOf(id));
             App.I.SaveSoon();
         }
 
@@ -1022,6 +1065,12 @@ namespace PipStudio
 
         Bitmap TakeSourceSnapshot(bool allowScreen = true)
         {
+            if (St.Kind == SourceKind.Widget)
+            {
+                var wb = new Bitmap(640, (int)Math.Round(640 / W.Aspect), PixelFormat.Format32bppRgb);
+                using (var g = Graphics.FromImage(wb)) W.Paint(g, new Rectangle(0, 0, wb.Width, wb.Height), 640f / 360f);
+                return wb;
+            }
             if (St.Kind == SourceKind.Screen)
             {
                 Rectangle r = St.ScreenRect;
@@ -1211,6 +1260,7 @@ namespace PipStudio
             if (r) return 11;
             if (t) return 12;
             if (b) return 15;
+            if (St.Kind == SourceKind.Widget && W.IsInteractive(WidgetPoint(p))) return Native.HTCLIENT;
             return Native.HTCAPTION;
         }
 
@@ -1236,6 +1286,7 @@ namespace PipStudio
         public void HandleWheel(int delta, bool ctrl, bool shift, Point screenPt)
         {
             App.I.Current = this;
+            if (!ctrl && !shift && St.Kind == SourceKind.Widget && W.Wheel(WidgetPoint(PointToClient(screenPt)), delta)) { CaptureTick(); return; }   // on a slider
             if (ctrl) StepOpacity(delta > 0 ? 0.05 : -0.05);
             else if (shift) ZoomAt(screenPt, delta > 0 ? 0.85 : 1 / 0.85);
             else if (!St.Locked) StepSize(delta > 0 ? 1 : -1);
@@ -1301,10 +1352,30 @@ namespace PipStudio
         }
 
         // Locked mode delivers client-area mouse messages instead of caption ones.
-        protected override void OnMouseDoubleClick(MouseEventArgs e) { base.OnMouseDoubleClick(e); if (e.Button == MouseButtons.Left) ToggleTheater(); }
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            if (e.Button != MouseButtons.Left) return;
+            if (St.Kind == SourceKind.Widget && W.IsInteractive(WidgetPoint(e.Location))) { W.MouseDown(WidgetPoint(e.Location)); CaptureTick(); return; }   // a quick second click on a button
+            ToggleTheater();
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (e.Button == MouseButtons.Left && St.Kind == SourceKind.Widget) { App.I.Current = this; W.MouseDown(WidgetPoint(e.Location)); CaptureTick(); }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (St.Kind == SourceKind.Widget && W.Busy) { W.MouseMove(WidgetPoint(e.Location)); CaptureTick(); }
+        }
+
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
+            if (e.Button == MouseButtons.Left && St.Kind == SourceKind.Widget) { W.MouseUp(WidgetPoint(e.Location)); CaptureTick(); return; }
             if (e.Button == MouseButtons.Right) RightClick();
             else if (e.Button == MouseButtons.Middle && App.S.MiddleClickCloses) CloseAnimated();
         }
@@ -1362,7 +1433,7 @@ namespace PipStudio
             if (hovering && !moving && !menuOpen)
             {
                 if (St.ClickThrough) hoverTarget = App.S.ClickThroughHoverPercent / 100.0;
-                else if (App.S.HoverAction == 1) hoverTarget = App.S.HoverFadePercent / 100.0;
+                else if (App.S.HoverAction == 1 && St.Kind != SourceKind.Widget) hoverTarget = App.S.HoverFadePercent / 100.0;   // a utility PiP stays solid: you're about to use it
             }
 
             bool anim = U.Animations;
@@ -1388,7 +1459,7 @@ namespace PipStudio
 
             // "Move out of the way": slide to the other side when the pointer arrives (hold Ctrl to grab it instead)
             bool ctrl = U.KeyHeld(0x11);
-            if (App.S.HoverAction == 3 && over && !ctrl && !moving && !animating && !menuOpen && !St.ClickThrough
+            if (App.S.HoverAction == 3 && over && !ctrl && !moving && !animating && !menuOpen && !St.ClickThrough && St.Kind != SourceKind.Widget
                 && Control.MouseButtons == MouseButtons.None && now > dodgeAfter && visTarget > 0)
             {
                 dodgeAfter = now.AddMilliseconds(800);
@@ -1478,6 +1549,7 @@ namespace PipStudio
 
         void CaptureTick()
         {
+            if (St.Kind == SourceKind.Widget) { RenderWidget(); return; }
             if (St.Kind != SourceKind.Screen || !Visible || IsDisposed) return;
             Rectangle content = ContentRect();
             if (content.Width < 2 || content.Height < 2) return;
@@ -1509,6 +1581,31 @@ namespace PipStudio
             capDst = dst;
             Invalidate(dst);
         }
+
+        void RenderWidget()
+        {
+            if (!Visible || IsDisposed || W == null) return;
+            Rectangle content = ContentRect();
+            if (content.Width < 2 || content.Height < 2) return;
+            if (capBmp == null || capBmp.Width != content.Width || capBmp.Height != content.Height)
+            {
+                DisposeCapture();
+                capBmp = new Bitmap(content.Width, content.Height, PixelFormat.Format32bppRgb);
+            }
+            using (var g = Graphics.FromImage(capBmp))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                try { W.Paint(g, new Rectangle(Point.Empty, content.Size), scale * Math.Max(0.6f, Math.Min(1.8f, content.Width / (360f * scale)))); }
+                catch (Exception ex) { App.ReportError(ex); }
+            }
+            capDst = content;
+            int want = W.Interval;
+            if (capTimer.Interval != want) capTimer.Interval = want;          // faster while you drag a slider
+            Invalidate(content);
+        }
+
+        /// <summary>A point on the PiP in the widget's picture coordinates.</summary>
+        Point WidgetPoint(Point client) { var c = ContentRect(); return new Point(client.X - c.X, client.Y - c.Y); }
 
         void DrawCursor(IntPtr hdc, Rectangle srcR, Size dstSz)
         {
@@ -1550,7 +1647,7 @@ namespace PipStudio
             }
             else g.Clear(bg);
 
-            if (St.Kind == SourceKind.Screen)
+            if (St.Kind != SourceKind.Window)
             {
                 if (capBmp != null) g.DrawImageUnscaled(capBmp, capDst.Location);
                 return;
@@ -1611,11 +1708,14 @@ namespace PipStudio
             var src = Menus.Item("Source", null);
             src.DropDownItems.Add(Menus.Item("Change source…", () => App.I.ShowPicker(this)));
             src.DropDownItems.Add(Menus.Item("Mirror a screen region instead…", () => App.I.PipScreenRegion(this)));
-            src.DropDownItems.Add(new ToolStripSeparator());
-            src.DropDownItems.Add(Menus.Item("Crop…", StartCrop, "HK_Crop"));
-            var reset = Menus.Item("Show everything (reset crop & zoom)", ResetCrop);
-            reset.Enabled = St.IsCropped;
-            src.DropDownItems.Add(reset);
+            if (St.Kind != SourceKind.Widget)
+            {
+                src.DropDownItems.Add(new ToolStripSeparator());
+                src.DropDownItems.Add(Menus.Item("Crop…", StartCrop, "HK_Crop"));
+                var reset = Menus.Item("Show everything (reset crop & zoom)", ResetCrop);
+                reset.Enabled = St.IsCropped;
+                src.DropDownItems.Add(reset);
+            }
             if (win)
             {
                 src.DropDownItems.Add(Menus.Check("Hide the source's title bar", St.ClientOnly, () => SetClientOnly(!St.ClientOnly)));
@@ -1634,7 +1734,7 @@ namespace PipStudio
                     src.DropDownItems.Add(Menus.Item("Fix frozen picture (restart " + U.ProcessName(Src) + ")…", FixFrozen));
                 }
             }
-            else
+            else if (St.Kind == SourceKind.Screen)
             {
                 var screens = Screen.AllScreens;
                 if (screens.Length > 1 && screens.Any(sc => sc.Bounds == St.ScreenRect))
@@ -1645,6 +1745,7 @@ namespace PipStudio
                 }
             }
             items.Add(src);
+            items.Add(App.UtilityMenu());
 
             var size = Menus.Item("Size", null);
             for (int i = 0; i < SizePresets.Count; i++) { int idx = i; size.DropDownItems.Add(Menus.Item(SizePresets.Names[i], () => SetSizePreset(idx))); }
@@ -1753,6 +1854,7 @@ namespace PipStudio
         {
             uiTimer.Stop(); slowTimer.Stop(); capTimer.Stop();
             uiTimer.Dispose(); slowTimer.Dispose(); capTimer.Dispose();
+            DropWidget();
             UnregisterThumb();
             if (parked) Unpark(false, true);
             if (overlay != null)

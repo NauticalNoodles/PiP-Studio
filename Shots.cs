@@ -75,6 +75,31 @@ namespace PipStudio
             shot("shortcuts", "shortcuts");
             shot("settings", "settings");
             shot("phone", "phone");
+            // the utility PiPs: open each one, and check it draws (the picture goes to the folder, the result to the notes)
+            foreach (var id in Widget.Ids)
+                steps.Add(() =>
+                {
+                    var p = App.I.CreatePipForWidget(id);
+                    Log(p == null ? "utility " + id + ": didn't open" : "utility " + id + ": open, " + p.Width + "x" + p.Height);
+                });
+            steps.Add(() =>
+            {
+                foreach (var p in App.I.Pips.Where(x => !x.IsClosing && x.IsWidget).ToList())
+                {
+                    try
+                    {
+                        using (var b = p.PreviewSnapshot())
+                        {
+                            if (b == null) { Log("utility " + p.St.Widget + ": no picture"); continue; }
+                            var colors = new HashSet<int>();
+                            for (int y = 0; y < b.Height; y += 7) for (int x = 0; x < b.Width; x += 7) colors.Add(b.GetPixel(x, y).ToArgb());
+                            b.Save(Path.Combine(dir, "utility-" + p.St.Widget + ".png"));
+                            Log("utility " + p.St.Widget + ": drew " + b.Width + "x" + b.Height + ", " + colors.Count + " colours");
+                        }
+                    }
+                    catch (Exception ex) { Log("utility " + p.St.Widget + ": " + ex.GetType().Name + " " + ex.Message); }
+                }
+            });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
             steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light

@@ -694,3 +694,16 @@ Full-screen windows can't be PiPs	全画面のウィンドウは PiP にでき�
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	そのディスプレイの他のすべてより手前に表示されたままになってしまいます。先にウィンドウ モードに切り替えてから、もう一度お試しください。
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	いつでも {0} を押すと、ウィンドウをピクチャー イン ピクチャーにできます。もう一度 PiP Studio を起動するとウィンドウが開きます。
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	ショートカットとコントローラーは引き続き使えます。もう一度 PiP Studio を起動するとこのウィンドウが開きます。
+Utility PiP	ユーティリティ PiP
+Utility PiPs	ユーティリティ PiP
+System monitor	システム モニター
+Clock	時計
+Now playing	再生中
+Main volume	メイン音量
+No app is making sound right now	今、音を出しているアプリはありません
+CPU	CPU
+GPU	GPU
+Memory	メモリ
+Network	ネットワーク
+Nothing is playing	何も再生されていません
+Unknown title	不明なタイトル

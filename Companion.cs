@@ -599,7 +599,7 @@ namespace PipStudio
                 pips.Add(new
                 {
                     id = PipId(p), kind = "own", title = p.DisplayName, proc = win ? p.St.ProcessName : null,
-                    app = !win ? "Screen" : p.Src != IntPtr.Zero ? ExternalPip.AppName(p.Src) : char.ToUpper(p.St.ProcessName[0]) + p.St.ProcessName.Substring(1),
+                    app = p.IsWidget ? "Utility PiP" : !win ? "Screen" : p.Src != IntPtr.Zero ? ExternalPip.AppName(p.Src) : char.ToUpper(p.St.ProcessName[0]) + p.St.ProcessName.Substring(1),
                     window = win, minimized = false, theater = p.InTheater,
                     spot = p.InTheater ? "" : p.NearestSpot(true), follow = win && p.St.Follow,
                     source = win && p.Src != IntPtr.Zero ? ExtId(p.Src).Substring(1) : null,

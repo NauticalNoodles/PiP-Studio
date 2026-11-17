@@ -694,3 +694,16 @@ Full-screen windows can't be PiPs	Janelas em tela cheia não podem ser PiPs
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Ela ficaria por cima de todo o resto nessa tela. Coloque-a no modo janela primeiro e tente de novo.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Pressione {0} a qualquer momento para colocar uma janela em picture-in-picture. Abra o PiP Studio de novo para ver a janela dele.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Seus atalhos e seu controle continuam funcionando. Abra o PiP Studio de novo para ver esta janela.
+Utility PiP	PiP utilitário
+Utility PiPs	PiPs utilitários
+System monitor	Monitor do sistema
+Clock	Relógio
+Now playing	Tocando agora
+Main volume	Volume principal
+No app is making sound right now	Nenhum app está tocando som agora
+CPU	CPU
+GPU	GPU
+Memory	Memória
+Network	Rede
+Nothing is playing	Nada está tocando
+Unknown title	Título desconhecido

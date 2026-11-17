@@ -724,6 +724,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "ستبقى فوق كل شيء آخر على تلك الشاشة. حوّلها إلى وضع النافذة أولًا، ثم حاول مرة أخرى." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "اضغط {0} في أي وقت لوضع نافذة في وضع الصورة داخل الصورة. شغّل PiP Studio مرة أخرى لفتح نافذته." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "تظل اختصاراتك ووحدة التحكم تعمل. شغّل PiP Studio مرة أخرى لفتح هذه النافذة." },
+                { "Utility PiP", "نافذة عائمة للأدوات" },
+                { "Utility PiPs", "النوافذ العائمة للأدوات" },
+                { "System monitor", "مراقب النظام" },
+                { "Clock", "الساعة" },
+                { "Now playing", "قيد التشغيل الآن" },
+                { "Main volume", "مستوى الصوت الرئيسي" },
+                { "No app is making sound right now", "لا يوجد تطبيق يصدر صوتًا الآن" },
+                { "CPU", "المعالج" },
+                { "GPU", "معالج الرسومات" },
+                { "Memory", "الذاكرة" },
+                { "Network", "الشبكة" },
+                { "Nothing is playing", "لا شيء قيد التشغيل" },
+                { "Unknown title", "عنوان غير معروف" },
             };
         }
 
@@ -1427,6 +1440,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "它会一直停留在该显示器上所有内容的上方。请先将其切换为窗口模式，然后重试。" },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "随时按 {0} 即可将窗口放入画中画。再次启动 PiP Studio 即可打开它的窗口。" },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "快捷键和控制器仍然可用。再次启动 PiP Studio 即可打开此窗口。" },
+                { "Utility PiP", "实用画中画" },
+                { "Utility PiPs", "实用画中画" },
+                { "System monitor", "系统监视器" },
+                { "Clock", "时钟" },
+                { "Now playing", "正在播放" },
+                { "Main volume", "主音量" },
+                { "No app is making sound right now", "现在没有应用在发声" },
+                { "CPU", "CPU" },
+                { "GPU", "GPU" },
+                { "Memory", "内存" },
+                { "Network", "网络" },
+                { "Nothing is playing", "没有正在播放的内容" },
+                { "Unknown title", "未知标题" },
             };
         }
 
@@ -2130,6 +2156,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Es würde auf diesem Bildschirm über allem anderen bleiben. Schalte es zuerst in den Fenstermodus und versuch es dann noch einmal." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Drück jederzeit {0}, um ein Fenster als Bild-in-Bild zu zeigen. Starte PiP Studio erneut, um sein Fenster zu öffnen." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Deine Tastenkürzel und dein Controller funktionieren weiter. Starte PiP Studio erneut, um dieses Fenster zu öffnen." },
+                { "Utility PiP", "Hilfs-PiP" },
+                { "Utility PiPs", "Hilfs-PiPs" },
+                { "System monitor", "Systemmonitor" },
+                { "Clock", "Uhr" },
+                { "Now playing", "Läuft gerade" },
+                { "Main volume", "Gesamtlautstärke" },
+                { "No app is making sound right now", "Gerade gibt keine App Ton aus" },
+                { "CPU", "CPU" },
+                { "GPU", "GPU" },
+                { "Memory", "Arbeitsspeicher" },
+                { "Network", "Netzwerk" },
+                { "Nothing is playing", "Gerade läuft nichts" },
+                { "Unknown title", "Unbekannter Titel" },
             };
         }
 
@@ -2833,6 +2872,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Se quedaría por encima de todo lo demás en esa pantalla. Ponla primero en modo ventana y vuelve a intentarlo." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Pulsa {0} en cualquier momento para poner una ventana en imagen en imagen. Vuelve a abrir PiP Studio para ver su ventana." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Tus atajos y tu mando siguen funcionando. Vuelve a abrir PiP Studio para ver esta ventana." },
+                { "Utility PiP", "PiP de utilidad" },
+                { "Utility PiPs", "PiP de utilidad" },
+                { "System monitor", "Monitor del sistema" },
+                { "Clock", "Reloj" },
+                { "Now playing", "Reproduciendo" },
+                { "Main volume", "Volumen general" },
+                { "No app is making sound right now", "Ninguna aplicación está sonando ahora" },
+                { "CPU", "CPU" },
+                { "GPU", "GPU" },
+                { "Memory", "Memoria" },
+                { "Network", "Red" },
+                { "Nothing is playing", "No se está reproduciendo nada" },
+                { "Unknown title", "Título desconocido" },
             };
         }
 
@@ -3536,6 +3588,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Elle resterait au-dessus de tout le reste sur cet écran. Passez-la d'abord en mode fenêtré, puis réessayez." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Appuyez sur {0} à tout moment pour mettre une fenêtre en picture-in-picture. Relancez PiP Studio pour ouvrir sa fenêtre." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Vos raccourcis et votre manette fonctionnent toujours. Relancez PiP Studio pour ouvrir cette fenêtre." },
+                { "Utility PiP", "PiP utilitaire" },
+                { "Utility PiPs", "PiP utilitaires" },
+                { "System monitor", "Moniteur système" },
+                { "Clock", "Horloge" },
+                { "Now playing", "En cours de lecture" },
+                { "Main volume", "Volume général" },
+                { "No app is making sound right now", "Aucune application n'émet de son pour l'instant" },
+                { "CPU", "Processeur" },
+                { "GPU", "GPU" },
+                { "Memory", "Mémoire" },
+                { "Network", "Réseau" },
+                { "Nothing is playing", "Aucune lecture en cours" },
+                { "Unknown title", "Titre inconnu" },
             };
         }
 
@@ -4239,6 +4304,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "そのディスプレイの他のすべてより手前に表示されたままになってしまいます。先にウィンドウ モードに切り替えてから、もう一度お試しください。" },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "いつでも {0} を押すと、ウィンドウをピクチャー イン ピクチャーにできます。もう一度 PiP Studio を起動するとウィンドウが開きます。" },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "ショートカットとコントローラーは引き続き使えます。もう一度 PiP Studio を起動するとこのウィンドウが開きます。" },
+                { "Utility PiP", "ユーティリティ PiP" },
+                { "Utility PiPs", "ユーティリティ PiP" },
+                { "System monitor", "システム モニター" },
+                { "Clock", "時計" },
+                { "Now playing", "再生中" },
+                { "Main volume", "メイン音量" },
+                { "No app is making sound right now", "今、音を出しているアプリはありません" },
+                { "CPU", "CPU" },
+                { "GPU", "GPU" },
+                { "Memory", "メモリ" },
+                { "Network", "ネットワーク" },
+                { "Nothing is playing", "何も再生されていません" },
+                { "Unknown title", "不明なタイトル" },
             };
         }
 
@@ -4942,6 +5020,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Ela ficaria por cima de todo o resto nessa tela. Coloque-a no modo janela primeiro e tente de novo." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Pressione {0} a qualquer momento para colocar uma janela em picture-in-picture. Abra o PiP Studio de novo para ver a janela dele." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Seus atalhos e seu controle continuam funcionando. Abra o PiP Studio de novo para ver esta janela." },
+                { "Utility PiP", "PiP utilitário" },
+                { "Utility PiPs", "PiPs utilitários" },
+                { "System monitor", "Monitor do sistema" },
+                { "Clock", "Relógio" },
+                { "Now playing", "Tocando agora" },
+                { "Main volume", "Volume principal" },
+                { "No app is making sound right now", "Nenhum app está tocando som agora" },
+                { "CPU", "CPU" },
+                { "GPU", "GPU" },
+                { "Memory", "Memória" },
+                { "Network", "Rede" },
+                { "Nothing is playing", "Nada está tocando" },
+                { "Unknown title", "Título desconhecido" },
             };
         }
 
@@ -5645,6 +5736,19 @@ namespace PipStudio
                 { "It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.", "Оно оставалось бы поверх всего остального на этом экране. Сначала переключите его в оконный режим и попробуйте снова." },
                 { "Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.", "Нажмите {0} в любой момент, чтобы открыть окно в режиме «картинка в картинке». Запустите PiP Studio снова, чтобы открыть его окно." },
                 { "Your shortcuts and controller keep working. Start PiP Studio again to open this window.", "Сочетания клавиш и геймпад продолжают работать. Запустите PiP Studio снова, чтобы открыть это окно." },
+                { "Utility PiP", "Служебный PiP" },
+                { "Utility PiPs", "Служебные PiP" },
+                { "System monitor", "Монитор системы" },
+                { "Clock", "Часы" },
+                { "Now playing", "Сейчас играет" },
+                { "Main volume", "Общая громкость" },
+                { "No app is making sound right now", "Сейчас ни одно приложение не издаёт звук" },
+                { "CPU", "ЦП" },
+                { "GPU", "ГП" },
+                { "Memory", "Память" },
+                { "Network", "Сеть" },
+                { "Nothing is playing", "Ничего не воспроизводится" },
+                { "Unknown title", "Неизвестное название" },
             };
         }
     }

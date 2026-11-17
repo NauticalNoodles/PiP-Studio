@@ -2,6 +2,14 @@
 
 ## 1.0.4
 
+New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your games and apps like any other PiP (snap, resize, fade, title bar, shortcuts and controller all work, and they come back when PiP Studio starts):
+
+- **Volume**: the main volume and a slider for every app making sound, with mute buttons
+- **System monitor**: CPU, GPU, memory and network, each with a graph of the last minute
+- **Clock**: the time and date
+- **Now playing**: what's playing on your PC, with previous, play/pause and next
+- Open them from **Utility PiP** on the Windows page, the tray menu, or a PiP's right-click menu. They open alongside your other PiPs, also when only one PiP at a time is allowed
+
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
 - Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them
