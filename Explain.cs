@@ -79,9 +79,11 @@ namespace PipStudio
             explainTitle = F<TextBlock>("ExplainTitle");
             explainText = F<TextBlock>("ExplainText");
             explainShown = null; explainAsPip = null;
-            var xb = F<Button>("ExplainX");      // the PiP's X shows while you point at it, like on a real PiP
-            explainCard.MouseEnter += (o, e) => { if (explainAsPip == true) Anim.Fade(xb, 1, 120); };
-            explainCard.MouseLeave += (o, e) => Anim.Fade(xb, 0, 160);
+            explainDodging = false; explainHasAnim = true;
+            // the PiP gets out of the way while the pointer is over it, like a PiP with "Move out of the way": it fades out
+            // and clicks go through to the settings under it, then it comes back when the pointer leaves
+            w.PreviewMouseMove += (o, e) => ExplainDodge();
+            w.MouseLeave += (o, e) => ExplainDodge(true);
             explainFirst.Clear();
             explainEls.Clear();
             HookHover();
@@ -204,7 +206,7 @@ namespace PipStudio
                 explainTitle.Margin = new Thickness(14, 10, 14, 0); explainTitle.FontSize = 14;
                 explainText.Margin = new Thickness(14, 2, 14, 12); explainText.FontSize = 12;
                 foot.Visibility = Visibility.Collapsed;
-                x.Visibility = Visibility.Visible;
+                x.Visibility = Visibility.Collapsed;                       // it moves out of the pointer's way, so no X (Hide explanations is at the top of the page)
             }
             else
             {
@@ -227,10 +229,28 @@ namespace PipStudio
         }
 
         /// <summary>The PiP only shows for settings with an animation (the panel in controller mode always shows).</summary>
+        static bool explainDodging, explainHasAnim = true;
+
+        /// <summary>Hides the explanation PiP while the pointer is over where it sits (not in controller mode's panel).</summary>
+        static void ExplainDodge(bool left = false)
+        {
+            if (explainCard == null || explainCard.Visibility != Visibility.Visible) { explainDodging = false; return; }
+            bool over = false;
+            if (!left && explainAsPip == true && explainCard.ActualWidth > 0)
+            {
+                var p = Mouse.GetPosition(explainCard);
+                over = p.X >= -6 && p.Y >= -6 && p.X <= explainCard.ActualWidth + 6 && p.Y <= explainCard.ActualHeight + 6;
+            }
+            if (over == explainDodging) return;
+            explainDodging = over;
+            ExplainPipFor(explainHasAnim);
+        }
+
         static void ExplainPipFor(bool hasAnimation)
         {
             if (explainCard == null) return;
-            bool show = explainAsPip != true || hasAnimation;
+            explainHasAnim = hasAnimation;
+            bool show = (explainAsPip != true || hasAnimation) && !(explainAsPip == true && explainDodging);
             if (explainCard.IsHitTestVisible == show && (show ? explainCard.Opacity > 0.99 : explainCard.Opacity < 0.01)) return;
             explainCard.IsHitTestVisible = show;
             Anim.Fade(explainCard, show ? 1 : 0, show ? 160 : 120);

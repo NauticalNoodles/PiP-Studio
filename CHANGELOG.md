@@ -15,7 +15,7 @@
 - Phone companion: Show a window lists each window with its app's icon, and a PiP's icon changes when it switches to another app's window
 - Phone companion: the page behind a menu (like Show a window) no longer scrolls, and long menus scroll inside themselves
 - Phone companion: sliders fill all the way at 100%, and apps running as administrator (like many games) show their icon too
-- Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. Controller mode keeps the panel. The Phone page has explanations too.
+- Setting explanations now play in a small PiP in the lower right corner instead of a panel, so the settings get the whole width. It fades out of the way while the pointer is over it, so the settings under it stay easy to reach. Controller mode keeps the panel. The Phone page has explanations too.
 
 Marking windows as PiPs is clearer and easier to undo:
 
