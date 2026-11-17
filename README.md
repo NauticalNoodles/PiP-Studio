@@ -112,7 +112,9 @@ Settings and open PiPs are saved in `%AppData%\PiPStudio`.
 
 ## Translations (test)
 
-Settings → General → Language offers English, Arabic and Chinese (Simplified), or follows Windows. The layout doesn't change; Arabic text reads right to left inside it.
+Settings → General → Language offers English, Spanish, Portuguese (Brazil), French, German, Russian, Japanese, Arabic and Chinese (Simplified), or follows Windows. The layout doesn't change; Arabic text reads right to left inside it. The phone companion page is in English.
+
+Arabic and Chinese are in `strings.tsv`; the other languages are in `lang/<code>.tsv` (English, a tab, the translation). After editing any of them, run `python make_langdata.py`. A line missing from a language file just shows in English.
 
 ## License
 
