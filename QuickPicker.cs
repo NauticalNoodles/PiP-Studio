@@ -49,6 +49,9 @@ namespace PipStudio
         ExtendsContentIntoTitleBar='True' WindowBackdropType='Mica' WindowStartupLocation='CenterScreen'
         ShowInTaskbar='False' Topmost='True'>
   <ui:FluentWindow.Resources>
+    <!-- touch: drag a finger to scroll every list and page (WPF leaves touch panning off) -->
+    <Style TargetType='ScrollViewer' BasedOn='{StaticResource {x:Type ScrollViewer}}'><Setter Property='PanningMode' Value='VerticalFirst'/></Style>
+    <Style TargetType='ListBox' BasedOn='{StaticResource {x:Type ListBox}}'><Setter Property='ScrollViewer.PanningMode' Value='VerticalFirst'/></Style>
 " + MainUI.SharedStyles + @"    <DataTemplate x:Key='PickRow'>
       <Grid Height='36'>
         <Grid.ColumnDefinitions><ColumnDefinition Width='*' MinWidth='120'/><ColumnDefinition Width='150'/><ColumnDefinition Width='100'/></Grid.ColumnDefinitions>
@@ -168,6 +171,7 @@ namespace PipStudio
             Fluent.PickBrushes();
             lite = App.S.LiteMode;
             win = (Window)XamlReader.Parse((lite ? MainUI.LiteXaml(Xaml) : Xaml).Replace("Microsoft YaHei UI", L.Cjk));
+            win.ManipulationBoundaryFeedback += (o, e) => e.Handled = true;
             L.Watch(win);
             list = (ListBox)win.FindName("List");
             search = (TextBox)win.FindName("Search");

@@ -1,6 +1,6 @@
 # Takes screenshots of PiP Studio on a Windows machine, for the README and the Microsoft Store: builds it, opens Notepad
 # (something to show in a PiP), runs "PiPStudio.exe --screenshots", and keeps the pictures as a download on the run.
-# On a claude/ branch it also commits them to docs/screenshots/raw, so they can be picked up without the download.
+# With [commit screenshots] in the message (claude/ branches) it also commits them to docs/screenshots/raw.
 # Runs when a commit message says [screenshots], or by hand from the Actions tab.
 
 name: Screenshots
@@ -59,7 +59,7 @@ jobs:
           if (Test-Path $prog) { Get-Content $prog }
 
       - name: Commit them to the branch (claude/ branches)
-        if: startsWith(github.ref_name, 'claude/')
+        if: startsWith(github.ref_name, 'claude/') && contains(github.event.head_commit.message, '[commit screenshots]')
         shell: pwsh
         run: |
           $raw = "docs/screenshots/raw"

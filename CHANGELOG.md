@@ -3,6 +3,7 @@
 ## 1.0.4
 
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
+- Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them
 - New **OLED** theme in Settings > Appearance > App theme, next to Light and Dark: true black instead of grey, for PiP Studio's window and menus
 - Easier with the keyboard: the arrow keys move between settings, rows and buttons (with a focus ring, like controller mode) instead of just scrolling, and Enter switches, opens or presses the one you're on

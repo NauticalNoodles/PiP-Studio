@@ -182,6 +182,9 @@ namespace PipStudio
         FontFamily='Segoe UI Variable Text, Segoe UI' FontSize='14'
         ExtendsContentIntoTitleBar='True' WindowBackdropType='Mica' WindowStartupLocation='CenterScreen'>
   <ui:FluentWindow.Resources>
+    <!-- touch: drag a finger to scroll every list and page (WPF leaves touch panning off) -->
+    <Style TargetType='ScrollViewer' BasedOn='{StaticResource {x:Type ScrollViewer}}'><Setter Property='PanningMode' Value='VerticalFirst'/></Style>
+    <Style TargetType='ListBox' BasedOn='{StaticResource {x:Type ListBox}}'><Setter Property='ScrollViewer.PanningMode' Value='VerticalFirst'/></Style>
 " + SharedStyles + @"    <GridLength x:Key='WColApp'>150</GridLength><GridLength x:Key='WColSize'>110</GridLength><GridLength x:Key='WColStatus'>110</GridLength>
     <GridLength x:Key='RColApp'>130</GridLength><GridLength x:Key='RColPos'>110</GridLength><GridLength x:Key='RColSize'>100</GridLength><GridLength x:Key='RColOpacity'>70</GridLength><GridLength x:Key='RColMode'>170</GridLength>
 
@@ -596,6 +599,7 @@ namespace PipStudio
             var win = (Window)XamlReader.Parse((App.S.LiteMode || Theme.Oled ? LiteXaml(Xaml) : Xaml).Replace("Microsoft YaHei UI", L.Cjk));   // the right font for the language's characters
             w = win;
             L.Watch(win);
+            win.ManipulationBoundaryFeedback += (o, e) => e.Handled = true;   // touch: scrolling past the end doesn't make the whole window bounce
             ImageSource appIcon = null;
             if (App.AppIconHandle != IntPtr.Zero)
             {
