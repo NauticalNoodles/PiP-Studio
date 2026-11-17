@@ -5,6 +5,12 @@
 <p align="center">Picture-in-picture for any window, display or part of the screen on Windows 10 and 11, in the style of the Windows 11 system apps.<br>It can also steer other apps' picture-in-picture windows (browsers, Discord and more) and be used entirely from a game controller.</p>
 
 <p align="center">
+  <a href="https://apps.microsoft.com/detail/9nwjlmr7pfth?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="56" alt="Get it from Microsoft"></a>
+  &nbsp;
+  <a href="../../releases/latest"><img src="assets/get-it-on-github.svg" height="56" alt="Get it on GitHub"></a>
+</p>
+
+<p align="center">
   <img src="docs/screenshots/pip-over-game.png" width="49%" alt="A PiP over a game">
   <img src="docs/screenshots/windows-page.png" width="49%" alt="The Windows page">
 </p>
@@ -17,7 +23,9 @@
 
 ## Download
 
-Get the latest version from the **[Releases](../../releases/latest)** page:
+Get PiP Studio from the **[Microsoft Store](https://apps.microsoft.com/detail/9nwjlmr7pfth)**, which installs and updates it for you, or from the **[Releases](../../releases/latest)** page here. The GitHub versions also include the phone companion, which the Store version doesn't have.
+
+From the Releases page:
 
 - **`PiPStudio-Setup-<version>.exe`** – the installer. It installs for your account only (no admin needed), adds a Start menu shortcut and can start PiP Studio when you sign in. Settings > Apps uninstalls it.
 - **`PiPStudio-<version>-win-x64-portable.zip`** – the same app as a single exe that runs without installing.
