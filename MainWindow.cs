@@ -634,6 +634,7 @@ namespace PipStudio
             selTitle = F<TextBlock>("SelTitle"); selSub = F<TextBlock>("SelSub"); runEmpty = F<TextBlock>("RunEmpty"); fixState = F<TextBlock>("FixState");
             previewNote = F<TextBlock>("PreviewNote");
             searchBox = F<TextBox>("SearchBox"); searchWrap = F<Grid>("SearchWrap"); cmdBar = F<WrapPanel>("CmdBar");
+            cmdBar.SizeChanged += (o, e) => { if (e.WidthChanged) AlignCommands(); };   // they may fit on one row now, or not
             pageWindows = F<Grid>("PageWindows"); pageRunning = F<Grid>("PageRunning"); winHeader = F<Grid>("WinHeader"); runHeader = F<Grid>("RunHeader");
             navRoot = F<Grid>("NavRoot");
             pageScroll = F<ScrollViewer>("PageScroll"); settingsHost = F<StackPanel>("SettingsHost");
@@ -1246,18 +1247,23 @@ namespace PipStudio
             return b;
         }
 
-        /// <summary>Every command as wide as the widest, so when they wrap onto a second line they line up in columns.
-        /// Measured once the text is in place (after translation).</summary>
+        /// <summary>When the commands wrap onto a second line, every one gets the widest one's width so they line up in
+        /// columns; when they all fit on one row they keep their own widths (no big gaps). Measured once the text is in
+        /// place (after translation), and again when the window's width changes.</summary>
         static void AlignCommands()
         {
             if (cmdBar == null) return;
-            double max = 0;
+            double max = 0, sum = 0;
             foreach (UIElement c in cmdBar.Children)
             {
                 c.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
                 max = Math.Max(max, c.DesiredSize.Width);
+                sum += c.DesiredSize.Width;
             }
-            cmdBar.ItemWidth = max > 0 ? Math.Ceiling(max) : double.NaN;
+            double avail = cmdBar.ActualWidth;
+            bool fits = avail <= 0 || sum <= avail + 0.5;
+            double want = fits || max <= 0 ? double.NaN : Math.Ceiling(max);
+            if (!(double.IsNaN(want) && double.IsNaN(cmdBar.ItemWidth)) && cmdBar.ItemWidth != want) cmdBar.ItemWidth = want;
         }
 
         static void BuildCommands()
