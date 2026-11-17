@@ -2,7 +2,7 @@
 
 <h1 align="center">PiP Studio</h1>
 
-<p align="center">Picture-in-picture for any window, display or part of the screen on Windows 10 and 11, in the style of the Windows 11 system apps.<br>It can also steer other apps' picture-in-picture windows (browsers, Discord and more) and be used entirely from a game controller.</p>
+<p align="center">Picture-in-picture for any window, display or part of the screen on Windows 10 and 11, in the style of the Windows 11 system apps.<br>It can also steer other apps' picture-in-picture windows (browsers, Discord and more) and be used entirely from a game controller, including in Windows' Xbox mode on handhelds and gaming PCs.</p>
 
 <p align="center">
   <a href="https://apps.microsoft.com/detail/9nwjlmr7pfth"><img src="assets/button-microsoft.svg" height="100" alt="Get it from Microsoft"></a>
@@ -72,6 +72,7 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 
 **Controller**
 - Xbox, PlayStation, Switch and most other controllers, several at once.
+- Works in Windows' Xbox mode (the full screen experience on handhelds like the ROG Ally and on gaming PCs): PiPs float over your games, PiP Studio opens straight into its controller layout, and with no taskbar there, you open it again by starting it from your library.
 - Controller controls for the PiP, with hints, continuous volume, opacity and size, and an option to release the game's focus while you steer.
 - A controller-friendly mode for the main window: bigger layout, focus ring, tabs, on-screen keyboard and button hints.
 
