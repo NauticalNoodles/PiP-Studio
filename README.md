@@ -5,9 +5,9 @@
 <p align="center">Picture-in-picture for any window, display or part of the screen on Windows 10 and 11, in the style of the Windows 11 system apps.<br>It can also steer other apps' picture-in-picture windows (browsers, Discord and more) and be used entirely from a game controller.</p>
 
 <p align="center">
-  <a href="https://apps.microsoft.com/detail/9nwjlmr7pfth?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" height="100" alt="Get it from Microsoft"></a>
+  <a href="https://apps.microsoft.com/detail/9nwjlmr7pfth?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Get it from Microsoft"></a>
   &nbsp;
-  <a href="https://github.com/NauticalNoodles/PiP-Studio/releases/latest"><img src="assets/get-it-on-github.svg" height="100" alt="Get it on GitHub"></a>
+  <a href="https://github.com/NauticalNoodles/PiP-Studio/releases/latest"><img src="assets/get-it-on-github.svg" height="42" alt="Get it on GitHub"></a>
 </p>
 
 <p align="center">
