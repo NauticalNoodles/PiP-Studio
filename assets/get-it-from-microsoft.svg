@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="864" height="312" viewBox="0 0 864 312" role="img" aria-label="Get it from Microsoft">
+  <!-- a "Get it from Microsoft" button in the same style and size as the "Get it on GitHub" one next to it -->
+  <rect x="2" y="2" width="860" height="308" rx="36" fill="#000" stroke="#A6A6A6" stroke-width="4"/>
+  <rect x="60" y="76" width="76" height="76" fill="#F25022"/>
+  <rect x="144" y="76" width="76" height="76" fill="#7FBA00"/>
+  <rect x="60" y="160" width="76" height="76" fill="#00A4EF"/>
+  <rect x="144" y="160" width="76" height="76" fill="#FFB900"/>
+  <text x="270" y="140" fill="#fff" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="56">Get it from</text>
+  <text x="266" y="236" fill="#fff" font-family="Segoe UI, -apple-system, Helvetica, Arial, sans-serif" font-size="96" font-weight="600">Microsoft</text>
+</svg>
