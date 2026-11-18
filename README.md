@@ -9,6 +9,7 @@
   &nbsp;
   <a href="https://github.com/NauticalNoodles/PiP-Studio/releases/latest"><img src="assets/button-github.svg" height="100" alt="Get it on GitHub"></a>
 </p>
+<p align="center"><sub>The Microsoft Store version can't run as administrator, so it can't show windows of apps that run as administrator or take a game's focus for controller controls when the game runs as administrator, and it doesn't include the phone companion. It updates through the Store. The GitHub version has everything.</sub></p>
 
 <p align="center">
   <img src="docs/screenshots/pip-over-game.png" width="49%" alt="A PiP over a game">
