@@ -741,3 +741,6 @@ Temperature	Температура
 Fan speed	Скорость вентилятора
 Power	Мощность
 Stopped	Остановлен
+Fans	Вентиляторы
+Needs the PawnIO driver	Требуется драйвер PawnIO
+No fan sensors found	Датчики вентиляторов не найдены

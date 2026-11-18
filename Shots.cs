@@ -94,8 +94,17 @@ namespace PipStudio
                             var colors = new HashSet<int>();
                             for (int y = 0; y < b.Height; y += 7) for (int x = 0; x < b.Width; x += 7) colors.Add(b.GetPixel(x, y).ToArgb());
                             b.Save(Path.Combine(dir, "utility-" + p.St.Widget + ".png"));
-                            if (p.St.Widget == "details")                       // a sharp one to share (the workflow prints it into its log)
+                            if (p.St.Widget == "details")                       // sharp ones to share (the workflow prints them into its log)
+                            {
                                 using (var hd = p.RenderWidgetAt(1000)) hd.Save(Path.Combine(dir, "share-details.png"));
+                                foreach (var t in new[] { 1, 3 })              // light and OLED too
+                                {
+                                    S.ThemeMode = t; Theme.Refresh();
+                                    using (var hd = p.RenderWidgetAt(600)) hd.Save(Path.Combine(dir, "share-details-" + (t == 1 ? "light" : "oled") + ".png"));
+                                }
+                                S.ThemeMode = 2; Theme.Refresh();
+                                Log("as administrator: " + App.IsElevated);
+                            }
                             Log("utility " + p.St.Widget + ": drew " + b.Width + "x" + b.Height + ", " + colors.Count + " colours");
                         }
                     }

@@ -741,3 +741,6 @@ Temperature	Temperatur
 Fan speed	Lüfterdrehzahl
 Power	Leistung
 Stopped	Gestoppt
+Fans	Lüfter
+Needs the PawnIO driver	Benötigt den PawnIO-Treiber
+No fan sensors found	Keine Lüftersensoren gefunden

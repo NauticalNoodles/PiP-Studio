@@ -741,3 +741,6 @@ Temperature	Temperatura
 Fan speed	Velocidade da ventoinha
 Power	Consumo
 Stopped	Parada
+Fans	Ventoinhas
+Needs the PawnIO driver	Requer o driver PawnIO
+No fan sensors found	Nenhum sensor de ventoinha encontrado

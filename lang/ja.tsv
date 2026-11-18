@@ -741,3 +741,6 @@ Temperature	温度
 Fan speed	ファン速度
 Power	電力
 Stopped	停止中
+Fans	ファン
+Needs the PawnIO driver	PawnIO ドライバーが必要です
+No fan sensors found	ファン センサーが見つかりません

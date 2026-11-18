@@ -57,11 +57,18 @@ namespace PipStudio
         public virtual void Dispose() { }
 
         // ------------------------------------------------------------ drawing helpers (dark glass, accent fills)
-        protected static readonly Color Text = Color.FromArgb(240, 240, 245), Sub = Color.FromArgb(150, 150, 162), Track = Color.FromArgb(58, 58, 66);
+        // the app's own colours, so utility PiPs follow its theme (light, dark or OLED)
+        protected static Color Text { get { return Theme.Text; } }
+        protected static Color Sub { get { return Theme.Dark ? Color.FromArgb(150, 150, 162) : Theme.SubText; } }
+        protected static Color Track { get { return Theme.Oled ? Color.FromArgb(44, 44, 50) : Theme.Dark ? Color.FromArgb(62, 62, 68) : Color.FromArgb(210, 210, 214); } }
+        /// <summary>A see-through layer that lifts things off the background: white on dark themes, black on light.</summary>
+        protected static Color Tint(int alpha) { return Theme.Dark ? Color.FromArgb(alpha, 255, 255, 255) : Color.FromArgb(Math.Max(8, alpha * 2 / 3), 0, 0, 0); }
+        /// <summary>A chart colour: the bright shade on dark themes, a deeper one that reads on light.</summary>
+        protected static Color Ser(int r, int g, int b) { var c = Color.FromArgb(r, g, b); return Theme.Dark ? c : U.Blend(c, Color.Black, 0.35); }
 
         protected static void Background(Graphics g, Rectangle r)
         {
-            using (var b = new LinearGradientBrush(r, Color.FromArgb(30, 30, 36), Color.FromArgb(16, 16, 20), 90f)) g.FillRectangle(b, r);
+            using (var b = new SolidBrush(Theme.Bg)) g.FillRectangle(b, r);       // the app window's background
         }
 
         protected static void Label(Graphics g, string text, Font f, Rectangle r, Color c, TextFormatFlags extra = 0)
@@ -96,6 +103,7 @@ namespace PipStudio
             if (v > 0) Fill(g, new RectangleF(r.X, y, Math.Max(h, (float)(r.Width * v)), h), h / 2, Theme.Accent);
             float k = (active ? 16 : 14) * s, kx = r.X + (float)(r.Width * v) - k / 2, ky = r.Y + (r.Height - k) / 2f;
             using (var b = new SolidBrush(Color.White)) g.FillEllipse(b, kx, ky, k, k);
+            if (!Theme.Dark) using (var p = new Pen(Color.FromArgb(60, 0, 0, 0), Math.Max(1, s))) g.DrawEllipse(p, kx, ky, k, k);   // so it shows on white
         }
 
         protected static double SliderValue(Rectangle r, Point p) { return U.Clamp((p.X - r.X) / (double)Math.Max(1, r.Width), 0, 1); }
@@ -133,7 +141,7 @@ namespace PipStudio
             int y = r.Y + pad / 2 + (int)(30 * s);
             Row(g, s, x, y, w, rowH, "", "Main volume", master < 0 ? 0 : master, masterMuted, "", true);
             y += rowH + (int)(6 * s);
-            using (var p = new Pen(Color.FromArgb(45, 255, 255, 255), Math.Max(1, s))) g.DrawLine(p, x, y - (int)(3 * s), x + w, y - (int)(3 * s));
+            using (var p = new Pen(Tint(45), Math.Max(1, s))) g.DrawLine(p, x, y - (int)(3 * s), x + w, y - (int)(3 * s));
             if (apps.Count == 0)
                 Label(g, "No app is making sound right now", U.UI(11.5f * s), new Rectangle(x, y, w, rowH), Sub);
             foreach (var a in apps)
@@ -148,7 +156,7 @@ namespace PipStudio
         {
             int btn = (int)(30 * s);
             var mute = new Rectangle(x, y + (h - btn) / 2, btn, btn);
-            Fill(g, mute, 8 * s, Color.FromArgb(muted ? 70 : 34, 255, 255, 255));
+            Fill(g, mute, 8 * s, Tint(muted ? 70 : 34));
             Glyph(g, muted ? "" : glyph, 13 * s, mute, muted ? Sub : Text);
             hits.Add(new Hit { R = mute, Kind = isMaster ? "mmute" : "mute", Key = key });
             int tx = x + btn + (int)(10 * s), pctW = (int)(40 * s), tw = w - btn - (int)(10 * s);
@@ -208,11 +216,11 @@ namespace PipStudio
             int tw = (r.Width - 2 * pad - gap) / 2, th = (r.Height - 2 * pad - gap) / 2;
             var snap = SysStats.Snapshot();
             Tile(g, s, new Rectangle(r.X + pad, r.Y + pad, tw, th), "CPU", snap.Cpu < 0 ? "—" : Pct(snap.Cpu), "", snap.CpuHist, 1, Theme.Accent);
-            Tile(g, s, new Rectangle(r.X + pad + tw + gap, r.Y + pad, tw, th), "GPU", snap.Gpu < 0 ? "—" : Pct(snap.Gpu), "", snap.GpuHist, 1, Color.FromArgb(120, 200, 120));
+            Tile(g, s, new Rectangle(r.X + pad + tw + gap, r.Y + pad, tw, th), "GPU", snap.Gpu < 0 ? "—" : Pct(snap.Gpu), "", snap.GpuHist, 1, Ser(120, 200, 120));
             Tile(g, s, new Rectangle(r.X + pad, r.Y + pad + th + gap, tw, th), "Memory", Pct(snap.Mem),
-                snap.MemTotalGb > 0 ? snap.MemUsedGb.ToString("0.0", U.CI) + " / " + snap.MemTotalGb.ToString("0", U.CI) + " GB" : "", snap.MemHist, 1, Color.FromArgb(200, 150, 255));
+                snap.MemTotalGb > 0 ? snap.MemUsedGb.ToString("0.0", U.CI) + " / " + snap.MemTotalGb.ToString("0", U.CI) + " GB" : "", snap.MemHist, 1, Ser(200, 150, 255));
             double top = Math.Max(1, Math.Max(snap.DownHist.DefaultIfEmpty(0).Max(), snap.UpHist.DefaultIfEmpty(0).Max()));
-            Tile(g, s, new Rectangle(r.X + pad + tw + gap, r.Y + pad + th + gap, tw, th), "Network", "↓ " + Rate(snap.Down), "↑ " + Rate(snap.Up), snap.DownHist, top, Color.FromArgb(255, 180, 90), snap.UpHist);
+            Tile(g, s, new Rectangle(r.X + pad + tw + gap, r.Y + pad + th + gap, tw, th), "Network", "↓ " + Rate(snap.Down), "↑ " + Rate(snap.Up), snap.DownHist, top, Ser(255, 180, 90), snap.UpHist);
         }
 
         internal static string Rate(double bps)
@@ -224,12 +232,12 @@ namespace PipStudio
 
         static void Tile(Graphics g, float s, Rectangle t, string name, string big, string small, double[] hist, double max, Color c, double[] hist2 = null)
         {
-            Fill(g, t, 10 * s, Color.FromArgb(26, 255, 255, 255));
+            Fill(g, t, 10 * s, Tint(26));
             int p = (int)(10 * s);
             // the graph fills the tile's lower half
             var gr = new RectangleF(t.X + p, t.Y + t.Height * 0.48f, t.Width - 2 * p, t.Height * 0.52f - p);
             Graph(g, gr, hist, max, c, true);
-            if (hist2 != null) Graph(g, gr, hist2, max, Color.FromArgb(160, 160, 220, 255), false);
+            if (hist2 != null) Graph(g, gr, hist2, max, Color.FromArgb(160, Ser(160, 220, 255)), false);
             Label(g, name, U.UI(10.5f * s), new Rectangle(t.X + p, t.Y + (int)(6 * s), t.Width - 2 * p, (int)(16 * s)), Sub);
             Label(g, big, U.UIBold(15 * s), new Rectangle(t.X + p, t.Y + (int)(22 * s), t.Width - 2 * p, (int)(24 * s)), Text);
             if (small != "") Label(g, small, U.UI(10 * s), new Rectangle(t.X + p, t.Y + (int)(6 * s), t.Width - 2 * p, (int)(16 * s)), Sub, TextFormatFlags.Right);
@@ -256,12 +264,15 @@ namespace PipStudio
     /// <summary>The dense one: everything Windows tells an app without administrator rights, in two columns.</summary>
     class DetailsWidget : Widget
     {
-        public override double Aspect { get { return 0.82; } }
+        public override double Aspect { get { return App.IsElevated ? 0.72 : 0.82; } }   // as administrator: room for the fans
         public DetailsWidget() { SysStats.Use(true, true); }
         public override void Dispose() { SysStats.Use(false, true); }
 
         static Color CpuC { get { return Theme.Accent; } }
-        static readonly Color GpuC = Color.FromArgb(120, 200, 120), MemC = Color.FromArgb(200, 150, 255), NetC = Color.FromArgb(255, 180, 90), DiskC = Color.FromArgb(90, 200, 230);
+        static Color GpuC { get { return Ser(120, 200, 120); } }
+        static Color MemC { get { return Ser(200, 150, 255); } }
+        static Color NetC { get { return Ser(255, 180, 90); } }
+        static Color DiskC { get { return Ser(90, 200, 230); } }
         float s; Graphics g; int bottom;
 
         static string Gb(double gb) { return gb < 0 ? "—" : gb >= 100 ? gb.ToString("0", U.CI) + " GB" : gb.ToString("0.0", U.CI) + " GB"; }
@@ -302,10 +313,10 @@ namespace PipStudio
         {
             if (y + h > bottom) return y;
             var r = new Rectangle(x, y, w, h);
-            Fill(g, r, 6 * s, Color.FromArgb(22, 255, 255, 255));
+            Fill(g, r, 6 * s, Tint(22));
             var inner = new RectangleF(x + 3 * s, y + 3 * s, w - 6 * s, h - 6 * s);
             MonitorWidget.Graph(g, inner, hist, max, c, true);
-            if (hist2 != null) MonitorWidget.Graph(g, inner, hist2, max, Color.FromArgb(160, 160, 220, 255), false);
+            if (hist2 != null) MonitorWidget.Graph(g, inner, hist2, max, Color.FromArgb(160, Ser(160, 220, 255)), false);
             return y + h + (int)(4 * s);
         }
 
@@ -328,7 +339,7 @@ namespace PipStudio
             {
                 int row = i / per, col = i % per;
                 var r = new RectangleF(x + col * (bw + gap), y + row * (bh + gap), bw, bh);
-                using (var b = new SolidBrush(Color.FromArgb(22, 255, 255, 255))) g.FillRectangle(b, r);
+                using (var b = new SolidBrush(Tint(22))) g.FillRectangle(b, r);
                 float fh = (float)(r.Height * U.Clamp(cores[i], 0, 1));
                 using (var b = new SolidBrush(CpuC)) g.FillRectangle(b, r.X, r.Bottom - fh, r.Width, fh);
             }
@@ -359,6 +370,7 @@ namespace PipStudio
             if (n.CpuGhz > 0) y = Row(xl, y, cw, "Clock speed", n.CpuGhz.ToString("0.00", U.CI) + " GHz");
             else if (n.CpuMaxGhz > 0) y = Row(xl, y, cw, "Clock speed", n.CpuMaxGhz.ToString("0.00", U.CI) + " GHz");
             y = Row(xl, y, cw, "Temperature", Temp(n.CpuTempC));
+            if (n.CpuPowerW > 0) y = Row(xl, y, cw, "Power", n.CpuPowerW.ToString("0.0", U.CI) + " W");
             y = Row(xl, y, cw, "Cores", N(n.Cores.Length > 0 ? n.Cores.Length : Environment.ProcessorCount));
             y = Row(xl, y, cw, "Processes", N(n.Processes));
             y = Row(xl, y, cw, "Threads", N(n.Threads));
@@ -407,10 +419,18 @@ namespace PipStudio
             if (n.BatteryPct >= 0)
             {
                 y += sect;
-                y = Header(xr, y, cw, "Battery", n.BatteryPct + "%", Color.FromArgb(140, 220, 140));
-                y = Bar(xr, y, cw, n.BatteryPct / 100.0, Color.FromArgb(140, 220, 140));
+                y = Header(xr, y, cw, "Battery", n.BatteryPct + "%", Ser(140, 220, 140));
+                y = Bar(xr, y, cw, n.BatteryPct / 100.0, Ser(140, 220, 140));
                 y = Row(xr, y, cw, n.BatteryCharging ? "Plugged in" : "On battery",
                     n.BatteryMinutes > 0 ? (n.BatteryMinutes / 60) + " h " + (n.BatteryMinutes % 60) + " min" : "");
+            }
+            if (n.SensorsShown)                                             // only as administrator
+            {
+                y += sect;
+                y = Header(xr, y, cw, "Fans", "", Ser(120, 190, 255));
+                if (!n.SensorsDriver) { y = Note(xr, y, cw, L.T("Needs the PawnIO driver")); y = Note(xr, y, cw, "pawnio.eu"); }
+                else if (n.Fans.Count == 0) y = Note(xr, y, cw, L.T("No fan sensors found"));
+                else foreach (var f in n.Fans) y = Row(xr, y, cw, f.Item1, N(f.Item2) + " RPM");
             }
             g = null;
         }
@@ -434,6 +454,8 @@ namespace PipStudio
             public TimeSpan Uptime;
             public double MemAvailGb, CommitGb, CommitLimitGb, CacheGb, KernelGb;
             public double Gpu3D = -1, GpuDecode = -1, GpuEncode = -1, GpuCopy = -1, VramDedicatedGb = -1, VramSharedGb = -1;
+            public bool SensorsShown, SensorsDriver; public double CpuPowerW = -1;   // as administrator (HwSensors)
+            public List<Tuple<string, int>> Fans = new List<Tuple<string, int>>();
             public double CpuTempC = -1, GpuTempC = -1, GpuPower = -1; public int GpuFanRpm = -1;
             public double DiskActive = -1, DiskRead = -1, DiskWrite = -1;
             public List<Tuple<string, double, double>> Drives = new List<Tuple<string, double, double>>();   // name, free GB, total GB
@@ -445,6 +467,7 @@ namespace PipStudio
         static readonly object gate = new object();
         static int users, detailUsers;
         static Thread thread;
+        static bool sensorsOpen;
         static Snap last = new Snap();
         static readonly Queue<double> cpuH = new Queue<double>(), gpuH = new Queue<double>(), memH = new Queue<double>(), downH = new Queue<double>(), upH = new Queue<double>();
 
@@ -515,7 +538,8 @@ namespace PipStudio
                 Dictionary<string, double> engines;
                 n.Gpu = gpu.Read(out engines);
                 bool detailed; lock (gate) detailed = detailUsers > 0;
-                if (detailed) { try { Details.Fill(n, engines, clock.Elapsed.TotalSeconds); } catch { } }
+                if (detailed) { try { Details.Fill(n, engines, clock.Elapsed.TotalSeconds); } catch { } sensorsOpen = App.IsElevated; }
+                else if (sensorsOpen) { sensorsOpen = false; try { HwSensors.Close(); } catch { } }
                 lock (gate)
                 {
                     if (n.Cpu >= 0) Push(cpuH, n.Cpu);
@@ -709,6 +733,7 @@ namespace PipStudio
                     if (engines.TryGetValue("Copy", out e)) n.GpuCopy = e;
                 }
                 GpuSensors.Read(n);
+                if (App.IsElevated) { try { HwSensors.Fill(n, t); } catch { } }
                 // memory, commit, cache and counts in one call
                 var pi = new PERFORMANCE_INFORMATION();
                 if (GetPerformanceInfo(out pi, (uint)Marshal.SizeOf(typeof(PERFORMANCE_INFORMATION))))
@@ -922,7 +947,7 @@ namespace PipStudio
             }
             else
             {
-                Fill(g, artR, 10 * s, Color.FromArgb(34, 255, 255, 255));
+                Fill(g, artR, 10 * s, Tint(34));
                 Glyph(g, "", art * 0.35f, artR, Sub);
             }
             int x = artR.Right + pad, w = r.Right - pad - x;
@@ -948,7 +973,7 @@ namespace PipStudio
 
         void Button(Graphics g, float s, Rectangle r, string glyph, string key, bool main)
         {
-            var c = main ? Theme.Accent : Color.FromArgb(40, 255, 255, 255);
+            var c = main ? Theme.Accent : Tint(40);
             Fill(g, r, r.Height / 2f, c);
             Glyph(g, glyph, 13 * s, r, main ? Theme.OnAccent : Text);
             hits.Add(new Hit { R = r, Kind = "button", Key = key });

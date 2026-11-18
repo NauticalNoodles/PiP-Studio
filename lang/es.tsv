@@ -741,3 +741,6 @@ Temperature	Temperatura
 Fan speed	Velocidad del ventilador
 Power	Consumo
 Stopped	Detenido
+Fans	Ventiladores
+Needs the PawnIO driver	Requiere el controlador PawnIO
+No fan sensors found	No se encontraron sensores de ventilador

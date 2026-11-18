@@ -741,3 +741,6 @@ Temperature	درجة الحرارة	温度
 Fan speed	سرعة المروحة	风扇转速
 Power	الطاقة	功耗
 Stopped	متوقفة	已停止
+Fans	المراوح	风扇
+Needs the PawnIO driver	يتطلب برنامج تشغيل PawnIO	需要 PawnIO 驱动程序
+No fan sensors found	لم يُعثر على مستشعرات للمراوح	未找到风扇传感器

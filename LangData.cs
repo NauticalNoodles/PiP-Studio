@@ -771,6 +771,9 @@ namespace PipStudio
                 { "Fan speed", "سرعة المروحة" },
                 { "Power", "الطاقة" },
                 { "Stopped", "متوقفة" },
+                { "Fans", "المراوح" },
+                { "Needs the PawnIO driver", "يتطلب برنامج تشغيل PawnIO" },
+                { "No fan sensors found", "لم يُعثر على مستشعرات للمراوح" },
             };
         }
 
@@ -1521,6 +1524,9 @@ namespace PipStudio
                 { "Fan speed", "风扇转速" },
                 { "Power", "功耗" },
                 { "Stopped", "已停止" },
+                { "Fans", "风扇" },
+                { "Needs the PawnIO driver", "需要 PawnIO 驱动程序" },
+                { "No fan sensors found", "未找到风扇传感器" },
             };
         }
 
@@ -2271,6 +2277,9 @@ namespace PipStudio
                 { "Fan speed", "Lüfterdrehzahl" },
                 { "Power", "Leistung" },
                 { "Stopped", "Gestoppt" },
+                { "Fans", "Lüfter" },
+                { "Needs the PawnIO driver", "Benötigt den PawnIO-Treiber" },
+                { "No fan sensors found", "Keine Lüftersensoren gefunden" },
             };
         }
 
@@ -3021,6 +3030,9 @@ namespace PipStudio
                 { "Fan speed", "Velocidad del ventilador" },
                 { "Power", "Consumo" },
                 { "Stopped", "Detenido" },
+                { "Fans", "Ventiladores" },
+                { "Needs the PawnIO driver", "Requiere el controlador PawnIO" },
+                { "No fan sensors found", "No se encontraron sensores de ventilador" },
             };
         }
 
@@ -3771,6 +3783,9 @@ namespace PipStudio
                 { "Fan speed", "Vitesse du ventilateur" },
                 { "Power", "Consommation" },
                 { "Stopped", "Arrêté" },
+                { "Fans", "Ventilateurs" },
+                { "Needs the PawnIO driver", "Nécessite le pilote PawnIO" },
+                { "No fan sensors found", "Aucun capteur de ventilateur trouvé" },
             };
         }
 
@@ -4521,6 +4536,9 @@ namespace PipStudio
                 { "Fan speed", "ファン速度" },
                 { "Power", "電力" },
                 { "Stopped", "停止中" },
+                { "Fans", "ファン" },
+                { "Needs the PawnIO driver", "PawnIO ドライバーが必要です" },
+                { "No fan sensors found", "ファン センサーが見つかりません" },
             };
         }
 
@@ -5271,6 +5289,9 @@ namespace PipStudio
                 { "Fan speed", "Velocidade da ventoinha" },
                 { "Power", "Consumo" },
                 { "Stopped", "Parada" },
+                { "Fans", "Ventoinhas" },
+                { "Needs the PawnIO driver", "Requer o driver PawnIO" },
+                { "No fan sensors found", "Nenhum sensor de ventoinha encontrado" },
             };
         }
 
@@ -6021,6 +6042,9 @@ namespace PipStudio
                 { "Fan speed", "Скорость вентилятора" },
                 { "Power", "Мощность" },
                 { "Stopped", "Остановлен" },
+                { "Fans", "Вентиляторы" },
+                { "Needs the PawnIO driver", "Требуется драйвер PawnIO" },
+                { "No fan sensors found", "Датчики вентиляторов не найдены" },
             };
         }
     }

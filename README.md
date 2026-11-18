@@ -65,7 +65,7 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 - Freeze fix for Chromium apps that stop drawing when covered.
 
 **Utility PiPs**
-- Small PiPs PiP Studio draws itself: Volume (main and per-app sliders), System monitor (CPU, GPU, memory, network), System details (a denser monitor: per-core CPU, temperatures, GPU fan and engines, disks, network totals, battery, busiest apps), Clock and Now playing (with play/pause and skip). They snap, resize and fade like any PiP.
+- Small PiPs PiP Studio draws itself: Volume (main and per-app sliders), System monitor (CPU, GPU, memory, network), System details (a denser monitor: per-core CPU, temperatures, GPU fan and engines, every fan's speed when run as administrator, disks, network totals, battery, busiest apps), Clock and Now playing (with play/pause and skip). They snap, resize and fade like any PiP.
 
 **Other apps' PiPs**
 - Shortcuts and the controller move, size, fade, mute and close the PiP windows of Chrome, Edge, Firefox, Discord and others. Other apps' floating video windows are found automatically; mark mistakes as Not a PiP, or add a window with Treat as a PiP.
