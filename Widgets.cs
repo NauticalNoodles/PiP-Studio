@@ -256,7 +256,7 @@ namespace PipStudio
     /// <summary>The dense one: everything Windows tells an app without administrator rights, in two columns.</summary>
     class DetailsWidget : Widget
     {
-        public override double Aspect { get { return 0.92; } }
+        public override double Aspect { get { return 0.82; } }
         public DetailsWidget() { SysStats.Use(true, true); }
         public override void Dispose() { SysStats.Use(false, true); }
 
@@ -267,6 +267,9 @@ namespace PipStudio
         static string Gb(double gb) { return gb < 0 ? "—" : gb >= 100 ? gb.ToString("0", U.CI) + " GB" : gb.ToString("0.0", U.CI) + " GB"; }
         static string Size(double bytes) { return bytes >= 1073741824 ? (bytes / 1073741824).ToString("0.00", U.CI) + " GB" : bytes >= 1048576 ? (bytes / 1048576).ToString("0", U.CI) + " MB" : (bytes / 1024).ToString("0", U.CI) + " KB"; }
         static string P(double v) { return v < 0 ? "—" : Pct(v); }
+        // °F where the region uses it (the US and a few others), °C everywhere else
+        static readonly bool fahrenheit = !System.Globalization.RegionInfo.CurrentRegion.IsMetric;
+        static string Temp(double c) { return c <= 0 ? "—" : fahrenheit ? (c * 9 / 5 + 32).ToString("0", U.CI) + " °F" : c.ToString("0", U.CI) + " °C"; }
         static string N(int v) { return v.ToString("N0", System.Globalization.CultureInfo.CurrentCulture); }
         static string Uptime(TimeSpan t) { return t.TotalDays >= 1 ? (int)t.TotalDays + " d " + t.Hours + " h" : t.Hours + " h " + t.Minutes + " min"; }
 
@@ -355,6 +358,7 @@ namespace PipStudio
             y = Cores(xl, y, cw, n.Cores);
             if (n.CpuGhz > 0) y = Row(xl, y, cw, "Clock speed", n.CpuGhz.ToString("0.00", U.CI) + " GHz");
             else if (n.CpuMaxGhz > 0) y = Row(xl, y, cw, "Clock speed", n.CpuMaxGhz.ToString("0.00", U.CI) + " GHz");
+            y = Row(xl, y, cw, "Temperature", Temp(n.CpuTempC));
             y = Row(xl, y, cw, "Cores", N(n.Cores.Length > 0 ? n.Cores.Length : Environment.ProcessorCount));
             y = Row(xl, y, cw, "Processes", N(n.Processes));
             y = Row(xl, y, cw, "Threads", N(n.Threads));
@@ -378,6 +382,9 @@ namespace PipStudio
             y = Header(xr, y, cw, "GPU", P(n.Gpu), GpuC);
             y = Note(xr, y, cw, n.GpuName);
             y = Chart(xr, y, cw, (int)(34 * s), n.GpuHist, 1, GpuC);
+            y = Row(xr, y, cw, "Temperature", Temp(n.GpuTempC));
+            y = Row(xr, y, cw, "Fan speed", n.GpuFanRpm > 0 ? N(n.GpuFanRpm) + " RPM" : n.GpuFanRpm == 0 && n.GpuTempC > 0 ? L.T("Stopped") : "—");
+            y = Row(xr, y, cw, "Power", P(n.GpuPower));
             y = Row(xr, y, cw, "3D", P(n.Gpu3D));
             y = Row(xr, y, cw, "Video decode", P(n.GpuDecode));
             y = Row(xr, y, cw, "Video encode", P(n.GpuEncode));
@@ -427,6 +434,7 @@ namespace PipStudio
             public TimeSpan Uptime;
             public double MemAvailGb, CommitGb, CommitLimitGb, CacheGb, KernelGb;
             public double Gpu3D = -1, GpuDecode = -1, GpuEncode = -1, GpuCopy = -1, VramDedicatedGb = -1, VramSharedGb = -1;
+            public double CpuTempC = -1, GpuTempC = -1, GpuPower = -1; public int GpuFanRpm = -1;
             public double DiskActive = -1, DiskRead = -1, DiskWrite = -1;
             public List<Tuple<string, double, double>> Drives = new List<Tuple<string, double, double>>();   // name, free GB, total GB
             public double NetLinkBps, NetTotalDown, NetTotalUp;
@@ -587,7 +595,7 @@ namespace PipStudio
         /// <summary>Everything else System details shows, read once a second while it's open.</summary>
         static class Details
         {
-            static IntPtr q, cores, perf, vramDed, vramShared, diskIdle, diskRead, diskWrite;
+            static IntPtr q, thermal, cores, perf, vramDed, vramShared, diskIdle, diskRead, diskWrite;
             static bool started, ok;
             static string cpuName = "", gpuName = "";
             static double baseMhz;
@@ -606,6 +614,7 @@ namespace PipStudio
                     if (ok)
                     {
                         PdhAddEnglishCounter(q, @"\Processor(*)\% Processor Time", IntPtr.Zero, out cores);
+                        PdhAddEnglishCounter(q, @"\Thermal Zone Information(*)\Temperature", IntPtr.Zero, out thermal);
                         PdhAddEnglishCounter(q, @"\Processor Information(_Total)\% Processor Performance", IntPtr.Zero, out perf);
                         PdhAddEnglishCounter(q, @"\GPU Adapter Memory(*)\Dedicated Usage", IntPtr.Zero, out vramDed);
                         PdhAddEnglishCounter(q, @"\GPU Adapter Memory(*)\Shared Usage", IntPtr.Zero, out vramShared);
@@ -685,6 +694,9 @@ namespace PipStudio
                     if (baseMhz > 0) { n.CpuMaxGhz = baseMhz / 1000.0; if (pf > 0) n.CpuGhz = baseMhz * pf / 100.0 / 1000.0; }
                     var vd = Many(vramDed); if (vd.Count > 0) n.VramDedicatedGb = vd.Max(x => x.Item2) / 1073741824.0;
                     var vs = Many(vramShared); if (vs.Count > 0) n.VramSharedGb = vs.Max(x => x.Item2) / 1073741824.0;
+                    // the motherboard's thermal zones (in kelvin): the hottest one, which is usually the processor's
+                    var tz = Many(thermal).Select(x => x.Item2 - 273.15).Where(c => c > 5 && c < 130).ToList();
+                    if (tz.Count > 0) n.CpuTempC = tz.Max();
                     double idle = Single(diskIdle); if (idle >= 0) n.DiskActive = U.Clamp(1 - idle / 100.0, 0, 1);
                     n.DiskRead = Single(diskRead); n.DiskWrite = Single(diskWrite);
                 }
@@ -696,6 +708,7 @@ namespace PipStudio
                     if (engines.TryGetValue("VideoEncode", out e)) n.GpuEncode = e;
                     if (engines.TryGetValue("Copy", out e)) n.GpuCopy = e;
                 }
+                GpuSensors.Read(n);
                 // memory, commit, cache and counts in one call
                 var pi = new PERFORMANCE_INFORMATION();
                 if (GetPerformanceInfo(out pi, (uint)Marshal.SizeOf(typeof(PERFORMANCE_INFORMATION))))
@@ -778,6 +791,62 @@ namespace PipStudio
                     }
                 }
                 catch { }
+            }
+        }
+
+        /// <summary>
+        /// The graphics card's temperature, fan speed and power, as its driver reports them to Windows (what Task Manager
+        /// shows). Needs a WDDM 2.4 driver or newer; the basic and virtual adapters report nothing.
+        /// </summary>
+        static class GpuSensors
+        {
+            static uint[] adapters;
+            const int KMTQAITYPE_ADAPTERPERFDATA = 62;
+
+            [StructLayout(LayoutKind.Sequential)] struct ENUMADAPTERS2 { public uint NumAdapters; public IntPtr pAdapters; }
+            [StructLayout(LayoutKind.Sequential)] struct QUERYADAPTERINFO { public uint hAdapter; public int Type; public IntPtr pPrivateDriverData; public uint PrivateDriverDataSize; }
+            [DllImport("gdi32.dll")] static extern int D3DKMTEnumAdapters2(ref ENUMADAPTERS2 e);
+            [DllImport("gdi32.dll")] static extern int D3DKMTQueryAdapterInfo(ref QUERYADAPTERINFO q);
+
+            static void Find()
+            {
+                adapters = new uint[0];
+                try
+                {
+                    var e = new ENUMADAPTERS2();
+                    if (D3DKMTEnumAdapters2(ref e) != 0 || e.NumAdapters == 0) return;
+                    const int item = 20;                                      // handle, LUID, sources, a flag
+                    e.pAdapters = Marshal.AllocHGlobal(item * (int)e.NumAdapters);
+                    try
+                    {
+                        if (D3DKMTEnumAdapters2(ref e) != 0) return;
+                        adapters = Enumerable.Range(0, (int)e.NumAdapters).Select(i => (uint)Marshal.ReadInt32(e.pAdapters + i * item)).ToArray();
+                    }
+                    finally { Marshal.FreeHGlobal(e.pAdapters); }
+                }
+                catch { }
+            }
+
+            public static void Read(Snap n)
+            {
+                if (adapters == null) Find();
+                IntPtr buf = Marshal.AllocHGlobal(72);
+                try
+                {
+                    foreach (var h in adapters)
+                    {
+                        for (int i = 0; i < 72; i++) Marshal.WriteByte(buf, i, 0);   // physical adapter 0
+                        var q = new QUERYADAPTERINFO { hAdapter = h, Type = KMTQAITYPE_ADAPTERPERFDATA, pPrivateDriverData = buf, PrivateDriverDataSize = 72 };
+                        if (D3DKMTQueryAdapterInfo(ref q) != 0) continue;
+                        double temp = Marshal.ReadInt64(buf, 56) / 10.0;          // tenths of a degree
+                        if (temp <= 0 || temp > 150 || temp < n.GpuTempC) continue; // the hottest card (the one working)
+                        n.GpuTempC = temp;
+                        n.GpuFanRpm = Marshal.ReadInt32(buf, 48);
+                        n.GpuPower = U.Clamp(Marshal.ReadInt32(buf, 52) / 1000.0, 0, 1);   // tenths of a percent
+                    }
+                }
+                catch { }
+                finally { Marshal.FreeHGlobal(buf); }
             }
         }
 

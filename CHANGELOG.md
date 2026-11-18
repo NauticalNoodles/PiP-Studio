@@ -6,7 +6,7 @@ New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your g
 
 - **Volume**: the main volume and a slider for every app making sound, with mute buttons
 - **System monitor**: CPU, GPU, memory and network, each with a graph of the last minute
-- **System details**: a denser monitor with as much as Windows tells: per-core CPU use and clock speed, processes and threads, memory breakdown, GPU engines (3D, video decode/encode) and video memory, disk activity and free space, network totals, battery, and the busiest apps
+- **System details**: a denser monitor with as much as Windows tells: per-core CPU use, clock speed and temperature, processes and threads, memory breakdown, GPU temperature, fan speed, power and engines (3D, video decode/encode) and video memory, disk activity and free space, network totals, battery, and the busiest apps
 - **Clock**: the time and date
 - **Now playing**: what's playing on your PC, with previous, play/pause and next
 - Open them from **Utility PiP** on the Windows page, the tray menu, or a PiP's right-click menu. They open alongside your other PiPs, also when only one PiP at a time is allowed

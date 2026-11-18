@@ -767,6 +767,10 @@ namespace PipStudio
                 { "Battery", "البطارية" },
                 { "Plugged in", "موصول بالشاحن" },
                 { "On battery", "على البطارية" },
+                { "Temperature", "درجة الحرارة" },
+                { "Fan speed", "سرعة المروحة" },
+                { "Power", "الطاقة" },
+                { "Stopped", "متوقفة" },
             };
         }
 
@@ -1513,6 +1517,10 @@ namespace PipStudio
                 { "Battery", "电池" },
                 { "Plugged in", "已接通电源" },
                 { "On battery", "使用电池" },
+                { "Temperature", "温度" },
+                { "Fan speed", "风扇转速" },
+                { "Power", "功耗" },
+                { "Stopped", "已停止" },
             };
         }
 
@@ -2259,6 +2267,10 @@ namespace PipStudio
                 { "Battery", "Akku" },
                 { "Plugged in", "Angeschlossen" },
                 { "On battery", "Akkubetrieb" },
+                { "Temperature", "Temperatur" },
+                { "Fan speed", "Lüfterdrehzahl" },
+                { "Power", "Leistung" },
+                { "Stopped", "Gestoppt" },
             };
         }
 
@@ -3005,6 +3017,10 @@ namespace PipStudio
                 { "Battery", "Batería" },
                 { "Plugged in", "Enchufado" },
                 { "On battery", "Con batería" },
+                { "Temperature", "Temperatura" },
+                { "Fan speed", "Velocidad del ventilador" },
+                { "Power", "Consumo" },
+                { "Stopped", "Detenido" },
             };
         }
 
@@ -3751,6 +3767,10 @@ namespace PipStudio
                 { "Battery", "Batterie" },
                 { "Plugged in", "Branché" },
                 { "On battery", "Sur batterie" },
+                { "Temperature", "Température" },
+                { "Fan speed", "Vitesse du ventilateur" },
+                { "Power", "Consommation" },
+                { "Stopped", "Arrêté" },
             };
         }
 
@@ -4497,6 +4517,10 @@ namespace PipStudio
                 { "Battery", "バッテリー" },
                 { "Plugged in", "電源に接続" },
                 { "On battery", "バッテリー駆動" },
+                { "Temperature", "温度" },
+                { "Fan speed", "ファン速度" },
+                { "Power", "電力" },
+                { "Stopped", "停止中" },
             };
         }
 
@@ -5243,6 +5267,10 @@ namespace PipStudio
                 { "Battery", "Bateria" },
                 { "Plugged in", "Na tomada" },
                 { "On battery", "Na bateria" },
+                { "Temperature", "Temperatura" },
+                { "Fan speed", "Velocidade da ventoinha" },
+                { "Power", "Consumo" },
+                { "Stopped", "Parada" },
             };
         }
 
@@ -5989,6 +6017,10 @@ namespace PipStudio
                 { "Battery", "Батарея" },
                 { "Plugged in", "Подключено к сети" },
                 { "On battery", "От батареи" },
+                { "Temperature", "Температура" },
+                { "Fan speed", "Скорость вентилятора" },
+                { "Power", "Мощность" },
+                { "Stopped", "Остановлен" },
             };
         }
     }
