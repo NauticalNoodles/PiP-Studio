@@ -707,3 +707,33 @@ Memory	الذاكرة	内存
 Network	الشبكة	网络
 Nothing is playing	لا شيء قيد التشغيل	没有正在播放的内容
 Unknown title	عنوان غير معروف	未知标题
+System details	تفاصيل النظام	系统详细信息
+Gathering details…	جارٍ جمع التفاصيل…	正在收集详细信息…
+Clock speed	سرعة المعالج	频率
+Cores	الأنوية	核心
+Processes	العمليات	进程
+Threads	سلاسل التنفيذ	线程
+Handles	المقابض	句柄
+Up time	مدة التشغيل	运行时间
+In use	قيد الاستخدام	使用中
+Available	المتاح	可用
+Committed	المخصصة	已提交
+Cached	المخزنة مؤقتًا	已缓存
+Kernel	النواة	内核
+Top apps	أكثر التطبيقات استخدامًا	占用最多的应用
+3D	ثلاثي الأبعاد	3D
+Video decode	فك ترميز الفيديو	视频解码
+Video encode	ترميز الفيديو	视频编码
+Copy	النسخ	复制
+Dedicated memory	الذاكرة المخصصة	专用内存
+Shared memory	الذاكرة المشتركة	共享内存
+Disk	القرص	磁盘
+Read	القراءة	读取
+Write	الكتابة	写入
+free	متاح	可用
+Download	التنزيل	下载
+Upload	الرفع	上传
+Since opened	منذ الفتح	打开以来
+Battery	البطارية	电池
+Plugged in	موصول بالشاحن	已接通电源
+On battery	على البطارية	使用电池

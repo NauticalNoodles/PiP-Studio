@@ -707,3 +707,33 @@ Memory	Mémoire
 Network	Réseau
 Nothing is playing	Aucune lecture en cours
 Unknown title	Titre inconnu
+System details	Détails du système
+Gathering details…	Collecte des détails…
+Clock speed	Fréquence
+Cores	Cœurs
+Processes	Processus
+Threads	Threads
+Handles	Handles
+Up time	Temps d'activité
+In use	Utilisée
+Available	Disponible
+Committed	Validée
+Cached	En cache
+Kernel	Noyau
+Top apps	Applications les plus gourmandes
+3D	3D
+Video decode	Décodage vidéo
+Video encode	Encodage vidéo
+Copy	Copie
+Dedicated memory	Mémoire dédiée
+Shared memory	Mémoire partagée
+Disk	Disque
+Read	Lecture
+Write	Écriture
+free	libre
+Download	Réception
+Upload	Envoi
+Since opened	Depuis l'ouverture
+Battery	Batterie
+Plugged in	Branché
+On battery	Sur batterie

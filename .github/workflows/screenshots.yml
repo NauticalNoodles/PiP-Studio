@@ -58,6 +58,17 @@ jobs:
           $prog = Join-Path $dir "progress.txt"
           if (Test-Path $prog) { Get-Content $prog }
 
+      # pictures named share-*.png also go into this log as text (base64), for when the run's download can't be reached
+      - name: Pictures to share, as text
+        shell: pwsh
+        run: |
+          foreach ($f in Get-ChildItem (Join-Path $env:RUNNER_TEMP "shots") -Filter "share-*.png" -ErrorAction SilentlyContinue) {
+            $b = [Convert]::ToBase64String([IO.File]::ReadAllBytes($f.FullName))
+            Write-Host ("SHARE-BEGIN " + $f.Name)
+            for ($i = 0; $i -lt $b.Length; $i += 3000) { Write-Host ("SHARE:" + $b.Substring($i, [Math]::Min(3000, $b.Length - $i))) }
+            Write-Host "SHARE-END"
+          }
+
       - name: Commit them to the branch (claude/ branches)
         if: startsWith(github.ref_name, 'claude/') && contains(github.event.head_commit.message, '[commit screenshots]')
         shell: pwsh

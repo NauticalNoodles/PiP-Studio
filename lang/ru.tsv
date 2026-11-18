@@ -707,3 +707,33 @@ Memory	Память
 Network	Сеть
 Nothing is playing	Ничего не воспроизводится
 Unknown title	Неизвестное название
+System details	Сведения о системе
+Gathering details…	Сбор сведений…
+Clock speed	Частота
+Cores	Ядра
+Processes	Процессы
+Threads	Потоки
+Handles	Дескрипторы
+Up time	Время работы
+In use	Используется
+Available	Доступно
+Committed	Выделено
+Cached	Кэшировано
+Kernel	Ядро ОС
+Top apps	Самые активные приложения
+3D	3D
+Video decode	Декодирование видео
+Video encode	Кодирование видео
+Copy	Копирование
+Dedicated memory	Выделенная память
+Shared memory	Общая память
+Disk	Диск
+Read	Чтение
+Write	Запись
+free	свободно
+Download	Загрузка
+Upload	Отдача
+Since opened	С момента открытия
+Battery	Батарея
+Plugged in	Подключено к сети
+On battery	От батареи

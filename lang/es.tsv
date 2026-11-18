@@ -707,3 +707,33 @@ Memory	Memoria
 Network	Red
 Nothing is playing	No se está reproduciendo nada
 Unknown title	Título desconocido
+System details	Detalles del sistema
+Gathering details…	Recopilando detalles…
+Clock speed	Velocidad
+Cores	Núcleos
+Processes	Procesos
+Threads	Subprocesos
+Handles	Identificadores
+Up time	Tiempo activo
+In use	En uso
+Available	Disponible
+Committed	Confirmada
+Cached	En caché
+Kernel	Kernel
+Top apps	Aplicaciones con más uso
+3D	3D
+Video decode	Decodificación de vídeo
+Video encode	Codificación de vídeo
+Copy	Copia
+Dedicated memory	Memoria dedicada
+Shared memory	Memoria compartida
+Disk	Disco
+Read	Lectura
+Write	Escritura
+free	libre
+Download	Descarga
+Upload	Subida
+Since opened	Desde que se abrió
+Battery	Batería
+Plugged in	Enchufado
+On battery	Con batería

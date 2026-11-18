@@ -707,3 +707,33 @@ Memory	メモリ
 Network	ネットワーク
 Nothing is playing	何も再生されていません
 Unknown title	不明なタイトル
+System details	システムの詳細
+Gathering details…	詳細を収集しています…
+Clock speed	速度
+Cores	コア
+Processes	プロセス
+Threads	スレッド
+Handles	ハンドル
+Up time	稼働時間
+In use	使用中
+Available	利用可能
+Committed	コミット済み
+Cached	キャッシュ済み
+Kernel	カーネル
+Top apps	使用量の多いアプリ
+3D	3D
+Video decode	ビデオ デコード
+Video encode	ビデオ エンコード
+Copy	コピー
+Dedicated memory	専用メモリ
+Shared memory	共有メモリ
+Disk	ディスク
+Read	読み取り
+Write	書き込み
+free	空き
+Download	ダウンロード
+Upload	アップロード
+Since opened	開いてから
+Battery	バッテリー
+Plugged in	電源に接続
+On battery	バッテリー駆動

@@ -1604,6 +1604,19 @@ namespace PipStudio
             Invalidate(content);
         }
 
+        /// <summary>A utility PiP's picture at a given width (screenshots); null for other PiPs.</summary>
+        public Bitmap RenderWidgetAt(int width)
+        {
+            if (St.Kind != SourceKind.Widget) return null;
+            var b = new Bitmap(width, (int)Math.Round(width / W.Aspect), PixelFormat.Format32bppRgb);
+            using (var g = Graphics.FromImage(b))
+            {
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                W.Paint(g, new Rectangle(0, 0, b.Width, b.Height), width / 360f);
+            }
+            return b;
+        }
+
         /// <summary>A point on the PiP in the widget's picture coordinates.</summary>
         Point WidgetPoint(Point client) { var c = ContentRect(); return new Point(client.X - c.X, client.Y - c.Y); }
 

@@ -707,3 +707,33 @@ Memory	Memória
 Network	Rede
 Nothing is playing	Nada está tocando
 Unknown title	Título desconhecido
+System details	Detalhes do sistema
+Gathering details…	Coletando detalhes…
+Clock speed	Velocidade
+Cores	Núcleos
+Processes	Processos
+Threads	Threads
+Handles	Identificadores
+Up time	Tempo ativo
+In use	Em uso
+Available	Disponível
+Committed	Confirmada
+Cached	Em cache
+Kernel	Kernel
+Top apps	Apps que mais usam
+3D	3D
+Video decode	Decodificação de vídeo
+Video encode	Codificação de vídeo
+Copy	Cópia
+Dedicated memory	Memória dedicada
+Shared memory	Memória compartilhada
+Disk	Disco
+Read	Leitura
+Write	Gravação
+free	livre
+Download	Download
+Upload	Upload
+Since opened	Desde que abriu
+Battery	Bateria
+Plugged in	Na tomada
+On battery	Na bateria

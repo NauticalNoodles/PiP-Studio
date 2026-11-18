@@ -707,3 +707,33 @@ Memory	Arbeitsspeicher
 Network	Netzwerk
 Nothing is playing	Gerade läuft nichts
 Unknown title	Unbekannter Titel
+System details	Systemdetails
+Gathering details…	Details werden gesammelt…
+Clock speed	Takt
+Cores	Kerne
+Processes	Prozesse
+Threads	Threads
+Handles	Handles
+Up time	Betriebszeit
+In use	In Verwendung
+Available	Verfügbar
+Committed	Zugesichert
+Cached	Im Cache
+Kernel	Kernel
+Top apps	Top-Apps
+3D	3D
+Video decode	Videodecodierung
+Video encode	Videocodierung
+Copy	Kopieren
+Dedicated memory	Dedizierter Speicher
+Shared memory	Gemeinsamer Speicher
+Disk	Datenträger
+Read	Lesen
+Write	Schreiben
+free	frei
+Download	Download
+Upload	Upload
+Since opened	Seit dem Öffnen
+Battery	Akku
+Plugged in	Angeschlossen
+On battery	Akkubetrieb
