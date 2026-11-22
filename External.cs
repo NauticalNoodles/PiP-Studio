@@ -1049,6 +1049,12 @@ namespace PipStudio
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible && IsHandleCreated) U.ExcludeFromCapture(Handle, App.S.HideFromCapture);   // streaming (Moonlight, Steam Link) sees them unless PiPs are hidden from capture
+        }
+
         protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
@@ -1064,7 +1070,7 @@ namespace PipStudio
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            U.ExcludeFromCapture(Handle, true);
+            U.ExcludeFromCapture(Handle, App.S.HideFromCapture);
         }
 
         public void Input()
@@ -1170,6 +1176,12 @@ namespace PipStudio
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible && IsHandleCreated) U.ExcludeFromCapture(Handle, App.S.HideFromCapture);   // streaming (Moonlight, Steam Link) sees them unless PiPs are hidden from capture
+        }
+
         protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
@@ -1185,7 +1197,7 @@ namespace PipStudio
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            U.ExcludeFromCapture(Handle, true);   // the controls never show up in recordings or screen sharing
+            U.ExcludeFromCapture(Handle, App.S.HideFromCapture);   // hidden from recordings and screen sharing only when PiPs are
         }
 
         /// <summary>The other app's PiP under the pointer, the one the bar is on while you're over the bar, or zero.</summary>
@@ -1452,6 +1464,12 @@ namespace PipStudio
             };
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible && IsHandleCreated) U.ExcludeFromCapture(Handle, App.S.HideFromCapture);   // streaming (Moonlight, Steam Link) sees them unless PiPs are hidden from capture
+        }
+
         protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
@@ -1468,7 +1486,7 @@ namespace PipStudio
         {
             base.OnHandleCreated(e);
             U.RoundCorners(Handle, true);
-            U.ExcludeFromCapture(Handle, true);
+            U.ExcludeFromCapture(Handle, App.S.HideFromCapture);
         }
 
         public void ShowFor(IntPtr h, string t, double lvl)

@@ -1944,6 +1944,12 @@ namespace PipStudio
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (Visible && IsHandleCreated) U.ExcludeFromCapture(Handle, App.S.HideFromCapture);
+        }
+
         protected override bool ShowWithoutActivation { get { return true; } }
 
         protected override CreateParams CreateParams
