@@ -994,8 +994,45 @@ namespace PipStudio
 
         void AfterUserMove()
         {
-            if (SnapOn) SnapToSpot(NearestSpot(App.S.SnapToEdges), true);
-            else { inTheater = false; ClampToWorkArea(true); }
+            // where you put it (snapped to its spot, or kept on the screen); PiPs in the way are bumped out of it, into a
+            // stack. If they can't all fit, this one makes room for itself instead (stacks next to them).
+            inTheater = false;
+            var wa = WorkArea();
+            var b = TargetBounds;
+            Rectangle want = SnapOn ? new Rectangle(SpotPoint(NearestSpot(App.S.SnapToEdges), b.Size, wa), b.Size)
+                                    : new Rectangle(U.Clamp(b.X, wa.Left, Math.Max(wa.Left, wa.Right - b.Width)), U.Clamp(b.Y, wa.Top, Math.Max(wa.Top, wa.Bottom - b.Height)), b.Width, b.Height);
+            if (SnapOn)
+            {
+                // the spot is taken: stack on the side of that PiP where you dropped this one, when there's room
+                var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
+                if (occ != null)
+                {
+                    var o = occ.TargetBounds;
+                    var stacked = App.I.ResolveCollision(this, want, b.Top + b.Height / 2 > o.Top + o.Height / 2);
+                    if (wa.Contains(stacked)) want = stacked;
+                }
+            }
+            var bump = App.I.PlanBump(this, want);
+            if (bump != null)
+            {
+                if (want != b) MoveTo(want, true);
+                foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+            }
+            else
+            {
+                // no room to push them: this one stacks above or below the PiP it's on (the side you dropped it on)
+                var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
+                Rectangle r = want;
+                if (occ != null)
+                {
+                    var o = occ.TargetBounds;
+                    bool down = b.Top + b.Height / 2 > o.Top + o.Height / 2;
+                    r = App.I.ResolveCollision(this, want, down);
+                    if (!wa.Contains(r)) r = App.I.ResolveCollision(this, want, !down);
+                    if (!wa.Contains(r)) r = want;                         // the screen is full: leave it where you put it
+                }
+                if (r != b) MoveTo(r, true);
+            }
             App.I.SaveSoon();
         }
 

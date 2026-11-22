@@ -12,6 +12,7 @@ New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your g
 - **Now playing**: what's playing on your PC, with previous, play/pause and next
 - Open them from **Utility PiP** on the Windows page, the tray menu, or a PiP's right-click menu. They open alongside your other PiPs, also when only one PiP at a time is allowed
 
+- **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
 - Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them
