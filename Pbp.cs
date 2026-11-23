@@ -62,10 +62,17 @@ namespace PipStudio
             if (!Active) return;
             try { bar.Release(); } catch { }
             bar = null;
-            foreach (var kv in shrunk)
-                if (Native.IsWindow(kv.Key))
-                    try { Native.SetWindowPos(kv.Key, IntPtr.Zero, kv.Value.X, kv.Value.Y, kv.Value.Width, kv.Value.Height, Native.SWP_NOZORDER | Native.SWP_NOACTIVATE); } catch { }
+            // the windows it shrank go back once Windows has given the space back (before that, it would squeeze them again)
+            var back = new Dictionary<IntPtr, Rectangle>(shrunk);
             shrunk.Clear(); refused.Clear();
+            Action restore = () =>
+            {
+                foreach (var kv in back)
+                    if (Native.IsWindow(kv.Key))
+                        try { Native.SetWindowPos(kv.Key, IntPtr.Zero, kv.Value.X, kv.Value.Y, kv.Value.Width, kv.Value.Height, Native.SWP_NOZORDER | Native.SWP_NOACTIVATE); } catch { }
+            };
+            restore();
+            App.RunSoon(restore, 400);
             foreach (var kv in before)
                 if (!kv.Key.IsClosing && !kv.Key.IsDisposed) kv.Key.MoveTo(kv.Value, true);
             before.Clear();
@@ -118,7 +125,8 @@ namespace PipStudio
         public static void Arrange(bool remember)
         {
             if (!Active) return;
-            var pips = App.I.Pips.Where(p => !p.IsClosing && p.Visible && !p.InTheater &&
+            // hidden ones too (hidden while their window is in front, or Hide all): they come back in the strip
+            var pips = App.I.Pips.Where(p => !p.IsClosing && !p.InTheater &&
                                              (Screen.FromRectangle(p.TargetBounds).DeviceName == screen.DeviceName || before.ContainsKey(p))).ToList();
             if (pips.Count == 0) return;
             pips = pips.OrderBy(p => p.TargetBounds.Top).ThenBy(p => p.TargetBounds.Left).ToList();

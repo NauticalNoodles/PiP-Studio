@@ -104,6 +104,7 @@ namespace PipStudio
                 w.WindowState = WindowState.Normal;
             });
             steps.Add(() => { var sun = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Sunset timelapse", StringComparison.OrdinalIgnoreCase)); if (sun != IntPtr.Zero) Log("side by side: page back at " + U.WindowRect(sun)); });
+            steps.Add(() => { foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: PiP " + p.DisplayName + " back at " + p.TargetBounds); });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
             steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light
