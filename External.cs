@@ -688,6 +688,7 @@ namespace PipStudio
         static bool IsFreeShape(IntPtr h)
         {
             bool on;
+            if (!Resizable(h)) return false;                                     // a menu or pop-up: never reshaped (its dark background isn't a bar)
             if (trimChoice.TryGetValue(h, out on)) return on;                     // you chose for this window
             return DiscordNames.Contains(U.ProcessName(h));
         }
