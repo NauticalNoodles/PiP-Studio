@@ -994,16 +994,29 @@ namespace PipStudio
 
         void AfterUserMove()
         {
-            // where you put it (snapped to its spot, or kept on the screen); PiPs in the way are bumped out of it, into a
-            // stack. If they can't all fit, this one makes room for itself instead (stacks next to them).
+            HideDropPreview();
             inTheater = false;
+            Dictionary<PipWindow, Rectangle> bump;
+            var r = PlanDrop(out bump);
+            if (r != TargetBounds) MoveTo(r, true);
+            foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+            App.I.SaveSoon();
+        }
+
+        /// <summary>
+        /// Where this PiP goes when you let go of it here, and where the PiPs it lands on go: it stays where you put it (snapped
+        /// to its spot, or kept on the screen) and PiPs in the way are bumped out of it, into a stack. With snapping, a spot
+        /// that's taken means stacking on the side of that PiP you dropped it on. If they can't all fit, this one makes room
+        /// for itself instead (stacks next to them). Changes nothing: the drop and the preview while dragging both use it.
+        /// </summary>
+        Rectangle PlanDrop(out Dictionary<PipWindow, Rectangle> bump)
+        {
             var wa = WorkArea();
             var b = TargetBounds;
             Rectangle want = SnapOn ? new Rectangle(SpotPoint(NearestSpot(App.S.SnapToEdges), b.Size, wa), b.Size)
                                     : new Rectangle(U.Clamp(b.X, wa.Left, Math.Max(wa.Left, wa.Right - b.Width)), U.Clamp(b.Y, wa.Top, Math.Max(wa.Top, wa.Bottom - b.Height)), b.Width, b.Height);
             if (SnapOn)
             {
-                // the spot is taken: stack on the side of that PiP where you dropped this one, when there's room
                 var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
                 if (occ != null)
                 {
@@ -1012,28 +1025,52 @@ namespace PipStudio
                     if (wa.Contains(stacked)) want = stacked;
                 }
             }
-            var bump = App.I.PlanBump(this, want);
-            if (bump != null)
+            bump = App.I.PlanBump(this, want);
+            if (bump != null) return want;
+            bump = new Dictionary<PipWindow, Rectangle>();
+            var occ2 = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
+            Rectangle r = want;
+            if (occ2 != null)
             {
-                if (want != b) MoveTo(want, true);
-                foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+                var o = occ2.TargetBounds;
+                bool down = b.Top + b.Height / 2 > o.Top + o.Height / 2;
+                r = App.I.ResolveCollision(this, want, down);
+                if (!wa.Contains(r)) r = App.I.ResolveCollision(this, want, !down);
+                if (!wa.Contains(r)) r = want;                             // the screen is full: leave it where you put it
             }
-            else
+            return r;
+        }
+
+        // ------------------------------------------------------------ drop preview (while you drag)
+        static readonly List<DropGhost> ghosts = new List<DropGhost>();
+        DateTime lastPreview = DateTime.MinValue;
+
+        /// <summary>While you drag (or resize): faint outlines where this PiP and the PiPs it would push will land.</summary>
+        void UpdateDropPreview()
+        {
+            if (!moving || (DateTime.Now - lastPreview).TotalMilliseconds < 50) return;
+            lastPreview = DateTime.Now;
+            var spots = new List<Rectangle>();
+            try
             {
-                // no room to push them: this one stacks above or below the PiP it's on (the side you dropped it on)
-                var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
-                Rectangle r = want;
-                if (occ != null)
-                {
-                    var o = occ.TargetBounds;
-                    bool down = b.Top + b.Height / 2 > o.Top + o.Height / 2;
-                    r = App.I.ResolveCollision(this, want, down);
-                    if (!wa.Contains(r)) r = App.I.ResolveCollision(this, want, !down);
-                    if (!wa.Contains(r)) r = want;                         // the screen is full: leave it where you put it
-                }
-                if (r != b) MoveTo(r, true);
+                Dictionary<PipWindow, Rectangle> bump;
+                var r = PlanDrop(out bump);
+                var b = Bounds;
+                if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) + Math.Abs(r.Width - b.Width) > 6) spots.Add(r);   // it won't stay right here
+                spots.AddRange(bump.Values);
             }
-            App.I.SaveSoon();
+            catch { }
+            while (ghosts.Count < spots.Count) ghosts.Add(new DropGhost());
+            for (int i = 0; i < ghosts.Count; i++)
+            {
+                if (i < spots.Count) ghosts[i].ShowAt(spots[i], this, App.S.RoundedCorners);
+                else if (ghosts[i].Visible) ghosts[i].Hide();
+            }
+        }
+
+        static void HideDropPreview()
+        {
+            foreach (var g in ghosts) if (!g.IsDisposed && g.Visible) g.Hide();
         }
 
         /// <summary>Displays were added, removed or rearranged: keep the PiP on a screen.</summary>
@@ -1420,6 +1457,7 @@ namespace PipStudio
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
+            if (moving) UpdateDropPreview();
             UpdateThumb();
             if (overlay != null) overlay.SyncBounds();
             Invalidate();
@@ -1429,6 +1467,7 @@ namespace PipStudio
         {
             base.OnMove(e);
             if (overlay != null) overlay.SyncBounds();
+            if (moving) UpdateDropPreview();
         }
 
         // ------------------------------------------------------------------ timers
@@ -1923,6 +1962,59 @@ namespace PipStudio
     // =================================================================================
     //  Hover controls (separate layered window above the PiP — DWM thumbnails cover GDI drawing)
     // =================================================================================
+    /// <summary>A faint, click-through outline of where a PiP will land when you let go (shown while you drag one).</summary>
+    class DropGhost : Form
+    {
+        bool round;
+
+        public DropGhost()
+        {
+            FormBorderStyle = FormBorderStyle.None;
+            ShowInTaskbar = false;
+            StartPosition = FormStartPosition.Manual;
+            Opacity = 0.32;
+            Text = "PiP drop preview";
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
+        }
+
+        protected override bool ShowWithoutActivation { get { return true; } }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.ExStyle |= Native.WS_EX_TOOLWINDOW | Native.WS_EX_NOACTIVATE | Native.WS_EX_TRANSPARENT | Native.WS_EX_LAYERED | Native.WS_EX_TOPMOST;
+                return cp;
+            }
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            U.ExcludeFromCapture(Handle, App.S.HideFromCapture);
+        }
+
+        /// <summary>Shows it over r, just under the PiP you're dragging.</summary>
+        public void ShowAt(Rectangle r, Form under, bool rounded)
+        {
+            if (round != rounded) { round = rounded; if (IsHandleCreated) U.RoundCorners(Handle, round); }
+            if (!Visible) { Bounds = r; Show(); if (IsHandleCreated) U.RoundCorners(Handle, round); }
+            else if (Bounds != r) Bounds = r;
+            try { Native.SetWindowPos(Handle, under.Handle, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE); } catch { }
+            Invalidate();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.Clear(U.Blend(Theme.Accent, Color.Black, 0.35));
+            int t = Math.Max(2, (int)Math.Round(3 * U.ScaleOf(Handle)));
+            using (var pen = new Pen(Color.White, t) { Alignment = System.Drawing.Drawing2D.PenAlignment.Inset })
+                g.DrawRectangle(pen, 0, 0, ClientSize.Width - 1, ClientSize.Height - 1);
+        }
+    }
+
     /// <summary>A click-through outline drawn over a PiP while controller controls are on, so you can see it even when the PiP is faded out.</summary>
     class PipOutline : Form
     {
