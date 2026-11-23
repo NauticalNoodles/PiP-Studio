@@ -812,6 +812,18 @@ namespace PipStudio
                 { "Router", "الموجّه" },
                 { "avg", "المتوسط" },
                 { "lost", "مفقود" },
+                { "Previous", "السابق" },
+                { "Play or pause", "تشغيل أو إيقاف مؤقت" },
+                { "Start or pause", "بدء أو إيقاف مؤقت" },
+                { "One minute more", "دقيقة إضافية" },
+                { "One minute less", "دقيقة أقل" },
+                { "Switch server", "تبديل الخادم" },
+                { "Unmute", "إلغاء الكتم" },
+                { "muted", "مكتوم" },
+                { "A part of the screen", "جزء من الشاشة" },
+                { "Picture-in-picture of {0}", "صورة داخل صورة لـ {0}" },
+                { "Playing", "قيد التشغيل" },
+                { "Paused", "متوقف مؤقتًا" },
             };
         }
 
@@ -1603,6 +1615,18 @@ namespace PipStudio
                 { "Router", "路由器" },
                 { "avg", "平均" },
                 { "lost", "丢失" },
+                { "Previous", "上一个" },
+                { "Play or pause", "播放或暂停" },
+                { "Start or pause", "开始或暂停" },
+                { "One minute more", "增加一分钟" },
+                { "One minute less", "减少一分钟" },
+                { "Switch server", "切换服务器" },
+                { "Unmute", "取消静音" },
+                { "muted", "已静音" },
+                { "A part of the screen", "屏幕的一部分" },
+                { "Picture-in-picture of {0}", "{0} 的画中画" },
+                { "Playing", "正在播放" },
+                { "Paused", "已暂停" },
             };
         }
 
@@ -2394,6 +2418,18 @@ namespace PipStudio
                 { "Router", "Router" },
                 { "avg", "Ø" },
                 { "lost", "verloren" },
+                { "Previous", "Zurück" },
+                { "Play or pause", "Wiedergabe oder Pause" },
+                { "Start or pause", "Starten oder anhalten" },
+                { "One minute more", "Eine Minute mehr" },
+                { "One minute less", "Eine Minute weniger" },
+                { "Switch server", "Server wechseln" },
+                { "Unmute", "Stummschaltung aufheben" },
+                { "muted", "stumm" },
+                { "A part of the screen", "Ein Teil des Bildschirms" },
+                { "Picture-in-picture of {0}", "Bild im Bild von {0}" },
+                { "Playing", "Wiedergabe" },
+                { "Paused", "Angehalten" },
             };
         }
 
@@ -3185,6 +3221,18 @@ namespace PipStudio
                 { "Router", "Router" },
                 { "avg", "media" },
                 { "lost", "perdidos" },
+                { "Previous", "Anterior" },
+                { "Play or pause", "Reproducir o pausar" },
+                { "Start or pause", "Iniciar o pausar" },
+                { "One minute more", "Un minuto más" },
+                { "One minute less", "Un minuto menos" },
+                { "Switch server", "Cambiar de servidor" },
+                { "Unmute", "Activar sonido" },
+                { "muted", "silenciado" },
+                { "A part of the screen", "Una parte de la pantalla" },
+                { "Picture-in-picture of {0}", "Imagen en imagen de {0}" },
+                { "Playing", "Reproduciendo" },
+                { "Paused", "En pausa" },
             };
         }
 
@@ -3976,6 +4024,18 @@ namespace PipStudio
                 { "Router", "Routeur" },
                 { "avg", "moy." },
                 { "lost", "perdus" },
+                { "Previous", "Précédent" },
+                { "Play or pause", "Lecture ou pause" },
+                { "Start or pause", "Démarrer ou mettre en pause" },
+                { "One minute more", "Une minute de plus" },
+                { "One minute less", "Une minute de moins" },
+                { "Switch server", "Changer de serveur" },
+                { "Unmute", "Réactiver le son" },
+                { "muted", "son coupé" },
+                { "A part of the screen", "Une partie de l'écran" },
+                { "Picture-in-picture of {0}", "Image dans l'image de {0}" },
+                { "Playing", "En lecture" },
+                { "Paused", "En pause" },
             };
         }
 
@@ -4767,6 +4827,18 @@ namespace PipStudio
                 { "Router", "ルーター" },
                 { "avg", "平均" },
                 { "lost", "損失" },
+                { "Previous", "前へ" },
+                { "Play or pause", "再生または一時停止" },
+                { "Start or pause", "開始または一時停止" },
+                { "One minute more", "1 分増やす" },
+                { "One minute less", "1 分減らす" },
+                { "Switch server", "サーバーを切り替え" },
+                { "Unmute", "ミュート解除" },
+                { "muted", "ミュート中" },
+                { "A part of the screen", "画面の一部" },
+                { "Picture-in-picture of {0}", "{0} のピクチャー イン ピクチャー" },
+                { "Playing", "再生中" },
+                { "Paused", "一時停止中" },
             };
         }
 
@@ -5558,6 +5630,18 @@ namespace PipStudio
                 { "Router", "Roteador" },
                 { "avg", "média" },
                 { "lost", "perdidos" },
+                { "Previous", "Anterior" },
+                { "Play or pause", "Reproduzir ou pausar" },
+                { "Start or pause", "Iniciar ou pausar" },
+                { "One minute more", "Um minuto a mais" },
+                { "One minute less", "Um minuto a menos" },
+                { "Switch server", "Trocar de servidor" },
+                { "Unmute", "Ativar som" },
+                { "muted", "sem som" },
+                { "A part of the screen", "Uma parte da tela" },
+                { "Picture-in-picture of {0}", "Picture-in-picture de {0}" },
+                { "Playing", "Reproduzindo" },
+                { "Paused", "Pausado" },
             };
         }
 
@@ -6349,6 +6433,18 @@ namespace PipStudio
                 { "Router", "Роутер" },
                 { "avg", "сред." },
                 { "lost", "потери" },
+                { "Previous", "Предыдущий" },
+                { "Play or pause", "Воспроизвести или пауза" },
+                { "Start or pause", "Старт или пауза" },
+                { "One minute more", "На минуту больше" },
+                { "One minute less", "На минуту меньше" },
+                { "Switch server", "Сменить сервер" },
+                { "Unmute", "Включить звук" },
+                { "muted", "без звука" },
+                { "A part of the screen", "Часть экрана" },
+                { "Picture-in-picture of {0}", "Картинка в картинке: {0}" },
+                { "Playing", "Воспроизводится" },
+                { "Paused", "Пауза" },
             };
         }
     }

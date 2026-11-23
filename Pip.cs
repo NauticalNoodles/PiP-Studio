@@ -1680,6 +1680,39 @@ namespace PipStudio
             Invalidate(content);
         }
 
+        // ------------------------------------------------------------ screen readers (Narrator and the like)
+        protected override AccessibleObject CreateAccessibilityInstance() { return new PipAccess(this); }
+
+        /// <summary>What the PiP shows, in a sentence.</summary>
+        public string AccessibleSummary
+        {
+            get
+            {
+                if (IsWidget && W != null) { try { return W.Describe(); } catch { return ""; } }
+                if (St.Kind == SourceKind.Screen) return L.T("A part of the screen");
+                return L.T("Picture-in-picture of {0}").Replace("{0}", string.IsNullOrEmpty(St.ProcessName) ? DisplayName : St.ProcessName);
+            }
+        }
+
+        /// <summary>A utility PiP's buttons and sliders, as last drawn.</summary>
+        public List<Widget.Hit> WidgetControls { get { return IsWidget && W != null ? W.Controls : new List<Widget.Hit>(); } }
+
+        /// <summary>A control's place on screen.</summary>
+        public Rectangle WidgetToScreen(Rectangle r)
+        {
+            var c = ContentRect();
+            return RectangleToScreen(new Rectangle(r.X + c.X, r.Y + c.Y, r.Width, r.Height));
+        }
+
+        /// <summary>Presses a utility PiP's button (a screen reader's default action).</summary>
+        public void PressWidget(Rectangle r)
+        {
+            if (W == null) return;
+            var pt = new Point(r.X + r.Width / 2, r.Y + r.Height / 2);
+            W.MouseDown(pt); W.MouseUp(pt);
+            CaptureTick();
+        }
+
         /// <summary>A utility PiP's picture at a given width (screenshots); null for other PiPs.</summary>
         public Bitmap RenderWidgetAt(int width)
         {
@@ -1962,6 +1995,40 @@ namespace PipStudio
     // =================================================================================
     //  Hover controls (separate layered window above the PiP — DWM thumbnails cover GDI drawing)
     // =================================================================================
+    /// <summary>What screen readers see of a PiP: its name, what it shows and, for utility PiPs, their buttons and sliders.</summary>
+    class PipAccess : Control.ControlAccessibleObject
+    {
+        readonly PipWindow p;
+        public PipAccess(PipWindow p) : base(p) { this.p = p; }
+        public override string Name { get { return p.DisplayName; } set { } }
+        public override string Description { get { return p.AccessibleSummary; } }
+        public override AccessibleRole Role { get { return p.IsWidget ? AccessibleRole.Grouping : AccessibleRole.Graphic; } }
+        public override string Value { get { return p.AccessibleSummary; } set { } }
+        public override int GetChildCount() { return p.WidgetControls.Count; }
+        public override AccessibleObject GetChild(int index)
+        {
+            var l = p.WidgetControls;
+            return index >= 0 && index < l.Count ? new HitAccess(p, this, l[index]) : null;
+        }
+    }
+
+    class HitAccess : AccessibleObject
+    {
+        readonly PipWindow p;
+        readonly AccessibleObject parent;
+        readonly Widget.Hit h;
+        public HitAccess(PipWindow p, AccessibleObject parent, Widget.Hit h) { this.p = p; this.parent = parent; this.h = h; }
+        bool IsSlider { get { return (h.Kind ?? "").EndsWith("slider"); } }
+        public override string Name { get { return Widget.NameOf(h); } set { } }
+        public override string Value { get { return h.Value ?? ""; } set { } }
+        public override AccessibleRole Role { get { return IsSlider ? AccessibleRole.Slider : h.Kind == "pawnio" || h.Kind == "admin" ? AccessibleRole.Link : AccessibleRole.PushButton; } }
+        public override AccessibleStates State { get { return AccessibleStates.Focusable; } }
+        public override Rectangle Bounds { get { return p.WidgetToScreen(h.R); } }
+        public override AccessibleObject Parent { get { return parent; } }
+        public override string DefaultAction { get { return IsSlider ? "" : L.T("Press"); } }
+        public override void DoDefaultAction() { if (!IsSlider) p.PressWidget(h.R); }
+    }
+
     /// <summary>A faint, click-through outline of where a PiP will land when you let go (shown while you drag one).</summary>
     class DropGhost : Form
     {

@@ -45,8 +45,30 @@ namespace PipStudio
         public abstract void Paint(Graphics g, Rectangle r, float s);
 
         // what can be clicked, in picture coordinates (filled in while painting)
-        protected class Hit { public Rectangle R; public string Kind, Key; }
+        public class Hit { public Rectangle R; public string Kind, Key, Name, Value; }
         protected readonly List<Hit> hits = new List<Hit>();
+
+        /// <summary>The buttons and sliders drawn last time (screen readers list them).</summary>
+        public List<Hit> Controls { get { return hits.ToList(); } }
+
+        /// <summary>What it shows, in a sentence, for screen readers ("CPU 12%, memory 40%…").</summary>
+        public virtual string Describe() { return ""; }
+
+        static readonly Dictionary<string, string> controlNames = new Dictionary<string, string>
+        {
+            { "prev", "Previous" }, { "play", "Play or pause" }, { "next", "Next" }, { "stopwatch", "Stopwatch" }, { "timer", "Timer" },
+            { "toggle", "Start or pause" }, { "reset", "Reset" }, { "plus", "One minute more" }, { "minus", "One minute less" },
+            { "server", "Switch server" }, { "pawnio", "Get PawnIO" }, { "admin", "Restart as administrator" }
+        };
+
+        /// <summary>A control's name for screen readers.</summary>
+        public static string NameOf(Hit h)
+        {
+            if (!string.IsNullOrEmpty(h.Name)) return h.Name;
+            string n;
+            if (controlNames.TryGetValue(h.Key ?? h.Kind ?? "", out n) || controlNames.TryGetValue(h.Kind ?? "", out n)) return L.T(n);
+            return h.Key ?? h.Kind ?? "";
+        }
         protected Hit dragging;
         public bool Busy { get { return dragging != null; } }
 
@@ -147,6 +169,16 @@ namespace PipStudio
     /// <summary>The speakers' volume and mute, then a slider for each app that makes sound (the ones playing first).</summary>
     class VolumeWidget : Widget
     {
+        public override string Describe()
+        {
+            try
+            {
+                var v = Audio.GetMasterVolume();
+                return L.T("Volume") + " " + (v == null ? "—" : Pct(v.Value)) + (Audio.GetMasterMute() == true ? ", " + L.T("muted") : "");
+            }
+            catch { return L.T("Volume"); }
+        }
+
         public override double Aspect { get { return 1.5; } }
         public override int Interval { get { return Busy ? 33 : 250; } }
 
@@ -190,13 +222,13 @@ namespace PipStudio
             var mute = new Rectangle(x, y + (h - btn) / 2, btn, btn);
             Fill(g, mute, 8 * s, Tint(muted ? 70 : 34));
             Glyph(g, muted ? "" : glyph, 13 * s, mute, muted ? Sub : Text);
-            hits.Add(new Hit { R = mute, Kind = isMaster ? "mmute" : "mute", Key = key });
+            hits.Add(new Hit { R = mute, Kind = isMaster ? "mmute" : "mute", Key = key, Name = L.T(muted ? "Unmute" : "Mute") + " " + L.T(name) });
             int tx = x + btn + (int)(10 * s), pctW = (int)(40 * s), tw = w - btn - (int)(10 * s);
             Label(g, name, U.UI(11 * s), new Rectangle(tx, y + (int)(2 * s), tw - pctW, (int)(18 * s)), muted ? Sub : Text);
             Label(g, Pct(v), U.UI(11 * s), new Rectangle(tx + tw - pctW, y + (int)(2 * s), pctW, (int)(18 * s)), Sub, TextFormatFlags.Right);
             var sl = new Rectangle(tx, y + (int)(20 * s), tw, (int)(20 * s));
             Slider(g, sl, muted ? 0 : v, s, dragging != null && dragging.Key == key && dragging.Kind.EndsWith("slider"));
-            hits.Add(new Hit { R = Rectangle.Inflate(sl, 0, (int)(4 * s)), Kind = isMaster ? "mslider" : "slider", Key = key });
+            hits.Add(new Hit { R = Rectangle.Inflate(sl, 0, (int)(4 * s)), Kind = isMaster ? "mslider" : "slider", Key = key, Name = L.T("Volume") + " " + L.T(name), Value = Pct(v) });
         }
 
         void Set(Hit h, double v)
@@ -237,6 +269,14 @@ namespace PipStudio
     /// <summary>CPU, GPU, memory and network use, each with a graph of the last minute.</summary>
     class MonitorWidget : Widget
     {
+        public override string Describe()
+        {
+            var n = SysStats.Snapshot();
+            Func<double, string> p = v => v < 0 ? "—" : Pct(v);
+            return L.T("CPU") + " " + p(n.Cpu) + ", " + L.T("GPU") + " " + p(n.Gpu) + ", " + L.T("Memory") + " " + p(n.Mem) + ", "
+                 + L.T("Download") + " " + MonitorWidget.Rate(n.Down) + ", " + L.T("Upload") + " " + MonitorWidget.Rate(n.Up);
+        }
+
         public override double Aspect { get { return 1.6; } }
         public MonitorWidget() { SysStats.Use(true); }
         public override void Dispose() { SysStats.Use(false); }
@@ -296,6 +336,14 @@ namespace PipStudio
     /// <summary>The dense one: everything Windows tells an app without administrator rights, in two columns.</summary>
     class DetailsWidget : Widget
     {
+        public override string Describe()
+        {
+            var n = SysStats.Snapshot();
+            Func<double, string> p = v => v < 0 ? "—" : Pct(v);
+            return L.T("CPU") + " " + p(n.Cpu) + ", " + L.T("GPU") + " " + p(n.Gpu) + ", " + L.T("Memory") + " " + p(n.Mem) + ", "
+                 + L.T("Download") + " " + MonitorWidget.Rate(n.Down) + ", " + L.T("Upload") + " " + MonitorWidget.Rate(n.Up);
+        }
+
         public override double Aspect { get { return App.IsElevated ? 0.72 : PawnIo.Installed ? 0.78 : 0.82; } }   // room for the fans (or the way to see them)
         public DetailsWidget() { SysStats.Use(true, true); }
         public override void Dispose() { SysStats.Use(false, true); }
@@ -971,6 +1019,8 @@ namespace PipStudio
     /// <summary>The time, big, and the date under it, in your Windows formats.</summary>
     class ClockWidget : Widget
     {
+        public override string Describe() { return DateTime.Now.ToString("f", System.Globalization.CultureInfo.CurrentCulture); }
+
         public override double Aspect { get { return 2.2; } }
 
         public override void Paint(Graphics g, Rectangle r, float s)
@@ -994,6 +1044,13 @@ namespace PipStudio
     /// <summary>What's playing on the PC (any app that shows in Windows' media controls), with previous, play/pause and next.</summary>
     class MediaWidget : Widget
     {
+        public override string Describe()
+        {
+            var m = MediaNow.Current;
+            if (m == null || !m.HasSession) return L.T("Nothing is playing");
+            return (m.Playing ? L.T("Playing") : L.T("Paused")) + ": " + m.Title + (m.Artist.Length > 0 ? ", " + m.Artist : "");
+        }
+
         public override double Aspect { get { return 2.4; } }
         public MediaWidget() { MediaNow.Use(true); }
         public override void Dispose() { MediaNow.Use(false); }

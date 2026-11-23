@@ -12,6 +12,13 @@ namespace PipStudio
     /// <summary>A stopwatch and a countdown timer: switch between them at the top; the wheel over the time sets the timer.</summary>
     class TimerWidget : Widget
     {
+        public override string Describe()
+        {
+            var t = countdown ? Left : Counted;
+            string time = ((int)t.TotalHours > 0 ? (int)t.TotalHours + " h " : "") + t.Minutes + " min " + t.Seconds + " s";
+            return L.T(countdown ? "Timer" : "Stopwatch") + ": " + time + (running ? "" : ", " + L.T("Paused"));
+        }
+
         public override double Aspect { get { return 1.9; } }
         public override int Interval { get { return running ? 100 : 400; } }
 
@@ -132,6 +139,12 @@ namespace PipStudio
     /// whether lag comes from your Wi-Fi or from further out. Click the internet line to switch which server it pings.</summary>
     class PingWidget : Widget
     {
+        public override string Describe()
+        {
+            var n = Pinger.Snapshot();
+            return L.T("Internet") + " " + (n.Net < 0 ? "—" : Ms(n.Net)) + ", " + L.T("Router") + " " + (n.Lan < 0 ? "—" : Ms(n.Lan));
+        }
+
         public override double Aspect { get { return 1.7; } }
         public PingWidget() { Pinger.Use(true); }
         public override void Dispose() { Pinger.Use(false); }
