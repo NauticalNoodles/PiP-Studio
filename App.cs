@@ -29,6 +29,9 @@ namespace PipStudio
             var cp = new CreateParams();
             cp.Caption = Caption;
             CreateHandle(cp);
+            // a copy started normally can still ask this one to show its window when this one runs as administrator
+            // (Windows otherwise drops messages from normal apps to administrator ones, and the second launch does nothing)
+            try { Native.ChangeWindowMessageFilterEx(Handle, (uint)WM_SHOWAPP, 1, IntPtr.Zero); } catch { }
         }
 
         protected override void WndProc(ref Message m)
@@ -361,7 +364,7 @@ namespace PipStudio
 
             SystemEvents.SessionEnding += (o, e) => { try { SaveSession(); } catch { } CrashReports.CleanExit(); };   // Windows shutting down isn't a crash
 
-            bool restored = S.RestoreSessions && RestoreSession();
+            if (S.RestoreSessions) RestoreSession();
             bool silent = args.Any(a => a.Equals("--startup", StringComparison.OrdinalIgnoreCase))
                           || (Packaged.IsPackaged && args.Length == 0 && Packaged.LaunchedAtStartup());
             if (S.FirstRun)
@@ -374,8 +377,11 @@ namespace PipStudio
             }
             bool updated = args.Any(a => a.Equals("--updated", StringComparison.OrdinalIgnoreCase));   // restarted by Updater.Install
             string shots = MainUI.ShotsDir(args);
+            // the window opens unless Windows started it (sign-in), also when PiPs came back: after a restart (as administrator,
+            // or an update) it would otherwise seem to vanish
+            bool replaced = args.Any(a => a.Equals("--replace", StringComparison.OrdinalIgnoreCase));
             if (shots != null) { MainUI.ShotsLog(args, "scheduled"); RunSoon(() => MainUI.TakeShots(shots), 1500); }      // the screenshots workflow
-            else if (updated || (!silent && !restored)) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
+            else if (updated || replaced || !silent) RunSoon(() => ShowMain(updated ? "settings" : null), 50);
             else if (S.MinimizeMemory) RunSoon(U.Trim, 6000);
             Updater.Start(updated);
             Companion.Apply();                                            // the phone companion, if you turned it on
