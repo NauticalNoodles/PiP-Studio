@@ -58,6 +58,7 @@ namespace PipStudio
             if ((ex & Native.WS_EX_TOPMOST) == 0) return false;
             if ((ex & (Native.WS_EX_TRANSPARENT | Native.WS_EX_NOACTIVATE)) != 0) return false;     // overlays, notifications
             if ((Native.GetWindowLong(h, Native.GWL_STYLE) & Native.WS_CHILD) != 0) return false;
+            if (!Resizable(h)) return false;                              // menus and flyouts (like Discord's tray menu) can't be resized
             if (Native.GetWindow(h, Native.GW_OWNER) != IntPtr.Zero) return false;                  // dialogs and pop-ups
             if (U.CloakState(h) != 0) return false;
             if (NotPipClasses.Contains(U.ClassName(h))) return false;
@@ -69,6 +70,9 @@ namespace PipStudio
             double a = r.Width / (double)r.Height;
             return a >= 0.45 && a <= 2.8;
         }
+
+        /// <summary>Resizable by its edges: PiPs and pop-outs are, menus, flyouts and notifications aren't.</summary>
+        static bool Resizable(IntPtr h) { return (Native.GetWindowLong(h, Native.GWL_STYLE) & Native.WS_THICKFRAME) != 0; }
 
         static readonly HashSet<string> NotPipClasses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -238,6 +242,7 @@ namespace PipStudio
             if ((title ?? "").IndexOf("overlay", StringComparison.OrdinalIgnoreCase) >= 0) return false;   // Discord's in-game overlay
             int ex = Native.GetWindowLong(h, Native.GWL_EXSTYLE);
             if ((ex & (Native.WS_EX_NOACTIVATE | Native.WS_EX_TRANSPARENT)) != 0) return false;   // overlay and notification helpers (click-through)
+            if (!Resizable(h)) return false;                              // its tray menu and other pop-ups: a pop-out can be resized
             var r = U.WindowRect(h);
             if (r.Width < 200 || r.Height < 120) return false;
             // the overlay covers the whole screen (even when you open it with Shift+Tab and it stops being click-through);

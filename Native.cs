@@ -25,6 +25,7 @@ namespace PipStudio
         public const int GWL_EXSTYLE = -20, GWL_STYLE = -16;
         public const int WS_CHILD = 0x40000000;
         public const uint GW_OWNER = 4;
+        public const int WS_THICKFRAME = 0x40000;                     // resizable by its edges (menus and flyouts aren't)
         public const int WS_EX_TOPMOST = 0x8, WS_EX_TRANSPARENT = 0x20, WS_EX_TOOLWINDOW = 0x80,
                          WS_EX_APPWINDOW = 0x40000, WS_EX_LAYERED = 0x80000, WS_EX_NOACTIVATE = 0x8000000;
         public const int WM_NCHITTEST = 0x84, WM_MOUSEACTIVATE = 0x21, WM_NCLBUTTONDOWN = 0xA1,

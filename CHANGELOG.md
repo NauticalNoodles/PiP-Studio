@@ -14,6 +14,7 @@ New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your g
 
 - **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put
 - Game streaming (Moonlight, Steam Link): the outline, title bar and volume pop-up PiP Studio adds to other apps' PiPs now show up in the stream. Like PiP Studio's own PiPs, they're only hidden from capture when "Hide PiPs from screenshots, recordings and screen sharing" is on
+- Other apps' menus are no longer mistaken for PiPs: Discord's tray menu (right-clicking Discord in the tray) works again instead of getting a PiP title bar. Only windows you can resize count as another app's PiP
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
 - Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them
