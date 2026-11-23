@@ -742,3 +742,16 @@ Control the next PiP	Controlar o próximo PiP
 Control the previous PiP	Controlar o PiP anterior
 Switch PiP	Trocar PiP
 The only PiP	O único PiP
+Side by side on / off (experimental)	Lado a lado liga / desliga (experimental)
+Side by side	Lado a lado
+Side by side (experimental)	Lado a lado (experimental)
+Side by side didn't start	Não foi possível iniciar lado a lado
+Windows wouldn't reserve that part of the screen.	O Windows não reservou essa parte da tela.
+Couldn't make {0} smaller	Não foi possível diminuir {0}
+It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	Ele roda em tela cheia exclusiva ou mantém o próprio tamanho. Mude para sem bordas ou janela nas configurações dele.
+Experimental	Experimental
+Side by side (picture-by-picture)	Lado a lado (imagem ao lado de imagem)
+Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	Experimental. Uma faixa da tela fica para seus PiPs: apps e jogos em tela cheia sem bordas encolhem para o resto, e nada os cobre. Jogos em tela cheia exclusiva não podem ser encolhidos.
+Side	Lado
+PiPs get	Para os PiPs
+Of the display	Da tela

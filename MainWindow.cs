@@ -125,6 +125,7 @@ namespace PipStudio
         static Action refreshUpdates;   // the Updates card on the settings page, while the window is open
         static Action refreshCompanion; // the Phone companion section, while the window is open
         static Action refreshLayouts;   // the Layouts section, while the window is open
+        static Wpf.Ui.Controls.ToggleSwitch pbpSwitchRef;   // the side by side switch, while the window is open
 
         public static void Init()
         {
@@ -133,6 +134,7 @@ namespace PipStudio
             Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
             Companion.Changed += () => { var r = refreshCompanion; if (r != null) r(); };
             Layouts.Changed += () => DelayRun(30, () => { var r = refreshLayouts; if (r != null) r(); });
+            Pbp.Changed += () => { var sw = pbpSwitchRef; if (sw != null) try { sw.IsChecked = Pbp.Active; } catch { } };
             Theme.Changed += () => { if (w != null) w.Dispatcher.BeginInvoke(new Action(ApplyLite)); };   // OLED: solid black, no Mica
         }
 
@@ -448,7 +450,7 @@ namespace PipStudio
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
-            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null; refreshLayouts = null; layoutsAnchor = null;
+            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null; refreshLayouts = null; layoutsAnchor = null; pbpSwitchRef = null;
             pages.Clear(); searchIndex.Clear(); iconCache.Clear(); winSig = runSig = "";
             if (!exiting && App.S.MinimizeMemory) App.RunSoon(U.Trim, 1500);
         }

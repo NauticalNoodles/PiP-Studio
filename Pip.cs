@@ -589,7 +589,7 @@ namespace PipStudio
             return r;
         }
 
-        Rectangle WorkArea() { return Screen.FromRectangle(TargetBounds).WorkingArea; }
+        Rectangle WorkArea() { return Pbp.AreaOf(TargetBounds); }   // the side-by-side strip while that's on
 
         /// <summary>Where new PiPs open: a corner (0-3), or the middle of an edge (4 top, 5 bottom, 6 left, 7 right) when 8 spots are on.</summary>
         public static string StartTag()
@@ -687,7 +687,7 @@ namespace PipStudio
             Point cur = Cursor.Position;
             Screen sc = Screen.FromPoint(cur);
             scale = U.ScaleAt(cur);
-            var wa = sc.WorkingArea;
+            var wa = Pbp.AreaOf(sc);
             Size sz = FitSizeIn((int)(wa.Width * SizePresets.Frac(App.S.DefaultSize)), wa, 0.8);
             string spot = StartTag();
             Rectangle target = new Rectangle(SpotPoint(spot, sz, wa), sz);
@@ -708,7 +708,7 @@ namespace PipStudio
 
         public void PlaceDefaultAnimated()
         {
-            var wa = Screen.FromPoint(Cursor.Position).WorkingArea;
+            var wa = Pbp.AreaOf(Screen.FromPoint(Cursor.Position));
             string spot = StartTag();
             Size sz = TargetBounds.Size;
             if (sz.Width > wa.Width || sz.Height > wa.Height) sz = FitSizeIn((int)(wa.Width * 0.25), wa, 0.8);
@@ -908,7 +908,7 @@ namespace PipStudio
         {
             Screen curS = Screen.FromRectangle(TargetBounds);
             double rel = TargetBounds.Width / (double)curS.WorkingArea.Width;
-            var wa = ns.WorkingArea;
+            var wa = Pbp.AreaOf(ns);
             Size sz = St.Fit == FitMode.Fit ? FitSizeIn((int)(wa.Width * rel), wa, 0.9)
                                             : new Size((int)(wa.Width * rel), (int)(TargetBounds.Height * (wa.Width / (double)curS.WorkingArea.Width)));
             inTheater = false;

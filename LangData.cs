@@ -772,6 +772,19 @@ namespace PipStudio
                 { "Control the previous PiP", "التحكم في نافذة PiP السابقة" },
                 { "Switch PiP", "تبديل PiP" },
                 { "The only PiP", "نافذة PiP الوحيدة" },
+                { "Side by side on / off (experimental)", "التشغيل جنبًا إلى جنب / إيقافه (تجريبي)" },
+                { "Side by side", "جنبًا إلى جنب" },
+                { "Side by side (experimental)", "جنبًا إلى جنب (تجريبي)" },
+                { "Side by side didn't start", "تعذّر بدء العرض جنبًا إلى جنب" },
+                { "Windows wouldn't reserve that part of the screen.", "لم يحجز Windows ذلك الجزء من الشاشة." },
+                { "Couldn't make {0} smaller", "تعذّر تصغير {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "يعمل في وضع ملء الشاشة الحصري أو يحتفظ بحجمه. حوّله إلى وضع بلا حدود أو وضع النافذة من إعداداته." },
+                { "Experimental", "تجريبي" },
+                { "Side by side (picture-by-picture)", "جنبًا إلى جنب (صورة بجانب صورة)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "تجريبي. يُحجز شريط من الشاشة لنوافذ PiP: تتقلص التطبيقات والألعاب بملء الشاشة بلا حدود إلى باقي الشاشة، فلا يغطيها شيء. لا يمكن تصغير الألعاب في وضع ملء الشاشة الحصري." },
+                { "Side", "الجانب" },
+                { "PiPs get", "نصيب نوافذ PiP" },
+                { "Of the display", "من الشاشة" },
             };
         }
 
@@ -1523,6 +1536,19 @@ namespace PipStudio
                 { "Control the previous PiP", "控制上一个画中画" },
                 { "Switch PiP", "切换画中画" },
                 { "The only PiP", "唯一的画中画" },
+                { "Side by side on / off (experimental)", "并排显示 开/关（实验性）" },
+                { "Side by side", "并排" },
+                { "Side by side (experimental)", "并排（实验性）" },
+                { "Side by side didn't start", "无法启动并排显示" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows 未能保留屏幕的那一部分。" },
+                { "Couldn't make {0} smaller", "无法缩小 {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "它以独占全屏运行或保持自身大小。请在其设置中切换为无边框或窗口模式。" },
+                { "Experimental", "实验性" },
+                { "Side by side (picture-by-picture)", "并排（画面并排）" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "实验性。显示器的一条区域留给画中画：应用和无边框全屏游戏会缩小到其余部分，不会被遮挡。独占全屏的游戏无法缩小。" },
+                { "Side", "位置" },
+                { "PiPs get", "画中画占用" },
+                { "Of the display", "显示器的比例" },
             };
         }
 
@@ -2274,6 +2300,19 @@ namespace PipStudio
                 { "Control the previous PiP", "Vorheriges PiP steuern" },
                 { "Switch PiP", "PiP wechseln" },
                 { "The only PiP", "Das einzige PiP" },
+                { "Side by side on / off (experimental)", "Nebeneinander ein / aus (experimentell)" },
+                { "Side by side", "Nebeneinander" },
+                { "Side by side (experimental)", "Nebeneinander (experimentell)" },
+                { "Side by side didn't start", "Nebeneinander ließ sich nicht starten" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows hat diesen Teil des Bildschirms nicht reserviert." },
+                { "Couldn't make {0} smaller", "{0} ließ sich nicht verkleinern" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "Es läuft im exklusiven Vollbild oder behält seine Größe. Stellen Sie in seinen Einstellungen randloses Fenster oder Fenstermodus ein." },
+                { "Experimental", "Experimentell" },
+                { "Side by side (picture-by-picture)", "Nebeneinander (Bild neben Bild)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "Experimentell. Ein Streifen des Bildschirms bleibt für Ihre PiPs frei: Apps und randlose Vollbildspiele schrumpfen auf den Rest, nichts verdeckt sie. Spiele im exklusiven Vollbild lassen sich nicht verkleinern." },
+                { "Side", "Seite" },
+                { "PiPs get", "Für die PiPs" },
+                { "Of the display", "Des Bildschirms" },
             };
         }
 
@@ -3025,6 +3064,19 @@ namespace PipStudio
                 { "Control the previous PiP", "Controlar el PiP anterior" },
                 { "Switch PiP", "Cambiar PiP" },
                 { "The only PiP", "El único PiP" },
+                { "Side by side on / off (experimental)", "Lado a lado sí / no (experimental)" },
+                { "Side by side", "Lado a lado" },
+                { "Side by side (experimental)", "Lado a lado (experimental)" },
+                { "Side by side didn't start", "No se pudo iniciar lado a lado" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows no reservó esa parte de la pantalla." },
+                { "Couldn't make {0} smaller", "No se pudo reducir {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "Se ejecuta en pantalla completa exclusiva o mantiene su tamaño. Cámbialo a modo sin bordes o ventana en su configuración." },
+                { "Experimental", "Experimental" },
+                { "Side by side (picture-by-picture)", "Lado a lado (imagen junto a imagen)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "Experimental. Se reserva una franja de la pantalla para tus PiP: las aplicaciones y los juegos en pantalla completa sin bordes se reducen al resto, así nada los tapa. Los juegos en pantalla completa exclusiva no se pueden reducir." },
+                { "Side", "Lado" },
+                { "PiPs get", "Para los PiP" },
+                { "Of the display", "De la pantalla" },
             };
         }
 
@@ -3776,6 +3828,19 @@ namespace PipStudio
                 { "Control the previous PiP", "Contrôler le PiP précédent" },
                 { "Switch PiP", "Changer de PiP" },
                 { "The only PiP", "Le seul PiP" },
+                { "Side by side on / off (experimental)", "Côte à côte activé / désactivé (expérimental)" },
+                { "Side by side", "Côte à côte" },
+                { "Side by side (experimental)", "Côte à côte (expérimental)" },
+                { "Side by side didn't start", "Impossible de lancer le côte à côte" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows n'a pas réservé cette partie de l'écran." },
+                { "Couldn't make {0} smaller", "Impossible de réduire {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "Il tourne en plein écran exclusif ou garde sa taille. Passez-le en mode sans bordure ou fenêtré dans ses paramètres." },
+                { "Experimental", "Expérimental" },
+                { "Side by side (picture-by-picture)", "Côte à côte (image à côté de l'image)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "Expérimental. Une bande de l'écran est réservée à vos PiP : les applications et les jeux en plein écran sans bordure se réduisent au reste, rien ne les recouvre. Les jeux en plein écran exclusif ne peuvent pas être réduits." },
+                { "Side", "Côté" },
+                { "PiPs get", "Pour les PiP" },
+                { "Of the display", "De l'écran" },
             };
         }
 
@@ -4527,6 +4592,19 @@ namespace PipStudio
                 { "Control the previous PiP", "前の PiP を操作" },
                 { "Switch PiP", "PiP 切替" },
                 { "The only PiP", "唯一の PiP" },
+                { "Side by side on / off (experimental)", "横並び オン / オフ（試験的）" },
+                { "Side by side", "横並び" },
+                { "Side by side (experimental)", "横並び（試験的）" },
+                { "Side by side didn't start", "横並びを開始できませんでした" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows が画面のその部分を確保できませんでした。" },
+                { "Couldn't make {0} smaller", "{0} を小さくできませんでした" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "排他的フルスクリーンで動いているか、サイズを固定しています。設定でボーダーレスまたはウィンドウ モードに切り替えてください。" },
+                { "Experimental", "試験的" },
+                { "Side by side (picture-by-picture)", "横並び（ピクチャー バイ ピクチャー）" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "試験的。画面の帯を PiP 用に確保します。アプリとボーダーレス全画面のゲームは残りの部分に縮小されるので、何にも覆われません。排他的フルスクリーンのゲームは縮小できません。" },
+                { "Side", "位置" },
+                { "PiPs get", "PiP の領域" },
+                { "Of the display", "画面に対して" },
             };
         }
 
@@ -5278,6 +5356,19 @@ namespace PipStudio
                 { "Control the previous PiP", "Controlar o PiP anterior" },
                 { "Switch PiP", "Trocar PiP" },
                 { "The only PiP", "O único PiP" },
+                { "Side by side on / off (experimental)", "Lado a lado liga / desliga (experimental)" },
+                { "Side by side", "Lado a lado" },
+                { "Side by side (experimental)", "Lado a lado (experimental)" },
+                { "Side by side didn't start", "Não foi possível iniciar lado a lado" },
+                { "Windows wouldn't reserve that part of the screen.", "O Windows não reservou essa parte da tela." },
+                { "Couldn't make {0} smaller", "Não foi possível diminuir {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "Ele roda em tela cheia exclusiva ou mantém o próprio tamanho. Mude para sem bordas ou janela nas configurações dele." },
+                { "Experimental", "Experimental" },
+                { "Side by side (picture-by-picture)", "Lado a lado (imagem ao lado de imagem)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "Experimental. Uma faixa da tela fica para seus PiPs: apps e jogos em tela cheia sem bordas encolhem para o resto, e nada os cobre. Jogos em tela cheia exclusiva não podem ser encolhidos." },
+                { "Side", "Lado" },
+                { "PiPs get", "Para os PiPs" },
+                { "Of the display", "Da tela" },
             };
         }
 
@@ -6029,6 +6120,19 @@ namespace PipStudio
                 { "Control the previous PiP", "Управлять предыдущим PiP" },
                 { "Switch PiP", "Сменить PiP" },
                 { "The only PiP", "Единственный PiP" },
+                { "Side by side on / off (experimental)", "Рядом: вкл. / выкл. (экспериментально)" },
+                { "Side by side", "Рядом" },
+                { "Side by side (experimental)", "Рядом (экспериментально)" },
+                { "Side by side didn't start", "Не удалось включить режим «рядом»" },
+                { "Windows wouldn't reserve that part of the screen.", "Windows не выделила эту часть экрана." },
+                { "Couldn't make {0} smaller", "Не удалось уменьшить {0}" },
+                { "It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.", "Оно работает в эксклюзивном полноэкранном режиме или сохраняет свой размер. Переключите его в режим без рамки или в окно в его настройках." },
+                { "Experimental", "Экспериментальное" },
+                { "Side by side (picture-by-picture)", "Рядом (картинка рядом с картинкой)" },
+                { "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", "Экспериментально. Полоса экрана отводится под PiP: приложения и игры в полноэкранном режиме без рамки уменьшаются до остальной части, и ничто их не закрывает. Игры в эксклюзивном полноэкранном режиме уменьшить нельзя." },
+                { "Side", "Сторона" },
+                { "PiPs get", "Под PiP" },
+                { "Of the display", "Экрана" },
             };
         }
     }

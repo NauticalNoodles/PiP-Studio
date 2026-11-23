@@ -111,6 +111,16 @@ namespace PipStudio
             Row(cap, "Show the pointer", null, Switch(() => S.CaptureCursor, v => S.CaptureCursor = v), "cursor mouse");
             BuildLayouts(be);
 
+            Section(be, "Experimental");
+            Action restart = () => { if (Pbp.Active) { Pbp.Off(); Pbp.On(); } };
+            var pbpSwitch = Switch(() => Pbp.Active, v => { if (v != Pbp.Active) Pbp.Toggle(); });
+            pbpSwitchRef = pbpSwitch;
+            var pbp = MakeExpander(be, "\uE737", "Side by side (picture-by-picture)", "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", pbpSwitch, false, "pbp picture by picture side split screen strip dock tile experimental");
+            Row(pbp, "Side", null, Combo(new[] { "Right", "Left", "Bottom" }, U.Clamp(S.PbpSide, 0, 2), v => { S.PbpSide = v; restart(); }), "right left bottom edge");
+            int[] sizes = { 25, 33, 40, 50 };
+            int si = Array.IndexOf(sizes, S.PbpPercent);
+            Row(pbp, "PiPs get", "Of the display", Combo(sizes.Select(x => x + "%").ToArray(), si < 0 ? 1 : si, v => { S.PbpPercent = sizes[v]; restart(); }), "size width percent");
+
             // ---------------- Controller
             var pc = NewPage("controller");
             var padSwitch = new Wpf.Ui.Controls.ToggleSwitch();
