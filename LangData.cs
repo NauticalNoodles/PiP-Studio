@@ -774,6 +774,8 @@ namespace PipStudio
                 { "Fans", "المراوح" },
                 { "Needs the PawnIO driver", "يتطلب برنامج تشغيل PawnIO" },
                 { "No fan sensors found", "لم يُعثر على مستشعرات للمراوح" },
+                { "Get PawnIO", "احصل على PawnIO" },
+                { "Fans and the processor's exact temperature", "المراوح ودرجة حرارة المعالج الدقيقة" },
             };
         }
 
@@ -1527,6 +1529,8 @@ namespace PipStudio
                 { "Fans", "风扇" },
                 { "Needs the PawnIO driver", "需要 PawnIO 驱动程序" },
                 { "No fan sensors found", "未找到风扇传感器" },
+                { "Get PawnIO", "获取 PawnIO" },
+                { "Fans and the processor's exact temperature", "风扇和处理器的精确温度" },
             };
         }
 
@@ -2280,6 +2284,8 @@ namespace PipStudio
                 { "Fans", "Lüfter" },
                 { "Needs the PawnIO driver", "Benötigt den PawnIO-Treiber" },
                 { "No fan sensors found", "Keine Lüftersensoren gefunden" },
+                { "Get PawnIO", "PawnIO herunterladen" },
+                { "Fans and the processor's exact temperature", "Lüfter und genaue Prozessortemperatur" },
             };
         }
 
@@ -3033,6 +3039,8 @@ namespace PipStudio
                 { "Fans", "Ventiladores" },
                 { "Needs the PawnIO driver", "Requiere el controlador PawnIO" },
                 { "No fan sensors found", "No se encontraron sensores de ventilador" },
+                { "Get PawnIO", "Obtener PawnIO" },
+                { "Fans and the processor's exact temperature", "Ventiladores y temperatura exacta del procesador" },
             };
         }
 
@@ -3786,6 +3794,8 @@ namespace PipStudio
                 { "Fans", "Ventilateurs" },
                 { "Needs the PawnIO driver", "Nécessite le pilote PawnIO" },
                 { "No fan sensors found", "Aucun capteur de ventilateur trouvé" },
+                { "Get PawnIO", "Obtenir PawnIO" },
+                { "Fans and the processor's exact temperature", "Ventilateurs et température exacte du processeur" },
             };
         }
 
@@ -4539,6 +4549,8 @@ namespace PipStudio
                 { "Fans", "ファン" },
                 { "Needs the PawnIO driver", "PawnIO ドライバーが必要です" },
                 { "No fan sensors found", "ファン センサーが見つかりません" },
+                { "Get PawnIO", "PawnIO を入手" },
+                { "Fans and the processor's exact temperature", "ファンとプロセッサの正確な温度" },
             };
         }
 
@@ -5292,6 +5304,8 @@ namespace PipStudio
                 { "Fans", "Ventoinhas" },
                 { "Needs the PawnIO driver", "Requer o driver PawnIO" },
                 { "No fan sensors found", "Nenhum sensor de ventoinha encontrado" },
+                { "Get PawnIO", "Obter o PawnIO" },
+                { "Fans and the processor's exact temperature", "Ventoinhas e temperatura exata do processador" },
             };
         }
 
@@ -6045,6 +6059,8 @@ namespace PipStudio
                 { "Fans", "Вентиляторы" },
                 { "Needs the PawnIO driver", "Требуется драйвер PawnIO" },
                 { "No fan sensors found", "Датчики вентиляторов не найдены" },
+                { "Get PawnIO", "Скачать PawnIO" },
+                { "Fans and the processor's exact temperature", "Вентиляторы и точная температура процессора" },
             };
         }
     }

@@ -744,3 +744,5 @@ Stopped	Detenido
 Fans	Ventiladores
 Needs the PawnIO driver	Requiere el controlador PawnIO
 No fan sensors found	No se encontraron sensores de ventilador
+Get PawnIO	Obtener PawnIO
+Fans and the processor's exact temperature	Ventiladores y temperatura exacta del procesador

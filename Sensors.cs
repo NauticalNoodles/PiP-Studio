@@ -11,6 +11,31 @@ namespace PipStudio
     /// lets administrators use (and which people install themselves, from pawnio.eu). Kept in a class of its own so the
     /// library isn't even loaded otherwise.
     /// </summary>
+    /// <summary>Whether the PawnIO driver is installed (the same check LibreHardwareMonitor makes). A class of its own so asking
+    /// doesn't load the sensor library. Looked up again at most every 10 seconds (people install it while PiP Studio runs).</summary>
+    static class PawnIo
+    {
+        public const string Url = "https://pawnio.eu";
+        static bool cached;
+        static DateTime checkedAt = DateTime.MinValue;
+
+        public static bool Installed
+        {
+            get
+            {
+                if ((DateTime.Now - checkedAt).TotalSeconds < 10) return cached;
+                checkedAt = DateTime.Now;
+                try
+                {
+                    using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PawnIO"))
+                        cached = k != null;
+                }
+                catch { cached = false; }
+                return cached;
+            }
+        }
+    }
+
     static class HwSensors
     {
         static Computer pc;
@@ -19,25 +44,11 @@ namespace PipStudio
         static double cpuTemp = -1, cpuPower = -1;
         static List<Tuple<string, int>> fans = new List<Tuple<string, int>>();
 
-        /// <summary>Whether the PawnIO driver is installed (the same check LibreHardwareMonitor makes).</summary>
-        public static bool DriverInstalled
-        {
-            get
-            {
-                try
-                {
-                    using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PawnIO"))
-                        return k != null;
-                }
-                catch { return false; }
-            }
-        }
-
         /// <summary>Called on the system monitor's thread, about once a second; reads the sensors every 2 seconds.</summary>
         public static void Fill(SysStats.Snap n, double t)
         {
             n.SensorsShown = true;
-            n.SensorsDriver = DriverInstalled;
+            n.SensorsDriver = PawnIo.Installed;
             if (!tried)
             {
                 tried = true;

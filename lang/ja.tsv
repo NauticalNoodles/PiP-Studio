@@ -744,3 +744,5 @@ Stopped	停止中
 Fans	ファン
 Needs the PawnIO driver	PawnIO ドライバーが必要です
 No fan sensors found	ファン センサーが見つかりません
+Get PawnIO	PawnIO を入手
+Fans and the processor's exact temperature	ファンとプロセッサの正確な温度

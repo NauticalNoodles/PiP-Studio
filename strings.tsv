@@ -744,3 +744,5 @@ Stopped	متوقفة	已停止
 Fans	المراوح	风扇
 Needs the PawnIO driver	يتطلب برنامج تشغيل PawnIO	需要 PawnIO 驱动程序
 No fan sensors found	لم يُعثر على مستشعرات للمراوح	未找到风扇传感器
+Get PawnIO	احصل على PawnIO	获取 PawnIO
+Fans and the processor's exact temperature	المراوح ودرجة حرارة المعالج الدقيقة	风扇和处理器的精确温度

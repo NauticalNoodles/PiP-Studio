@@ -744,3 +744,5 @@ Stopped	Parada
 Fans	Ventoinhas
 Needs the PawnIO driver	Requer o driver PawnIO
 No fan sensors found	Nenhum sensor de ventoinha encontrado
+Get PawnIO	Obter o PawnIO
+Fans and the processor's exact temperature	Ventoinhas e temperatura exata do processador

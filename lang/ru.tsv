@@ -744,3 +744,5 @@ Stopped	Остановлен
 Fans	Вентиляторы
 Needs the PawnIO driver	Требуется драйвер PawnIO
 No fan sensors found	Датчики вентиляторов не найдены
+Get PawnIO	Скачать PawnIO
+Fans and the processor's exact temperature	Вентиляторы и точная температура процессора

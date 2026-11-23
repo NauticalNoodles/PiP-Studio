@@ -73,12 +73,33 @@ namespace PipStudio
 
         protected static void Label(Graphics g, string text, Font f, Rectangle r, Color c, TextFormatFlags extra = 0)
         {
-            LT.DrawText(g, text, f, r, c, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding | extra);
+            Txt(g, L.T(text), f, r, c, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis | extra);
+        }
+
+        /// <summary>
+        /// Smooth (anti-aliased) text, the same on light and dark backgrounds. The older Windows text drawing looks rough on
+        /// light ones when drawn into a picture, which is what utility PiPs are.
+        /// </summary>
+        protected static void Txt(Graphics g, string text, Font f, RectangleF r, Color c, TextFormatFlags flags)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+            using (var sf = (StringFormat)StringFormat.GenericTypographic.Clone())
+            {
+                sf.Alignment = (flags & TextFormatFlags.HorizontalCenter) != 0 ? StringAlignment.Center : (flags & TextFormatFlags.Right) != 0 ? StringAlignment.Far : StringAlignment.Near;
+                sf.LineAlignment = (flags & TextFormatFlags.VerticalCenter) != 0 ? StringAlignment.Center : (flags & TextFormatFlags.Bottom) != 0 ? StringAlignment.Far : StringAlignment.Near;
+                sf.FormatFlags |= StringFormatFlags.NoWrap | StringFormatFlags.MeasureTrailingSpaces;
+                sf.FormatFlags &= ~StringFormatFlags.LineLimit;
+                sf.Trimming = (flags & TextFormatFlags.EndEllipsis) != 0 ? StringTrimming.EllipsisCharacter : StringTrimming.None;
+                var hint = g.TextRenderingHint;
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                using (var b = new SolidBrush(c)) g.DrawString(text, f, b, r, sf);
+                g.TextRenderingHint = hint;
+            }
         }
 
         protected static void Glyph(Graphics g, string glyph, float px, Rectangle r, Color c)
         {
-            TextRenderer.DrawText(g, glyph, U.Icons(px), r, c, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+            Txt(g, glyph, U.Icons(px), r, c, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
         protected static GraphicsPath Round(RectangleF r, float rad)
@@ -264,9 +285,30 @@ namespace PipStudio
     /// <summary>The dense one: everything Windows tells an app without administrator rights, in two columns.</summary>
     class DetailsWidget : Widget
     {
-        public override double Aspect { get { return App.IsElevated ? 0.72 : 0.82; } }   // as administrator: room for the fans
+        public override double Aspect { get { return App.IsElevated ? 0.72 : PawnIo.Installed ? 0.78 : 0.82; } }   // room for the fans (or the way to see them)
         public DetailsWidget() { SysStats.Use(true, true); }
         public override void Dispose() { SysStats.Use(false, true); }
+
+        public override void MouseDown(Point p)
+        {
+            var h = HitAt(p);
+            if (h == null) return;
+            if (h.Kind == "pawnio") { try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(PawnIo.Url) { UseShellExecute = true }); } catch { } }
+            else if (h.Kind == "admin") App.I.RestartElevated();
+        }
+
+        /// <summary>A line of accent-coloured text you can click.</summary>
+        int Link(int x, int y, int w, string text, string kind)
+        {
+            if (y + (int)(14 * s) > bottom) return y;
+            var f = U.UI(9.5f * s);
+            var rr = new Rectangle(x, y, w, (int)(15 * s));
+            var tw = (int)Math.Ceiling(g.MeasureString(L.T(text), f).Width);
+            Label(g, text, f, rr, Theme.Accent);
+            using (var pen = new Pen(Color.FromArgb(150, Theme.Accent), Math.Max(1, s * 0.8f))) g.DrawLine(pen, x, rr.Bottom - 1, x + Math.Min(w, tw), rr.Bottom - 1);
+            hits.Add(new Hit { R = new Rectangle(x, y, Math.Min(w, tw + (int)(4 * s)), rr.Height), Kind = kind });
+            return y + (int)(17 * s);
+        }
 
         static Color CpuC { get { return Theme.Accent; } }
         static Color GpuC { get { return Ser(120, 200, 120); } }
@@ -349,6 +391,8 @@ namespace PipStudio
         public override void Paint(Graphics graphics, Rectangle r, float scale)
         {
             g = graphics; s = scale;
+            SysStats.Shown = DateTime.Now;                              // the busiest-apps scan only runs while it's on screen
+            hits.Clear();
             Background(g, r);
             var n = SysStats.Snapshot();
             if (!n.Detailed)
@@ -424,11 +468,18 @@ namespace PipStudio
                 y = Row(xr, y, cw, n.BatteryCharging ? "Plugged in" : "On battery",
                     n.BatteryMinutes > 0 ? (n.BatteryMinutes / 60) + " h " + (n.BatteryMinutes % 60) + " min" : "");
             }
+            if (!n.SensorsShown && n.SensorsDriver)                         // PawnIO is there, PiP Studio isn't administrator
+            {
+                y += sect;
+                y = Header(xr, y, cw, "Fans", "", Ser(120, 190, 255));
+                y = Note(xr, y, cw, L.T("Fans and the processor's exact temperature"));
+                y = Link(xr, y, cw, "Restart as administrator", "admin");
+            }
             if (n.SensorsShown)                                             // only as administrator
             {
                 y += sect;
                 y = Header(xr, y, cw, "Fans", "", Ser(120, 190, 255));
-                if (!n.SensorsDriver) { y = Note(xr, y, cw, L.T("Needs the PawnIO driver")); y = Note(xr, y, cw, "pawnio.eu"); }
+                if (!n.SensorsDriver) { y = Note(xr, y, cw, L.T("Needs the PawnIO driver")); y = Link(xr, y, cw, "Get PawnIO", "pawnio"); }
                 else if (n.Fans.Count == 0) y = Note(xr, y, cw, L.T("No fan sensors found"));
                 else foreach (var f in n.Fans) y = Row(xr, y, cw, f.Item1, N(f.Item2) + " RPM");
             }
@@ -468,6 +519,8 @@ namespace PipStudio
         static int users, detailUsers;
         static Thread thread;
         static bool sensorsOpen;
+        /// <summary>When a System details PiP last drew itself: hidden ones (minimized, all PiPs hidden) don't need the slow parts.</summary>
+        public static DateTime Shown = DateTime.MinValue;
         static Snap last = new Snap();
         static readonly Queue<double> cpuH = new Queue<double>(), gpuH = new Queue<double>(), memH = new Queue<double>(), downH = new Queue<double>(), upH = new Queue<double>();
 
@@ -734,6 +787,7 @@ namespace PipStudio
                 }
                 GpuSensors.Read(n);
                 if (App.IsElevated) { try { HwSensors.Fill(n, t); } catch { } }
+                else n.SensorsDriver = PawnIo.Installed;                         // offers a restart as administrator
                 // memory, commit, cache and counts in one call
                 var pi = new PERFORMANCE_INFORMATION();
                 if (GetPerformanceInfo(out pi, (uint)Marshal.SizeOf(typeof(PERFORMANCE_INFORMATION))))
@@ -744,8 +798,10 @@ namespace PipStudio
                     n.CacheGb = pi.SystemCache.ToUInt64() * pg; n.KernelGb = pi.KernelTotal.ToUInt64() * pg;
                     n.Processes = (int)pi.ProcessCount; n.Threads = (int)pi.ThreadCount; n.Handles = (int)pi.HandleCount;
                 }
-                // the busiest apps, every 2 seconds (an app's processes added up, like Task Manager's groups)
-                if (t - procT >= 2)
+                // the busiest apps, every 4 seconds while it's on screen (an app's processes added up, like Task Manager's groups):
+                // listing every process is the costliest thing it does
+                bool onScreen = (DateTime.Now - Shown).TotalSeconds < 3;
+                if (onScreen && t - procT >= 4)
                 {
                     double dt = lastT > 0 ? t - lastT : 0; lastT = t; procT = t;
                     var cpuBy = new Dictionary<string, double>(StringComparer.OrdinalIgnoreCase);
@@ -777,7 +833,7 @@ namespace PipStudio
                 }
                 n.TopCpu = topCpu; n.TopMem = topMem;
                 // drives, every 10 seconds
-                if (t - drivesT >= 10)
+                if (onScreen && t - drivesT >= 10)
                 {
                     drivesT = t;
                     var l = new List<Tuple<string, double, double>>();
@@ -916,9 +972,9 @@ namespace PipStudio
             // as big as the picture allows
             float px = Math.Max(10, Math.Min(r.Height * 0.42f, r.Width / Math.Max(4, time.Length) * 1.55f));
             var big = new Rectangle(r.X, r.Y + (int)(r.Height * 0.12f), r.Width, (int)(r.Height * 0.55f));
-            TextRenderer.DrawText(g, time, U.UIBold(px), big, Text, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.NoPadding);
+            Txt(g, time, U.UIBold(px), big, Text, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
             var small = new Rectangle(r.X + (int)(8 * s), r.Y + (int)(r.Height * 0.66f), r.Width - (int)(16 * s), (int)(r.Height * 0.22f));
-            TextRenderer.DrawText(g, date, U.UI(Math.Max(8, Math.Min(px * 0.32f, 16 * s))), small, Sub,
+            Txt(g, date, U.UI(Math.Max(8, Math.Min(px * 0.32f, 16 * s))), small, Sub,
                 TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPadding);
         }
     }
