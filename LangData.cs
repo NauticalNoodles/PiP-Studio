@@ -767,6 +767,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "ستتغير إعداداتك واختصاراتك وتخطيطاتك إلى ما في الملف. تبقى الهواتف المقترنة كما هي." },
                 { "Couldn't read the settings", "تعذّرت قراءة الإعدادات" },
                 { "This isn't a PiP Studio settings file.", "هذا ليس ملف إعدادات PiP Studio." },
+                { "No room that way", "لا توجد مساحة في هذا الاتجاه" },
             };
         }
 
@@ -1513,6 +1514,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "你的设置、快捷键和布局将变为文件中的内容。已配对的手机保持不变。" },
                 { "Couldn't read the settings", "无法读取设置" },
                 { "This isn't a PiP Studio settings file.", "这不是 PiP Studio 设置文件。" },
+                { "No room that way", "那个方向没有空间" },
             };
         }
 
@@ -2259,6 +2261,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Ihre Einstellungen, Tastenkürzel und Layouts werden durch die aus der Datei ersetzt. Gekoppelte Handys bleiben, wie sie sind." },
                 { "Couldn't read the settings", "Einstellungen konnten nicht gelesen werden" },
                 { "This isn't a PiP Studio settings file.", "Das ist keine PiP Studio-Einstellungsdatei." },
+                { "No room that way", "In diese Richtung ist kein Platz" },
             };
         }
 
@@ -3005,6 +3008,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Tu configuración, atajos y diseños pasan a ser los del archivo. Los teléfonos emparejados no cambian." },
                 { "Couldn't read the settings", "No se pudo leer la configuración" },
                 { "This isn't a PiP Studio settings file.", "Este no es un archivo de configuración de PiP Studio." },
+                { "No room that way", "No hay espacio en esa dirección" },
             };
         }
 
@@ -3751,6 +3755,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Vos paramètres, raccourcis et dispositions deviennent ceux du fichier. Les téléphones associés ne changent pas." },
                 { "Couldn't read the settings", "Impossible de lire les paramètres" },
                 { "This isn't a PiP Studio settings file.", "Ce n'est pas un fichier de paramètres PiP Studio." },
+                { "No room that way", "Plus de place de ce côté" },
             };
         }
 
@@ -4497,6 +4502,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "設定、ショートカット、レイアウトがファイルの内容に変わります。ペアリングしたスマートフォンはそのままです。" },
                 { "Couldn't read the settings", "設定を読み取れませんでした" },
                 { "This isn't a PiP Studio settings file.", "これは PiP Studio の設定ファイルではありません。" },
+                { "No room that way", "その方向には空きがありません" },
             };
         }
 
@@ -5243,6 +5249,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Suas configurações, atalhos e layouts passam a ser os do arquivo. Os celulares pareados não mudam." },
                 { "Couldn't read the settings", "Não foi possível ler as configurações" },
                 { "This isn't a PiP Studio settings file.", "Este não é um arquivo de configurações do PiP Studio." },
+                { "No room that way", "Não há espaço nessa direção" },
             };
         }
 
@@ -5989,6 +5996,7 @@ namespace PipStudio
                 { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Ваши настройки, сочетания клавиш и макеты заменятся данными из файла. Сопряжённые телефоны не изменятся." },
                 { "Couldn't read the settings", "Не удалось прочитать настройки" },
                 { "This isn't a PiP Studio settings file.", "Это не файл настроек PiP Studio." },
+                { "No room that way", "В эту сторону нет места" },
             };
         }
     }

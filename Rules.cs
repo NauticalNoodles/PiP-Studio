@@ -83,6 +83,52 @@ namespace PipStudio
             return r;
         }
 
+        /// <summary>
+        /// Where a PiP goes when it's put at <paramref name="want"/> (a snap spot, a drop, a new PiP), and which others move
+        /// for it: always on the screen, never on top of another PiP when there's any way round it.
+        /// <list type="bullet">
+        /// <item>The spot is free: it goes there.</item>
+        /// <item><paramref name="stackFirst"/> (snapping, controller moves, new PiPs): it stacks next to the PiP(s) there,
+        /// above or below as <paramref name="stackDown"/> says.</item>
+        /// <item><paramref name="allowBump"/> (things you do to this PiP): it stays and the others are pushed aside.</item>
+        /// <item>Otherwise it stacks either way, or, when the screen is full, stays put (overlapping beats off-screen).</item>
+        /// </list>
+        /// </summary>
+        public static Rectangle Place(Rectangle want, IList<Rectangle> movable, IList<Rectangle> stuck, Rectangle area, int gap,
+                                      bool stackDown, bool stackFirst, bool allowBump, out Dictionary<int, Rectangle> bump)
+        {
+            bump = new Dictionary<int, Rectangle>();
+            want = Inside(want, area);
+            var all = movable.Concat(stuck).ToList();
+            Func<Rectangle, bool> free = c => area.Contains(c) && !all.Any(o => o.IntersectsWith(c));
+            if (!all.Any(o => o.IntersectsWith(want))) return want;
+            if (stackFirst) { var a = StackPast(want, all, stackDown, gap); if (free(a)) return a; }
+            if (allowBump)
+            {
+                var plan = PlanBump(want, movable, stuck, area, gap);
+                if (plan != null) { bump = plan; return want; }
+            }
+            var b1 = StackPast(want, all, stackDown, gap); if (free(b1)) return b1;
+            var b2 = StackPast(want, all, !stackDown, gap); if (free(b2)) return b2;
+            return want;
+        }
+
+        /// <summary>r moved (not resized) so it's inside area, as far as it fits.</summary>
+        public static Rectangle Inside(Rectangle r, Rectangle area)
+        {
+            int x = Math.Max(area.Left, Math.Min(r.X, area.Right - r.Width));
+            int y = Math.Max(area.Top, Math.Min(r.Y, area.Bottom - r.Height));
+            return new Rectangle(x, y, r.Width, r.Height);
+        }
+
+        /// <summary>Whether a PiP going from <paramref name="from"/> to <paramref name="to"/> actually moved the way you pressed
+        /// (dx, dy: -1, 0 or 1), by more than a few pixels: a move that lands back where it was (or goes the other way) doesn't count.</summary>
+        public static bool MovedToward(Rectangle from, Rectangle to, int dx, int dy, int minPx = 8)
+        {
+            double mx = (to.X + to.Width / 2.0) - (from.X + from.Width / 2.0), my = (to.Y + to.Height / 2.0) - (from.Y + from.Height / 2.0);
+            return dx * mx + dy * my >= minPx;
+        }
+
         static double Dist(Rectangle a, Rectangle b)
         {
             double dx = (a.X + a.Width / 2.0) - (b.X + b.Width / 2.0), dy = (a.Y + a.Height / 2.0) - (b.Y + b.Height / 2.0);

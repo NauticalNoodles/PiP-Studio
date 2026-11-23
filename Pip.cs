@@ -691,7 +691,8 @@ namespace PipStudio
             Size sz = FitSizeIn((int)(wa.Width * SizePresets.Frac(App.S.DefaultSize)), wa, 0.8);
             string spot = StartTag();
             Rectangle target = new Rectangle(SpotPoint(spot, sz, wa), sz);
-            target = App.I.ResolveCollision(this, target, spot);
+            Dictionary<PipWindow, Rectangle> none;
+            target = App.I.Place(this, target, App.SpotGoesDown(spot), true, false, out none);
             if (U.Animations)
             {
                 int slide = (int)(48 * scale);
@@ -712,7 +713,18 @@ namespace PipStudio
             Size sz = TargetBounds.Size;
             if (sz.Width > wa.Width || sz.Height > wa.Height) sz = FitSizeIn((int)(wa.Width * 0.25), wa, 0.8);
             inTheater = false;
-            MoveTo(App.I.ResolveCollision(this, new Rectangle(SpotPoint(spot, sz, wa), sz), spot), true);
+            PlaceAt(new Rectangle(SpotPoint(spot, sz, wa), sz), App.SpotGoesDown(spot), true, false, true);
+        }
+
+        /// <summary>Puts this PiP at want (or next to it: Stacking.Place) and moves the PiPs that make room for it.</summary>
+        bool PlaceAt(Rectangle want, bool stackDown, bool stackFirst, bool allowBump, bool animate)
+        {
+            Dictionary<PipWindow, Rectangle> bump;
+            var r = App.I.Place(this, want, stackDown, stackFirst, allowBump, out bump);
+            bool moved = r != TargetBounds;
+            if (moved) MoveTo(r, animate);
+            foreach (var kv in bump) kv.Key.MoveTo(kv.Value, animate);
+            return moved || bump.Count > 0;
         }
 
         public void SnapToSpot(string spot, bool animate)
@@ -720,8 +732,7 @@ namespace PipStudio
             inTheater = false;
             var wa = WorkArea();
             Size sz = TargetBounds.Size;
-            var r = new Rectangle(SpotPoint(spot, sz, wa), sz);
-            MoveTo(App.I.ResolveCollision(this, r, spot), animate);
+            PlaceAt(new Rectangle(SpotPoint(spot, sz, wa), sz), App.SpotGoesDown(spot), true, false, animate);
         }
 
         public void SnapTo(Corner c, bool animate) { SnapToSpot(CornerTag(c), animate); }
@@ -744,11 +755,26 @@ namespace PipStudio
             MoveTo(AnchoredResize(sz), animate);
         }
 
+        /// <summary>The next corner clockwise; a corner where it can't really go (taken, and stacking there lands it back
+        /// where it is) is skipped.</summary>
         public void CycleCorner()
         {
             string[] order = { "TL", "TR", "BR", "BL" };
             int i = Array.IndexOf(order, NearestSpot(false));
-            SnapToSpot(order[(i + 1) % 4], true);
+            var wa = WorkArea();
+            var b = TargetBounds;
+            inTheater = false;
+            for (int k = 1; k <= 3; k++)
+            {
+                string spot = order[(i + k) % 4];
+                Dictionary<PipWindow, Rectangle> bump;
+                var r = App.I.Place(this, new Rectangle(SpotPoint(spot, b.Size, wa), b.Size), App.SpotGoesDown(spot), true, true, out bump);
+                if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) < 16) continue;
+                MoveTo(r, true);
+                foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+                App.I.SaveSoon();
+                return;
+            }
         }
 
         public void SetSizePreset(int idx)
@@ -758,8 +784,9 @@ namespace PipStudio
             Size sz = PresetSize(idx, wa);
             string spot = NearestSpot(App.S.SnapToEdges);
             inTheater = false;
-            Rectangle nb = SnapOn ? App.I.ResolveCollision(this, new Rectangle(SpotPoint(spot, sz, wa), sz), spot) : AnchoredResize(sz);
-            MoveTo(nb, true);
+            // it keeps its spot (or where it's anchored) and pushes the PiPs it grows into aside
+            if (SnapOn) PlaceAt(new Rectangle(SpotPoint(spot, sz, wa), sz), App.SpotGoesDown(spot), true, true, true);
+            else PlaceAt(AnchoredResize(sz), App.SpotGoesDown(spot), false, true, true);
             Osd(SizePresets.Names[idx]);
         }
 
@@ -839,7 +866,7 @@ namespace PipStudio
             int i = SizePresets.Next(cw, wa.Width, dir, k => PresetSize(k, wa).Width);
             if (i < 0) { Osd(dir > 0 ? "Largest size" : "Smallest size"); return; }
             inTheater = false;
-            MoveTo(AnchoredResize(PresetSize(i, wa)), true);
+            PlaceAt(AnchoredResize(PresetSize(i, wa)), App.SpotGoesDown(NearestSpot(App.S.SnapToEdges)), false, true, true);   // grows into others: they move aside
             Osd(SizePresets.Names[i]);
             App.I.SaveSoon();
         }
@@ -885,8 +912,7 @@ namespace PipStudio
             Size sz = St.Fit == FitMode.Fit ? FitSizeIn((int)(wa.Width * rel), wa, 0.9)
                                             : new Size((int)(wa.Width * rel), (int)(TargetBounds.Height * (wa.Width / (double)curS.WorkingArea.Width)));
             inTheater = false;
-            var r = new Rectangle(SpotPoint(spot, sz, wa), sz);
-            MoveTo(App.I.ResolveCollision(this, r, spot), animate);
+            PlaceAt(new Rectangle(SpotPoint(spot, sz, wa), sz), App.SpotGoesDown(spot), true, false, animate);
         }
 
         public void NextMonitor()
@@ -931,10 +957,27 @@ namespace PipStudio
             if (r < 0) return;
             int nr = r + dy * step, nc = c + dx * step;
             if (nr == 1 && nc == 1) { nr += dy; nc += dx; }
-            if (nr >= 0 && nr <= 2 && nc >= 0 && nc <= 2 && Tags[nr, nc] != null)
+            if (nr >= 0 && nr <= 2 && nc >= 0 && nc <= 2)
             {
-                SnapToSpot(Tags[nr, nc], true);
-                App.I.SaveSoon();
+                // the next spot that way where it really moves: a taken spot means stacking next to the PiP there (on the side
+                // it comes from), or pushing it aside; a spot where that lands it back where it was is skipped
+                var wa = WorkArea();
+                var b = TargetBounds;
+                for (int tr = nr, tc = nc; tr >= 0 && tr <= 2 && tc >= 0 && tc <= 2; tr += dy * step, tc += dx * step)
+                {
+                    if ((tr == 1 && tc == 1) || Tags[tr, tc] == null) continue;
+                    string to = Tags[tr, tc];
+                    bool down = dy > 0 ? false : dy < 0 ? true : App.SpotGoesDown(to);
+                    Dictionary<PipWindow, Rectangle> bump;
+                    var dest = App.I.Place(this, new Rectangle(SpotPoint(to, b.Size, wa), b.Size), down, true, true, out bump);
+                    if (!Stacking.MovedToward(b, dest, dx, dy)) continue;
+                    inTheater = false;
+                    MoveTo(dest, true);
+                    foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+                    App.I.SaveSoon();
+                    return;
+                }
+                Osd("No room that way");
                 return;
             }
             int hx = (nc < 0 || nc > 2) ? dx : 0, hy = (nr < 0 || nr > 2) ? dy : 0;
@@ -970,32 +1013,11 @@ namespace PipStudio
         {
             var wa = WorkArea();
             var b = TargetBounds;
-            Rectangle want = SnapOn ? new Rectangle(SpotPoint(NearestSpot(App.S.SnapToEdges), b.Size, wa), b.Size)
-                                    : new Rectangle(U.Clamp(b.X, wa.Left, Math.Max(wa.Left, wa.Right - b.Width)), U.Clamp(b.Y, wa.Top, Math.Max(wa.Top, wa.Bottom - b.Height)), b.Width, b.Height);
-            if (SnapOn)
-            {
-                var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
-                if (occ != null)
-                {
-                    var o = occ.TargetBounds;
-                    var stacked = App.I.ResolveCollision(this, want, b.Top + b.Height / 2 > o.Top + o.Height / 2);
-                    if (wa.Contains(stacked)) want = stacked;
-                }
-            }
-            bump = App.I.PlanBump(this, want);
-            if (bump != null) return want;
-            bump = new Dictionary<PipWindow, Rectangle>();
-            var occ2 = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
-            Rectangle r = want;
-            if (occ2 != null)
-            {
-                var o = occ2.TargetBounds;
-                bool down = b.Top + b.Height / 2 > o.Top + o.Height / 2;
-                r = App.I.ResolveCollision(this, want, down);
-                if (!wa.Contains(r)) r = App.I.ResolveCollision(this, want, !down);
-                if (!wa.Contains(r)) r = want;                             // the screen is full: leave it where you put it
-            }
-            return r;
+            Rectangle want = SnapOn ? new Rectangle(SpotPoint(NearestSpot(App.S.SnapToEdges), b.Size, wa), b.Size) : Stacking.Inside(b, wa);
+            // stacking goes on the side of the PiP there that you dropped it on
+            var occ = App.I.Pips.FirstOrDefault(p => p != this && !p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want));
+            bool down = occ != null && b.Top + b.Height / 2 > occ.TargetBounds.Top + occ.TargetBounds.Height / 2;
+            return App.I.Place(this, want, down, SnapOn, true, out bump);
         }
 
         // ------------------------------------------------------------ drop preview (while you drag)

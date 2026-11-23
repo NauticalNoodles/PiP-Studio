@@ -1144,28 +1144,24 @@ namespace PipStudio
 
         public void CloseAll() { foreach (var p in Pips.ToArray()) p.CloseAnimated(); }
 
-        public Rectangle ResolveCollision(PipWindow self, Rectangle r, string spot) { return ResolveCollision(self, r, spot.StartsWith("T") || spot == "L" || spot == "R"); }
-
-        /// <summary>Moves r up (or down) past the PiPs it overlaps, so it stacks next to them.</summary>
-        public Rectangle ResolveCollision(PipWindow self, Rectangle r, bool goDown)
-        {
-            var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).Select(p => p.TargetBounds).ToList();
-            return Stacking.StackPast(r, others, goDown, (int)Math.Round(12 * self.UiScale));
-        }
+        /// <summary>Snap spots at the top and the middle of the sides stack downwards when taken; the others upwards.</summary>
+        public static bool SpotGoesDown(string spot) { return spot.StartsWith("T") || spot == "L" || spot == "R"; }
 
         /// <summary>
-        /// Where the PiPs that <paramref name="r"/> would overlap go, so the one you just put there can stay (Stacking.PlanBump).
-        /// Null when they can't all fit on the screen, or one in the way is locked or in theater view.
+        /// Where <paramref name="self"/> goes when it's put at <paramref name="want"/>, and which PiPs move for it
+        /// (Stacking.Place): on the screen, stacked next to PiPs in the way or pushing them aside.
         /// </summary>
-        public Dictionary<PipWindow, Rectangle> PlanBump(PipWindow self, Rectangle r)
+        public Rectangle Place(PipWindow self, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<PipWindow, Rectangle> bump)
         {
             int gap = (int)Math.Round(12 * self.UiScale);
-            Rectangle wa = Screen.FromRectangle(r).WorkingArea;
+            Rectangle wa = Screen.FromRectangle(want).WorkingArea;
             var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
             var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
-            var stuck = others.Except(movable).Select(p => p.TargetBounds);
-            var plan = Stacking.PlanBump(r, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap);
-            return plan == null ? null : plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
+            var stuck = others.Except(movable).Select(p => p.TargetBounds).ToList();
+            Dictionary<int, Rectangle> plan;
+            var r = Stacking.Place(want, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap, stackDown, stackFirst, allowBump, out plan);
+            bump = plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
+            return r;
         }
 
         public bool FullscreenOn(PipWindow p)

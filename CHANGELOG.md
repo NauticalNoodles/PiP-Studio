@@ -3,6 +3,7 @@
 ## 1.0.4
 
 - **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put. While you drag or resize, faint outlines show where it and the PiPs it pushes will land
+- Moving PiPs with a controller or shortcuts works with other PiPs around: a taken spot means stacking next to the PiP there (or pushing it aside), a spot where it wouldn't really move is skipped, PiPs never end up off-screen, and making one bigger pushes its neighbours aside instead of covering them
 - Game streaming (Moonlight, Steam Link): the outline, title bar and volume pop-up PiP Studio adds to other apps' PiPs now show up in the stream. Like PiP Studio's own PiPs, they're only hidden from capture when "Hide PiPs from screenshots, recordings and screen sharing" is on
 - Other apps' menus are no longer mistaken for PiPs: Discord's tray menu (right-clicking Discord in the tray) works again instead of being shrunk by black bar removal and getting a PiP title bar. Only windows you can resize count as another app's PiP, and black bar removal never reshapes a window that can't be resized
 - Screen readers: Narrator and other screen readers announce each PiP by name and what it shows
