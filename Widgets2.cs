@@ -183,7 +183,7 @@ namespace PipStudio
             using (var b = new SolidBrush(c)) g.FillEllipse(b, x, y + h / 2f - 3 * s, 6 * s, 6 * s);
             Label(g, name, U.UI(10 * s), new Rectangle(x + (int)(11 * s), y, (int)(w * 0.3f), h), Sub);
             Label(g, ms < 0 ? "—" : Ms(ms), U.UIBold(11 * s), new Rectangle(x + (int)(w * 0.3f), y, (int)(w * 0.22f), h), Text);
-            string more = avg < 0 ? "" : L.T("avg") + " " + Ms(avg) + "  ±" + Ms(jitter) + "  " + L.T("lost") + " " + Math.Round(loss * 100) + "%";
+            string more = avg < 0 ? (loss > 0 ? L.T("lost") + " " + Math.Round(loss * 100) + "%" : "") : L.T("avg") + " " + Ms(avg) + "  ±" + Ms(jitter) + "  " + L.T("lost") + " " + Math.Round(loss * 100) + "%";
             Label(g, more, U.UI(9 * s), new Rectangle(x + (int)(w * 0.5f), y, (int)(w * 0.5f), h), Sub, TextFormatFlags.Right);
             return y + h + (int)(4 * s);
         }
