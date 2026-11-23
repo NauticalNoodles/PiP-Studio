@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	Vollbildfenster können keine PiPs sein
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Es würde auf diesem Bildschirm über allem anderen bleiben. Schalte es zuerst in den Fenstermodus und versuch es dann noch einmal.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Drück jederzeit {0}, um ein Fenster als Bild-in-Bild zu zeigen. Starte PiP Studio erneut, um sein Fenster zu öffnen.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Deine Tastenkürzel und dein Controller funktionieren weiter. Starte PiP Studio erneut, um dieses Fenster zu öffnen.
-Utility PiP	Hilfs-PiP
-Utility PiPs	Hilfs-PiPs
-System monitor	Systemmonitor
-Clock	Uhr
-Now playing	Läuft gerade
-Main volume	Gesamtlautstärke
-No app is making sound right now	Gerade gibt keine App Ton aus
-CPU	CPU
-GPU	GPU
-Memory	Arbeitsspeicher
-Network	Netzwerk
-Nothing is playing	Gerade läuft nichts
-Unknown title	Unbekannter Titel
-System details	Systemdetails
-Gathering details…	Details werden gesammelt…
-Clock speed	Takt
-Cores	Kerne
-Processes	Prozesse
-Threads	Threads
-Handles	Handles
-Up time	Betriebszeit
-In use	In Verwendung
-Available	Verfügbar
-Committed	Zugesichert
-Cached	Im Cache
-Kernel	Kernel
-Top apps	Top-Apps
-3D	3D
-Video decode	Videodecodierung
-Video encode	Videocodierung
-Copy	Kopieren
-Dedicated memory	Dedizierter Speicher
-Shared memory	Gemeinsamer Speicher
-Disk	Datenträger
-Read	Lesen
-Write	Schreiben
-free	frei
-Download	Download
-Upload	Upload
-Since opened	Seit dem Öffnen
-Battery	Akku
-Plugged in	Angeschlossen
-On battery	Akkubetrieb
-Temperature	Temperatur
-Fan speed	Lüfterdrehzahl
-Power	Leistung
-Stopped	Gestoppt
-Fans	Lüfter
-Needs the PawnIO driver	Benötigt den PawnIO-Treiber
-No fan sensors found	Keine Lüftersensoren gefunden
-Get PawnIO	PawnIO herunterladen
-Fans and the processor's exact temperature	Lüfter und genaue Prozessortemperatur
 Layouts	Layouts
 Save these PiPs as a layout…	Diese PiPs als Layout speichern…
 Manage layouts…	Layouts verwalten…
@@ -773,27 +721,9 @@ Layout	Layout
 Save as a layout	Als Layout speichern
 A name for this set of PiPs, like Gaming or Work.	Ein Name für diese PiPs, z. B. Gaming oder Arbeit.
 A layout with that name exists. It will bring back the PiPs that are open now instead.	Ein Layout mit diesem Namen gibt es schon. Es holt stattdessen die jetzt geöffneten PiPs zurück.
-Timer	Timer
-Ping	Ping
-Stopwatch	Stoppuhr
-Time's up	Zeit ist um
-Scroll to set	Zum Einstellen scrollen
-Internet	Internet
-Router	Router
-avg	Ø
-lost	verloren
-Previous	Zurück
-Play or pause	Wiedergabe oder Pause
-Start or pause	Starten oder anhalten
-One minute more	Eine Minute mehr
-One minute less	Eine Minute weniger
-Switch server	Server wechseln
-Unmute	Stummschaltung aufheben
 muted	stumm
 A part of the screen	Ein Teil des Bildschirms
 Picture-in-picture of {0}	Bild im Bild von {0}
-Playing	Wiedergabe
-Paused	Angehalten
 Export…	Exportieren…
 Import…	Importieren…
 Back up settings	Einstellungen sichern

@@ -149,17 +149,13 @@ namespace PipStudio
                 foreach (var p in app.Pips.Where(x => !x.IsClosing).ToList()) p.CloseAnimated();
             if (app.HiddenAll) app.ToggleHideAll();                          // show them again (with the new ones)
             var states = new List<PipState>();
-            foreach (var b in l.Pips)
+            foreach (var b in l.Pips.Where(b => !PipStudio.App.Retired(b)))
             {
                 var st = new PipState();
                 Ser.Read(st, Ser.ParseKv(b));
                 states.Add(st);
             }
-            if (!PipStudio.App.S.AllowMultiple)                                 // one PiP at a time: the first, plus utility PiPs
-            {
-                var first = states.FirstOrDefault(s => s.Kind != SourceKind.Widget);
-                states = states.Where(s => s == first || s.Kind == SourceKind.Widget).ToList();
-            }
+            if (!PipStudio.App.S.AllowMultiple) states = states.Take(1).ToList();   // one PiP at a time: the first
             l.Opened.RemoveAll(p => p.IsClosing || p.IsDisposed);
             int n = 0;
             foreach (var st in states)

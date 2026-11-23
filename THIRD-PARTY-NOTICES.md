@@ -62,20 +62,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ```
 
-## LibreHardwareMonitor and its libraries
-
-Used only while PiP Studio runs as administrator, to read the processor's temperature and power and the fan speeds in
-System details. Their source code is available at the links below.
-
-- [LibreHardwareMonitorLib](https://www.nuget.org/packages/LibreHardwareMonitorLib/) 0.9.6, https://github.com/LibreHardwareMonitor/LibreHardwareMonitor: Mozilla Public License 2.0 (https://mozilla.org/MPL/2.0/)
-- [DiskInfoToolkit](https://github.com/Blacktempel/DiskInfoToolkit): Mozilla Public License 2.0
-- [RAMSPDToolkit-NDD](https://github.com/Blacktempel/RAMSPDToolkit): Mozilla Public License 2.0
-- [HidSharp](https://software.seekye.com/hidsharp), Copyright 2010-2025 James F. Bellinger: Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
-- Mono.Posix.NETStandard, © Microsoft: MIT License
-
-The sensors are read through the PawnIO driver (https://pawnio.eu), which PiP Studio doesn't include: people who want
-these readings install it themselves.
-
 ## .NET
 
 The self-contained downloads include the .NET 8 runtime and Windows Desktop runtime, © .NET Foundation and Contributors, under the MIT License: https://github.com/dotnet/runtime/blob/main/LICENSE.TXT

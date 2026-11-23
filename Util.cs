@@ -20,7 +20,7 @@ namespace PipStudio
     // =================================================================================
     //  Helpers
     // =================================================================================
-    enum SourceKind { Window, Screen, Widget }   // Widget: a utility PiP PiP Studio draws itself (Widgets.cs)
+    enum SourceKind { Window, Screen }
     enum FitMode { Fit, Fill, Stretch }
     enum Corner { TopLeft, TopRight, BottomLeft, BottomRight }
 
@@ -763,7 +763,6 @@ namespace PipStudio
         public int Aspect = 0;                    // 0 = the picture's own shape, otherwise one of AspectChoices
         public int Snap = 0;                      // 0 = follow Settings, 1 = always snap, 2 = never snap
         public bool TrimBars = false;             // crop away the black bars around the video
-        public string Widget = "";                // which utility PiP (Widget.Ids), for SourceKind.Widget
 
         public PipState Clone() { return (PipState)MemberwiseClone(); }
         public bool IsCropped { get { return Crop.X > 0.0005f || Crop.Y > 0.0005f || Crop.Width < 0.999f || Crop.Height < 0.999f; } }

@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	全画面のウィンドウは PiP にでき�
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	そのディスプレイの他のすべてより手前に表示されたままになってしまいます。先にウィンドウ モードに切り替えてから、もう一度お試しください。
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	いつでも {0} を押すと、ウィンドウをピクチャー イン ピクチャーにできます。もう一度 PiP Studio を起動するとウィンドウが開きます。
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	ショートカットとコントローラーは引き続き使えます。もう一度 PiP Studio を起動するとこのウィンドウが開きます。
-Utility PiP	ユーティリティ PiP
-Utility PiPs	ユーティリティ PiP
-System monitor	システム モニター
-Clock	時計
-Now playing	再生中
-Main volume	メイン音量
-No app is making sound right now	今、音を出しているアプリはありません
-CPU	CPU
-GPU	GPU
-Memory	メモリ
-Network	ネットワーク
-Nothing is playing	何も再生されていません
-Unknown title	不明なタイトル
-System details	システムの詳細
-Gathering details…	詳細を収集しています…
-Clock speed	速度
-Cores	コア
-Processes	プロセス
-Threads	スレッド
-Handles	ハンドル
-Up time	稼働時間
-In use	使用中
-Available	利用可能
-Committed	コミット済み
-Cached	キャッシュ済み
-Kernel	カーネル
-Top apps	使用量の多いアプリ
-3D	3D
-Video decode	ビデオ デコード
-Video encode	ビデオ エンコード
-Copy	コピー
-Dedicated memory	専用メモリ
-Shared memory	共有メモリ
-Disk	ディスク
-Read	読み取り
-Write	書き込み
-free	空き
-Download	ダウンロード
-Upload	アップロード
-Since opened	開いてから
-Battery	バッテリー
-Plugged in	電源に接続
-On battery	バッテリー駆動
-Temperature	温度
-Fan speed	ファン速度
-Power	電力
-Stopped	停止中
-Fans	ファン
-Needs the PawnIO driver	PawnIO ドライバーが必要です
-No fan sensors found	ファン センサーが見つかりません
-Get PawnIO	PawnIO を入手
-Fans and the processor's exact temperature	ファンとプロセッサの正確な温度
 Layouts	レイアウト
 Save these PiPs as a layout…	これらの PiP をレイアウトとして保存…
 Manage layouts…	レイアウトの管理…
@@ -773,27 +721,9 @@ Layout	レイアウト
 Save as a layout	レイアウトとして保存
 A name for this set of PiPs, like Gaming or Work.	この PiP のセットの名前（例: ゲーム、仕事）。
 A layout with that name exists. It will bring back the PiPs that are open now instead.	その名前のレイアウトがあります。代わりに今開いている PiP を元に戻すようになります。
-Timer	タイマー
-Ping	Ping
-Stopwatch	ストップウォッチ
-Time's up	時間です
-Scroll to set	スクロールで設定
-Internet	インターネット
-Router	ルーター
-avg	平均
-lost	損失
-Previous	前へ
-Play or pause	再生または一時停止
-Start or pause	開始または一時停止
-One minute more	1 分増やす
-One minute less	1 分減らす
-Switch server	サーバーを切り替え
-Unmute	ミュート解除
 muted	ミュート中
 A part of the screen	画面の一部
 Picture-in-picture of {0}	{0} のピクチャー イン ピクチャー
-Playing	再生中
-Paused	一時停止中
 Export…	エクスポート…
 Import…	インポート…
 Back up settings	設定のバックアップ

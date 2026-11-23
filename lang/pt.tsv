@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	Janelas em tela cheia não podem ser PiPs
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Ela ficaria por cima de todo o resto nessa tela. Coloque-a no modo janela primeiro e tente de novo.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Pressione {0} a qualquer momento para colocar uma janela em picture-in-picture. Abra o PiP Studio de novo para ver a janela dele.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Seus atalhos e seu controle continuam funcionando. Abra o PiP Studio de novo para ver esta janela.
-Utility PiP	PiP utilitário
-Utility PiPs	PiPs utilitários
-System monitor	Monitor do sistema
-Clock	Relógio
-Now playing	Tocando agora
-Main volume	Volume principal
-No app is making sound right now	Nenhum app está tocando som agora
-CPU	CPU
-GPU	GPU
-Memory	Memória
-Network	Rede
-Nothing is playing	Nada está tocando
-Unknown title	Título desconhecido
-System details	Detalhes do sistema
-Gathering details…	Coletando detalhes…
-Clock speed	Velocidade
-Cores	Núcleos
-Processes	Processos
-Threads	Threads
-Handles	Identificadores
-Up time	Tempo ativo
-In use	Em uso
-Available	Disponível
-Committed	Confirmada
-Cached	Em cache
-Kernel	Kernel
-Top apps	Apps que mais usam
-3D	3D
-Video decode	Decodificação de vídeo
-Video encode	Codificação de vídeo
-Copy	Cópia
-Dedicated memory	Memória dedicada
-Shared memory	Memória compartilhada
-Disk	Disco
-Read	Leitura
-Write	Gravação
-free	livre
-Download	Download
-Upload	Upload
-Since opened	Desde que abriu
-Battery	Bateria
-Plugged in	Na tomada
-On battery	Na bateria
-Temperature	Temperatura
-Fan speed	Velocidade da ventoinha
-Power	Consumo
-Stopped	Parada
-Fans	Ventoinhas
-Needs the PawnIO driver	Requer o driver PawnIO
-No fan sensors found	Nenhum sensor de ventoinha encontrado
-Get PawnIO	Obter o PawnIO
-Fans and the processor's exact temperature	Ventoinhas e temperatura exata do processador
 Layouts	Layouts
 Save these PiPs as a layout…	Salvar estes PiPs como layout…
 Manage layouts…	Gerenciar layouts…
@@ -773,27 +721,9 @@ Layout	Layout
 Save as a layout	Salvar como layout
 A name for this set of PiPs, like Gaming or Work.	Um nome para este conjunto de PiPs, como Jogos ou Trabalho.
 A layout with that name exists. It will bring back the PiPs that are open now instead.	Já existe um layout com esse nome. Ele vai trazer de volta os PiPs abertos agora.
-Timer	Timer
-Ping	Ping
-Stopwatch	Cronômetro
-Time's up	Tempo esgotado
-Scroll to set	Role para ajustar
-Internet	Internet
-Router	Roteador
-avg	média
-lost	perdidos
-Previous	Anterior
-Play or pause	Reproduzir ou pausar
-Start or pause	Iniciar ou pausar
-One minute more	Um minuto a mais
-One minute less	Um minuto a menos
-Switch server	Trocar de servidor
-Unmute	Ativar som
 muted	sem som
 A part of the screen	Uma parte da tela
 Picture-in-picture of {0}	Picture-in-picture de {0}
-Playing	Reproduzindo
-Paused	Pausado
 Export…	Exportar…
 Import…	Importar…
 Back up settings	Backup das configurações

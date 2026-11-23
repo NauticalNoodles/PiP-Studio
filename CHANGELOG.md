@@ -2,22 +2,10 @@
 
 ## 1.0.4
 
-New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your games and apps like any other PiP (snap, resize, fade, title bar, shortcuts and controller all work, and they come back when PiP Studio starts):
-
-- **Volume**: the main volume and a slider for every app making sound, with mute buttons
-- **System monitor**: CPU, GPU, memory and network, each with a graph of the last minute
-- Utility PiPs use the app's background and colours, and follow its theme (light, dark or OLED)
-- **System details**: a denser monitor with as much as Windows tells: per-core CPU use, clock speed and temperature, processes and threads, memory breakdown, GPU temperature, fan speed, power and engines (3D, video decode/encode) and video memory, disk activity and free space, network totals, battery, and the busiest apps. Run as administrator (with the free PawnIO driver installed) and it also shows the processor's exact temperature and power, and every fan's speed
-- **Clock**: the time and date
-- **Now playing**: what's playing on your PC, with previous, play/pause and next
-- **Timer**: a stopwatch, and a countdown timer that rings when it's done (scroll over the time to set it, or use − and +)
-- **Ping**: how long a ping takes to your router and to the internet, with a graph, the average, jitter and lost pings, to tell whether lag comes from your Wi-Fi or further out (click the server name to switch between Cloudflare, Google and Quad9)
-- Open them from **Utility PiP** on the Windows page, the tray menu, or a PiP's right-click menu. They open alongside your other PiPs, also when only one PiP at a time is allowed
-
 - **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put. While you drag or resize, faint outlines show where it and the PiPs it pushes will land
 - Game streaming (Moonlight, Steam Link): the outline, title bar and volume pop-up PiP Studio adds to other apps' PiPs now show up in the stream. Like PiP Studio's own PiPs, they're only hidden from capture when "Hide PiPs from screenshots, recordings and screen sharing" is on
 - Other apps' menus are no longer mistaken for PiPs: Discord's tray menu (right-clicking Discord in the tray) works again instead of being shrunk by black bar removal and getting a PiP title bar. Only windows you can resize count as another app's PiP, and black bar removal never reshapes a window that can't be resized
-- Screen readers: Narrator and other screen readers announce each PiP by name and what it shows, and list utility PiPs' buttons and sliders by name (their buttons can be pressed from the screen reader)
+- Screen readers: Narrator and other screen readers announce each PiP by name and what it shows
 - **Saved layouts**: save the PiPs you have open under a name ("Gaming", "Work") and bring them all back in one go from Running PiPs > Layouts, the tray menu or Behavior > Layouts. A layout can also open by itself when an app starts, and close its PiPs when the app exits
 - **Back up settings** (Settings): export your settings, shortcuts and layouts to a file and import them on another PC
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)

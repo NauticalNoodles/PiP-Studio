@@ -213,12 +213,12 @@ namespace PipStudio
                 {
                     Pip = p,
                     Title = p.DisplayName,
-                    App = p.St.Kind == SourceKind.Screen ? "Screen" : p.IsWidget ? "Utility PiP" : p.St.ProcessName,
+                    App = p.St.Kind == SourceKind.Screen ? "Screen" : p.St.ProcessName,
                     Position = SpotName(p),
                     SizeText = b.Width + " × " + b.Height,
                     OpacityText = (int)Math.Round(p.St.Opacity * 100) + "%",
                     Mode = modes.Count == 0 ? "Normal" : string.Join(", ", modes),
-                    Glyph = p.St.Kind == SourceKind.Screen ? "" : p.IsWidget ? Widget.Glyphs[Math.Max(0, Array.IndexOf(Widget.Ids, p.St.Widget))] : null,
+                    Glyph = p.St.Kind == SourceKind.Screen ? "" : null,
                     Icon = p.St.Kind == SourceKind.Window && p.Src != IntPtr.Zero ? IconFor(p.Src) : null
                 };
                 if (q.Length > 0 && item.Title.IndexOf(q, StringComparison.OrdinalIgnoreCase) < 0 && (item.App ?? "").IndexOf(q, StringComparison.OrdinalIgnoreCase) < 0) continue;

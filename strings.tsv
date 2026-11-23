@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	لا يمكن أن تكون النوافذ ب�
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	ستبقى فوق كل شيء آخر على تلك الشاشة. حوّلها إلى وضع النافذة أولًا، ثم حاول مرة أخرى.	它会一直停留在该显示器上所有内容的上方。请先将其切换为窗口模式，然后重试。
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	اضغط {0} في أي وقت لوضع نافذة في وضع الصورة داخل الصورة. شغّل PiP Studio مرة أخرى لفتح نافذته.	随时按 {0} 即可将窗口放入画中画。再次启动 PiP Studio 即可打开它的窗口。
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	تظل اختصاراتك ووحدة التحكم تعمل. شغّل PiP Studio مرة أخرى لفتح هذه النافذة.	快捷键和控制器仍然可用。再次启动 PiP Studio 即可打开此窗口。
-Utility PiP	نافذة عائمة للأدوات	实用画中画
-Utility PiPs	النوافذ العائمة للأدوات	实用画中画
-System monitor	مراقب النظام	系统监视器
-Clock	الساعة	时钟
-Now playing	قيد التشغيل الآن	正在播放
-Main volume	مستوى الصوت الرئيسي	主音量
-No app is making sound right now	لا يوجد تطبيق يصدر صوتًا الآن	现在没有应用在发声
-CPU	المعالج	CPU
-GPU	معالج الرسومات	GPU
-Memory	الذاكرة	内存
-Network	الشبكة	网络
-Nothing is playing	لا شيء قيد التشغيل	没有正在播放的内容
-Unknown title	عنوان غير معروف	未知标题
-System details	تفاصيل النظام	系统详细信息
-Gathering details…	جارٍ جمع التفاصيل…	正在收集详细信息…
-Clock speed	سرعة المعالج	频率
-Cores	الأنوية	核心
-Processes	العمليات	进程
-Threads	سلاسل التنفيذ	线程
-Handles	المقابض	句柄
-Up time	مدة التشغيل	运行时间
-In use	قيد الاستخدام	使用中
-Available	المتاح	可用
-Committed	المخصصة	已提交
-Cached	المخزنة مؤقتًا	已缓存
-Kernel	النواة	内核
-Top apps	أكثر التطبيقات استخدامًا	占用最多的应用
-3D	ثلاثي الأبعاد	3D
-Video decode	فك ترميز الفيديو	视频解码
-Video encode	ترميز الفيديو	视频编码
-Copy	النسخ	复制
-Dedicated memory	الذاكرة المخصصة	专用内存
-Shared memory	الذاكرة المشتركة	共享内存
-Disk	القرص	磁盘
-Read	القراءة	读取
-Write	الكتابة	写入
-free	متاح	可用
-Download	التنزيل	下载
-Upload	الرفع	上传
-Since opened	منذ الفتح	打开以来
-Battery	البطارية	电池
-Plugged in	موصول بالشاحن	已接通电源
-On battery	على البطارية	使用电池
-Temperature	درجة الحرارة	温度
-Fan speed	سرعة المروحة	风扇转速
-Power	الطاقة	功耗
-Stopped	متوقفة	已停止
-Fans	المراوح	风扇
-Needs the PawnIO driver	يتطلب برنامج تشغيل PawnIO	需要 PawnIO 驱动程序
-No fan sensors found	لم يُعثر على مستشعرات للمراوح	未找到风扇传感器
-Get PawnIO	احصل على PawnIO	获取 PawnIO
-Fans and the processor's exact temperature	المراوح ودرجة حرارة المعالج الدقيقة	风扇和处理器的精确温度
 Layouts	التخطيطات	布局
 Save these PiPs as a layout…	حفظ نوافذ PiP هذه كتخطيط…	将这些画中画保存为布局…
 Manage layouts…	إدارة التخطيطات…	管理布局…
@@ -773,27 +721,9 @@ Layout	تخطيط	布局
 Save as a layout	حفظ كتخطيط	保存为布局
 A name for this set of PiPs, like Gaming or Work.	اسم لهذه المجموعة من نوافذ PiP، مثل الألعاب أو العمل.	为这组画中画起个名字，例如“游戏”或“工作”。
 A layout with that name exists. It will bring back the PiPs that are open now instead.	يوجد تخطيط بهذا الاسم. سيعيد بدلًا من ذلك نوافذ PiP المفتوحة الآن.	已存在同名布局。它将改为恢复当前打开的画中画。
-Timer	المؤقت	计时器
-Ping	Ping	Ping
-Stopwatch	ساعة الإيقاف	秒表
-Time's up	انتهى الوقت	时间到
-Scroll to set	مرّر للضبط	滚动以设置
-Internet	الإنترنت	互联网
-Router	الموجّه	路由器
-avg	المتوسط	平均
-lost	مفقود	丢失
-Previous	السابق	上一个
-Play or pause	تشغيل أو إيقاف مؤقت	播放或暂停
-Start or pause	بدء أو إيقاف مؤقت	开始或暂停
-One minute more	دقيقة إضافية	增加一分钟
-One minute less	دقيقة أقل	减少一分钟
-Switch server	تبديل الخادم	切换服务器
-Unmute	إلغاء الكتم	取消静音
 muted	مكتوم	已静音
 A part of the screen	جزء من الشاشة	屏幕的一部分
 Picture-in-picture of {0}	صورة داخل صورة لـ {0}	{0} 的画中画
-Playing	قيد التشغيل	正在播放
-Paused	متوقف مؤقتًا	已暂停
 Export…	تصدير…	导出…
 Import…	استيراد…	导入…
 Back up settings	نسخ الإعدادات احتياطيًا	备份设置

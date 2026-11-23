@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	Les fenêtres en plein écran ne peuvent pas �
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Elle resterait au-dessus de tout le reste sur cet écran. Passez-la d'abord en mode fenêtré, puis réessayez.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Appuyez sur {0} à tout moment pour mettre une fenêtre en picture-in-picture. Relancez PiP Studio pour ouvrir sa fenêtre.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Vos raccourcis et votre manette fonctionnent toujours. Relancez PiP Studio pour ouvrir cette fenêtre.
-Utility PiP	PiP utilitaire
-Utility PiPs	PiP utilitaires
-System monitor	Moniteur système
-Clock	Horloge
-Now playing	En cours de lecture
-Main volume	Volume général
-No app is making sound right now	Aucune application n'émet de son pour l'instant
-CPU	Processeur
-GPU	GPU
-Memory	Mémoire
-Network	Réseau
-Nothing is playing	Aucune lecture en cours
-Unknown title	Titre inconnu
-System details	Détails du système
-Gathering details…	Collecte des détails…
-Clock speed	Fréquence
-Cores	Cœurs
-Processes	Processus
-Threads	Threads
-Handles	Handles
-Up time	Temps d'activité
-In use	Utilisée
-Available	Disponible
-Committed	Validée
-Cached	En cache
-Kernel	Noyau
-Top apps	Applications les plus gourmandes
-3D	3D
-Video decode	Décodage vidéo
-Video encode	Encodage vidéo
-Copy	Copie
-Dedicated memory	Mémoire dédiée
-Shared memory	Mémoire partagée
-Disk	Disque
-Read	Lecture
-Write	Écriture
-free	libre
-Download	Réception
-Upload	Envoi
-Since opened	Depuis l'ouverture
-Battery	Batterie
-Plugged in	Branché
-On battery	Sur batterie
-Temperature	Température
-Fan speed	Vitesse du ventilateur
-Power	Consommation
-Stopped	Arrêté
-Fans	Ventilateurs
-Needs the PawnIO driver	Nécessite le pilote PawnIO
-No fan sensors found	Aucun capteur de ventilateur trouvé
-Get PawnIO	Obtenir PawnIO
-Fans and the processor's exact temperature	Ventilateurs et température exacte du processeur
 Layouts	Dispositions
 Save these PiPs as a layout…	Enregistrer ces PiP comme disposition…
 Manage layouts…	Gérer les dispositions…
@@ -773,27 +721,9 @@ Layout	Disposition
 Save as a layout	Enregistrer comme disposition
 A name for this set of PiPs, like Gaming or Work.	Un nom pour cet ensemble de PiP, comme Jeux ou Travail.
 A layout with that name exists. It will bring back the PiPs that are open now instead.	Une disposition porte déjà ce nom. Elle rappellera à la place les PiP ouverts maintenant.
-Timer	Minuteur
-Ping	Ping
-Stopwatch	Chronomètre
-Time's up	Temps écoulé
-Scroll to set	Faites défiler pour régler
-Internet	Internet
-Router	Routeur
-avg	moy.
-lost	perdus
-Previous	Précédent
-Play or pause	Lecture ou pause
-Start or pause	Démarrer ou mettre en pause
-One minute more	Une minute de plus
-One minute less	Une minute de moins
-Switch server	Changer de serveur
-Unmute	Réactiver le son
 muted	son coupé
 A part of the screen	Une partie de l'écran
 Picture-in-picture of {0}	Image dans l'image de {0}
-Playing	En lecture
-Paused	En pause
 Export…	Exporter…
 Import…	Importer…
 Back up settings	Sauvegarder les paramètres

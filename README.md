@@ -64,9 +64,6 @@ To work on it in Visual Studio or VS Code, open `PiPStudio.csproj`.
 - Smart hiding: while the source window is in front, over full-screen apps, or when you point at it (fade, or slide out of the way).
 - Freeze fix for Chromium apps that stop drawing when covered.
 
-**Utility PiPs**
-- Small PiPs PiP Studio draws itself: Volume (main and per-app sliders), System monitor (CPU, GPU, memory, network), System details (a denser monitor: per-core CPU, temperatures, GPU fan and engines, every fan's speed when run as administrator, disks, network totals, battery, busiest apps), Clock, Now playing (with play/pause and skip), Timer (stopwatch and countdown) and Ping (router and internet latency). They snap, resize and fade like any PiP.
-
 **Layouts**
 - Save the PiPs you have open as a layout and bring them all back in one go; a layout can open by itself when an app starts. PiPs push each other aside instead of overlapping, with a preview while you drag. Settings, shortcuts and layouts can be backed up to a file.
 

@@ -79,20 +79,6 @@ namespace PipStudio
                 cmdBar.Children.Add(Cmd("", "Open in PiP", OpenSelected, it != null));
                 cmdBar.Children.Add(Cmd("", "Click a window", () => App.I.PickOnScreen(null)));
                 cmdBar.Children.Add(Cmd("", "Screen region", () => App.I.PipScreenRegion(null)));
-                Wpf.Ui.Controls.Button utilBtn = null;                       // utility PiPs: volume, system monitor, clock, now playing
-                utilBtn = Cmd("\uE71D", "Utility PiP", () =>
-                {
-                    var cm = new ContextMenu { PlacementTarget = utilBtn, Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom };
-                    for (int i = 0; i < Widget.Ids.Length; i++)
-                    {
-                        string id = Widget.Ids[i];
-                        var mi = new MenuItem { Header = L.T(Widget.Names[i]), Icon = new TextBlock { Text = Widget.Glyphs[i], FontFamily = Fluent.IconFont, FontSize = 14 } };
-                        mi.Click += (o, e) => App.I.CreatePipForWidget(id);
-                        cm.Items.Add(mi);
-                    }
-                    cm.IsOpen = true;
-                });
-                cmdBar.Children.Add(utilBtn);
                 cmdBar.Children.Add(Cmd("", "Refresh", () => { U.ClearProcessCache(); iconCache.Clear(); winSig = ""; RefreshWindows(); }));
                 bool real = it != null && !it.IsDisplay && !it.IsAuto && it.Hwnd != IntPtr.Zero;
                 cmdBar.Children.Add(Cmd("\uE8A7", "Treat as a PiP", () =>

@@ -694,58 +694,6 @@ Full-screen windows can't be PiPs	Полноэкранные окна не мо�
 It would stay on top of everything else on that display. Switch it to windowed mode first, then try again.	Оно оставалось бы поверх всего остального на этом экране. Сначала переключите его в оконный режим и попробуйте снова.
 Press {0} any time to put a window in picture-in-picture. Start PiP Studio again to open its window.	Нажмите {0} в любой момент, чтобы открыть окно в режиме «картинка в картинке». Запустите PiP Studio снова, чтобы открыть его окно.
 Your shortcuts and controller keep working. Start PiP Studio again to open this window.	Сочетания клавиш и геймпад продолжают работать. Запустите PiP Studio снова, чтобы открыть это окно.
-Utility PiP	Служебный PiP
-Utility PiPs	Служебные PiP
-System monitor	Монитор системы
-Clock	Часы
-Now playing	Сейчас играет
-Main volume	Общая громкость
-No app is making sound right now	Сейчас ни одно приложение не издаёт звук
-CPU	ЦП
-GPU	ГП
-Memory	Память
-Network	Сеть
-Nothing is playing	Ничего не воспроизводится
-Unknown title	Неизвестное название
-System details	Сведения о системе
-Gathering details…	Сбор сведений…
-Clock speed	Частота
-Cores	Ядра
-Processes	Процессы
-Threads	Потоки
-Handles	Дескрипторы
-Up time	Время работы
-In use	Используется
-Available	Доступно
-Committed	Выделено
-Cached	Кэшировано
-Kernel	Ядро ОС
-Top apps	Самые активные приложения
-3D	3D
-Video decode	Декодирование видео
-Video encode	Кодирование видео
-Copy	Копирование
-Dedicated memory	Выделенная память
-Shared memory	Общая память
-Disk	Диск
-Read	Чтение
-Write	Запись
-free	свободно
-Download	Загрузка
-Upload	Отдача
-Since opened	С момента открытия
-Battery	Батарея
-Plugged in	Подключено к сети
-On battery	От батареи
-Temperature	Температура
-Fan speed	Скорость вентилятора
-Power	Мощность
-Stopped	Остановлен
-Fans	Вентиляторы
-Needs the PawnIO driver	Требуется драйвер PawnIO
-No fan sensors found	Датчики вентиляторов не найдены
-Get PawnIO	Скачать PawnIO
-Fans and the processor's exact temperature	Вентиляторы и точная температура процессора
 Layouts	Макеты
 Save these PiPs as a layout…	Сохранить эти PiP как макет…
 Manage layouts…	Управление макетами…
@@ -773,27 +721,9 @@ Layout	Макет
 Save as a layout	Сохранить как макет
 A name for this set of PiPs, like Gaming or Work.	Имя для этого набора PiP, например «Игры» или «Работа».
 A layout with that name exists. It will bring back the PiPs that are open now instead.	Макет с таким именем уже есть. Вместо этого он будет возвращать открытые сейчас PiP.
-Timer	Таймер
-Ping	Пинг
-Stopwatch	Секундомер
-Time's up	Время вышло
-Scroll to set	Прокрутите, чтобы задать
-Internet	Интернет
-Router	Роутер
-avg	сред.
-lost	потери
-Previous	Предыдущий
-Play or pause	Воспроизвести или пауза
-Start or pause	Старт или пауза
-One minute more	На минуту больше
-One minute less	На минуту меньше
-Switch server	Сменить сервер
-Unmute	Включить звук
 muted	без звука
 A part of the screen	Часть экрана
 Picture-in-picture of {0}	Картинка в картинке: {0}
-Playing	Воспроизводится
-Paused	Пауза
 Export…	Экспорт…
 Import…	Импорт…
 Back up settings	Резервная копия настроек
