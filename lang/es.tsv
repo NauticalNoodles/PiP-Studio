@@ -794,3 +794,16 @@ A part of the screen	Una parte de la pantalla
 Picture-in-picture of {0}	Imagen en imagen de {0}
 Playing	Reproduciendo
 Paused	En pausa
+Export…	Exportar…
+Import…	Importar…
+Back up settings	Copia de seguridad de la configuración
+Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.	Guarda tu configuración, atajos y diseños en un archivo para tener una copia o llevarlos a otro PC. Los teléfonos emparejados se quedan en este PC.
+PiP Studio settings	Configuración de PiP Studio
+All files	Todos los archivos
+Settings saved	Configuración guardada
+Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.	Importa este archivo en la página Configuración de PiP Studio en otro PC (o en este) para recuperarla.
+Couldn't save the settings	No se pudo guardar la configuración
+Replace your settings?	¿Reemplazar tu configuración?
+Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.	Tu configuración, atajos y diseños pasan a ser los del archivo. Los teléfonos emparejados no cambian.
+Couldn't read the settings	No se pudo leer la configuración
+This isn't a PiP Studio settings file.	Este no es un archivo de configuración de PiP Studio.

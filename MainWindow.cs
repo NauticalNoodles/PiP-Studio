@@ -2757,6 +2757,34 @@ namespace PipStudio
             }, false, box, box);
         }
 
+        // ---------------------------------------------------------------- settings in a file (Settings page)
+        static void ExportSettings()
+        {
+            var dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "PiP Studio settings" + Backup.Extension,
+                Filter = L.T("PiP Studio settings") + " (*" + Backup.Extension + ")|*" + Backup.Extension,
+                DefaultExt = Backup.Extension
+            };
+            if (dlg.ShowDialog(w) != true) return;
+            try { Backup.Export(dlg.FileName); Ask("Settings saved", "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "OK", null, null); }
+            catch (Exception ex) { Ask("Couldn't save the settings", ex.Message, "OK", null, null, true); }
+        }
+
+        static void ImportSettings()
+        {
+            var dlg = new Microsoft.Win32.OpenFileDialog { Filter = L.T("PiP Studio settings") + " (*" + Backup.Extension + ")|*" + Backup.Extension + "|" + L.T("All files") + " (*.*)|*.*" };
+            if (dlg.ShowDialog(w) != true) return;
+            string file = dlg.FileName;
+            Ask("Replace your settings?", "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Replace", "Cancel", ok =>
+            {
+                if (!ok) return;
+                string err = Backup.Import(file);
+                if (err != null) { DelayRun(200, () => Ask("Couldn't read the settings", err, "OK", null, null, true)); return; }
+                DelayRun(100, () => { SwitchLanguage(); Navigate("settings", false); });   // rebuilt with the new settings (and language)
+            });
+        }
+
         /// <summary>Rename a paired phone (its name comes from what the phone's browser says it is, like "Pixel 7").</summary>
         static void RenamePhone(Companion.Device dev)
         {
@@ -3071,6 +3099,14 @@ namespace PipStudio
             Section(ge, "Performance");
             Card(ge, "", "Keep running in the tray when I close this window", "Otherwise closing this window quits PiP Studio", Switch(() => S.CloseToTray, v => S.CloseToTray = v), "tray background close quit");
             Card(ge, "", "Release memory while idle", "Gives unused memory back to Windows while PiP Studio sits in the tray", Switch(() => S.MinimizeMemory, v => S.MinimizeMemory = v), "ram memory trim");
+            {
+                var bk = new StackPanel { Orientation = Orientation.Horizontal };
+                var exp = PlainButton("Export…", ExportSettings);
+                exp.Margin = new Thickness(0, 0, 8, 0);
+                bk.Children.Add(exp);
+                bk.Children.Add(PlainButton("Import…", ImportSettings));
+                Card(ge, "\uE777", "Back up settings", "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", bk, "backup export import save restore transfer move copy file");
+            }
             if (!Packaged.IsPackaged)                                     // the Store version can't restart itself elevated
             {
                 Section(ge, "Administrator");

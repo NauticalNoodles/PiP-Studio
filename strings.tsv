@@ -794,3 +794,16 @@ A part of the screen	جزء من الشاشة	屏幕的一部分
 Picture-in-picture of {0}	صورة داخل صورة لـ {0}	{0} 的画中画
 Playing	قيد التشغيل	正在播放
 Paused	متوقف مؤقتًا	已暂停
+Export…	تصدير…	导出…
+Import…	استيراد…	导入…
+Back up settings	نسخ الإعدادات احتياطيًا	备份设置
+Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.	احفظ إعداداتك واختصاراتك وتخطيطاتك في ملف، للاحتفاظ بنسخة أو نقلها إلى كمبيوتر آخر. تبقى الهواتف المقترنة على هذا الكمبيوتر.	将设置、快捷键和布局保存到文件，以便留存副本或转移到另一台电脑。已配对的手机保留在此电脑上。
+PiP Studio settings	إعدادات PiP Studio	PiP Studio 设置
+All files	كل الملفات	所有文件
+Settings saved	تم حفظ الإعدادات	设置已保存
+Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.	استورد هذا الملف من صفحة الإعدادات في PiP Studio على كمبيوتر آخر (أو هذا) لاستعادتها.	在另一台电脑（或这台）上的 PiP Studio 设置页面导入此文件即可恢复。
+Couldn't save the settings	تعذّر حفظ الإعدادات	无法保存设置
+Replace your settings?	استبدال إعداداتك؟	替换你的设置？
+Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.	ستتغير إعداداتك واختصاراتك وتخطيطاتك إلى ما في الملف. تبقى الهواتف المقترنة كما هي.	你的设置、快捷键和布局将变为文件中的内容。已配对的手机保持不变。
+Couldn't read the settings	تعذّرت قراءة الإعدادات	无法读取设置
+This isn't a PiP Studio settings file.	هذا ليس ملف إعدادات PiP Studio.	这不是 PiP Studio 设置文件。

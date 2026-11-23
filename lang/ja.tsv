@@ -794,3 +794,16 @@ A part of the screen	画面の一部
 Picture-in-picture of {0}	{0} のピクチャー イン ピクチャー
 Playing	再生中
 Paused	一時停止中
+Export…	エクスポート…
+Import…	インポート…
+Back up settings	設定のバックアップ
+Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.	設定、ショートカット、レイアウトをファイルに保存して、コピーを残したり別の PC に移したりできます。ペアリングしたスマートフォンはこの PC に残ります。
+PiP Studio settings	PiP Studio の設定
+All files	すべてのファイル
+Settings saved	設定を保存しました
+Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.	別の PC（またはこの PC）の PiP Studio の設定ページでこのファイルをインポートすると元に戻せます。
+Couldn't save the settings	設定を保存できませんでした
+Replace your settings?	設定を置き換えますか?
+Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.	設定、ショートカット、レイアウトがファイルの内容に変わります。ペアリングしたスマートフォンはそのままです。
+Couldn't read the settings	設定を読み取れませんでした
+This isn't a PiP Studio settings file.	これは PiP Studio の設定ファイルではありません。

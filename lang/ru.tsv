@@ -794,3 +794,16 @@ A part of the screen	Часть экрана
 Picture-in-picture of {0}	Картинка в картинке: {0}
 Playing	Воспроизводится
 Paused	Пауза
+Export…	Экспорт…
+Import…	Импорт…
+Back up settings	Резервная копия настроек
+Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.	Сохраните настройки, сочетания клавиш и макеты в файл, чтобы иметь копию или перенести их на другой ПК. Сопряжённые телефоны остаются на этом ПК.
+PiP Studio settings	Настройки PiP Studio
+All files	Все файлы
+Settings saved	Настройки сохранены
+Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.	Импортируйте этот файл на странице «Настройки» PiP Studio на другом ПК (или этом), чтобы вернуть их.
+Couldn't save the settings	Не удалось сохранить настройки
+Replace your settings?	Заменить ваши настройки?
+Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.	Ваши настройки, сочетания клавиш и макеты заменятся данными из файла. Сопряжённые телефоны не изменятся.
+Couldn't read the settings	Не удалось прочитать настройки
+This isn't a PiP Studio settings file.	Это не файл настроек PiP Studio.

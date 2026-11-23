@@ -18,6 +18,8 @@ New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your g
 - Game streaming (Moonlight, Steam Link): the outline, title bar and volume pop-up PiP Studio adds to other apps' PiPs now show up in the stream. Like PiP Studio's own PiPs, they're only hidden from capture when "Hide PiPs from screenshots, recordings and screen sharing" is on
 - Other apps' menus are no longer mistaken for PiPs: Discord's tray menu (right-clicking Discord in the tray) works again instead of being shrunk by black bar removal and getting a PiP title bar. Only windows you can resize count as another app's PiP, and black bar removal never reshapes a window that can't be resized
 - Screen readers: Narrator and other screen readers announce each PiP by name and what it shows, and list utility PiPs' buttons and sliders by name (their buttons can be pressed from the screen reader)
+- **Saved layouts**: save the PiPs you have open under a name ("Gaming", "Work") and bring them all back in one go from Running PiPs > Layouts, the tray menu or Behavior > Layouts. A layout can also open by itself when an app starts, and close its PiPs when the app exits
+- **Back up settings** (Settings): export your settings, shortcuts and layouts to a file and import them on another PC
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
 - Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them

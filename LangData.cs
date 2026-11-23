@@ -824,6 +824,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "صورة داخل صورة لـ {0}" },
                 { "Playing", "قيد التشغيل" },
                 { "Paused", "متوقف مؤقتًا" },
+                { "Export…", "تصدير…" },
+                { "Import…", "استيراد…" },
+                { "Back up settings", "نسخ الإعدادات احتياطيًا" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "احفظ إعداداتك واختصاراتك وتخطيطاتك في ملف، للاحتفاظ بنسخة أو نقلها إلى كمبيوتر آخر. تبقى الهواتف المقترنة على هذا الكمبيوتر." },
+                { "PiP Studio settings", "إعدادات PiP Studio" },
+                { "All files", "كل الملفات" },
+                { "Settings saved", "تم حفظ الإعدادات" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "استورد هذا الملف من صفحة الإعدادات في PiP Studio على كمبيوتر آخر (أو هذا) لاستعادتها." },
+                { "Couldn't save the settings", "تعذّر حفظ الإعدادات" },
+                { "Replace your settings?", "استبدال إعداداتك؟" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "ستتغير إعداداتك واختصاراتك وتخطيطاتك إلى ما في الملف. تبقى الهواتف المقترنة كما هي." },
+                { "Couldn't read the settings", "تعذّرت قراءة الإعدادات" },
+                { "This isn't a PiP Studio settings file.", "هذا ليس ملف إعدادات PiP Studio." },
             };
         }
 
@@ -1627,6 +1640,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "{0} 的画中画" },
                 { "Playing", "正在播放" },
                 { "Paused", "已暂停" },
+                { "Export…", "导出…" },
+                { "Import…", "导入…" },
+                { "Back up settings", "备份设置" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "将设置、快捷键和布局保存到文件，以便留存副本或转移到另一台电脑。已配对的手机保留在此电脑上。" },
+                { "PiP Studio settings", "PiP Studio 设置" },
+                { "All files", "所有文件" },
+                { "Settings saved", "设置已保存" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "在另一台电脑（或这台）上的 PiP Studio 设置页面导入此文件即可恢复。" },
+                { "Couldn't save the settings", "无法保存设置" },
+                { "Replace your settings?", "替换你的设置？" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "你的设置、快捷键和布局将变为文件中的内容。已配对的手机保持不变。" },
+                { "Couldn't read the settings", "无法读取设置" },
+                { "This isn't a PiP Studio settings file.", "这不是 PiP Studio 设置文件。" },
             };
         }
 
@@ -2430,6 +2456,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "Bild im Bild von {0}" },
                 { "Playing", "Wiedergabe" },
                 { "Paused", "Angehalten" },
+                { "Export…", "Exportieren…" },
+                { "Import…", "Importieren…" },
+                { "Back up settings", "Einstellungen sichern" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "Speichern Sie Einstellungen, Tastenkürzel und Layouts in einer Datei, als Kopie oder für einen anderen PC. Gekoppelte Handys bleiben auf diesem PC." },
+                { "PiP Studio settings", "PiP Studio-Einstellungen" },
+                { "All files", "Alle Dateien" },
+                { "Settings saved", "Einstellungen gespeichert" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "Importieren Sie diese Datei auf der Seite „Einstellungen“ von PiP Studio auf einem anderen PC (oder diesem), um sie zurückzuholen." },
+                { "Couldn't save the settings", "Einstellungen konnten nicht gespeichert werden" },
+                { "Replace your settings?", "Ihre Einstellungen ersetzen?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Ihre Einstellungen, Tastenkürzel und Layouts werden durch die aus der Datei ersetzt. Gekoppelte Handys bleiben, wie sie sind." },
+                { "Couldn't read the settings", "Einstellungen konnten nicht gelesen werden" },
+                { "This isn't a PiP Studio settings file.", "Das ist keine PiP Studio-Einstellungsdatei." },
             };
         }
 
@@ -3233,6 +3272,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "Imagen en imagen de {0}" },
                 { "Playing", "Reproduciendo" },
                 { "Paused", "En pausa" },
+                { "Export…", "Exportar…" },
+                { "Import…", "Importar…" },
+                { "Back up settings", "Copia de seguridad de la configuración" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "Guarda tu configuración, atajos y diseños en un archivo para tener una copia o llevarlos a otro PC. Los teléfonos emparejados se quedan en este PC." },
+                { "PiP Studio settings", "Configuración de PiP Studio" },
+                { "All files", "Todos los archivos" },
+                { "Settings saved", "Configuración guardada" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "Importa este archivo en la página Configuración de PiP Studio en otro PC (o en este) para recuperarla." },
+                { "Couldn't save the settings", "No se pudo guardar la configuración" },
+                { "Replace your settings?", "¿Reemplazar tu configuración?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Tu configuración, atajos y diseños pasan a ser los del archivo. Los teléfonos emparejados no cambian." },
+                { "Couldn't read the settings", "No se pudo leer la configuración" },
+                { "This isn't a PiP Studio settings file.", "Este no es un archivo de configuración de PiP Studio." },
             };
         }
 
@@ -4036,6 +4088,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "Image dans l'image de {0}" },
                 { "Playing", "En lecture" },
                 { "Paused", "En pause" },
+                { "Export…", "Exporter…" },
+                { "Import…", "Importer…" },
+                { "Back up settings", "Sauvegarder les paramètres" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "Enregistrez vos paramètres, raccourcis et dispositions dans un fichier, pour en garder une copie ou les transférer sur un autre PC. Les téléphones associés restent sur ce PC." },
+                { "PiP Studio settings", "Paramètres PiP Studio" },
+                { "All files", "Tous les fichiers" },
+                { "Settings saved", "Paramètres enregistrés" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "Importez ce fichier depuis la page Paramètres de PiP Studio sur un autre PC (ou celui-ci) pour les récupérer." },
+                { "Couldn't save the settings", "Impossible d'enregistrer les paramètres" },
+                { "Replace your settings?", "Remplacer vos paramètres ?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Vos paramètres, raccourcis et dispositions deviennent ceux du fichier. Les téléphones associés ne changent pas." },
+                { "Couldn't read the settings", "Impossible de lire les paramètres" },
+                { "This isn't a PiP Studio settings file.", "Ce n'est pas un fichier de paramètres PiP Studio." },
             };
         }
 
@@ -4839,6 +4904,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "{0} のピクチャー イン ピクチャー" },
                 { "Playing", "再生中" },
                 { "Paused", "一時停止中" },
+                { "Export…", "エクスポート…" },
+                { "Import…", "インポート…" },
+                { "Back up settings", "設定のバックアップ" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "設定、ショートカット、レイアウトをファイルに保存して、コピーを残したり別の PC に移したりできます。ペアリングしたスマートフォンはこの PC に残ります。" },
+                { "PiP Studio settings", "PiP Studio の設定" },
+                { "All files", "すべてのファイル" },
+                { "Settings saved", "設定を保存しました" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "別の PC（またはこの PC）の PiP Studio の設定ページでこのファイルをインポートすると元に戻せます。" },
+                { "Couldn't save the settings", "設定を保存できませんでした" },
+                { "Replace your settings?", "設定を置き換えますか?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "設定、ショートカット、レイアウトがファイルの内容に変わります。ペアリングしたスマートフォンはそのままです。" },
+                { "Couldn't read the settings", "設定を読み取れませんでした" },
+                { "This isn't a PiP Studio settings file.", "これは PiP Studio の設定ファイルではありません。" },
             };
         }
 
@@ -5642,6 +5720,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "Picture-in-picture de {0}" },
                 { "Playing", "Reproduzindo" },
                 { "Paused", "Pausado" },
+                { "Export…", "Exportar…" },
+                { "Import…", "Importar…" },
+                { "Back up settings", "Backup das configurações" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "Salve suas configurações, atalhos e layouts em um arquivo, para ter uma cópia ou levá-los a outro PC. Os celulares pareados ficam neste PC." },
+                { "PiP Studio settings", "Configurações do PiP Studio" },
+                { "All files", "Todos os arquivos" },
+                { "Settings saved", "Configurações salvas" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "Importe este arquivo na página Configurações do PiP Studio em outro PC (ou neste) para recuperá-las." },
+                { "Couldn't save the settings", "Não foi possível salvar as configurações" },
+                { "Replace your settings?", "Substituir suas configurações?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Suas configurações, atalhos e layouts passam a ser os do arquivo. Os celulares pareados não mudam." },
+                { "Couldn't read the settings", "Não foi possível ler as configurações" },
+                { "This isn't a PiP Studio settings file.", "Este não é um arquivo de configurações do PiP Studio." },
             };
         }
 
@@ -6445,6 +6536,19 @@ namespace PipStudio
                 { "Picture-in-picture of {0}", "Картинка в картинке: {0}" },
                 { "Playing", "Воспроизводится" },
                 { "Paused", "Пауза" },
+                { "Export…", "Экспорт…" },
+                { "Import…", "Импорт…" },
+                { "Back up settings", "Резервная копия настроек" },
+                { "Save your settings, shortcuts and layouts to a file, to keep a copy or move them to another PC. Paired phones stay on this PC.", "Сохраните настройки, сочетания клавиш и макеты в файл, чтобы иметь копию или перенести их на другой ПК. Сопряжённые телефоны остаются на этом ПК." },
+                { "PiP Studio settings", "Настройки PiP Studio" },
+                { "All files", "Все файлы" },
+                { "Settings saved", "Настройки сохранены" },
+                { "Import this file on the Settings page of PiP Studio on another PC (or this one) to bring them back.", "Импортируйте этот файл на странице «Настройки» PiP Studio на другом ПК (или этом), чтобы вернуть их." },
+                { "Couldn't save the settings", "Не удалось сохранить настройки" },
+                { "Replace your settings?", "Заменить ваши настройки?" },
+                { "Your settings, shortcuts and layouts change to the ones in the file. Paired phones stay as they are.", "Ваши настройки, сочетания клавиш и макеты заменятся данными из файла. Сопряжённые телефоны не изменятся." },
+                { "Couldn't read the settings", "Не удалось прочитать настройки" },
+                { "This isn't a PiP Studio settings file.", "Это не файл настроек PiP Studio." },
             };
         }
     }
