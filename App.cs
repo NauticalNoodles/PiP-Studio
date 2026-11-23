@@ -1165,82 +1165,23 @@ namespace PipStudio
         /// <summary>Moves r up (or down) past the PiPs it overlaps, so it stacks next to them.</summary>
         public Rectangle ResolveCollision(PipWindow self, Rectangle r, bool goDown)
         {
-            int gap = (int)Math.Round(12 * self.UiScale);
-            for (int i = 0; i <= Pips.Count; i++)
-            {
-                PipWindow hit = null;
-                foreach (var p in Pips)
-                {
-                    if (p == self || p.IsClosing || !p.Visible) continue;
-                    if (p.TargetBounds.IntersectsWith(r)) { hit = p; break; }
-                }
-                if (hit == null) break;
-                Rectangle hb = hit.TargetBounds;
-                r.Y = goDown ? hb.Bottom + gap : hb.Top - gap - r.Height;
-            }
-            return r;
+            var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).Select(p => p.TargetBounds).ToList();
+            return Stacking.StackPast(r, others, goDown, (int)Math.Round(12 * self.UiScale));
         }
 
         /// <summary>
-        /// Where the PiPs that <paramref name="r"/> would overlap go, so the one you just put there can stay: each is
-        /// pushed out the way it was pushed: away from what landed on it, along the side they overlap least (with a small gap), and anything it then lands on is pushed
-        /// in turn, so they end up stacked. Null when they can't all fit on the screen (or one is locked or in theater
-        /// view): then the moved PiP makes room for itself instead, as before.
+        /// Where the PiPs that <paramref name="r"/> would overlap go, so the one you just put there can stay (Stacking.PlanBump).
+        /// Null when they can't all fit on the screen, or one in the way is locked or in theater view.
         /// </summary>
         public Dictionary<PipWindow, Rectangle> PlanBump(PipWindow self, Rectangle r)
         {
             int gap = (int)Math.Round(12 * self.UiScale);
             Rectangle wa = Screen.FromRectangle(r).WorkingArea;
             var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
-            var placed = new Dictionary<PipWindow, Rectangle>();
-            var fixedRects = new List<Rectangle> { r };
-            // what can't move stays put, and nothing may land on it
-            foreach (var p in others.Where(p => p.St.Locked || p.InTheater || !wa.IntersectsWith(p.TargetBounds))) fixedRects.Add(p.TargetBounds);
             var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
-            if (fixedRects.Skip(1).Any(f => f.IntersectsWith(r))) return null;  // dropped on a PiP that can't move
-            Func<PipWindow, Rectangle> at = p => placed.ContainsKey(p) ? placed[p] : p.TargetBounds;
-            for (int guard = 0; guard < 4 * (movable.Count + 1); guard++)
-            {
-                // the next PiP sitting on something that has its place: the one nearest the PiP you moved first
-                var hit = movable.Where(p => !placed.ContainsKey(p) && fixedRects.Any(f => f.IntersectsWith(at(p))))
-                                 .OrderBy(p => Dist(at(p), r)).FirstOrDefault();
-                if (hit == null) return placed;
-                Rectangle cur = at(hit);
-                Rectangle best = Rectangle.Empty; double bestD = double.MaxValue;
-                foreach (var f in fixedRects.Where(f => f.IntersectsWith(cur)))
-                {
-                    // pushed away from what it's on, never past it (that would swap them round)
-                    double dx = (cur.X + cur.Width / 2.0) - (f.X + f.Width / 2.0), dy = (cur.Y + cur.Height / 2.0) - (f.Y + f.Height / 2.0);
-                    // ...along the side they overlap least (dropped on its top edge: it goes down, on its side: sideways)
-                    int ox = Math.Min(cur.Right, f.Right) - Math.Max(cur.Left, f.Left), oy = Math.Min(cur.Bottom, f.Bottom) - Math.Max(cur.Top, f.Top);
-                    bool vert = oy <= ox;
-                    bool[] away = { vert && dy <= 0, vert && dy >= 0, !vert && dx <= 0, !vert && dx >= 0 };
-                    var cands = new[]
-                    {
-                        new Rectangle(cur.X, f.Top - gap - cur.Height, cur.Width, cur.Height),    // above
-                        new Rectangle(cur.X, f.Bottom + gap, cur.Width, cur.Height),              // below
-                        new Rectangle(f.Left - gap - cur.Width, cur.Y, cur.Width, cur.Height),    // left
-                        new Rectangle(f.Right + gap, cur.Y, cur.Width, cur.Height),               // right
-                    };
-                    for (int k = 0; k < cands.Length; k++)
-                    {
-                        var c = cands[k];
-                        if (!away[k] || !wa.Contains(c) || fixedRects.Any(o => o.IntersectsWith(c))) continue;
-                        double d = Math.Abs(c.X - cur.X) + Math.Abs(c.Y - cur.Y) + (k >= 2 ? 1 : 0);   // stacking up or down wins a tie
-                        if (d < bestD) { bestD = d; best = c; }
-                    }
-                }
-                if (bestD == double.MaxValue) return null;                    // no room on this screen
-                placed[hit] = best;
-                fixedRects.Add(best);
-            }
-            return null;
-        }
-
-        static double Dist(Rectangle a, Rectangle b)
-        {
-            double dx = (a.X + a.Width / 2.0) - (b.X + b.Width / 2.0), dy = (a.Y + a.Height / 2.0) - (b.Y + b.Height / 2.0);
-            return dx * dx + dy * dy;
+            var stuck = others.Except(movable).Select(p => p.TargetBounds);
+            var plan = Stacking.PlanBump(r, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap);
+            return plan == null ? null : plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
         }
 
         public bool FullscreenOn(PipWindow p)

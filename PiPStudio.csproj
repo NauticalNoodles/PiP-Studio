@@ -24,6 +24,11 @@
     <NoWarn>$(NoWarn);CA1416;CS0618;CS0414;CS0169;CS0649;WFAC010;WFO1000</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <!-- the tests are a project of their own (tests/) -->
+    <Compile Remove="tests\**" />
+    <None Remove="tests\**" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- the phone companion's page and icon, served by PiP Studio itself (Companion.cs) -->
     <EmbeddedResource Include="companion\index.html" LogicalName="companion.index.html" />
     <EmbeddedResource Include="companion\crypto.js" LogicalName="companion.crypto.js" />

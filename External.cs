@@ -13,12 +13,6 @@ namespace PipStudio
     /// </summary>
     static class ExternalPip
     {
-        static readonly HashSet<string> Titles = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "Picture in picture", "Picture-in-Picture", "Picture-in-picture", "Picture in Picture", "Bild im Bild", "Image dans l'image",
-            "Imagen en imagen", "Picture-in-picture video", "Picture in picture video"
-        };
-
         static readonly Dictionary<IntPtr, byte> alpha = new Dictionary<IntPtr, byte>();
 
         /// <summary>The app PiP picked with next / previous (otherwise the one in front is used).</summary>
@@ -26,9 +20,9 @@ namespace PipStudio
         static IntPtr announced;
         static ExtSplash splash;
 
-        public static bool IsPipTitle(string t) { return t != null && Titles.Contains(t.Trim()); }
+        public static bool IsPipTitle(string t) { return PipRules.IsPipTitle(t); }
 
-        static readonly HashSet<string> DiscordNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "discord", "discordptb", "discordcanary", "vesktop", "legcord" };
+        static HashSet<string> DiscordNames { get { return PipRules.DiscordNames; } }
 
         /// <summary>Another app's own PiP: a browser PiP window (by title), or a Discord pop-out (a call or stream popped out of the app).</summary>
         public static bool IsAppPip(IntPtr h)
@@ -52,42 +46,21 @@ namespace PipStudio
         /// <summary>A window that behaves like a PiP: always on top, small, picture-shaped, a normal top-level window you can click
         /// (not a click-through overlay, a tooltip or part of Windows). Video players' mini modes, Chrome's document PiPs
         /// (Spotify, YouTube Music, Meet), Telegram and Zoom floating videos and the like.</summary>
-        static bool LooksLikePip(IntPtr h)
+        static bool LooksLikePip(IntPtr h) { return PipRules.LooksLikePip(Facts(h)); }
+
+        /// <summary>What the rules (Rules.cs) look at.</summary>
+        static WindowFacts Facts(IntPtr h, string title = null)
         {
-            int ex = Native.GetWindowLong(h, Native.GWL_EXSTYLE);
-            if ((ex & Native.WS_EX_TOPMOST) == 0) return false;
-            if ((ex & (Native.WS_EX_TRANSPARENT | Native.WS_EX_NOACTIVATE)) != 0) return false;     // overlays, notifications
-            if ((Native.GetWindowLong(h, Native.GWL_STYLE) & Native.WS_CHILD) != 0) return false;
-            if (!Resizable(h)) return false;                              // menus and flyouts (like Discord's tray menu) can't be resized
-            if (Native.GetWindow(h, Native.GW_OWNER) != IntPtr.Zero) return false;                  // dialogs and pop-ups
-            if (U.CloakState(h) != 0) return false;
-            if (NotPipClasses.Contains(U.ClassName(h))) return false;
-            if (NotPipProcesses.Contains(U.ProcessName(h))) return false;
-            var r = U.WindowRect(h);
-            if (r.Width < 160 || r.Height < 90) return false;
-            var mon = Screen.FromHandle(h).Bounds;
-            if ((double)r.Width * r.Height > 0.45 * mon.Width * mon.Height) return false;        // a big always-on-top window isn't a PiP
-            double a = r.Width / (double)r.Height;
-            return a >= 0.45 && a <= 2.8;
+            return new WindowFacts
+            {
+                Title = title ?? U.WindowTitle(h) ?? "", Class = U.ClassName(h) ?? "", Process = U.ProcessName(h) ?? "",
+                Style = Native.GetWindowLong(h, Native.GWL_STYLE), ExStyle = Native.GetWindowLong(h, Native.GWL_EXSTYLE),
+                HasOwner = Native.GetWindow(h, Native.GW_OWNER) != IntPtr.Zero, Cloaked = U.CloakState(h) != 0,
+                Rect = U.WindowRect(h), Monitor = Screen.FromHandle(h).Bounds
+            };
         }
 
-        /// <summary>Resizable by its edges: PiPs and pop-outs are, menus, flyouts and notifications aren't.</summary>
         static bool Resizable(IntPtr h) { return (Native.GetWindowLong(h, Native.GWL_STYLE) & Native.WS_THICKFRAME) != 0; }
-
-        static readonly HashSet<string> NotPipClasses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "Shell_TrayWnd", "Shell_SecondaryTrayWnd", "Progman", "WorkerW", "tooltips_class32", "#32768", "#32770",
-            "NotifyIconOverflowWindow", "Windows.UI.Core.CoreWindow", "XamlExplorerHostIslandWindow", "TopLevelWindowForOverflowXamlIsland",
-            "ForegroundStaging", "MultitaskingViewFrame", "TaskListThumbnailWnd", "Xaml_WindowedPopupClass", "SysShadow", "IME", "MSCTFIME UI"
-        };
-
-        static readonly HashSet<string> NotPipProcesses = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        {
-            "explorer", "ShellExperienceHost", "StartMenuExperienceHost", "SearchHost", "SearchApp", "TextInputHost", "LockApp",
-            "GameBar", "GameBarFTServer", "XboxGameBarWidgets", "NVIDIA Overlay", "nvcontainer", "RadeonSoftware", "AMDRSServ",
-            "MSIAfterburner", "RTSS", "EncoderServer", "ScreenClippingHost", "SnippingTool", "PowerToys", "PowerToys.AlwaysOnTop",
-            "Taskmgr", "SystemSettings", "ApplicationFrameHost"
-        };
 
         // ------------------------------------------------------------ what you told PiP Studio
         /// <summary>An app's window kind: process and window class, e.g. "vlc|Qt5QWindowIcon".</summary>
@@ -234,22 +207,7 @@ namespace PipStudio
         /// Discord's popped-out call/stream window. Its main window's title always ends in "Discord" ("Friends - Discord",
         /// "#general | Server - Discord"); the pop-out is a second window of the same app with any other (or no) title.
         /// </summary>
-        static bool IsDiscordPopout(IntPtr h, string title)
-        {
-            if (U.ClassName(h) != "Chrome_WidgetWin_1") return false;
-            if (!DiscordNames.Contains(U.ProcessName(h))) return false;
-            if ((title ?? "").Trim().EndsWith("Discord", StringComparison.OrdinalIgnoreCase)) return false;
-            if ((title ?? "").IndexOf("overlay", StringComparison.OrdinalIgnoreCase) >= 0) return false;   // Discord's in-game overlay
-            int ex = Native.GetWindowLong(h, Native.GWL_EXSTYLE);
-            if ((ex & (Native.WS_EX_NOACTIVATE | Native.WS_EX_TRANSPARENT)) != 0) return false;   // overlay and notification helpers (click-through)
-            if (!Resizable(h)) return false;                              // its tray menu and other pop-ups: a pop-out can be resized
-            var r = U.WindowRect(h);
-            if (r.Width < 200 || r.Height < 120) return false;
-            // the overlay covers the whole screen (even when you open it with Shift+Tab and it stops being click-through);
-            // a call pop-out is a small window
-            var mon = Screen.FromHandle(h).Bounds;
-            return (double)r.Width * r.Height < 0.6 * mon.Width * mon.Height;
-        }
+        static bool IsDiscordPopout(IntPtr h, string title) { return PipRules.IsDiscordPopout(Facts(h, title)); }
 
         /// <summary>A short note under the window: this is another app's own PiP (shown once each time control moves to it).</summary>
         public static void Announce(IntPtr h)

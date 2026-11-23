@@ -36,3 +36,7 @@ jobs:
           python make_langdata.py
           git diff --exit-code -- LangData.cs
           if ($LASTEXITCODE -ne 0) { throw "LangData.cs doesn't match strings.tsv: run python make_langdata.py and commit the result" }
+
+      # the plain-logic parts (where PiPs go when they bump, which windows count as other apps' PiPs): tests/
+      - name: Tests
+        run: dotnet test tests -c Release
