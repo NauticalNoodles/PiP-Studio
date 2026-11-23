@@ -10,6 +10,8 @@ New **utility PiPs**: small PiPs PiP Studio draws itself, that float over your g
 - **System details**: a denser monitor with as much as Windows tells: per-core CPU use, clock speed and temperature, processes and threads, memory breakdown, GPU temperature, fan speed, power and engines (3D, video decode/encode) and video memory, disk activity and free space, network totals, battery, and the busiest apps. Run as administrator (with the free PawnIO driver installed) and it also shows the processor's exact temperature and power, and every fan's speed
 - **Clock**: the time and date
 - **Now playing**: what's playing on your PC, with previous, play/pause and next
+- **Timer**: a stopwatch, and a countdown timer that rings when it's done (scroll over the time to set it, or use − and +)
+- **Ping**: how long a ping takes to your router and to the internet, with a graph, the average, jitter and lost pings, to tell whether lag comes from your Wi-Fi or further out (click the server name to switch between Cloudflare, Google and Quad9)
 - Open them from **Utility PiP** on the Windows page, the tray menu, or a PiP's right-click menu. They open alongside your other PiPs, also when only one PiP at a time is allowed
 
 - **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put

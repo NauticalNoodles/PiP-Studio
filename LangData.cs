@@ -803,6 +803,15 @@ namespace PipStudio
                 { "Save as a layout", "حفظ كتخطيط" },
                 { "A name for this set of PiPs, like Gaming or Work.", "اسم لهذه المجموعة من نوافذ PiP، مثل الألعاب أو العمل." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "يوجد تخطيط بهذا الاسم. سيعيد بدلًا من ذلك نوافذ PiP المفتوحة الآن." },
+                { "Timer", "المؤقت" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "ساعة الإيقاف" },
+                { "Time's up", "انتهى الوقت" },
+                { "Scroll to set", "مرّر للضبط" },
+                { "Internet", "الإنترنت" },
+                { "Router", "الموجّه" },
+                { "avg", "المتوسط" },
+                { "lost", "مفقود" },
             };
         }
 
@@ -1585,6 +1594,15 @@ namespace PipStudio
                 { "Save as a layout", "保存为布局" },
                 { "A name for this set of PiPs, like Gaming or Work.", "为这组画中画起个名字，例如“游戏”或“工作”。" },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "已存在同名布局。它将改为恢复当前打开的画中画。" },
+                { "Timer", "计时器" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "秒表" },
+                { "Time's up", "时间到" },
+                { "Scroll to set", "滚动以设置" },
+                { "Internet", "互联网" },
+                { "Router", "路由器" },
+                { "avg", "平均" },
+                { "lost", "丢失" },
             };
         }
 
@@ -2367,6 +2385,15 @@ namespace PipStudio
                 { "Save as a layout", "Als Layout speichern" },
                 { "A name for this set of PiPs, like Gaming or Work.", "Ein Name für diese PiPs, z. B. Gaming oder Arbeit." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Ein Layout mit diesem Namen gibt es schon. Es holt stattdessen die jetzt geöffneten PiPs zurück." },
+                { "Timer", "Timer" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "Stoppuhr" },
+                { "Time's up", "Zeit ist um" },
+                { "Scroll to set", "Zum Einstellen scrollen" },
+                { "Internet", "Internet" },
+                { "Router", "Router" },
+                { "avg", "Ø" },
+                { "lost", "verloren" },
             };
         }
 
@@ -3149,6 +3176,15 @@ namespace PipStudio
                 { "Save as a layout", "Guardar como diseño" },
                 { "A name for this set of PiPs, like Gaming or Work.", "Un nombre para este conjunto de PiP, como Juegos o Trabajo." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Ya existe un diseño con ese nombre. En su lugar, recuperará los PiP abiertos ahora." },
+                { "Timer", "Temporizador" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "Cronómetro" },
+                { "Time's up", "Se acabó el tiempo" },
+                { "Scroll to set", "Desplaza para ajustar" },
+                { "Internet", "Internet" },
+                { "Router", "Router" },
+                { "avg", "media" },
+                { "lost", "perdidos" },
             };
         }
 
@@ -3931,6 +3967,15 @@ namespace PipStudio
                 { "Save as a layout", "Enregistrer comme disposition" },
                 { "A name for this set of PiPs, like Gaming or Work.", "Un nom pour cet ensemble de PiP, comme Jeux ou Travail." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Une disposition porte déjà ce nom. Elle rappellera à la place les PiP ouverts maintenant." },
+                { "Timer", "Minuteur" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "Chronomètre" },
+                { "Time's up", "Temps écoulé" },
+                { "Scroll to set", "Faites défiler pour régler" },
+                { "Internet", "Internet" },
+                { "Router", "Routeur" },
+                { "avg", "moy." },
+                { "lost", "perdus" },
             };
         }
 
@@ -4713,6 +4758,15 @@ namespace PipStudio
                 { "Save as a layout", "レイアウトとして保存" },
                 { "A name for this set of PiPs, like Gaming or Work.", "この PiP のセットの名前（例: ゲーム、仕事）。" },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "その名前のレイアウトがあります。代わりに今開いている PiP を元に戻すようになります。" },
+                { "Timer", "タイマー" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "ストップウォッチ" },
+                { "Time's up", "時間です" },
+                { "Scroll to set", "スクロールで設定" },
+                { "Internet", "インターネット" },
+                { "Router", "ルーター" },
+                { "avg", "平均" },
+                { "lost", "損失" },
             };
         }
 
@@ -5495,6 +5549,15 @@ namespace PipStudio
                 { "Save as a layout", "Salvar como layout" },
                 { "A name for this set of PiPs, like Gaming or Work.", "Um nome para este conjunto de PiPs, como Jogos ou Trabalho." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Já existe um layout com esse nome. Ele vai trazer de volta os PiPs abertos agora." },
+                { "Timer", "Timer" },
+                { "Ping", "Ping" },
+                { "Stopwatch", "Cronômetro" },
+                { "Time's up", "Tempo esgotado" },
+                { "Scroll to set", "Role para ajustar" },
+                { "Internet", "Internet" },
+                { "Router", "Roteador" },
+                { "avg", "média" },
+                { "lost", "perdidos" },
             };
         }
 
@@ -6277,6 +6340,15 @@ namespace PipStudio
                 { "Save as a layout", "Сохранить как макет" },
                 { "A name for this set of PiPs, like Gaming or Work.", "Имя для этого набора PiP, например «Игры» или «Работа»." },
                 { "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Макет с таким именем уже есть. Вместо этого он будет возвращать открытые сейчас PiP." },
+                { "Timer", "Таймер" },
+                { "Ping", "Пинг" },
+                { "Stopwatch", "Секундомер" },
+                { "Time's up", "Время вышло" },
+                { "Scroll to set", "Прокрутите, чтобы задать" },
+                { "Internet", "Интернет" },
+                { "Router", "Роутер" },
+                { "avg", "сред." },
+                { "lost", "потери" },
             };
         }
     }

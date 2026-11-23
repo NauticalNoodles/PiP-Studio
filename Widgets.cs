@@ -19,9 +19,9 @@ namespace PipStudio
     // =================================================================================
     abstract class Widget
     {
-        public static readonly string[] Ids = { "volume", "monitor", "details", "clock", "media" };
-        public static readonly string[] Names = { "Volume", "System monitor", "System details", "Clock", "Now playing" };
-        public static readonly string[] Glyphs = { "", "", "\uE950", "", "" };
+        public static readonly string[] Ids = { "volume", "monitor", "details", "clock", "media", "timer", "ping" };
+        public static readonly string[] Names = { "Volume", "System monitor", "System details", "Clock", "Now playing", "Timer", "Ping" };
+        public static readonly string[] Glyphs = { "", "", "\uE950", "", "" , "\uE916", "\uE968" };
 
         public static Widget Create(string id)
         {
@@ -31,6 +31,8 @@ namespace PipStudio
                 case "details": return new DetailsWidget();
                 case "clock": return new ClockWidget();
                 case "media": return new MediaWidget();
+                case "timer": return new TimerWidget();
+                case "ping": return new PingWidget();
                 default: return new VolumeWidget();
             }
         }
@@ -95,6 +97,15 @@ namespace PipStudio
                 using (var b = new SolidBrush(c)) g.DrawString(text, f, b, r, sf);
                 g.TextRenderingHint = hint;
             }
+        }
+
+        /// <summary>A round button with a glyph: the accent colour for the main one.</summary>
+        protected void Button(Graphics g, float s, Rectangle r, string glyph, string key, bool main)
+        {
+            var c = main ? Theme.Accent : Tint(40);
+            Fill(g, r, r.Height / 2f, c);
+            Glyph(g, glyph, 13 * s, r, main ? Theme.OnAccent : Text);
+            hits.Add(new Hit { R = r, Kind = "button", Key = key });
         }
 
         protected static void Glyph(Graphics g, string glyph, float px, Rectangle r, Color c)
@@ -1025,14 +1036,6 @@ namespace PipStudio
             Button(g, s, new Rectangle(bx, by, b, b), "", "prev", false);
             Button(g, s, new Rectangle(bx + b + gap, by, b, b), m.Playing ? "" : "", "play", true);
             Button(g, s, new Rectangle(bx + 2 * (b + gap), by, b, b), "", "next", false);
-        }
-
-        void Button(Graphics g, float s, Rectangle r, string glyph, string key, bool main)
-        {
-            var c = main ? Theme.Accent : Tint(40);
-            Fill(g, r, r.Height / 2f, c);
-            Glyph(g, glyph, 13 * s, r, main ? Theme.OnAccent : Text);
-            hits.Add(new Hit { R = r, Kind = "button", Key = key });
         }
 
         public override void MouseDown(Point p)
