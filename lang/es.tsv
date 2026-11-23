@@ -746,3 +746,30 @@ Needs the PawnIO driver	Requiere el controlador PawnIO
 No fan sensors found	No se encontraron sensores de ventilador
 Get PawnIO	Obtener PawnIO
 Fans and the processor's exact temperature	Ventiladores y temperatura exacta del procesador
+Layouts	Diseños
+Save these PiPs as a layout…	Guardar estos PiP como diseño…
+Manage layouts…	Administrar diseños…
+Save these PiPs as a layout	Guardar estos PiP como diseño
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	Recupera un conjunto de PiP (sus ventanas, posiciones y tamaños) de una vez, desde aquí, la página PiP en ejecución o el menú de la bandeja. Un diseño también puede abrirse solo cuando se inicia una aplicación.
+No layouts yet. Open the PiPs you want, then press Save above.	Aún no hay diseños. Abre los PiP que quieras y pulsa Guardar arriba.
+1 PiP	1 PiP
+{0} PiPs	{0} PiP
+opens when {0} starts	se abre al iniciar {0}
+Only when you open it	Solo cuando lo abras
+Open when this app starts	Abrir cuando se inicie esta aplicación
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	Sus PiP se abren junto a los que ya tienes. Se muestran las aplicaciones con una ventana abierta ahora.
+Close its PiPs when the app exits	Cerrar sus PiP cuando se cierre la aplicación
+Replace with the PiPs open now	Reemplazar por los PiP abiertos ahora
+Replace	Reemplazar
+Replace {0}?	¿Reemplazar {0}?
+It will bring back the PiPs that are open now instead.	En su lugar, recuperará los PiP abiertos ahora.
+Delete this layout	Eliminar este diseño
+Delete	Eliminar
+Delete {0}?	¿Eliminar {0}?
+Its PiPs stay open; only the saved layout goes.	Sus PiP siguen abiertos; solo se elimina el diseño guardado.
+No PiPs are open	No hay PiP abiertos
+Open the PiPs you want first, then save them as a layout.	Abre primero los PiP que quieras y luego guárdalos como diseño.
+Layout	Diseño
+Save as a layout	Guardar como diseño
+A name for this set of PiPs, like Gaming or Work.	Un nombre para este conjunto de PiP, como Juegos o Trabajo.
+A layout with that name exists. It will bring back the PiPs that are open now instead.	Ya existe un diseño con ese nombre. En su lugar, recuperará los PiP abiertos ahora.

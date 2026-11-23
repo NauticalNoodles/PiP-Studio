@@ -124,6 +124,7 @@ namespace PipStudio
         static Action refreshBindings;
         static Action refreshUpdates;   // the Updates card on the settings page, while the window is open
         static Action refreshCompanion; // the Phone companion section, while the window is open
+        static Action refreshLayouts;   // the Layouts section, while the window is open
 
         public static void Init()
         {
@@ -131,6 +132,7 @@ namespace PipStudio
             App.CloseMain = () => { if (w != null && !exiting) { exiting = true; w.Close(); } };
             Updater.Changed += () => { var r = refreshUpdates; if (r != null) r(); };
             Companion.Changed += () => { var r = refreshCompanion; if (r != null) r(); };
+            Layouts.Changed += () => DelayRun(30, () => { var r = refreshLayouts; if (r != null) r(); });
             Theme.Changed += () => { if (w != null) w.Dispatcher.BeginInvoke(new Action(ApplyLite)); };   // OLED: solid black, no Mica
         }
 
@@ -839,7 +841,7 @@ namespace PipStudio
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
-            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null;
+            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null; refreshLayouts = null; layoutsAnchor = null;
             pages.Clear(); searchIndex.Clear(); iconCache.Clear(); winSig = runSig = "";
             if (!exiting && App.S.MinimizeMemory) App.RunSoon(U.Trim, 1500);
         }
@@ -1359,6 +1361,27 @@ namespace PipStudio
                 cmdBar.Children.Add(Cmd("", "Show source", () => { var q = SelectedPip(); if (q != null) q.BringSourceToFront(); }, win));
                 cmdBar.Children.Add(Cmd(win && p.St.Follow ? "" : "", "Follow", () => { var q = SelectedPip(); if (q != null) { q.SetFollow(!q.St.Follow); runSig = ""; RefreshRunning(); BuildCommands(); } }, win));
                 cmdBar.Children.Add(Cmd(App.I.HiddenAll ? "" : "", App.I.HiddenAll ? "Show all" : "Hide all", () => { App.I.ToggleHideAll(); BuildCommands(); }, any));
+                Wpf.Ui.Controls.Button layBtn = null;                        // saved layouts: open one, or save these PiPs as one
+                layBtn = Cmd("\uF0E2", "Layouts", () =>
+                {
+                    var cm = new ContextMenu { PlacementTarget = layBtn, Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom };
+                    foreach (var l in Layouts.All)
+                    {
+                        var lay = l;
+                        var mi = new MenuItem { Header = lay.Name };
+                        mi.Click += (o, e) => { Layouts.Open(lay, true); DelayRun(400, () => { runSig = ""; RefreshRunning(); BuildCommands(); }); };
+                        cm.Items.Add(mi);
+                    }
+                    if (Layouts.All.Count > 0) cm.Items.Add(new Separator());
+                    var save = new MenuItem { Header = L.T("Save these PiPs as a layout…"), IsEnabled = App.I.Pips.Any(x => !x.IsClosing) };
+                    save.Click += (o, e) => AskLayoutName();
+                    cm.Items.Add(save);
+                    var manage = new MenuItem { Header = L.T("Manage layouts…") };
+                    manage.Click += (o, e) => { Navigate("behavior", true); DelayRun(350, () => ScrollToLayouts()); };
+                    cm.Items.Add(manage);
+                    cm.IsOpen = true;
+                });
+                cmdBar.Children.Add(layBtn);
                 cmdBar.Children.Add(Cmd("\uE712", "Options", () => { var r = runList.SelectedItem as PipRowItem; if (r != null && r.Pip != null) ShowPipOptions(r); }, sel));
                 cmdBar.Children.Add(Cmd("", "Close", () => { var q = SelectedPip(); if (q != null) q.CloseAnimated(); }, sel));
             }
@@ -2663,6 +2686,77 @@ namespace PipStudio
             refreshCompanion();
         }
 
+        // ---------------------------------------------------------------- saved layouts (Behavior page)
+        static FrameworkElement layoutsAnchor;
+
+        static void BuildLayouts(StackPanel be)
+        {
+            Section(be, "Layouts");
+            var saveBtn = PlainButton("Save", AskLayoutName, true);
+            var head = Card(be, "\uF0E2", "Save these PiPs as a layout", "Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.", saveBtn, "layout preset profile workspace save restore arrangement gaming work");
+            layoutsAnchor = head.Root;
+            var host = new StackPanel();
+            be.Children.Add(host);
+            refreshLayouts = () =>
+            {
+                host.Children.Clear();
+                if (Layouts.All.Count == 0)
+                {
+                    var none = Fluent.Label("No layouts yet. Open the PiPs you want, then press Save above.", 13, "Sub");
+                    none.Margin = new Thickness(4, 2, 0, 8);
+                    host.Children.Add(none);
+                }
+                foreach (var l in Layouts.All)
+                {
+                    var lay = l;
+                    var openBtn = PlainButton("Open", () => Layouts.Open(lay, true));
+                    Func<string> desc = () => L.T(lay.Count == 1 ? "1 PiP" : "{0} PiPs").Replace("{0}", lay.Count.ToString()) + (lay.App.Length > 0 ? " · " + L.T("opens when {0} starts").Replace("{0}", lay.App) : "");
+                    var ex = MakeExpander(host, "\uF0E2", lay.Name, desc(), openBtn, false, "layout " + lay.Name);
+                    // the app it opens with: apps with a window open now, plus the one it has
+                    var apps = Layouts.AppsWithWindows();
+                    if (lay.App.Length > 0 && !apps.Contains(lay.App, StringComparer.OrdinalIgnoreCase)) apps.Insert(0, lay.App);
+                    var opts = new List<string> { L.T("Only when you open it") };
+                    opts.AddRange(apps);
+                    int cur = lay.App.Length == 0 ? 0 : 1 + apps.FindIndex(a => a.Equals(lay.App, StringComparison.OrdinalIgnoreCase));
+                    Row(ex, "Open when this app starts", "Its PiPs open next to the ones you have. Apps with a window open now are listed.",
+                        Combo(opts.ToArray(), cur, v =>
+                        {
+                            Layouts.SetApp(lay, v <= 0 ? "" : apps[v - 1]);
+                            if (ex.Header != null && ex.Header.Desc != null) ex.Header.Desc.Text = desc();
+                        }), "automatic app game rule start launch");
+                    Row(ex, "Close its PiPs when the app exits", null, Switch(() => lay.CloseWithApp, v => Layouts.SetCloseWithApp(lay, v)), "automatic close exit quit");
+                    Row(ex, "Replace with the PiPs open now", null, PlainButton("Replace", () =>
+                        Ask(L.T("Replace {0}?").Replace("{0}", lay.Name), "It will bring back the PiPs that are open now instead.", "Replace", "Cancel", ok => { if (ok) Layouts.SaveCurrent(lay.Name); })), "update overwrite");
+                    Row(ex, "Delete this layout", null, PlainButton("Delete", () =>
+                        Ask(L.T("Delete {0}?").Replace("{0}", lay.Name), "Its PiPs stay open; only the saved layout goes.", "Delete", "Cancel", ok => { if (ok) Layouts.Delete(lay); })), "remove");
+                }
+            };
+            refreshLayouts();
+        }
+
+        static void ScrollToLayouts()
+        {
+            if (layoutsAnchor != null) try { layoutsAnchor.BringIntoView(); } catch { }
+        }
+
+        /// <summary>Asks for a name and saves the PiPs that are open as a layout (asking first before replacing one).</summary>
+        public static void AskLayoutName()
+        {
+            if (!App.I.Pips.Any(x => !x.IsClosing)) { Ask("No PiPs are open", "Open the PiPs you want first, then save them as a layout.", "OK", null, null); return; }
+            int n = Layouts.All.Count + 1;
+            while (Layouts.Find(L.T("Layout") + " " + n) != null) n++;
+            var box = new TextBox { Text = L.T("Layout") + " " + n, MaxLength = 40, MinWidth = 280, Padding = new Thickness(8, 6, 8, 6), Margin = new Thickness(0, 14, 0, 0) };
+            box.Loaded += (o, e) => box.SelectAll();
+            Ask("Save as a layout", "A name for this set of PiPs, like Gaming or Work.", "Save", "Cancel", ok =>
+            {
+                string name = (box.Text ?? "").Trim();
+                if (!ok || name.Length == 0) return;
+                if (Layouts.Find(name) != null)
+                    DelayRun(200, () => Ask(L.T("Replace {0}?").Replace("{0}", name), "A layout with that name exists. It will bring back the PiPs that are open now instead.", "Replace", "Cancel", ok2 => { if (ok2) Layouts.SaveCurrent(name); }));
+                else Layouts.SaveCurrent(name);
+            }, false, box, box);
+        }
+
         /// <summary>Rename a paired phone (its name comes from what the phone's browser says it is, like "Pixel 7").</summary>
         static void RenamePhone(Companion.Device dev)
         {
@@ -2863,6 +2957,7 @@ namespace PipStudio
             var cap = MakeExpander(be, "", "Screen regions", "Window sources always run at full speed", null, false, "fps capture region display");
             Row(cap, "Frame rate", null, SliderBox(5, 60, S.CaptureFps, " fps", v => S.CaptureFps = v), "fps smooth");
             Row(cap, "Show the pointer", null, Switch(() => S.CaptureCursor, v => S.CaptureCursor = v), "cursor mouse");
+            BuildLayouts(be);
 
             // ---------------- Controller
             var pc = NewPage("controller");

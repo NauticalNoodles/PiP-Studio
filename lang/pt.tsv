@@ -746,3 +746,30 @@ Needs the PawnIO driver	Requer o driver PawnIO
 No fan sensors found	Nenhum sensor de ventoinha encontrado
 Get PawnIO	Obter o PawnIO
 Fans and the processor's exact temperature	Ventoinhas e temperatura exata do processador
+Layouts	Layouts
+Save these PiPs as a layout…	Salvar estes PiPs como layout…
+Manage layouts…	Gerenciar layouts…
+Save these PiPs as a layout	Salvar estes PiPs como layout
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	Traga de volta um conjunto de PiPs (janelas, posições e tamanhos) de uma vez, daqui, da página PiPs em execução ou do menu da bandeja. Um layout também pode abrir sozinho quando um app é iniciado.
+No layouts yet. Open the PiPs you want, then press Save above.	Ainda não há layouts. Abra os PiPs que quiser e pressione Salvar acima.
+1 PiP	1 PiP
+{0} PiPs	{0} PiPs
+opens when {0} starts	abre quando {0} inicia
+Only when you open it	Só quando você abrir
+Open when this app starts	Abrir quando este app iniciar
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	Os PiPs abrem ao lado dos que você já tem. Aparecem os apps com uma janela aberta agora.
+Close its PiPs when the app exits	Fechar os PiPs quando o app sair
+Replace with the PiPs open now	Substituir pelos PiPs abertos agora
+Replace	Substituir
+Replace {0}?	Substituir {0}?
+It will bring back the PiPs that are open now instead.	Ele vai trazer de volta os PiPs abertos agora.
+Delete this layout	Excluir este layout
+Delete	Excluir
+Delete {0}?	Excluir {0}?
+Its PiPs stay open; only the saved layout goes.	Os PiPs continuam abertos; só o layout salvo é removido.
+No PiPs are open	Nenhum PiP aberto
+Open the PiPs you want first, then save them as a layout.	Abra primeiro os PiPs que quiser e depois salve-os como layout.
+Layout	Layout
+Save as a layout	Salvar como layout
+A name for this set of PiPs, like Gaming or Work.	Um nome para este conjunto de PiPs, como Jogos ou Trabalho.
+A layout with that name exists. It will bring back the PiPs that are open now instead.	Já existe um layout com esse nome. Ele vai trazer de volta os PiPs abertos agora.

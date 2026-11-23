@@ -746,3 +746,30 @@ Needs the PawnIO driver	PawnIO ドライバーが必要です
 No fan sensors found	ファン センサーが見つかりません
 Get PawnIO	PawnIO を入手
 Fans and the processor's exact temperature	ファンとプロセッサの正確な温度
+Layouts	レイアウト
+Save these PiPs as a layout…	これらの PiP をレイアウトとして保存…
+Manage layouts…	レイアウトの管理…
+Save these PiPs as a layout	これらの PiP をレイアウトとして保存
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	一連の PiP（ウィンドウ、位置、サイズ）をまとめて元に戻せます。ここ、実行中の PiP ページ、またはトレイ メニューから開けます。アプリの起動時に自動で開くようにもできます。
+No layouts yet. Open the PiPs you want, then press Save above.	レイアウトはまだありません。必要な PiP を開いて、上の［保存］を押してください。
+1 PiP	1 個の PiP
+{0} PiPs	{0} 個の PiP
+opens when {0} starts	{0} の起動時に開く
+Only when you open it	自分で開いたときだけ
+Open when this app starts	このアプリの起動時に開く
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	その PiP は今ある PiP の隣に開きます。いまウィンドウを開いているアプリが一覧に出ます。
+Close its PiPs when the app exits	アプリの終了時にその PiP を閉じる
+Replace with the PiPs open now	今開いている PiP で置き換える
+Replace	置き換え
+Replace {0}?	{0} を置き換えますか?
+It will bring back the PiPs that are open now instead.	代わりに今開いている PiP を元に戻すようになります。
+Delete this layout	このレイアウトを削除
+Delete	削除
+Delete {0}?	{0} を削除しますか?
+Its PiPs stay open; only the saved layout goes.	PiP は開いたままです。保存したレイアウトだけが削除されます。
+No PiPs are open	開いている PiP はありません
+Open the PiPs you want first, then save them as a layout.	まず必要な PiP を開き、それからレイアウトとして保存してください。
+Layout	レイアウト
+Save as a layout	レイアウトとして保存
+A name for this set of PiPs, like Gaming or Work.	この PiP のセットの名前（例: ゲーム、仕事）。
+A layout with that name exists. It will bring back the PiPs that are open now instead.	その名前のレイアウトがあります。代わりに今開いている PiP を元に戻すようになります。

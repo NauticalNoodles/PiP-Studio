@@ -746,3 +746,30 @@ Needs the PawnIO driver	Требуется драйвер PawnIO
 No fan sensors found	Датчики вентиляторов не найдены
 Get PawnIO	Скачать PawnIO
 Fans and the processor's exact temperature	Вентиляторы и точная температура процессора
+Layouts	Макеты
+Save these PiPs as a layout…	Сохранить эти PiP как макет…
+Manage layouts…	Управление макетами…
+Save these PiPs as a layout	Сохранить эти PiP как макет
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	Верните набор PiP (их окна, места и размеры) за один раз — отсюда, со страницы «Открытые PiP» или из меню в трее. Макет также может открываться сам при запуске приложения.
+No layouts yet. Open the PiPs you want, then press Save above.	Макетов пока нет. Откройте нужные PiP и нажмите «Сохранить» выше.
+1 PiP	1 PiP
+{0} PiPs	PiP: {0}
+opens when {0} starts	открывается при запуске {0}
+Only when you open it	Только вручную
+Open when this app starts	Открывать при запуске этого приложения
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	Его PiP открываются рядом с уже открытыми. Перечислены приложения, у которых сейчас открыто окно.
+Close its PiPs when the app exits	Закрывать его PiP при выходе из приложения
+Replace with the PiPs open now	Заменить открытыми сейчас PiP
+Replace	Заменить
+Replace {0}?	Заменить «{0}»?
+It will bring back the PiPs that are open now instead.	Вместо этого он будет возвращать открытые сейчас PiP.
+Delete this layout	Удалить этот макет
+Delete	Удалить
+Delete {0}?	Удалить «{0}»?
+Its PiPs stay open; only the saved layout goes.	PiP останутся открытыми; удалится только сохранённый макет.
+No PiPs are open	Нет открытых PiP
+Open the PiPs you want first, then save them as a layout.	Сначала откройте нужные PiP, затем сохраните их как макет.
+Layout	Макет
+Save as a layout	Сохранить как макет
+A name for this set of PiPs, like Gaming or Work.	Имя для этого набора PiP, например «Игры» или «Работа».
+A layout with that name exists. It will bring back the PiPs that are open now instead.	Макет с таким именем уже есть. Вместо этого он будет возвращать открытые сейчас PiP.

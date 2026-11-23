@@ -746,3 +746,30 @@ Needs the PawnIO driver	Nécessite le pilote PawnIO
 No fan sensors found	Aucun capteur de ventilateur trouvé
 Get PawnIO	Obtenir PawnIO
 Fans and the processor's exact temperature	Ventilateurs et température exacte du processeur
+Layouts	Dispositions
+Save these PiPs as a layout…	Enregistrer ces PiP comme disposition…
+Manage layouts…	Gérer les dispositions…
+Save these PiPs as a layout	Enregistrer ces PiP comme disposition
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	Rappelez un ensemble de PiP (leurs fenêtres, positions et tailles) d'un coup, depuis ici, la page PiP ouverts ou le menu de la zone de notification. Une disposition peut aussi s'ouvrir toute seule au démarrage d'une application.
+No layouts yet. Open the PiPs you want, then press Save above.	Aucune disposition pour l'instant. Ouvrez les PiP voulus, puis appuyez sur Enregistrer ci-dessus.
+1 PiP	1 PiP
+{0} PiPs	{0} PiP
+opens when {0} starts	s'ouvre au démarrage de {0}
+Only when you open it	Seulement quand vous l'ouvrez
+Open when this app starts	Ouvrir au démarrage de cette application
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	Ses PiP s'ouvrent à côté de ceux que vous avez. Les applications ayant une fenêtre ouverte sont listées.
+Close its PiPs when the app exits	Fermer ses PiP quand l'application se ferme
+Replace with the PiPs open now	Remplacer par les PiP ouverts maintenant
+Replace	Remplacer
+Replace {0}?	Remplacer {0} ?
+It will bring back the PiPs that are open now instead.	Elle rappellera à la place les PiP ouverts maintenant.
+Delete this layout	Supprimer cette disposition
+Delete	Supprimer
+Delete {0}?	Supprimer {0} ?
+Its PiPs stay open; only the saved layout goes.	Ses PiP restent ouverts ; seule la disposition enregistrée disparaît.
+No PiPs are open	Aucun PiP ouvert
+Open the PiPs you want first, then save them as a layout.	Ouvrez d'abord les PiP voulus, puis enregistrez-les comme disposition.
+Layout	Disposition
+Save as a layout	Enregistrer comme disposition
+A name for this set of PiPs, like Gaming or Work.	Un nom pour cet ensemble de PiP, comme Jeux ou Travail.
+A layout with that name exists. It will bring back the PiPs that are open now instead.	Une disposition porte déjà ce nom. Elle rappellera à la place les PiP ouverts maintenant.

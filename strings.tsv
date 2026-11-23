@@ -746,3 +746,30 @@ Needs the PawnIO driver	يتطلب برنامج تشغيل PawnIO	需要 PawnIO 
 No fan sensors found	لم يُعثر على مستشعرات للمراوح	未找到风扇传感器
 Get PawnIO	احصل على PawnIO	获取 PawnIO
 Fans and the processor's exact temperature	المراوح ودرجة حرارة المعالج الدقيقة	风扇和处理器的精确温度
+Layouts	التخطيطات	布局
+Save these PiPs as a layout…	حفظ نوافذ PiP هذه كتخطيط…	将这些画中画保存为布局…
+Manage layouts…	إدارة التخطيطات…	管理布局…
+Save these PiPs as a layout	حفظ نوافذ PiP هذه كتخطيط	将这些画中画保存为布局
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	أعد مجموعة من نوافذ PiP (نوافذها وأماكنها وأحجامها) دفعة واحدة، من هنا أو من صفحة نوافذ PiP المفتوحة أو من قائمة الدرج. ويمكن أن يُفتح التخطيط تلقائيًا عند بدء تطبيق.	一次性恢复一组画中画（其窗口、位置和大小），可从此处、“正在运行的画中画”页面或托盘菜单打开。布局也可以在某个应用启动时自动打开。
+No layouts yet. Open the PiPs you want, then press Save above.	لا توجد تخطيطات بعد. افتح نوافذ PiP التي تريدها، ثم اضغط حفظ أعلاه.	还没有布局。打开所需的画中画，然后按上方的“保存”。
+1 PiP	نافذة PiP واحدة	1 个画中画
+{0} PiPs	{0} من نوافذ PiP	{0} 个画中画
+opens when {0} starts	يُفتح عند بدء {0}	{0} 启动时打开
+Only when you open it	فقط عندما تفتحه بنفسك	仅在你打开时
+Open when this app starts	الفتح عند بدء هذا التطبيق	此应用启动时打开
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	تُفتح نوافذ PiP الخاصة به بجانب النوافذ الموجودة. تظهر هنا التطبيقات التي لديها نافذة مفتوحة الآن.	其画中画会在现有画中画旁打开。此处列出当前有窗口打开的应用。
+Close its PiPs when the app exits	إغلاق نوافذ PiP الخاصة به عند خروج التطبيق	应用退出时关闭其画中画
+Replace with the PiPs open now	الاستبدال بنوافذ PiP المفتوحة الآن	替换为当前打开的画中画
+Replace	استبدال	替换
+Replace {0}?	استبدال {0}؟	替换“{0}”？
+It will bring back the PiPs that are open now instead.	سيعيد بدلًا من ذلك نوافذ PiP المفتوحة الآن.	它将改为恢复当前打开的画中画。
+Delete this layout	حذف هذا التخطيط	删除此布局
+Delete	حذف	删除
+Delete {0}?	حذف {0}؟	删除“{0}”？
+Its PiPs stay open; only the saved layout goes.	تبقى نوافذ PiP مفتوحة؛ يُحذف التخطيط المحفوظ فقط.	其画中画保持打开，只删除保存的布局。
+No PiPs are open	لا توجد نوافذ PiP مفتوحة	没有打开的画中画
+Open the PiPs you want first, then save them as a layout.	افتح نوافذ PiP التي تريدها أولًا، ثم احفظها كتخطيط.	请先打开所需的画中画，然后将其保存为布局。
+Layout	تخطيط	布局
+Save as a layout	حفظ كتخطيط	保存为布局
+A name for this set of PiPs, like Gaming or Work.	اسم لهذه المجموعة من نوافذ PiP، مثل الألعاب أو العمل.	为这组画中画起个名字，例如“游戏”或“工作”。
+A layout with that name exists. It will bring back the PiPs that are open now instead.	يوجد تخطيط بهذا الاسم. سيعيد بدلًا من ذلك نوافذ PiP المفتوحة الآن.	已存在同名布局。它将改为恢复当前打开的画中画。

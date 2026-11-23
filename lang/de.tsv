@@ -746,3 +746,30 @@ Needs the PawnIO driver	Benötigt den PawnIO-Treiber
 No fan sensors found	Keine Lüftersensoren gefunden
 Get PawnIO	PawnIO herunterladen
 Fans and the processor's exact temperature	Lüfter und genaue Prozessortemperatur
+Layouts	Layouts
+Save these PiPs as a layout…	Diese PiPs als Layout speichern…
+Manage layouts…	Layouts verwalten…
+Save these PiPs as a layout	Diese PiPs als Layout speichern
+Bring back a set of PiPs (their windows, places and sizes) in one go, from here, the Running PiPs page or the tray menu. A layout can also open by itself when an app starts.	Holen Sie eine Gruppe von PiPs (Fenster, Positionen und Größen) auf einmal zurück – von hier, der Seite „Laufende PiPs“ oder dem Infobereichsmenü. Ein Layout kann sich auch von selbst öffnen, wenn eine App startet.
+No layouts yet. Open the PiPs you want, then press Save above.	Noch keine Layouts. Öffnen Sie die gewünschten PiPs und drücken Sie oben auf Speichern.
+1 PiP	1 PiP
+{0} PiPs	{0} PiPs
+opens when {0} starts	öffnet sich, wenn {0} startet
+Only when you open it	Nur wenn Sie es öffnen
+Open when this app starts	Öffnen, wenn diese App startet
+Its PiPs open next to the ones you have. Apps with a window open now are listed.	Seine PiPs öffnen sich neben den vorhandenen. Aufgeführt sind Apps, die gerade ein Fenster geöffnet haben.
+Close its PiPs when the app exits	Seine PiPs schließen, wenn die App beendet wird
+Replace with the PiPs open now	Durch die jetzt geöffneten PiPs ersetzen
+Replace	Ersetzen
+Replace {0}?	{0} ersetzen?
+It will bring back the PiPs that are open now instead.	Es holt stattdessen die jetzt geöffneten PiPs zurück.
+Delete this layout	Dieses Layout löschen
+Delete	Löschen
+Delete {0}?	{0} löschen?
+Its PiPs stay open; only the saved layout goes.	Die PiPs bleiben offen; nur das gespeicherte Layout wird entfernt.
+No PiPs are open	Keine PiPs geöffnet
+Open the PiPs you want first, then save them as a layout.	Öffnen Sie zuerst die gewünschten PiPs und speichern Sie sie dann als Layout.
+Layout	Layout
+Save as a layout	Als Layout speichern
+A name for this set of PiPs, like Gaming or Work.	Ein Name für diese PiPs, z. B. Gaming oder Arbeit.
+A layout with that name exists. It will bring back the PiPs that are open now instead.	Ein Layout mit diesem Namen gibt es schon. Es holt stattdessen die jetzt geöffneten PiPs zurück.

@@ -1206,6 +1206,7 @@ namespace PipStudio
                 }
             }
             bgTicks++;
+            if (bgTicks % 6 == 0) { try { Layouts.Tick(); } catch (Exception ex) { ReportError(ex); } }   // layouts that open with an app
             if (bgTicks % 4 == 0)
             {
                 if (saveDue) { saveDue = false; try { SaveSession(); } catch { } }
@@ -1224,6 +1225,20 @@ namespace PipStudio
                 bool open = I.Pips.Any(p => !p.IsClosing && p.IsWidget && p.St.Widget == id);
                 m.DropDownItems.Add(Menus.Check(Widget.Names[i], open, () => I.CreatePipForWidget(id)));
             }
+            return m;
+        }
+
+        /// <summary>"Layouts ›": each saved layout (picking one opens it in place of the PiPs that are open), and saving a new one.</summary>
+        public static ToolStripMenuItem LayoutsMenu()
+        {
+            var m = Menus.Item("Layouts", null);
+            foreach (var l in Layouts.All)
+            {
+                var lay = l;
+                m.DropDownItems.Add(Menus.Item(lay.Name.Replace("&", "&&"), () => Layouts.Open(lay, true)));
+            }
+            if (Layouts.All.Count > 0) m.DropDownItems.Add(new ToolStripSeparator());
+            m.DropDownItems.Add(Menus.Item("Save these PiPs as a layout…", () => { I.ShowMain("behavior"); MainUI.AskLayoutName(); }));
             return m;
         }
 
@@ -1246,6 +1261,7 @@ namespace PipStudio
             items.Add(Menus.Item("Click a window on screen…", () => PickOnScreen(null)));
             items.Add(Menus.Item("Mirror a screen region…", () => PipScreenRegion(null), "HK_ScreenRegion"));
             items.Add(UtilityMenu());
+            items.Add(LayoutsMenu());
 
             var live = Pips.Where(p => !p.IsClosing).ToList();
             if (live.Count > 0)
@@ -1371,30 +1387,34 @@ namespace PipStudio
                 {
                     var st = new PipState();
                     Ser.Read(st, Ser.ParseKv(b));
-                    if (st.Kind == SourceKind.Widget)
-                    {
-                        if (Pips.Any(p => !p.IsClosing && p.IsWidget && p.St.Widget == st.Widget)) continue;
-                        CreatePip(st, IntPtr.Zero);
-                        n++;
-                    }
-                    else if (st.Kind == SourceKind.Screen)
-                    {
-                        if (st.ScreenRect.Width < 8 || st.ScreenRect.Height < 8) continue;
-                        CreatePip(st, IntPtr.Zero);
-                        n++;
-                    }
-                    else
-                    {
-                        IntPtr h = WinEnum.FindMatch(st.ProcessName, st.ClassName, st.Title);
-                        if (st.Auto) { st.Follow = true; if (h == IntPtr.Zero) h = FirstAvailableWindow(IntPtr.Zero); }
-                        if (h == IntPtr.Zero && !S.AutoReattach && !st.Auto) continue;
-                        CreatePip(st, h);
-                        n++;
-                    }
+                    if (OpenState(st, S.AutoReattach) != null) n++;
                 }
                 return n > 0;
             }
             catch (Exception ex) { ReportError(ex); return false; }
+        }
+
+        /// <summary>
+        /// Opens a saved PiP (a session or a layout): the same source if it's there (the window found again by its app, kind
+        /// and title), in the same place. A window that isn't open yet gets a PiP that waits for it when <paramref name="wait"/>.
+        /// Null when nothing opened (a utility PiP that's already open, or a window that isn't there).
+        /// </summary>
+        public PipWindow OpenState(PipState st, bool wait)
+        {
+            if (st.Kind == SourceKind.Widget)
+            {
+                if (Pips.Any(p => !p.IsClosing && p.IsWidget && p.St.Widget == st.Widget)) return null;
+                return CreatePip(st, IntPtr.Zero);
+            }
+            if (st.Kind == SourceKind.Screen)
+            {
+                if (st.ScreenRect.Width < 8 || st.ScreenRect.Height < 8) return null;
+                return CreatePip(st, IntPtr.Zero);
+            }
+            IntPtr h = WinEnum.FindMatch(st.ProcessName, st.ClassName, st.Title);
+            if (st.Auto) { st.Follow = true; if (h == IntPtr.Zero) h = FirstAvailableWindow(IntPtr.Zero); }
+            if (h == IntPtr.Zero && !wait && !st.Auto) return null;
+            return CreatePip(st, h);
         }
 
         // ---------------------------------------------------------------- exit
