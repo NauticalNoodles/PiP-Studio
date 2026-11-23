@@ -86,6 +86,13 @@ namespace PipStudio
             if (!Active) return;
             ShrinkFullScreen();
             foreach (var h in shrunk.Keys.Where(h => !Native.IsWindow(h)).ToList()) shrunk.Remove(h);
+            // a PiP changed shape (its window was resized: often the game that was just shrunk) or wandered off: stack them again
+            var pips = App.I.Pips.Where(p => !p.IsClosing && !p.InTheater && !p.Moving && Screen.FromRectangle(p.TargetBounds).DeviceName == screen.DeviceName).ToList();
+            bool messy = pips.Any(p => !strip.Contains(p.TargetBounds));
+            for (int i = 0; i < pips.Count && !messy; i++)
+                for (int k = i + 1; k < pips.Count; k++)
+                    if (pips[i].TargetBounds.IntersectsWith(pips[k].TargetBounds)) { messy = true; break; }
+            if (messy) Arrange(false);
         }
 
         /// <summary>The game area: the display minus the strip.</summary>

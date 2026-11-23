@@ -266,6 +266,8 @@ namespace PipStudio
             if (overlay != null) overlay.Invalidate();
         }
         public bool PadActiveShown { get { return padActive; } }
+        /// <summary>Being dragged or resized right now.</summary>
+        public bool Moving { get { return moving; } }
 
         PipOutline outline;
 
