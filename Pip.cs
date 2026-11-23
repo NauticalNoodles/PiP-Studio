@@ -969,8 +969,23 @@ namespace PipStudio
                     string to = Tags[tr, tc];
                     bool down = dy > 0 ? false : dy < 0 ? true : App.SpotGoesDown(to);
                     Dictionary<PipWindow, Rectangle> bump;
-                    var dest = App.I.Place(this, new Rectangle(SpotPoint(to, b.Size, wa), b.Size), down, true, true, out bump);
-                    if (!Stacking.MovedToward(b, dest, dx, dy)) continue;
+                    var want = Stacking.Inside(new Rectangle(SpotPoint(to, b.Size, wa), b.Size), wa);
+                    var dest = App.I.Place(this, want, down, true, true, out bump);
+                    if (!Stacking.MovedToward(b, dest, dx, dy))
+                    {
+                        // stacking next to the PiPs there gets nowhere (a tall PiP under a small one, moving up): swap places,
+                        // pushing them the other way, past this one
+                        Dictionary<PipWindow, Rectangle> swap = null;
+                        if (Stacking.MovedToward(b, want, dx, dy))
+                        {
+                            swap = App.I.PlanPush(this, want, -dx, -dy);
+                            // no room for both that way (the column is too short): move them aside, toward the middle of the screen
+                            if (swap == null && dy != 0) swap = App.I.PlanPush(this, want, want.Left + want.Width / 2 > wa.Left + wa.Width / 2 ? -1 : 1, 0);
+                            if (swap == null && dx != 0) swap = App.I.PlanPush(this, want, 0, want.Top + want.Height / 2 > wa.Top + wa.Height / 2 ? -1 : 1);
+                        }
+                        if (swap == null) continue;
+                        dest = want; bump = swap;
+                    }
                     inTheater = false;
                     MoveTo(dest, true);
                     foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);

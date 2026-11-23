@@ -1164,6 +1164,21 @@ namespace PipStudio
             return r;
         }
 
+        /// <summary>
+        /// The PiPs in the way of <paramref name="r"/> pushed one way (dx, dy), even past it: for swapping places with a
+        /// controller. Null when they don't fit on the screen that way, or one of them can't move.
+        /// </summary>
+        public Dictionary<PipWindow, Rectangle> PlanPush(PipWindow self, Rectangle r, int dx, int dy)
+        {
+            int gap = (int)Math.Round(12 * self.UiScale);
+            Rectangle wa = Screen.FromRectangle(r).WorkingArea;
+            var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
+            var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
+            var stuck = others.Except(movable).Select(p => p.TargetBounds);
+            var plan = Stacking.PlanBump(r, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap, dx, dy);
+            return plan == null ? null : plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
+        }
+
         public bool FullscreenOn(PipWindow p)
         {
             if (FullscreenWindow == IntPtr.Zero || FullscreenWindow == p.Src) return false;

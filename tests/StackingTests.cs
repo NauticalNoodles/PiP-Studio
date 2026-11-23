@@ -174,3 +174,35 @@ public class PlaceTests
         Assert.True(Stacking.MovedToward(a, new Rectangle(20, 400, 400, 225), -1, 0));      // left
     }
 }
+
+public class SwapTests
+{
+    static readonly Rectangle Screen = new Rectangle(0, 0, 1920, 1040);
+    const int Gap = 12;
+
+    [Fact]
+    public void TallPipMovedUp_SwapsWithTheSmallOneAboveIt()
+    {
+        // the screenshot: a small PiP at the top right, a tall one under it; the controller moves the tall one up
+        var small = new Rectangle(1500, 12, 400, 260);
+        var tall = new Rectangle(1580, 284, 320, 740);
+        var want = new Rectangle(1580, 12, 320, 740);               // the tall one at the top right spot
+        // stacking finds nothing better than where it is...
+        var stacked = Stacking.StackPast(want, new[] { small }, true, Gap);
+        Assert.False(Stacking.MovedToward(tall, stacked, 0, -1));
+        // ...so the small one is pushed down instead (past the tall one), and they swap
+        var plan = Stacking.PlanBump(want, new[] { small }, new Rectangle[0], Screen, Gap, 0, 1);
+        Assert.NotNull(plan);
+        Assert.Equal(want.Bottom + Gap, plan[0].Y);
+        Assert.True(Screen.Contains(plan[0]));
+        Assert.True(Stacking.MovedToward(tall, want, 0, -1));
+    }
+
+    [Fact]
+    public void SwapThatDoesntFit_IsRefused()
+    {
+        var small = new Rectangle(1500, 12, 400, 400);
+        var want = new Rectangle(1500, 12, 400, 900);                // too tall for both to fit in the column
+        Assert.Null(Stacking.PlanBump(want, new[] { small }, new Rectangle[0], Screen, Gap, 0, 1));
+    }
+}

@@ -17,7 +17,9 @@ namespace PipStudio
         /// is pushed in turn, so they end up stacked. Keys are indexes into <paramref name="movable"/>; only moved ones are
         /// listed. Null when they can't all fit in <paramref name="area"/>, or r lands on something that can't move.
         /// </summary>
-        public static Dictionary<int, Rectangle> PlanBump(Rectangle r, IList<Rectangle> movable, IEnumerable<Rectangle> fixedOnes, Rectangle area, int gap)
+        /// <param name="pushDx">With <paramref name="pushDy"/>: push everything this way instead (-1, 0 or 1), even past r. A controller
+        /// move up into a taken spot pushes the PiPs there down, so the two swap places.</param>
+        public static Dictionary<int, Rectangle> PlanBump(Rectangle r, IList<Rectangle> movable, IEnumerable<Rectangle> fixedOnes, Rectangle area, int gap, int pushDx = 0, int pushDy = 0)
         {
             var placed = new Dictionary<int, Rectangle>();
             var fixedRects = new List<Rectangle> { r };
@@ -48,6 +50,7 @@ namespace PipStudio
                     int ox = Math.Min(cur.Right, f.Right) - Math.Max(cur.Left, f.Left), oy = Math.Min(cur.Bottom, f.Bottom) - Math.Max(cur.Top, f.Top);
                     bool vert = oy <= ox;
                     bool[] away = { vert && dy <= 0, vert && dy >= 0, !vert && dx <= 0, !vert && dx >= 0 };
+                    if (pushDx != 0 || pushDy != 0) away = new[] { pushDy < 0, pushDy > 0, pushDx < 0, pushDx > 0 };
                     var cands = new[]
                     {
                         new Rectangle(cur.X, f.Top - gap - cur.Height, cur.Width, cur.Height),    // above
