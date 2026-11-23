@@ -768,6 +768,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "تعذّرت قراءة الإعدادات" },
                 { "This isn't a PiP Studio settings file.", "هذا ليس ملف إعدادات PiP Studio." },
                 { "No room that way", "لا توجد مساحة في هذا الاتجاه" },
+                { "Control the next PiP", "التحكم في نافذة PiP التالية" },
+                { "Control the previous PiP", "التحكم في نافذة PiP السابقة" },
+                { "Switch PiP", "تبديل PiP" },
+                { "The only PiP", "نافذة PiP الوحيدة" },
             };
         }
 
@@ -1515,6 +1519,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "无法读取设置" },
                 { "This isn't a PiP Studio settings file.", "这不是 PiP Studio 设置文件。" },
                 { "No room that way", "那个方向没有空间" },
+                { "Control the next PiP", "控制下一个画中画" },
+                { "Control the previous PiP", "控制上一个画中画" },
+                { "Switch PiP", "切换画中画" },
+                { "The only PiP", "唯一的画中画" },
             };
         }
 
@@ -2262,6 +2270,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "Einstellungen konnten nicht gelesen werden" },
                 { "This isn't a PiP Studio settings file.", "Das ist keine PiP Studio-Einstellungsdatei." },
                 { "No room that way", "In diese Richtung ist kein Platz" },
+                { "Control the next PiP", "Nächstes PiP steuern" },
+                { "Control the previous PiP", "Vorheriges PiP steuern" },
+                { "Switch PiP", "PiP wechseln" },
+                { "The only PiP", "Das einzige PiP" },
             };
         }
 
@@ -3009,6 +3021,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "No se pudo leer la configuración" },
                 { "This isn't a PiP Studio settings file.", "Este no es un archivo de configuración de PiP Studio." },
                 { "No room that way", "No hay espacio en esa dirección" },
+                { "Control the next PiP", "Controlar el siguiente PiP" },
+                { "Control the previous PiP", "Controlar el PiP anterior" },
+                { "Switch PiP", "Cambiar PiP" },
+                { "The only PiP", "El único PiP" },
             };
         }
 
@@ -3756,6 +3772,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "Impossible de lire les paramètres" },
                 { "This isn't a PiP Studio settings file.", "Ce n'est pas un fichier de paramètres PiP Studio." },
                 { "No room that way", "Plus de place de ce côté" },
+                { "Control the next PiP", "Contrôler le PiP suivant" },
+                { "Control the previous PiP", "Contrôler le PiP précédent" },
+                { "Switch PiP", "Changer de PiP" },
+                { "The only PiP", "Le seul PiP" },
             };
         }
 
@@ -4503,6 +4523,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "設定を読み取れませんでした" },
                 { "This isn't a PiP Studio settings file.", "これは PiP Studio の設定ファイルではありません。" },
                 { "No room that way", "その方向には空きがありません" },
+                { "Control the next PiP", "次の PiP を操作" },
+                { "Control the previous PiP", "前の PiP を操作" },
+                { "Switch PiP", "PiP 切替" },
+                { "The only PiP", "唯一の PiP" },
             };
         }
 
@@ -5250,6 +5274,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "Não foi possível ler as configurações" },
                 { "This isn't a PiP Studio settings file.", "Este não é um arquivo de configurações do PiP Studio." },
                 { "No room that way", "Não há espaço nessa direção" },
+                { "Control the next PiP", "Controlar o próximo PiP" },
+                { "Control the previous PiP", "Controlar o PiP anterior" },
+                { "Switch PiP", "Trocar PiP" },
+                { "The only PiP", "O único PiP" },
             };
         }
 
@@ -5997,6 +6025,10 @@ namespace PipStudio
                 { "Couldn't read the settings", "Не удалось прочитать настройки" },
                 { "This isn't a PiP Studio settings file.", "Это не файл настроек PiP Studio." },
                 { "No room that way", "В эту сторону нет места" },
+                { "Control the next PiP", "Управлять следующим PiP" },
+                { "Control the previous PiP", "Управлять предыдущим PiP" },
+                { "Switch PiP", "Сменить PiP" },
+                { "The only PiP", "Единственный PiP" },
             };
         }
     }

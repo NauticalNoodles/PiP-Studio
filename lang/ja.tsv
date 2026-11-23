@@ -738,3 +738,7 @@ Your settings, shortcuts and layouts change to the ones in the file. Paired phon
 Couldn't read the settings	設定を読み取れませんでした
 This isn't a PiP Studio settings file.	これは PiP Studio の設定ファイルではありません。
 No room that way	その方向には空きがありません
+Control the next PiP	次の PiP を操作
+Control the previous PiP	前の PiP を操作
+Switch PiP	PiP 切替
+The only PiP	唯一の PiP

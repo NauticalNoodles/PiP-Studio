@@ -235,7 +235,14 @@ namespace PipStudio
         public static Action CloseMain;
 
         public readonly List<PipWindow> Pips = new List<PipWindow>();
-        public PipWindow Current;
+        PipWindow current;
+        /// <summary>The PiP your shortcuts and controller steer (the last one you used or pointed at). With controller controls
+        /// on, it alone wears the controller outline.</summary>
+        public PipWindow Current
+        {
+            get { return current; }
+            set { if (current == value) return; current = value; RefreshPadVisuals(); }
+        }
         public bool HiddenAll;
         public int ModalOpen;
         public IntPtr FullscreenWindow = IntPtr.Zero;
@@ -313,6 +320,8 @@ namespace PipStudio
                 new ActionDef("playpause", "Media play / pause", "Play", "HK_PlayPause", 0, () => U.MediaKey(0xB3)),
                 new ActionDef("crop", "Crop the PiP", "Crop", "HK_Crop", 0, () => WithCurrent(p => p.StartCrop())),
                 new ActionDef("close", "Close the PiP", "Close", "HK_Close", 0, () => WithCurrent(p => p.CloseAnimated())),
+                new ActionDef("nextpip", "Control the next PiP", "Switch PiP", "HK_NextPip", 0x200000, () => SwitchPip(1)),
+                new ActionDef("prevpip", "Control the previous PiP", "Switch PiP", "HK_PrevPip", 0x100000, () => SwitchPip(-1)),
                 new ActionDef("pad", "Controller controls on / off", "Controls", "HK_Pad", 0x30, () => SetPadOn(!PadOn)),
                 new ActionDef("startpip", "Start a PiP on Auto (when none is open)", "Start", "HK_StartPip", 0x30, StartPipIfNone),
                 new ActionDef("padoff", "Turn controller controls off", "Off", null, 0x2000, () => SetPadOn(false)),
@@ -682,7 +691,21 @@ namespace PipStudio
 
         void RefreshPadVisuals()
         {
-            foreach (var p in Pips) { try { p.SetPadActive(PadActive); } catch { } }
+            var cur = CurrentPip();
+            foreach (var p in Pips) { try { p.SetPadActive(PadActive && p == cur); } catch { } }
+        }
+
+        /// <summary>Hands control to the next (or previous) PiP, in reading order (top to bottom, left to right).</summary>
+        void SwitchPip(int dir)
+        {
+            var list = Pips.Where(p => !p.IsClosing && p.Visible).OrderBy(p => p.TargetBounds.Top / 40).ThenBy(p => p.TargetBounds.Left).ToList();
+            if (list.Count == 0) { Balloon("No PiP is open", "Press " + HK.Display("HK_NewPip") + " to open one.", true); return; }
+            int i = list.IndexOf(CurrentPip());
+            var next = list[i < 0 ? 0 : ((i + dir) % list.Count + list.Count) % list.Count];
+            Current = next;
+            RefreshPadVisuals();
+            next.PadPulse();
+            next.Osd(list.Count == 1 ? L.T("The only PiP") : U.Trunc(next.DisplayName, 50));
         }
 
         /// <summary>Button hints shown on the PiP while controller controls are on.</summary>
@@ -699,7 +722,8 @@ namespace PipStudio
             // paired controls share one hint: "R-Stick ↕  Opacity" when both halves sit on one axis of a stick or the D-pad
             var used = new HashSet<string> { "up", "down", "left", "right", "pad", "startpip" };
             foreach (var pr in new[] { Tuple.Create("grow", "shrink", "Size"), Tuple.Create("opup", "opdown", "Opacity"),
-                                       Tuple.Create("volup", "voldown", "Volume"), Tuple.Create("nextsrc", "prevsrc", "Source") })
+                                       Tuple.Create("volup", "voldown", "Volume"), Tuple.Create("nextsrc", "prevsrc", "Source"),
+                                       Tuple.Create("nextpip", "prevpip", "Switch PiP") })
             {
                 used.Add(pr.Item1); used.Add(pr.Item2);
                 int m1 = PadMask[pr.Item1], m2 = PadMask[pr.Item2];
@@ -780,7 +804,7 @@ namespace PipStudio
             // coming from another app's PiP: open a PiP Studio PiP for the pick
             ExternalPip.Preferred = IntPtr.Zero;
             var p = t == autoMark ? CreateAutoPip() : CreatePipForWindow(t);
-            if (p != null && PadOn) p.SetPadActive(true);
+            if (p != null) RefreshPadVisuals();
         }
 
         /// <summary>The window you were in before controller controls took focus is no longer where you want to return.</summary>
@@ -1115,7 +1139,7 @@ namespace PipStudio
             if (st.HasBounds && Screen.AllScreens.Any(sc => sc.WorkingArea.IntersectsWith(st.Bounds))) p.Bounds = st.Bounds;
             else p.PlaceDefault();
             p.Show();
-            p.SetPadActive(PadActive);
+            RefreshPadVisuals();
             SaveSoon();
             RaiseState();
             return p;
@@ -1125,7 +1149,7 @@ namespace PipStudio
         {
             Pips.Remove(p);
             if (Current == p) Current = null;
-            if (!cleaned) { SaveSoon(); RaiseState(); }
+            if (!cleaned) { SaveSoon(); RaiseState(); RefreshPadVisuals(); }
         }
 
         public void ToggleHideAll()

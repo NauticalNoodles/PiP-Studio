@@ -682,6 +682,8 @@ namespace PipStudio
         public string HK_Crop = "3,75";          // Ctrl+Alt+K
         public string HK_NextMonitor = "3,78";   // Ctrl+Alt+N
         public string HK_Close = "3,88";         // Ctrl+Alt+X
+        public string HK_NextPip = "";            // control the next PiP (none by default; the left stick on a controller)
+        public string HK_PrevPip = "";
         public string HK_MoveUp = "3,38";        // Ctrl+Alt+Up
         public string HK_MoveDown = "3,40";      // Ctrl+Alt+Down
         public string HK_MoveLeft = "3,37";      // Ctrl+Alt+Left
