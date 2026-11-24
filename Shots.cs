@@ -142,12 +142,17 @@ namespace PipStudio
             steps.Add(() =>
             {
                 w.WindowState = WindowState.Normal;
-                S.PbpMode = 1;
+                S.PbpMode = 1; S.ShowExplainers = false;
+                SwitchLanguage();                                         // rebuilt, so the setting shows Black bars and the resolution
                 Navigate("behavior", false);
             });
             steps.Add(() =>
             {
-                if (pbpRows != null) { pbpRows.Open(); try { pbpRows.Rows.BringIntoView(); } catch { } }
+                if (pbpRows != null) { pbpRows.Open(); }
+            });
+            steps.Add(() =>
+            {
+                if (pbpRows != null) try { var last = pbpRows.Rows.Children[pbpRows.Rows.Children.Count - 1] as FrameworkElement; if (last != null) last.BringIntoView(); } catch { }
             });
             steps.Add(() =>
             {
@@ -155,7 +160,7 @@ namespace PipStudio
                 Save(tmp);
                 using (var big = new System.Drawing.Bitmap(tmp))
                 using (var small = new System.Drawing.Bitmap(big, new System.Drawing.Size(1200, (int)(1200.0 * big.Height / big.Width)))) small.Save(Path.Combine(dir, "share-pbp-setting.png"));
-                S.PbpMode = 0;
+                S.PbpMode = 0; S.ShowExplainers = true;
             });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
