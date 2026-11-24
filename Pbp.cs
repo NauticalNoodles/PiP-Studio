@@ -28,6 +28,9 @@ namespace PipStudio
         static Screen screen;
         static Rectangle strip;                                  // where the PiPs go
         static BarWindow bar;
+        static GameView view;                                    // virtual display: the game, shown beside the strip
+        /// <summary>Virtual display: the window shown as the game (zero while it waits for one).</summary>
+        public static IntPtr ShownGame { get { return view != null && !view.IsDisposed ? view.Source : IntPtr.Zero; } }
         static readonly Dictionary<IntPtr, Rectangle> shrunk = new Dictionary<IntPtr, Rectangle>();   // full-screen windows made smaller: where they were
         static readonly HashSet<IntPtr> refused = new HashSet<IntPtr>();                                // ones that wouldn't shrink
         static readonly Dictionary<PipWindow, Rectangle> before = new Dictionary<PipWindow, Rectangle>(); // PiPs: where they were
@@ -66,6 +69,19 @@ namespace PipStudio
             var cur = app.CurrentPip();
             screen = cur != null ? Screen.FromRectangle(cur.TargetBounds) : Screen.FromPoint(Cursor.Position);
             if (App.S.PbpMode == 1) { OnLetterbox(); return; }
+            if (App.S.PbpMode == 2)
+            {
+                // the strip goes on a real display: not the game's
+                var gt = GameDisplay.Target(null);
+                if (gt != null && screen.DeviceName == gt.DeviceName)
+                    screen = Screen.AllScreens.FirstOrDefault(x => x.DeviceName != gt.DeviceName && x.Primary) ?? Screen.AllScreens.FirstOrDefault(x => x.DeviceName != gt.DeviceName) ?? screen;
+                if (GameDisplay.Target(screen) == null && GameDisplay.Override == IntPtr.Zero)
+                {
+                    app.Balloon("Pick the game display first", "Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.", true, "behavior");
+                    screen = null;
+                    return;
+                }
+            }
             var mb = screen.Bounds;
             var oldWork = screen.WorkingArea;
             int side = U.Clamp(App.S.PbpSide, 0, 2);
@@ -78,9 +94,25 @@ namespace PipStudio
             if (got.Width < 50 || got.Height < 50) { bar.Release(); bar = null; app.Balloon("Side by side didn't start", "Windows wouldn't reserve that part of the screen.", true); return; }
             strip = Rectangle.Intersect(got, oldWork);           // not under the taskbar
             if (strip.Width < 50 || strip.Height < 50) strip = got;
-            ShrinkFullScreen();
+            if (App.S.PbpMode == 2)
+            {
+                view = new GameView();
+                view.Bounds = Rest();
+                view.Show();
+                view.SetSource(GameDisplay.FindGame(GameDisplay.Target(screen)));
+            }
+            else ShrinkFullScreen();
             Arrange(true);
+            KeepPipsOnTop();
             Raise();
+        }
+
+        /// <summary>Virtual display: the PiPs stay above the game view (both are always on top; the later one wins).</summary>
+        static void KeepPipsOnTop()
+        {
+            if (view == null) return;
+            foreach (var p in App.I.Pips.Where(x => !x.IsClosing && x.IsHandleCreated))
+                try { Native.SetWindowPos(p.Handle, Native.HWND_TOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE); } catch { }
         }
 
         /// <summary>
@@ -115,6 +147,7 @@ namespace PipStudio
         {
             if (!Active) return;
             letterbox = false;
+            if (view != null) { try { view.Close(); view.Dispose(); } catch { } view = null; }
             if (bar != null) try { bar.Release(); } catch { }
             bar = null;
             // the windows it shrank go back once Windows has given the space back (before that, it would squeeze them again)
@@ -139,7 +172,14 @@ namespace PipStudio
         public static void Tick()
         {
             if (!Active) return;
-            if (!letterbox) ShrinkFullScreen();
+            if (view != null)
+            {
+                var g = GameDisplay.FindGame(GameDisplay.Target(screen));
+                bool changed = g != view.Source;
+                view.SetSource(g);                               // also fits it again when the game changed size
+                if (changed) KeepPipsOnTop();
+            }
+            else if (!letterbox) ShrinkFullScreen();
             foreach (var h in shrunk.Keys.Where(h => !Native.IsWindow(h)).ToList()) shrunk.Remove(h);
             // a PiP changed shape (its window was resized: often the game that was just shrunk) or wandered off: stack them again
             var pips = App.I.Pips.Where(p => !p.IsClosing && !p.InTheater && !p.Moving && Screen.FromRectangle(p.TargetBounds).DeviceName == screen.DeviceName).ToList();
@@ -148,6 +188,15 @@ namespace PipStudio
                 for (int k = i + 1; k < pips.Count; k++)
                     if (pips[i].TargetBounds.IntersectsWith(pips[k].TargetBounds)) { messy = true; break; }
             if (messy) Arrange(false);
+        }
+
+        /// <summary>The size of the game area on a display (for matching a virtual display's resolution).</summary>
+        public static Size RestSize(Screen s)
+        {
+            var b = s.Bounds;
+            double frac = U.Clamp(App.S.PbpPercent, 15, 60) / 100.0;
+            if (U.Clamp(App.S.PbpSide, 0, 2) == 2) return new Size(b.Width, b.Height - (int)(b.Height * frac));
+            return new Size(b.Width - (int)(b.Width * frac), b.Height);
         }
 
         /// <summary>The game area: the display minus the strip.</summary>

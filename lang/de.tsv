@@ -760,5 +760,26 @@ In the game's display settings, full screen. Windows shows it in the middle with
 Set the game to {0}, full screen.	Stellen Sie das Spiel auf {0}, Vollbild.
 Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Funktioniert mit Spielen, über denen PiPs schon erscheinen; Spiele im echten exklusiven Vollbild verdecken alles andere.
 How	Wie
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	Fenster verkleinern: Apps und randlose Spiele werden verkleinert, um Platz zu machen. Schwarze Balken: Das Spiel läuft im Vollbild mit schmalerer Auflösung, und die PiPs füllen die Balken daneben.
 Shrink windows	Fenster verkleinern
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	Fenster verkleinern: Apps und randlose Spiele werden verkleinert, um Platz zu machen. Schwarze Balken: Das Spiel läuft im Vollbild mit schmalerer Auflösung, und die PiPs füllen die Balken daneben. Virtueller Bildschirm: Das Spiel läuft im Vollbild auf einem unsichtbaren zweiten Bildschirm, und PiP Studio zeigt es neben dem Streifen.
+Virtual display	Virtueller Bildschirm
+Pick the game display first	Wählen Sie zuerst den Spielbildschirm
+Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	Verhalten > Experimentell > Nebeneinander: Installieren Sie einen Treiber für virtuelle Bildschirme und wählen Sie dessen Bildschirm als Spielbildschirm.
+Game display	Spielbildschirm
+The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	Der Bildschirm, auf dem das Spiel läuft: ein virtueller (für jeden im Treiber hinzugefügten virtuellen Bildschirm erscheint einer). Nicht der Bildschirm mit dem Streifen.
+Not picked	Nicht gewählt
+main	Haupt
+Match its resolution	Auflösung anpassen
+Sets the game display to the shape of the space beside the strip, so the game fills it.	Gibt dem Spielbildschirm die Form des Platzes neben dem Streifen, damit das Spiel ihn füllt.
+Match	Anpassen
+Virtual display driver	Treiber für virtuelle Bildschirme
+A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	Ein kostenloser Treiber fügt Bildschirme hinzu, die nur für Apps wie diese existieren. PiP Studio enthält ihn nicht: Installieren Sie ihn, fügen Sie einen Bildschirm hinzu und wählen Sie ihn oben. Die Maus erreicht das Spiel so nicht; Controller oder Tastatur schon (klicken Sie auf das Spiel, um ihm die Tastatur zu geben).
+Get it	Holen
+Pick the game display first.	Wählen Sie zuerst den Spielbildschirm.
+That display doesn't list any resolutions.	Dieser Bildschirm nennt keine Auflösungen.
+It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	Er hat keine Auflösung in dieser Form. Fügen Sie {0} in den Einstellungen des Treibers hinzu und versuchen Sie es erneut.
+It's already at {0}.	Er steht schon auf {0}.
+Set to {0}. Now set the game to the same, full screen, on that display.	Auf {0} gestellt. Stellen Sie das Spiel jetzt genauso ein, im Vollbild, auf diesem Bildschirm.
+Windows didn't change it (error {0}).	Windows hat sie nicht geändert (Fehler {0}).
+Waiting for the game	Warten auf das Spiel
+Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	Starten Sie es auf dem Spielbildschirm im Vollbild: Wählen Sie diesen Bildschirm in den Einstellungen des Spiels, oder drücken Sie Windows + Umschalt + Pfeil, während es vorn ist.

@@ -125,13 +125,39 @@ namespace PipStudio
             };
             System.Windows.Controls.TextBlock resNote = null;
             Action showRes = () => { if (resNote != null) { resNote.Text = gameRes(); resNote.Visibility = S.PbpMode == 1 ? Visibility.Visible : Visibility.Collapsed; } };
-            Row(pbp, "How", "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.",
-                Combo(new[] { "Shrink windows", "Black bars" }, U.Clamp(S.PbpMode, 0, 1), v => { S.PbpMode = v; showRes(); restart(); }), "mode letterbox pillarbox black bars full screen exclusive resolution");
+            System.Windows.Controls.StackPanel vdHost = null;
+            Row(pbp, "How", "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.",
+                Combo(new[] { "Shrink windows", "Black bars", "Virtual display" }, U.Clamp(S.PbpMode, 0, 2), v =>
+                {
+                    S.PbpMode = v; showRes();
+                    if (vdHost != null) vdHost.Visibility = v == 2 ? Visibility.Visible : Visibility.Collapsed;
+                    restart();
+                }), "mode letterbox pillarbox black bars full screen exclusive resolution virtual display second monitor");
             resNote = Fluent.Label("", 13, "Sub", true);
             resNote.Margin = new Thickness(16, 4, 16, 12);
             pbp.Rows.Children.Add(resNote);
             DelayRun(50, showRes);
             pbpRows = pbp;
+            // virtual display: which display the game runs on, its resolution, and where to get a driver
+            vdHost = new System.Windows.Controls.StackPanel { Visibility = S.PbpMode == 2 ? Visibility.Visible : Visibility.Collapsed };
+            var vdRows = new Expander { Rows = vdHost };
+            var choices = GameDisplay.Choices();
+            int ci = choices.FindIndex(c => c.Item1 == S.PbpGameDisplay);
+            var gdOpts = new List<string> { L.T("Not picked") };
+            gdOpts.AddRange(choices.Select(c => c.Item2));
+            Row(vdRows, "Game display", "The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.",
+                Combo(gdOpts.ToArray(), ci + 1, v => { S.PbpGameDisplay = v <= 0 ? "" : choices[v - 1].Item1; restart(); }), "game display virtual monitor second screen");
+            Row(vdRows, "Match its resolution", "Sets the game display to the shape of the space beside the strip, so the game fills it.",
+                PlainButton("Match", () =>
+                {
+                    var main = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(w).Handle);
+                    var t = GameDisplay.Target(main);
+                    var sz = Pbp.RestSize(main);
+                    Ask("Game display", GameDisplay.MatchResolution(t, sz), "OK", null, null);
+                }), "resolution match size shape");
+            Row(vdRows, "Virtual display driver", "A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).",
+                PlainButton("Get it", () => { try { System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(GameDisplay.DriverUrl) { UseShellExecute = true }); } catch { } }), "driver install virtual display download");
+            pbp.Rows.Children.Add(vdHost);
             Row(pbp, "Side", null, Combo(new[] { "Right", "Left", "Bottom" }, U.Clamp(S.PbpSide, 0, 2), v => { S.PbpSide = v; showRes(); restart(); }), "right left bottom edge");
             int[] sizes = { 25, 33, 40, 50 };
             int si = Array.IndexOf(sizes, S.PbpPercent);

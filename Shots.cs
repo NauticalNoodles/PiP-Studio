@@ -138,11 +138,47 @@ namespace PipStudio
                 var game = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Demo game", StringComparison.OrdinalIgnoreCase));
                 if (game != IntPtr.Zero) Native.ShowWindow(game, 6);       // minimized, out of the way
             });
+            // side by side, virtual display: the demo game in a window the shape of the space beside the strip (what a virtual
+            // display sized for it would hold; this machine has one display), shown as the game
+            steps.Add(() =>
+            {
+                var game = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Demo game", StringComparison.OrdinalIgnoreCase));
+                if (game == IntPtr.Zero) { Log("virtual display: no demo game window"); return; }
+                Native.ShowWindow(game, 9);
+                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+                var size = Pbp.RestSize(System.Windows.Forms.Screen.PrimaryScreen);
+                var wr = U.WindowRect(game); var cr = U.ClientScreenRect(game);
+                int l = cr.Left - wr.Left, t = cr.Top - wr.Top, r = wr.Right - cr.Right, b = wr.Bottom - cr.Bottom;
+                Native.SetWindowPos(game, IntPtr.Zero, sb.X - l, sb.Y - t, size.Width + l + r, size.Height + t + b, 0);
+                GameDisplay.Override = game;
+                Log("virtual display: game window " + U.ClientScreenRect(game) + " for a game area of " + size);
+            });
+            steps.Add(() =>
+            {
+                S.PbpMode = 2;
+                Pbp.On();
+                Log("virtual display: on=" + Pbp.Active + " strip " + Pbp.Strip + ", showing " + U.WindowTitle(Pbp.ShownGame));
+            });
+            steps.Add(() =>
+            {
+                foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("virtual display: PiP " + p.DisplayName + " at " + p.TargetBounds + (p.Visible ? "" : " (hidden)"));
+                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+                using (var full = new System.Drawing.Bitmap(sb.Width, sb.Height))
+                {
+                    using (var g = System.Drawing.Graphics.FromImage(full)) g.CopyFromScreen(sb.Location, System.Drawing.Point.Empty, sb.Size);
+                    using (var small = new System.Drawing.Bitmap(full, new System.Drawing.Size(1280, 720))) small.Save(Path.Combine(dir, "share-pbp-virtual.png"));
+                }
+                Pbp.Off();
+                GameDisplay.Override = IntPtr.Zero;
+                S.PbpMode = 0;
+                var game = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Demo game", StringComparison.OrdinalIgnoreCase));
+                if (game != IntPtr.Zero) Native.ShowWindow(game, 6);
+            });
             // the setting, opened, with black bars picked (so the resolution to use shows)
             steps.Add(() =>
             {
                 w.WindowState = WindowState.Normal;
-                S.PbpMode = 1; S.ShowExplainers = false;
+                S.PbpMode = 2; S.ShowExplainers = false;
                 SwitchLanguage();                                         // rebuilt, so the setting shows Black bars and the resolution
                 Navigate("behavior", false);
             });

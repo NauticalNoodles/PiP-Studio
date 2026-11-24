@@ -760,5 +760,26 @@ In the game's display settings, full screen. Windows shows it in the middle with
 Set the game to {0}, full screen.	Установите в игре {0}, полноэкранный режим.
 Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Работает с играми, поверх которых PiP уже видны; игры в эксклюзивном полноэкранном режиме скрывают всё остальное.
 How	Способ
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	Уменьшать окна: приложения и игры без рамки уменьшаются, освобождая место. Чёрные полосы: игра идёт во весь экран в более узком разрешении, а PiP заполняют полосы рядом.
 Shrink windows	Уменьшать окна
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	Уменьшать окна: приложения и игры без рамки уменьшаются, освобождая место. Чёрные полосы: игра идёт во весь экран в более узком разрешении, а PiP заполняют полосы рядом. Виртуальный дисплей: игра идёт во весь экран на невидимом втором дисплее, а PiP Studio показывает её рядом с полосой.
+Virtual display	Виртуальный дисплей
+Pick the game display first	Сначала выберите дисплей для игры
+Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	Поведение > Экспериментальное > Рядом: установите драйвер виртуального дисплея и выберите его дисплей для игры.
+Game display	Дисплей для игры
+The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	Дисплей, на котором идёт игра: виртуальный (по одному на каждый виртуальный дисплей, добавленный в драйвере). Не тот, где полоса.
+Not picked	Не выбран
+main	основной
+Match its resolution	Подобрать разрешение
+Sets the game display to the shape of the space beside the strip, so the game fills it.	Задаёт дисплею игры форму места рядом с полосой, чтобы игра его заполнила.
+Match	Подобрать
+Virtual display driver	Драйвер виртуального дисплея
+A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	Бесплатный драйвер добавляет дисплеи, которые существуют только для таких приложений. PiP Studio его не включает: установите его, добавьте дисплей и выберите его выше. Мышь так до игры не достаёт; геймпад или клавиатура достают (щёлкните по игре, чтобы отдать ей клавиатуру).
+Get it	Скачать
+Pick the game display first.	Сначала выберите дисплей для игры.
+That display doesn't list any resolutions.	Этот дисплей не сообщает разрешений.
+It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	У него нет разрешения такой формы. Добавьте {0} в настройках драйвера виртуального дисплея и попробуйте снова.
+It's already at {0}.	Уже {0}.
+Set to {0}. Now set the game to the same, full screen, on that display.	Установлено {0}. Теперь поставьте в игре то же разрешение, во весь экран, на этом дисплее.
+Windows didn't change it (error {0}).	Windows не изменила его (ошибка {0}).
+Waiting for the game	Ожидание игры
+Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	Запустите её на дисплее для игры во весь экран: выберите этот дисплей в настройках игры или нажмите Windows + Shift + стрелку, когда она на переднем плане.

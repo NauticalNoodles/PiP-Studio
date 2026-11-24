@@ -28,8 +28,12 @@ svg{width:100%;height:100%;display:block}
 <div class="hud" id="speed">184<small>km/h</small></div>
 </div>
 <script>
-const share = parseFloat(new URLSearchParams(location.search).get("w") || "0.67");
-function fit(){ const w = Math.round(innerWidth * share / 8) * 8; document.getElementById("game").style.width = w + "px"; }
+// a wide window (the whole screen) shows the game narrower, with black bars; a window already the game's shape (a virtual display) shows it whole
+const asked = parseFloat(new URLSearchParams(location.search).get("w") || "0");
+function fit(){
+  const share = asked || (innerWidth / innerHeight > 1.5 ? 0.67 : 1);
+  const w = Math.round(innerWidth * share / 8) * 8; document.getElementById("game").style.width = w + "px";
+}
 addEventListener("resize", fit); fit();
 </script>
 </body></html>

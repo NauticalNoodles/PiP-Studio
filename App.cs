@@ -1218,6 +1218,7 @@ namespace PipStudio
             if (FullscreenWindow == IntPtr.Zero || FullscreenWindow == p.Src) return false;
             if (U.XboxMode) return false;                                 // there every app is full screen: PiPs would never show
             if (Pbp.Letterbox && Pbp.OnScreen(Screen.FromRectangle(p.Bounds))) return false;   // black bars: they sit beside the game on purpose
+            if (Pbp.Active && FullscreenWindow == Pbp.ShownGame) return false;   // virtual display: the game is on the other display
             try { return Screen.FromHandle(FullscreenWindow).Bounds.IntersectsWith(p.Bounds); } catch { return false; }
         }
 
