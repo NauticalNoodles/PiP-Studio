@@ -785,6 +785,13 @@ namespace PipStudio
                 { "Side", "الجانب" },
                 { "PiPs get", "نصيب نوافذ PiP" },
                 { "Of the display", "من الشاشة" },
+                { "Set your game to {0}", "اضبط لعبتك على {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "من إعدادات العرض في اللعبة، بملء الشاشة. يعرضها Windows في المنتصف مع أشرطة سوداء على الجانبين، وتوضع نوافذ PiP في الأشرطة." },
+                { "Set the game to {0}, full screen.", "اضبط اللعبة على {0} بملء الشاشة." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "يعمل مع الألعاب التي تظهر فوقها نوافذ PiP بالفعل؛ أما الألعاب بملء الشاشة الحصري فتخفي كل شيء آخر." },
+                { "How", "الطريقة" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "تصغير النوافذ: تُصغَّر التطبيقات والألعاب بلا حدود لترك مساحة. الأشرطة السوداء: تعمل اللعبة بملء الشاشة بدقة أضيق، وتملأ نوافذ PiP الأشرطة بجانبها." },
+                { "Shrink windows", "تصغير النوافذ" },
             };
         }
 
@@ -1549,6 +1556,13 @@ namespace PipStudio
                 { "Side", "位置" },
                 { "PiPs get", "画中画占用" },
                 { "Of the display", "显示器的比例" },
+                { "Set your game to {0}", "将游戏设置为 {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "在游戏的显示设置中选择全屏。Windows 会把它显示在中间，两侧是黑边，画中画放在黑边里。" },
+                { "Set the game to {0}, full screen.", "将游戏设置为 {0}，全屏。" },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "适用于画中画本来就能显示在其上的游戏；真正独占全屏的游戏会挡住其他一切。" },
+                { "How", "方式" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "缩小窗口：应用和无边框游戏会缩小以腾出空间。黑边：游戏以较窄的分辨率全屏运行，画中画填满旁边的黑边。" },
+                { "Shrink windows", "缩小窗口" },
             };
         }
 
@@ -2313,6 +2327,13 @@ namespace PipStudio
                 { "Side", "Seite" },
                 { "PiPs get", "Für die PiPs" },
                 { "Of the display", "Des Bildschirms" },
+                { "Set your game to {0}", "Stellen Sie Ihr Spiel auf {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "In den Anzeigeeinstellungen des Spiels, im Vollbild. Windows zeigt es mittig mit schwarzen Balken an den Seiten, und Ihre PiPs kommen in die Balken." },
+                { "Set the game to {0}, full screen.", "Stellen Sie das Spiel auf {0}, Vollbild." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "Funktioniert mit Spielen, über denen PiPs schon erscheinen; Spiele im echten exklusiven Vollbild verdecken alles andere." },
+                { "How", "Wie" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "Fenster verkleinern: Apps und randlose Spiele werden verkleinert, um Platz zu machen. Schwarze Balken: Das Spiel läuft im Vollbild mit schmalerer Auflösung, und die PiPs füllen die Balken daneben." },
+                { "Shrink windows", "Fenster verkleinern" },
             };
         }
 
@@ -3077,6 +3098,13 @@ namespace PipStudio
                 { "Side", "Lado" },
                 { "PiPs get", "Para los PiP" },
                 { "Of the display", "De la pantalla" },
+                { "Set your game to {0}", "Pon el juego a {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "En los ajustes de pantalla del juego, a pantalla completa. Windows lo muestra en el centro con franjas negras a los lados, y tus PiP van en las franjas." },
+                { "Set the game to {0}, full screen.", "Pon el juego a {0}, a pantalla completa." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "Funciona con los juegos sobre los que ya se ven los PiP; los de pantalla completa exclusiva tapan todo lo demás." },
+                { "How", "Cómo" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "Reducir ventanas: las aplicaciones y los juegos sin bordes se hacen más pequeños para dejar sitio. Franjas negras: el juego va a pantalla completa con una resolución más estrecha y los PiP llenan las franjas de al lado." },
+                { "Shrink windows", "Reducir ventanas" },
             };
         }
 
@@ -3841,6 +3869,13 @@ namespace PipStudio
                 { "Side", "Côté" },
                 { "PiPs get", "Pour les PiP" },
                 { "Of the display", "De l'écran" },
+                { "Set your game to {0}", "Réglez votre jeu sur {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "Dans les paramètres d'affichage du jeu, en plein écran. Windows l'affiche au milieu avec des bandes noires sur les côtés, et vos PiP vont dans les bandes." },
+                { "Set the game to {0}, full screen.", "Réglez le jeu sur {0}, en plein écran." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "Fonctionne avec les jeux au-dessus desquels les PiP s'affichent déjà ; ceux en plein écran exclusif masquent tout le reste." },
+                { "How", "Comment" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "Réduire les fenêtres : les applications et les jeux sans bordure sont réduits pour faire de la place. Bandes noires : le jeu tourne en plein écran dans une résolution plus étroite, et les PiP remplissent les bandes à côté." },
+                { "Shrink windows", "Réduire les fenêtres" },
             };
         }
 
@@ -4605,6 +4640,13 @@ namespace PipStudio
                 { "Side", "位置" },
                 { "PiPs get", "PiP の領域" },
                 { "Of the display", "画面に対して" },
+                { "Set your game to {0}", "ゲームを {0} に設定" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "ゲームの画面設定で全画面にします。Windows が中央に表示して両側に黒い帯ができ、PiP は帯に入ります。" },
+                { "Set the game to {0}, full screen.", "ゲームを {0} の全画面に設定します。" },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "PiP がすでに上に表示されるゲームで使えます。真の排他的フルスクリーンのゲームは他のすべてを隠します。" },
+                { "How", "方法" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "ウィンドウを縮小: アプリとボーダーレスのゲームを小さくして場所を空けます。黒い帯: ゲームを狭い解像度の全画面で動かし、横の帯に PiP を並べます。" },
+                { "Shrink windows", "ウィンドウを縮小" },
             };
         }
 
@@ -5369,6 +5411,13 @@ namespace PipStudio
                 { "Side", "Lado" },
                 { "PiPs get", "Para os PiPs" },
                 { "Of the display", "Da tela" },
+                { "Set your game to {0}", "Coloque o jogo em {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "Nas configurações de vídeo do jogo, em tela cheia. O Windows o mostra no meio com barras pretas nas laterais, e seus PiPs ficam nas barras." },
+                { "Set the game to {0}, full screen.", "Coloque o jogo em {0}, em tela cheia." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "Funciona com jogos sobre os quais os PiPs já aparecem; os em tela cheia exclusiva escondem todo o resto." },
+                { "How", "Como" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "Encolher janelas: apps e jogos sem bordas ficam menores para abrir espaço. Barras pretas: o jogo roda em tela cheia numa resolução mais estreita, e os PiPs preenchem as barras ao lado." },
+                { "Shrink windows", "Encolher janelas" },
             };
         }
 
@@ -6133,6 +6182,13 @@ namespace PipStudio
                 { "Side", "Сторона" },
                 { "PiPs get", "Под PiP" },
                 { "Of the display", "Экрана" },
+                { "Set your game to {0}", "Установите в игре {0}" },
+                { "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", "В настройках экрана игры, в полноэкранном режиме. Windows покажет её посередине с чёрными полосами по бокам, а PiP встанут в полосы." },
+                { "Set the game to {0}, full screen.", "Установите в игре {0}, полноэкранный режим." },
+                { "Works with games PiPs already show over; ones in true exclusive full screen hide everything else.", "Работает с играми, поверх которых PiP уже видны; игры в эксклюзивном полноэкранном режиме скрывают всё остальное." },
+                { "How", "Способ" },
+                { "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.", "Уменьшать окна: приложения и игры без рамки уменьшаются, освобождая место. Чёрные полосы: игра идёт во весь экран в более узком разрешении, а PiP заполняют полосы рядом." },
+                { "Shrink windows", "Уменьшать окна" },
             };
         }
     }

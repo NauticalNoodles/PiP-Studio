@@ -755,3 +755,10 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	Côté
 PiPs get	Pour les PiP
 Of the display	De l'écran
+Set your game to {0}	Réglez votre jeu sur {0}
+In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	Dans les paramètres d'affichage du jeu, en plein écran. Windows l'affiche au milieu avec des bandes noires sur les côtés, et vos PiP vont dans les bandes.
+Set the game to {0}, full screen.	Réglez le jeu sur {0}, en plein écran.
+Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Fonctionne avec les jeux au-dessus desquels les PiP s'affichent déjà ; ceux en plein écran exclusif masquent tout le reste.
+How	Comment
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	Réduire les fenêtres : les applications et les jeux sans bordure sont réduits pour faire de la place. Bandes noires : le jeu tourne en plein écran dans une résolution plus étroite, et les PiP remplissent les bandes à côté.
+Shrink windows	Réduire les fenêtres

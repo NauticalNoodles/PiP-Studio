@@ -755,3 +755,10 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	位置
 PiPs get	PiP の領域
 Of the display	画面に対して
+Set your game to {0}	ゲームを {0} に設定
+In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	ゲームの画面設定で全画面にします。Windows が中央に表示して両側に黒い帯ができ、PiP は帯に入ります。
+Set the game to {0}, full screen.	ゲームを {0} の全画面に設定します。
+Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	PiP がすでに上に表示されるゲームで使えます。真の排他的フルスクリーンのゲームは他のすべてを隠します。
+How	方法
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	ウィンドウを縮小: アプリとボーダーレスのゲームを小さくして場所を空けます。黒い帯: ゲームを狭い解像度の全画面で動かし、横の帯に PiP を並べます。
+Shrink windows	ウィンドウを縮小

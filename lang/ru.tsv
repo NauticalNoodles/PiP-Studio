@@ -755,3 +755,10 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	Сторона
 PiPs get	Под PiP
 Of the display	Экрана
+Set your game to {0}	Установите в игре {0}
+In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	В настройках экрана игры, в полноэкранном режиме. Windows покажет её посередине с чёрными полосами по бокам, а PiP встанут в полосы.
+Set the game to {0}, full screen.	Установите в игре {0}, полноэкранный режим.
+Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Работает с играми, поверх которых PiP уже видны; игры в эксклюзивном полноэкранном режиме скрывают всё остальное.
+How	Способ
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	Уменьшать окна: приложения и игры без рамки уменьшаются, освобождая место. Чёрные полосы: игра идёт во весь экран в более узком разрешении, а PiP заполняют полосы рядом.
+Shrink windows	Уменьшать окна

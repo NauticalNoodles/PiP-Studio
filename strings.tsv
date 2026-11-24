@@ -755,3 +755,10 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	الجانب	位置
 PiPs get	نصيب نوافذ PiP	画中画占用
 Of the display	من الشاشة	显示器的比例
+Set your game to {0}	اضبط لعبتك على {0}	将游戏设置为 {0}
+In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	من إعدادات العرض في اللعبة، بملء الشاشة. يعرضها Windows في المنتصف مع أشرطة سوداء على الجانبين، وتوضع نوافذ PiP في الأشرطة.	在游戏的显示设置中选择全屏。Windows 会把它显示在中间，两侧是黑边，画中画放在黑边里。
+Set the game to {0}, full screen.	اضبط اللعبة على {0} بملء الشاشة.	将游戏设置为 {0}，全屏。
+Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	يعمل مع الألعاب التي تظهر فوقها نوافذ PiP بالفعل؛ أما الألعاب بملء الشاشة الحصري فتخفي كل شيء آخر.	适用于画中画本来就能显示在其上的游戏；真正独占全屏的游戏会挡住其他一切。
+How	الطريقة	方式
+Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.	تصغير النوافذ: تُصغَّر التطبيقات والألعاب بلا حدود لترك مساحة. الأشرطة السوداء: تعمل اللعبة بملء الشاشة بدقة أضيق، وتملأ نوافذ PiP الأشرطة بجانبها.	缩小窗口：应用和无边框游戏会缩小以腾出空间。黑边：游戏以较窄的分辨率全屏运行，画中画填满旁边的黑边。
+Shrink windows	تصغير النوافذ	缩小窗口

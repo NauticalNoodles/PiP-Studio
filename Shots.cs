@@ -105,6 +105,58 @@ namespace PipStudio
             });
             steps.Add(() => { var sun = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Sunset timelapse", StringComparison.OrdinalIgnoreCase)); if (sun != IntPtr.Zero) Log("side by side: page back at " + U.WindowRect(sun)); });
             steps.Add(() => { foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: PiP " + p.DisplayName + " back at " + p.TargetBounds); });
+            // side by side, black bars: the demo game page fills the screen (drawn the way a full-screen game set to the narrower
+            // resolution looks), then black bars turn on: the PiPs should fill the bars beside it
+            steps.Add(() =>
+            {
+                var game = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Demo game", StringComparison.OrdinalIgnoreCase));
+                if (game == IntPtr.Zero) { Log("black bars: no demo game window"); return; }
+                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+                var wr = U.WindowRect(game); var cr = U.ClientScreenRect(game);
+                int l = cr.Left - wr.Left, t = cr.Top - wr.Top, r = wr.Right - cr.Right, b = wr.Bottom - cr.Bottom;   // its frame and title bar go off-screen
+                Native.SetWindowPos(game, IntPtr.Zero, sb.X - l, sb.Y - t, sb.Width + l + r, sb.Height + t + b, 0);
+                U.ForceForeground(game);
+                Log("black bars: game page at " + U.ClientScreenRect(game));
+            });
+            steps.Add(() =>
+            {
+                S.PbpMode = 1;
+                Pbp.On();
+                Log("black bars: on=" + Pbp.Active + " bars " + Pbp.Strip2 + " and " + Pbp.Strip + ", game size " + Pbp.GameSize(System.Windows.Forms.Screen.PrimaryScreen));
+            });
+            steps.Add(() =>
+            {
+                foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("black bars: PiP " + p.DisplayName + " at " + p.TargetBounds + (p.Visible ? "" : " (hidden)"));
+                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+                using (var full = new System.Drawing.Bitmap(sb.Width, sb.Height))
+                {
+                    using (var g = System.Drawing.Graphics.FromImage(full)) g.CopyFromScreen(sb.Location, System.Drawing.Point.Empty, sb.Size);
+                    using (var small = new System.Drawing.Bitmap(full, new System.Drawing.Size(1280, 720))) small.Save(Path.Combine(dir, "share-pbp-blackbars.png"));
+                }
+                Pbp.Off();
+                S.PbpMode = 0;
+                var game = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Demo game", StringComparison.OrdinalIgnoreCase));
+                if (game != IntPtr.Zero) Native.ShowWindow(game, 6);       // minimized, out of the way
+            });
+            // the setting, opened, with black bars picked (so the resolution to use shows)
+            steps.Add(() =>
+            {
+                w.WindowState = WindowState.Normal;
+                S.PbpMode = 1;
+                Navigate("behavior", false);
+            });
+            steps.Add(() =>
+            {
+                if (pbpRows != null) { pbpRows.Open(); try { pbpRows.Rows.BringIntoView(); } catch { } }
+            });
+            steps.Add(() =>
+            {
+                string tmp = Path.Combine(dir, "behavior-pbp.png");
+                Save(tmp);
+                using (var big = new System.Drawing.Bitmap(tmp))
+                using (var small = new System.Drawing.Bitmap(big, new System.Drawing.Size(1200, (int)(1200.0 * big.Height / big.Width)))) small.Save(Path.Combine(dir, "share-pbp-setting.png"));
+                S.PbpMode = 0;
+            });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
             steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light

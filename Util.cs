@@ -685,6 +685,7 @@ namespace PipStudio
         public string HK_Pbp = "";                // side by side on / off
         public int PbpSide = 0;                   // side by side: 0 right, 1 left, 2 bottom
         public int PbpPercent = 33;               // ...and how much of the display the PiPs get
+        public int PbpMode = 0;                   // ...and how: 0 shrink windows beside a reserved strip, 1 black bars beside a full-screen game
         public string HK_NextPip = "";            // control the next PiP (none by default; the left stick on a controller)
         public string HK_PrevPip = "";
         public string HK_MoveUp = "3,38";        // Ctrl+Alt+Up

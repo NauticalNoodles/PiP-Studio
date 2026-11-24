@@ -116,10 +116,26 @@ namespace PipStudio
             var pbpSwitch = Switch(() => Pbp.Active, v => { if (v != Pbp.Active) Pbp.Toggle(); });
             pbpSwitchRef = pbpSwitch;
             var pbp = MakeExpander(be, "\uE737", "Side by side (picture-by-picture)", "Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.", pbpSwitch, false, "pbp picture by picture side split screen strip dock tile experimental");
-            Row(pbp, "Side", null, Combo(new[] { "Right", "Left", "Bottom" }, U.Clamp(S.PbpSide, 0, 2), v => { S.PbpSide = v; restart(); }), "right left bottom edge");
+            // the resolution to pick in a game for black bars, for the display this window is on
+            Func<string> gameRes = () =>
+            {
+                var sc = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(w).Handle);
+                var g = Pbp.GameSize(sc);
+                return L.T("Set the game to {0}, full screen.").Replace("{0}", g.Width + " × " + g.Height) + " " + L.T("Works with games PiPs already show over; ones in true exclusive full screen hide everything else.");
+            };
+            System.Windows.Controls.TextBlock resNote = null;
+            Action showRes = () => { if (resNote != null) { resNote.Text = gameRes(); resNote.Visibility = S.PbpMode == 1 ? Visibility.Visible : Visibility.Collapsed; } };
+            Row(pbp, "How", "Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it.",
+                Combo(new[] { "Shrink windows", "Black bars" }, U.Clamp(S.PbpMode, 0, 1), v => { S.PbpMode = v; showRes(); restart(); }), "mode letterbox pillarbox black bars full screen exclusive resolution");
+            resNote = Fluent.Label("", 13, "Sub", true);
+            resNote.Margin = new Thickness(16, 4, 16, 12);
+            pbp.Rows.Children.Add(resNote);
+            DelayRun(50, showRes);
+            pbpRows = pbp;
+            Row(pbp, "Side", null, Combo(new[] { "Right", "Left", "Bottom" }, U.Clamp(S.PbpSide, 0, 2), v => { S.PbpSide = v; showRes(); restart(); }), "right left bottom edge");
             int[] sizes = { 25, 33, 40, 50 };
             int si = Array.IndexOf(sizes, S.PbpPercent);
-            Row(pbp, "PiPs get", "Of the display", Combo(sizes.Select(x => x + "%").ToArray(), si < 0 ? 1 : si, v => { S.PbpPercent = sizes[v]; restart(); }), "size width percent");
+            Row(pbp, "PiPs get", "Of the display", Combo(sizes.Select(x => x + "%").ToArray(), si < 0 ? 1 : si, v => { S.PbpPercent = sizes[v]; showRes(); restart(); }), "size width percent");
 
             // ---------------- Controller
             var pc = NewPage("controller");
