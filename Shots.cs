@@ -93,6 +93,19 @@ namespace PipStudio
             steps.Add(() =>
             {
                 foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: PiP " + p.DisplayName + " at " + p.TargetBounds);
+                // what you'd do by hand: make the top one smaller, then move it down the stack
+                var top = App.I.Pips.Where(x => !x.IsClosing).OrderBy(x => x.TargetBounds.Top).FirstOrDefault();
+                if (top != null)
+                {
+                    var b = top.TargetBounds;
+                    Pbp.SetSize(top, new System.Drawing.Size(b.Width * 6 / 10, b.Height * 6 / 10));
+                    Log("side by side: made " + top.DisplayName + " smaller: " + top.TargetBounds);
+                    Log("side by side: moved it down the stack: " + Pbp.Nudge(top, 1));
+                }
+            });
+            steps.Add(() =>
+            {
+                foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: after, PiP " + p.DisplayName + " at " + p.TargetBounds);
                 var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
                 using (var full = new System.Drawing.Bitmap(sb.Width, sb.Height))
                 {

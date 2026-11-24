@@ -785,6 +785,7 @@ namespace PipStudio
                 { "Side", "الجانب" },
                 { "PiPs get", "نصيب نوافذ PiP" },
                 { "Of the display", "من الشاشة" },
+                { "Side by side: move it along the strip", "جنبًا إلى جنب: حرّكها على طول الشريط" },
             };
         }
 
@@ -1549,6 +1550,7 @@ namespace PipStudio
                 { "Side", "位置" },
                 { "PiPs get", "画中画占用" },
                 { "Of the display", "显示器的比例" },
+                { "Side by side: move it along the strip", "并排：沿条带移动它" },
             };
         }
 
@@ -2313,6 +2315,7 @@ namespace PipStudio
                 { "Side", "Seite" },
                 { "PiPs get", "Für die PiPs" },
                 { "Of the display", "Des Bildschirms" },
+                { "Side by side: move it along the strip", "Nebeneinander: entlang des Streifens bewegen" },
             };
         }
 
@@ -3077,6 +3080,7 @@ namespace PipStudio
                 { "Side", "Lado" },
                 { "PiPs get", "Para los PiP" },
                 { "Of the display", "De la pantalla" },
+                { "Side by side: move it along the strip", "Lado a lado: muévelo a lo largo de la franja" },
             };
         }
 
@@ -3841,6 +3845,7 @@ namespace PipStudio
                 { "Side", "Côté" },
                 { "PiPs get", "Pour les PiP" },
                 { "Of the display", "De l'écran" },
+                { "Side by side: move it along the strip", "Côte à côte : déplacez-le le long de la bande" },
             };
         }
 
@@ -4605,6 +4610,7 @@ namespace PipStudio
                 { "Side", "位置" },
                 { "PiPs get", "PiP の領域" },
                 { "Of the display", "画面に対して" },
+                { "Side by side: move it along the strip", "横並び: 帯に沿って動かしてください" },
             };
         }
 
@@ -5369,6 +5375,7 @@ namespace PipStudio
                 { "Side", "Lado" },
                 { "PiPs get", "Para os PiPs" },
                 { "Of the display", "Da tela" },
+                { "Side by side: move it along the strip", "Lado a lado: mova-o ao longo da faixa" },
             };
         }
 
@@ -6133,6 +6140,7 @@ namespace PipStudio
                 { "Side", "Сторона" },
                 { "PiPs get", "Под PiP" },
                 { "Of the display", "Экрана" },
+                { "Side by side: move it along the strip", "Рядом: двигайте его вдоль полосы" },
             };
         }
     }
