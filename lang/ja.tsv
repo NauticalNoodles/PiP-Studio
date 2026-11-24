@@ -755,31 +755,3 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	位置
 PiPs get	PiP の領域
 Of the display	画面に対して
-Set your game to {0}	ゲームを {0} に設定
-In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	ゲームの画面設定で全画面にします。Windows が中央に表示して両側に黒い帯ができ、PiP は帯に入ります。
-Set the game to {0}, full screen.	ゲームを {0} の全画面に設定します。
-Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	PiP がすでに上に表示されるゲームで使えます。真の排他的フルスクリーンのゲームは他のすべてを隠します。
-How	方法
-Shrink windows	ウィンドウを縮小
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	ウィンドウを縮小: アプリとボーダーレスのゲームを小さくして場所を空けます。黒い帯: ゲームを狭い解像度の全画面で動かし、横の帯に PiP を並べます。仮想ディスプレイ: ゲームを見えない 2 台目のディスプレイで全画面で動かし、PiP Studio が帯の横に表示します。
-Virtual display	仮想ディスプレイ
-Pick the game display first	先にゲーム用ディスプレイを選んでください
-Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	動作 > 試験的 > 横並び: 仮想ディスプレイのドライバーをインストールし、そのディスプレイをゲーム用に選んでください。
-Game display	ゲーム用ディスプレイ
-The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	ゲームを動かすディスプレイ: 仮想ディスプレイ（ドライバーで追加した数だけ表示されます）。帯のあるディスプレイではありません。
-Not picked	未選択
-main	メイン
-Match its resolution	解像度を合わせる
-Sets the game display to the shape of the space beside the strip, so the game fills it.	ゲーム用ディスプレイを帯の横の領域と同じ形にして、ゲームがそこを埋めるようにします。
-Match	合わせる
-Virtual display driver	仮想ディスプレイ ドライバー
-A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	無料のドライバーが、このようなアプリ専用のディスプレイを追加します。PiP Studio には含まれていません。インストールしてディスプレイを追加し、上で選んでください。この方法ではマウスはゲームに届きません。コントローラーかキーボードを使います（ゲームをクリックするとキーボードがゲームに渡ります）。
-Get it	入手
-Pick the game display first.	先にゲーム用ディスプレイを選んでください。
-That display doesn't list any resolutions.	そのディスプレイには解像度がありません。
-It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	その形の解像度がありません。仮想ディスプレイ ドライバーの設定で {0} を追加してから、もう一度お試しください。
-It's already at {0}.	すでに {0} です。
-Set to {0}. Now set the game to the same, full screen, on that display.	{0} に設定しました。ゲームも同じ解像度の全画面で、そのディスプレイに設定してください。
-Windows didn't change it (error {0}).	Windows は変更しませんでした（エラー {0}）。
-Waiting for the game	ゲームを待っています
-Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	ゲーム用ディスプレイで全画面で起動してください。ゲームの設定でそのディスプレイを選ぶか、前面にある状態で Windows + Shift + 矢印キーを押します。

@@ -15,50 +15,22 @@ namespace PipStudio
     /// </summary>
     static class Pbp
     {
-        public static bool Active { get { return bar != null || letterbox; } }
-        /// <summary>The black bars kind: a full-screen game set to a narrower resolution, and the PiPs in the bars beside it.</summary>
-        public static bool Letterbox { get { return letterbox; } }
-        static bool letterbox;
-        static Rectangle strip2;                                 // black bars: the second bar (left, or top)
-        /// <summary>Where the PiPs go while it's on (black bars: the right or bottom bar; Strip2 is the other).</summary>
+        public static bool Active { get { return bar != null; } }
+        /// <summary>Where the PiPs go while it's on.</summary>
         public static Rectangle Strip { get { return strip; } }
-        public static Rectangle Strip2 { get { return strip2; } }
         /// <summary>The full-screen windows it made smaller, and where they were.</summary>
         public static Dictionary<IntPtr, Rectangle> Shrunk { get { return new Dictionary<IntPtr, Rectangle>(shrunk); } }
         static Screen screen;
         static Rectangle strip;                                  // where the PiPs go
         static BarWindow bar;
-        static GameView view;                                    // virtual display: the game, shown beside the strip
-        /// <summary>Virtual display: the window shown as the game (zero while it waits for one).</summary>
-        public static IntPtr ShownGame { get { return view != null && !view.IsDisposed ? view.Source : IntPtr.Zero; } }
         static readonly Dictionary<IntPtr, Rectangle> shrunk = new Dictionary<IntPtr, Rectangle>();   // full-screen windows made smaller: where they were
         static readonly HashSet<IntPtr> refused = new HashSet<IntPtr>();                                // ones that wouldn't shrink
         static readonly Dictionary<PipWindow, Rectangle> before = new Dictionary<PipWindow, Rectangle>(); // PiPs: where they were
         public static event Action Changed;
 
         /// <summary>The area PiPs use on a display: the strip while side by side is on there, otherwise the usual work area.</summary>
-        public static Rectangle AreaOf(Screen s) { return OnScreen(s) ? strip : s.WorkingArea; }
-        public static Rectangle AreaOf(Rectangle r)
-        {
-            var s = Screen.FromRectangle(r);
-            if (!OnScreen(s) || !letterbox) return AreaOf(s);
-            // black bars: the bar it's in (or nearest to)
-            int cx = r.X + r.Width / 2, cy = r.Y + r.Height / 2;
-            Func<Rectangle, double> d = b => Math.Abs(cx - (b.X + b.Width / 2.0)) + Math.Abs(cy - (b.Y + b.Height / 2.0));
-            return d(strip2) < d(strip) ? strip2 : strip;
-        }
-
-        /// <summary>Side by side is on, on this display.</summary>
-        public static bool OnScreen(Screen s) { return Active && screen != null && s.DeviceName == screen.DeviceName; }
-
-        /// <summary>The resolution to set in a game for the black bars kind: the full height (or width), the rest narrower.</summary>
-        public static Size GameSize(Screen s)
-        {
-            var b = s.Bounds;
-            double frac = U.Clamp(App.S.PbpPercent, 15, 60) / 100.0;
-            if (U.Clamp(App.S.PbpSide, 0, 2) == 2) return new Size(b.Width, (int)Math.Round(b.Height * (1 - frac) / 8) * 8);
-            return new Size((int)Math.Round(b.Width * (1 - frac) / 8) * 8, b.Height);
-        }
+        public static Rectangle AreaOf(Screen s) { return Active && screen != null && s.DeviceName == screen.DeviceName ? strip : s.WorkingArea; }
+        public static Rectangle AreaOf(Rectangle r) { return AreaOf(Screen.FromRectangle(r)); }
 
         public static void Toggle() { if (Active) Off(); else On(); }
 
@@ -68,20 +40,6 @@ namespace PipStudio
             var app = App.I;
             var cur = app.CurrentPip();
             screen = cur != null ? Screen.FromRectangle(cur.TargetBounds) : Screen.FromPoint(Cursor.Position);
-            if (App.S.PbpMode == 1) { OnLetterbox(); return; }
-            if (App.S.PbpMode == 2)
-            {
-                // the strip goes on a real display: not the game's
-                var gt = GameDisplay.Target(null);
-                if (gt != null && screen.DeviceName == gt.DeviceName)
-                    screen = Screen.AllScreens.FirstOrDefault(x => x.DeviceName != gt.DeviceName && x.Primary) ?? Screen.AllScreens.FirstOrDefault(x => x.DeviceName != gt.DeviceName) ?? screen;
-                if (GameDisplay.Target(screen) == null && GameDisplay.Override == IntPtr.Zero)
-                {
-                    app.Balloon("Pick the game display first", "Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.", true, "behavior");
-                    screen = null;
-                    return;
-                }
-            }
             var mb = screen.Bounds;
             var oldWork = screen.WorkingArea;
             int side = U.Clamp(App.S.PbpSide, 0, 2);
@@ -94,61 +52,15 @@ namespace PipStudio
             if (got.Width < 50 || got.Height < 50) { bar.Release(); bar = null; app.Balloon("Side by side didn't start", "Windows wouldn't reserve that part of the screen.", true); return; }
             strip = Rectangle.Intersect(got, oldWork);           // not under the taskbar
             if (strip.Width < 50 || strip.Height < 50) strip = got;
-            if (App.S.PbpMode == 2)
-            {
-                view = new GameView();
-                view.Bounds = Rest();
-                view.Show();
-                view.SetSource(GameDisplay.FindGame(GameDisplay.Target(screen)));
-            }
-            else ShrinkFullScreen();
+            ShrinkFullScreen();
             Arrange(true);
-            KeepPipsOnTop();
-            Raise();
-        }
-
-        /// <summary>Virtual display: the PiPs stay above the game view (both are always on top; the later one wins).</summary>
-        static void KeepPipsOnTop()
-        {
-            if (view == null) return;
-            foreach (var p in App.I.Pips.Where(x => !x.IsClosing && x.IsHandleCreated))
-                try { Native.SetWindowPos(p.Handle, Native.HWND_TOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE); } catch { }
-        }
-
-        /// <summary>
-        /// Black bars: nothing is resized or reserved. The game, set to the narrower resolution GameSize gives, is shown by
-        /// Windows in the middle with black bars at the sides (keeping its shape), and the PiPs stack in those bars. Works for
-        /// games Windows runs borderless behind the scenes (most "full screen" games today), the ones PiPs can show over.
-        /// </summary>
-        static void OnLetterbox()
-        {
-            var mb = screen.Bounds;
-            var g = GameSize(screen);
-            if (U.Clamp(App.S.PbpSide, 0, 2) == 2)
-            {
-                int bh = (mb.Height - g.Height) / 2;
-                strip2 = new Rectangle(mb.Left, mb.Top, mb.Width, bh);
-                strip = new Rectangle(mb.Left, mb.Bottom - bh, mb.Width, bh);
-            }
-            else
-            {
-                int bw = (mb.Width - g.Width) / 2;
-                strip2 = new Rectangle(mb.Left, mb.Top, bw, mb.Height);
-                strip = new Rectangle(mb.Right - bw, mb.Top, bw, mb.Height);
-            }
-            letterbox = true;
-            Arrange(true);
-            App.I.Balloon(L.T("Set your game to {0}").Replace("{0}", g.Width + " × " + g.Height),
-                "In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.", true);
             Raise();
         }
 
         public static void Off()
         {
             if (!Active) return;
-            letterbox = false;
-            if (view != null) { try { view.Close(); view.Dispose(); } catch { } view = null; }
-            if (bar != null) try { bar.Release(); } catch { }
+            try { bar.Release(); } catch { }
             bar = null;
             // the windows it shrank go back once Windows has given the space back (before that, it would squeeze them again)
             var back = new Dictionary<IntPtr, Rectangle>(shrunk);
@@ -172,31 +84,15 @@ namespace PipStudio
         public static void Tick()
         {
             if (!Active) return;
-            if (view != null)
-            {
-                var g = GameDisplay.FindGame(GameDisplay.Target(screen));
-                bool changed = g != view.Source;
-                view.SetSource(g);                               // also fits it again when the game changed size
-                if (changed) KeepPipsOnTop();
-            }
-            else if (!letterbox) ShrinkFullScreen();
+            ShrinkFullScreen();
             foreach (var h in shrunk.Keys.Where(h => !Native.IsWindow(h)).ToList()) shrunk.Remove(h);
             // a PiP changed shape (its window was resized: often the game that was just shrunk) or wandered off: stack them again
             var pips = App.I.Pips.Where(p => !p.IsClosing && !p.InTheater && !p.Moving && Screen.FromRectangle(p.TargetBounds).DeviceName == screen.DeviceName).ToList();
-            bool messy = pips.Any(p => !strip.Contains(p.TargetBounds) && !(letterbox && strip2.Contains(p.TargetBounds)));
+            bool messy = pips.Any(p => !strip.Contains(p.TargetBounds));
             for (int i = 0; i < pips.Count && !messy; i++)
                 for (int k = i + 1; k < pips.Count; k++)
                     if (pips[i].TargetBounds.IntersectsWith(pips[k].TargetBounds)) { messy = true; break; }
             if (messy) Arrange(false);
-        }
-
-        /// <summary>The size of the game area on a display (for matching a virtual display's resolution).</summary>
-        public static Size RestSize(Screen s)
-        {
-            var b = s.Bounds;
-            double frac = U.Clamp(App.S.PbpPercent, 15, 60) / 100.0;
-            if (U.Clamp(App.S.PbpSide, 0, 2) == 2) return new Size(b.Width, b.Height - (int)(b.Height * frac));
-            return new Size(b.Width - (int)(b.Width * frac), b.Height);
         }
 
         /// <summary>The game area: the display minus the strip.</summary>
@@ -244,31 +140,13 @@ namespace PipStudio
             if (remember) foreach (var p in pips) if (!before.ContainsKey(p)) before[p] = p.TargetBounds;
             int gap = (int)Math.Round(10 * pips[0].UiScale), m = gap;
             bool row = U.Clamp(App.S.PbpSide, 0, 2) == 2;
-            Func<List<PipWindow>, Rectangle, List<Rectangle>> place = (ps, area) =>
-            {
-                var aspects = ps.Select(p => Math.Max(0.2, p.TargetBounds.Width / (double)Math.Max(1, p.TargetBounds.Height))).ToList();
-                return row ? Row(area, aspects, gap, m) : Column(area, aspects, gap, m);
-            };
-            if (!letterbox)
-            {
-                var slots = place(pips, strip);
-                for (int i = 0; i < pips.Count; i++) pips[i].MoveTo(slots[i], true);
-                return;
-            }
-            // black bars: the PiPs nearer the first bar go there, the rest in the other; about half each
-            var byPos = pips.OrderBy(p => row ? p.TargetBounds.Top : p.TargetBounds.Left).ToList();
-            int half = (byPos.Count + 1) / 2;
-            var first = byPos.Take(byPos.Count == 1 ? 0 : half).OrderBy(p => row ? p.TargetBounds.Left : p.TargetBounds.Top).ToList();
-            var second = byPos.Skip(first.Count).OrderBy(p => row ? p.TargetBounds.Left : p.TargetBounds.Top).ToList();
-            var s1 = place(first, strip2);
-            for (int i = 0; i < first.Count; i++) first[i].MoveTo(s1[i], true);
-            var s2 = place(second, strip);
-            for (int i = 0; i < second.Count; i++) second[i].MoveTo(s2[i], true);
+            var aspects = pips.Select(p => Math.Max(0.2, p.TargetBounds.Width / (double)Math.Max(1, p.TargetBounds.Height))).ToList();
+            var slots = row ? Row(aspects, gap, m) : Column(aspects, gap, m);
+            for (int i = 0; i < pips.Count; i++) pips[i].MoveTo(slots[i], true);
         }
 
-        static List<Rectangle> Column(Rectangle strip, List<double> aspects, int gap, int m)
+        static List<Rectangle> Column(List<double> aspects, int gap, int m)
         {
-            if (aspects.Count == 0) return new List<Rectangle>();
             double w = strip.Width - 2 * m;
             double total = aspects.Sum(a => w / a) + gap * (aspects.Count - 1);
             double avail = strip.Height - 2 * m;
@@ -284,9 +162,8 @@ namespace PipStudio
             return list;
         }
 
-        static List<Rectangle> Row(Rectangle strip, List<double> aspects, int gap, int m)
+        static List<Rectangle> Row(List<double> aspects, int gap, int m)
         {
-            if (aspects.Count == 0) return new List<Rectangle>();
             double h = strip.Height - 2 * m;
             double total = aspects.Sum(a => h * a) + gap * (aspects.Count - 1);
             double avail = strip.Width - 2 * m;

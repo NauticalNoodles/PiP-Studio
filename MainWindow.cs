@@ -126,7 +126,6 @@ namespace PipStudio
         static Action refreshCompanion; // the Phone companion section, while the window is open
         static Action refreshLayouts;   // the Layouts section, while the window is open
         static Wpf.Ui.Controls.ToggleSwitch pbpSwitchRef;   // the side by side switch, while the window is open
-        static Expander pbpRows;                            // its section (the screenshots open it)
 
         public static void Init()
         {
@@ -451,7 +450,7 @@ namespace PipStudio
             pageTitle = searchHint = padStatus = selTitle = selSub = runEmpty = fixState = previewNote = null; searchBox = null; winSearch = null; winSearchHint = null; searchWrap = null; cmdBar = null;
             pageWindows = pageRunning = winHeader = runHeader = navRoot = null; pageScroll = null; settingsHost = null; navBtns = null;
             burger = searchIconBtn = null; indicator = null; indCanvas = null; navSpace = scrim = null; widthTokens.Clear();
-            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null; refreshLayouts = null; layoutsAnchor = null; pbpSwitchRef = null; pbpRows = null;
+            fixAlways = null; fixNow = null; refreshBindings = null; refreshUpdates = null; refreshCompanion = null; refreshLayouts = null; layoutsAnchor = null; pbpSwitchRef = null;
             pages.Clear(); searchIndex.Clear(); iconCache.Clear(); winSig = runSig = "";
             if (!exiting && App.S.MinimizeMemory) App.RunSoon(U.Trim, 1500);
         }

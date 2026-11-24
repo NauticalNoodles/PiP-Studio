@@ -37,7 +37,7 @@ jobs:
           # things to show in PiPs: two small local pages (a sunset, a music player) in Edge app windows
           $edge = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
           $prof = Join-Path $env:RUNNER_TEMP "edge"
-          foreach ($page in "sunset", "radio", "game") {
+          foreach ($page in "sunset", "radio") {
             $url = "file:///" + ((Resolve-Path ".github/screenshots/$page.html").Path -replace "\\", "/")
             Start-Process $edge -ArgumentList "--no-first-run", "--no-default-browser-check", "--user-data-dir=`"$prof`"", "--app=$url", "--window-size=1280,760"
             Start-Sleep -Seconds 4

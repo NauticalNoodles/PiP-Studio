@@ -755,31 +755,3 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	Côté
 PiPs get	Pour les PiP
 Of the display	De l'écran
-Set your game to {0}	Réglez votre jeu sur {0}
-In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	Dans les paramètres d'affichage du jeu, en plein écran. Windows l'affiche au milieu avec des bandes noires sur les côtés, et vos PiP vont dans les bandes.
-Set the game to {0}, full screen.	Réglez le jeu sur {0}, en plein écran.
-Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Fonctionne avec les jeux au-dessus desquels les PiP s'affichent déjà ; ceux en plein écran exclusif masquent tout le reste.
-How	Comment
-Shrink windows	Réduire les fenêtres
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	Réduire les fenêtres : les applications et les jeux sans bordure sont réduits pour faire de la place. Bandes noires : le jeu tourne en plein écran dans une résolution plus étroite, et les PiP remplissent les bandes à côté. Écran virtuel : le jeu tourne en plein écran sur un second écran invisible, et PiP Studio l'affiche à côté de la bande.
-Virtual display	Écran virtuel
-Pick the game display first	Choisissez d'abord l'écran du jeu
-Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	Comportement > Expérimental > Côte à côte : installez un pilote d'écran virtuel, puis choisissez son écran comme écran du jeu.
-Game display	Écran du jeu
-The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	L'écran où tourne le jeu : un écran virtuel (il en apparaît un pour chaque écran virtuel ajouté dans le pilote). Pas celui de la bande.
-Not picked	Aucun
-main	principal
-Match its resolution	Adapter sa résolution
-Sets the game display to the shape of the space beside the strip, so the game fills it.	Donne à l'écran du jeu la forme de l'espace à côté de la bande, pour que le jeu le remplisse.
-Match	Adapter
-Virtual display driver	Pilote d'écran virtuel
-A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	Un pilote gratuit ajoute des écrans qui n'existent que pour ce genre d'application. PiP Studio ne l'inclut pas : installez-le, ajoutez un écran, puis choisissez-le ci-dessus. La souris n'atteint pas le jeu ainsi ; la manette ou le clavier, oui (cliquez sur le jeu pour lui donner le clavier).
-Get it	Obtenir
-Pick the game display first.	Choisissez d'abord l'écran du jeu.
-That display doesn't list any resolutions.	Cet écran n'indique aucune résolution.
-It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	Il n'a aucune résolution de cette forme. Ajoutez {0} dans les paramètres du pilote d'écran virtuel, puis réessayez.
-It's already at {0}.	Il est déjà en {0}.
-Set to {0}. Now set the game to the same, full screen, on that display.	Réglé sur {0}. Réglez maintenant le jeu pareil, en plein écran, sur cet écran.
-Windows didn't change it (error {0}).	Windows ne l'a pas modifié (erreur {0}).
-Waiting for the game	En attente du jeu
-Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	Lancez-le sur l'écran du jeu, en plein écran : choisissez cet écran dans les paramètres du jeu, ou appuyez sur Windows + Maj + flèche quand il est au premier plan.

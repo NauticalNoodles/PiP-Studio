@@ -755,31 +755,3 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	Lado
 PiPs get	Para os PiPs
 Of the display	Da tela
-Set your game to {0}	Coloque o jogo em {0}
-In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	Nas configurações de vídeo do jogo, em tela cheia. O Windows o mostra no meio com barras pretas nas laterais, e seus PiPs ficam nas barras.
-Set the game to {0}, full screen.	Coloque o jogo em {0}, em tela cheia.
-Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	Funciona com jogos sobre os quais os PiPs já aparecem; os em tela cheia exclusiva escondem todo o resto.
-How	Como
-Shrink windows	Encolher janelas
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	Encolher janelas: apps e jogos sem bordas ficam menores para abrir espaço. Barras pretas: o jogo roda em tela cheia numa resolução mais estreita, e os PiPs preenchem as barras ao lado. Tela virtual: o jogo roda em tela cheia numa segunda tela invisível, e o PiP Studio o mostra ao lado da faixa.
-Virtual display	Tela virtual
-Pick the game display first	Escolha primeiro a tela do jogo
-Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	Comportamento > Experimental > Lado a lado: instale um driver de tela virtual e escolha a tela dele como tela do jogo.
-Game display	Tela do jogo
-The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	A tela onde o jogo roda: uma virtual (aparece uma para cada tela virtual que você adicionar no driver). Não a tela da faixa.
-Not picked	Não escolhida
-main	principal
-Match its resolution	Ajustar a resolução
-Sets the game display to the shape of the space beside the strip, so the game fills it.	Ajusta a tela do jogo ao formato do espaço ao lado da faixa, para o jogo preenchê-lo.
-Match	Ajustar
-Virtual display driver	Driver de tela virtual
-A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	Um driver gratuito adiciona telas que só existem para apps como este. O PiP Studio não o inclui: instale-o, adicione uma tela e escolha-a acima. Assim o mouse não chega ao jogo; o controle ou o teclado sim (clique no jogo para dar o teclado a ele).
-Get it	Obter
-Pick the game display first.	Escolha primeiro a tela do jogo.
-That display doesn't list any resolutions.	Essa tela não lista nenhuma resolução.
-It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	Ela não tem resolução nesse formato. Adicione {0} nas configurações do driver de tela virtual e tente de novo.
-It's already at {0}.	Ela já está em {0}.
-Set to {0}. Now set the game to the same, full screen, on that display.	Ajustada para {0}. Agora coloque o jogo igual, em tela cheia, nessa tela.
-Windows didn't change it (error {0}).	O Windows não a alterou (erro {0}).
-Waiting for the game	Aguardando o jogo
-Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	Inicie-o na tela do jogo, em tela cheia: escolha essa tela nas configurações do jogo ou pressione Windows + Shift + seta com ele na frente.

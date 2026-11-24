@@ -755,31 +755,3 @@ Experimental. A strip of the display is kept for your PiPs: apps and borderless 
 Side	الجانب	位置
 PiPs get	نصيب نوافذ PiP	画中画占用
 Of the display	من الشاشة	显示器的比例
-Set your game to {0}	اضبط لعبتك على {0}	将游戏设置为 {0}
-In the game's display settings, full screen. Windows shows it in the middle with black bars at the sides, and your PiPs go in the bars.	من إعدادات العرض في اللعبة، بملء الشاشة. يعرضها Windows في المنتصف مع أشرطة سوداء على الجانبين، وتوضع نوافذ PiP في الأشرطة.	在游戏的显示设置中选择全屏。Windows 会把它显示在中间，两侧是黑边，画中画放在黑边里。
-Set the game to {0}, full screen.	اضبط اللعبة على {0} بملء الشاشة.	将游戏设置为 {0}，全屏。
-Works with games PiPs already show over; ones in true exclusive full screen hide everything else.	يعمل مع الألعاب التي تظهر فوقها نوافذ PiP بالفعل؛ أما الألعاب بملء الشاشة الحصري فتخفي كل شيء آخر.	适用于画中画本来就能显示在其上的游戏；真正独占全屏的游戏会挡住其他一切。
-How	الطريقة	方式
-Shrink windows	تصغير النوافذ	缩小窗口
-Shrink windows: apps and borderless games are made smaller to leave room. Black bars: the game runs full screen at a narrower resolution, and the PiPs fill the bars beside it. Virtual display: the game runs full screen on an invisible second display, and PiP Studio shows it beside the strip.	تصغير النوافذ: تُصغَّر التطبيقات والألعاب بلا حدود لترك مساحة. الأشرطة السوداء: تعمل اللعبة بملء الشاشة بدقة أضيق، وتملأ نوافذ PiP الأشرطة بجانبها. الشاشة الافتراضية: تعمل اللعبة بملء الشاشة على شاشة ثانية غير مرئية، ويعرضها PiP Studio بجانب الشريط.	缩小窗口：应用和无边框游戏会缩小以腾出空间。黑边：游戏以较窄的分辨率全屏运行，画中画填满旁边的黑边。虚拟显示器：游戏在一个看不见的第二显示器上全屏运行，PiP Studio 把它显示在条带旁边。
-Virtual display	شاشة افتراضية	虚拟显示器
-Pick the game display first	اختر شاشة اللعبة أولًا	请先选择游戏显示器
-Behavior > Experimental > Side by side: install a virtual display driver, then pick its display as the game display.	السلوك > تجريبي > جنبًا إلى جنب: ثبّت برنامج تشغيل شاشة افتراضية، ثم اختر شاشته كشاشة للعبة.	行为 > 实验性 > 并排：安装虚拟显示器驱动程序，然后把它的显示器选为游戏显示器。
-Game display	شاشة اللعبة	游戏显示器
-The display the game runs on: a virtual one (one appears for each virtual display you add in the driver). Not the display the strip is on.	الشاشة التي تعمل عليها اللعبة: شاشة افتراضية (تظهر واحدة لكل شاشة افتراضية تضيفها في برنامج التشغيل). ليست الشاشة التي عليها الشريط.	游戏运行的显示器：一个虚拟显示器（你在驱动程序中每添加一个虚拟显示器就会出现一个）。不是条带所在的显示器。
-Not picked	لم يُختر	未选择
-main	الرئيسية	主显示器
-Match its resolution	مطابقة دقتها	匹配其分辨率
-Sets the game display to the shape of the space beside the strip, so the game fills it.	يضبط شاشة اللعبة على شكل المساحة بجانب الشريط، لتملأها اللعبة.	把游戏显示器设为条带旁空间的形状，让游戏填满它。
-Match	مطابقة	匹配
-Virtual display driver	برنامج تشغيل الشاشة الافتراضية	虚拟显示器驱动程序
-A free driver adds displays that only exist for apps like this. PiP Studio doesn't include it: install it, add a display, then pick it above. The mouse can't reach the game this way; a controller or the keyboard can (click the game to give it the keyboard).	يضيف برنامج تشغيل مجاني شاشات لا توجد إلا لتطبيقات كهذا. لا يتضمنه PiP Studio: ثبّته وأضف شاشة ثم اخترها أعلاه. لا يصل الماوس إلى اللعبة بهذه الطريقة؛ يصل إليها جهاز التحكم أو لوحة المفاتيح (انقر اللعبة لتعطيها لوحة المفاتيح).	一个免费驱动程序可添加只供此类应用使用的显示器。PiP Studio 不包含它：请安装它、添加一个显示器，然后在上方选择。这种方式下鼠标无法操作游戏；手柄或键盘可以（点击游戏把键盘交给它）。
-Get it	احصل عليه	获取
-Pick the game display first.	اختر شاشة اللعبة أولًا.	请先选择游戏显示器。
-That display doesn't list any resolutions.	لا تعرض تلك الشاشة أي دقة.	该显示器没有列出任何分辨率。
-It has no resolution of that shape. Add {0} in the virtual display driver's settings, then try again.	لا توجد لديها دقة بهذا الشكل. أضف {0} في إعدادات برنامج تشغيل الشاشة الافتراضية، ثم حاول مجددًا.	它没有这种形状的分辨率。请在虚拟显示器驱动程序的设置中添加 {0}，然后重试。
-It's already at {0}.	إنها بالفعل على {0}.	它已经是 {0}。
-Set to {0}. Now set the game to the same, full screen, on that display.	ضُبطت على {0}. اضبط اللعبة الآن على الدقة نفسها بملء الشاشة على تلك الشاشة.	已设为 {0}。现在把游戏设为相同分辨率，在那个显示器上全屏。
-Windows didn't change it (error {0}).	لم يغيّرها Windows (الخطأ {0}).	Windows 没有更改它（错误 {0}）。
-Waiting for the game	في انتظار اللعبة	正在等待游戏
-Start it on the game display, full screen: pick that display in the game's settings, or press Windows + Shift + arrow while it's in front.	شغّلها على شاشة اللعبة بملء الشاشة: اختر تلك الشاشة من إعدادات اللعبة، أو اضغط Windows + Shift + سهم وهي في المقدمة.	在游戏显示器上全屏启动它：在游戏设置中选择那个显示器，或在它位于前台时按 Windows + Shift + 方向键。
