@@ -149,7 +149,8 @@ namespace PipStudio
                 var size = Pbp.RestSize(System.Windows.Forms.Screen.PrimaryScreen);
                 var wr = U.WindowRect(game); var cr = U.ClientScreenRect(game);
                 int l = cr.Left - wr.Left, t = cr.Top - wr.Top, r = wr.Right - cr.Right, b = wr.Bottom - cr.Bottom;
-                Native.SetWindowPos(game, IntPtr.Zero, sb.X - l, sb.Y - t, size.Width + l + r, size.Height + t + b, 0);
+                // somewhere else, half off the screen: what shows in the game area has to be PiP Studio's view of it
+                Native.SetWindowPos(game, IntPtr.Zero, sb.X + sb.Width / 2 - l, sb.Y + sb.Height / 2 - t, size.Width + l + r, size.Height + t + b, 0);
                 GameDisplay.Override = game;
                 Log("virtual display: game window " + U.ClientScreenRect(game) + " for a game area of " + size);
             });
