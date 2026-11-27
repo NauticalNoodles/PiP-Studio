@@ -691,7 +691,7 @@ namespace PipStudio
             Size sz = FitSizeIn((int)(wa.Width * SizePresets.Frac(App.S.DefaultSize)), wa, 0.8);
             string spot = StartTag();
             Rectangle target = new Rectangle(SpotPoint(spot, sz, wa), sz);
-            Dictionary<PipWindow, Rectangle> none;
+            Dictionary<IntPtr, Rectangle> none;
             target = App.I.Place(this, target, App.SpotGoesDown(spot), true, false, out none);
             if (U.Animations)
             {
@@ -719,11 +719,11 @@ namespace PipStudio
         /// <summary>Puts this PiP at want (or next to it: Stacking.Place) and moves the PiPs that make room for it.</summary>
         bool PlaceAt(Rectangle want, bool stackDown, bool stackFirst, bool allowBump, bool animate)
         {
-            Dictionary<PipWindow, Rectangle> bump;
+            Dictionary<IntPtr, Rectangle> bump;
             var r = App.I.Place(this, want, stackDown, stackFirst, allowBump, out bump);
             bool moved = r != TargetBounds;
             if (moved) MoveTo(r, animate);
-            foreach (var kv in bump) kv.Key.MoveTo(kv.Value, animate);
+            foreach (var kv in bump) App.I.MoveAny(kv.Key, kv.Value, animate);
             return moved || bump.Count > 0;
         }
 
@@ -767,11 +767,11 @@ namespace PipStudio
             for (int k = 1; k <= 3; k++)
             {
                 string spot = order[(i + k) % 4];
-                Dictionary<PipWindow, Rectangle> bump;
+                Dictionary<IntPtr, Rectangle> bump;
                 var r = App.I.Place(this, new Rectangle(SpotPoint(spot, b.Size, wa), b.Size), App.SpotGoesDown(spot), true, true, out bump);
                 if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) < 16) continue;
                 MoveTo(r, true);
-                foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+                foreach (var kv in bump) App.I.MoveAny(kv.Key, kv.Value, true);
                 App.I.SaveSoon();
                 return;
             }
@@ -968,14 +968,14 @@ namespace PipStudio
                     if ((tr == 1 && tc == 1) || Tags[tr, tc] == null) continue;
                     string to = Tags[tr, tc];
                     bool down = dy > 0 ? false : dy < 0 ? true : App.SpotGoesDown(to);
-                    Dictionary<PipWindow, Rectangle> bump;
+                    Dictionary<IntPtr, Rectangle> bump;
                     var want = Stacking.Inside(new Rectangle(SpotPoint(to, b.Size, wa), b.Size), wa);
                     var dest = App.I.Place(this, want, down, true, true, out bump);
                     if (!Stacking.MovedToward(b, dest, dx, dy))
                     {
                         // stacking next to the PiPs there gets nowhere (a tall PiP under a small one, moving up): swap places,
                         // pushing them the other way, past this one
-                        Dictionary<PipWindow, Rectangle> swap = null;
+                        Dictionary<IntPtr, Rectangle> swap = null;
                         if (Stacking.MovedToward(b, want, dx, dy))
                         {
                             swap = App.I.PlanPush(this, want, -dx, -dy);
@@ -988,7 +988,7 @@ namespace PipStudio
                     }
                     inTheater = false;
                     MoveTo(dest, true);
-                    foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+                    foreach (var kv in bump) App.I.MoveAny(kv.Key, kv.Value, true);
                     App.I.SaveSoon();
                     return;
                 }
@@ -1011,10 +1011,10 @@ namespace PipStudio
         {
             HideDropPreview();
             inTheater = false;
-            Dictionary<PipWindow, Rectangle> bump;
+            Dictionary<IntPtr, Rectangle> bump;
             var r = PlanDrop(out bump);
             if (r != TargetBounds) MoveTo(r, true);
-            foreach (var kv in bump) kv.Key.MoveTo(kv.Value, true);
+            foreach (var kv in bump) App.I.MoveAny(kv.Key, kv.Value, true);
             App.I.SaveSoon();
         }
 
@@ -1024,7 +1024,7 @@ namespace PipStudio
         /// that's taken means stacking on the side of that PiP you dropped it on. If they can't all fit, this one makes room
         /// for itself instead (stacks next to them). Changes nothing: the drop and the preview while dragging both use it.
         /// </summary>
-        Rectangle PlanDrop(out Dictionary<PipWindow, Rectangle> bump)
+        Rectangle PlanDrop(out Dictionary<IntPtr, Rectangle> bump)
         {
             var wa = WorkArea();
             var b = TargetBounds;
@@ -1047,7 +1047,7 @@ namespace PipStudio
             var spots = new List<Rectangle>();
             try
             {
-                Dictionary<PipWindow, Rectangle> bump;
+                Dictionary<IntPtr, Rectangle> bump;
                 var r = PlanDrop(out bump);
                 var b = Bounds;
                 if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) + Math.Abs(r.Width - b.Width) > 6) spots.Add(r);   // it won't stay right here

@@ -466,7 +466,7 @@ namespace PipStudio
                         ResizeTo(h, fs.Width, fs.Height);
                         TrimBarsSoon(h, 4);
                     }
-                    if (!mouseDown && SnapsHere(h)) SnapNearest(h);       // just appeared: put it on a spot, once
+                    if (!mouseDown && SnapsHere(h)) Settle(h, false);     // just appeared: put it on a spot, once (stacked by others)
                     continue;
                 }
                 if (prev == r)
@@ -474,7 +474,7 @@ namespace PipStudio
                     if (moved.Contains(h) && !mouseDown)
                     {
                         moved.Remove(h);
-                        if (!appControlled.Contains(h) && SnapsHere(h)) SnapNearest(h);   // you let go: glide to the nearest spot
+                        if (!appControlled.Contains(h) && SnapsHere(h)) Settle(h, true);   // you let go: the nearest spot, making room
                     }
                     else if (!mouseDown && !moved.Contains(h)) RecheckBars(h);   // sitting still: has the stream changed shape?
                     continue;
@@ -515,7 +515,53 @@ namespace PipStudio
             return new Rectangle(bx, by, b.Width, b.Height);
         }
 
-        static DropGhost ghost;
+        static List<Tuple<IntPtr, Rectangle, bool>> partCache;
+        static DateTime partAt = DateTime.MinValue;
+
+        /// <summary>Other apps' PiPs for placing PiPs together: handle, place, and whether it may be pushed aside (it snaps,
+        /// and its app doesn't move it by itself). Looked up at most every 0.3 s (the drag preview asks often).</summary>
+        public static List<Tuple<IntPtr, Rectangle, bool>> Participants()
+        {
+            if (partCache != null && (DateTime.Now - partAt).TotalMilliseconds < 300) return partCache;
+            var l = new List<Tuple<IntPtr, Rectangle, bool>>();
+            foreach (var h in FindAll())
+            {
+                if (!Native.IsWindowVisible(h) || Native.IsIconic(h) || theaterRestore.ContainsKey(h)) continue;
+                l.Add(Tuple.Create(h, Bounds(h), SnapsHere(h) && !appControlled.Contains(h)));
+            }
+            partCache = l; partAt = DateTime.Now;
+            return l;
+        }
+
+        /// <summary>Moves another app's PiP to make room (placing PiPs together).</summary>
+        public static void MoveTo(IntPtr h, Rectangle r) { Place(h, r); partCache = null; }
+
+        /// <summary>
+        /// Where another app's PiP goes when you let go of it (or it appears): its nearest spot, stacked next to a PiP already
+        /// there (on the side you dropped it), or, when it was dropped, pushing PiPs aside, like PiP Studio's own.
+        /// </summary>
+        static Rectangle PlanSettle(IntPtr h, bool dropped, out Dictionary<IntPtr, Rectangle> bump)
+        {
+            var want = SnapTarget(h);
+            var b = Bounds(h);
+            bool down = false;
+            foreach (var p in Participants())
+                if (p.Item1 != h && p.Item2.IntersectsWith(want)) { down = b.Top + b.Height / 2 > p.Item2.Top + p.Item2.Height / 2; break; }
+            foreach (var p in App.I.Pips)
+                if (!p.IsClosing && p.Visible && p.TargetBounds.IntersectsWith(want)) { down = b.Top + b.Height / 2 > p.TargetBounds.Top + p.TargetBounds.Height / 2; break; }
+            return App.I.PlaceExternal(h, want, down, true, dropped, out bump);
+        }
+
+        static void Settle(IntPtr h, bool dropped)
+        {
+            Dictionary<IntPtr, Rectangle> bump;
+            var r = PlanSettle(h, dropped, out bump);
+            if (r != Bounds(h)) Place(h, r);
+            foreach (var kv in bump) App.I.MoveAny(kv.Key, kv.Value, true);
+            partCache = null;
+        }
+
+        static readonly List<DropGhost> ghosts = new List<DropGhost>();
 
         /// <summary>While you drag another app's PiP: a faint outline of the spot it will glide to when you let go,
         /// like PiP Studio's own PiPs show.</summary>
@@ -523,12 +569,21 @@ namespace PipStudio
         {
             IntPtr h = IntPtr.Zero;
             if (mouseDown) foreach (var x in moved) if (Native.IsWindow(x) && !appControlled.Contains(x) && SnapsHere(x)) { h = x; break; }
-            if (h == IntPtr.Zero) { if (ghost != null && !ghost.IsDisposed && ghost.Visible) ghost.Hide(); return; }
-            var t = SnapTarget(h);
-            var b = Bounds(h);
-            if (Math.Abs(t.X - b.X) + Math.Abs(t.Y - b.Y) <= 6) { if (ghost != null && ghost.Visible) ghost.Hide(); return; }
-            if (ghost == null || ghost.IsDisposed) ghost = new DropGhost();
-            ghost.ShowAt(t, h, App.S.RoundedCorners);
+            var spots = new List<Rectangle>();
+            if (h != IntPtr.Zero)
+            {
+                Dictionary<IntPtr, Rectangle> bump;
+                var t = PlanSettle(h, true, out bump);
+                var b = Bounds(h);
+                if (Math.Abs(t.X - b.X) + Math.Abs(t.Y - b.Y) > 6) spots.Add(t);
+                spots.AddRange(bump.Values);                              // and where the PiPs it pushes go
+            }
+            while (ghosts.Count < spots.Count) ghosts.Add(new DropGhost());
+            for (int i = 0; i < ghosts.Count; i++)
+            {
+                if (i < spots.Count) ghosts[i].ShowAt(spots[i], h, App.S.RoundedCorners);
+                else if (!ghosts[i].IsDisposed && ghosts[i].Visible) ghosts[i].Hide();
+            }
         }
 
         static void Place(IntPtr h, Rectangle r)
@@ -749,7 +804,7 @@ namespace PipStudio
         public static void SetSnapMode(IntPtr h, int mode)
         {
             if (mode <= 0) snapChoice.Remove(h); else snapChoice[h] = mode;
-            if (SnapsHere(h)) SnapNearest(h);
+            if (SnapsHere(h)) Settle(h, false);                      // onto a spot, stacked by any PiP there
         }
 
         // ------------------------------------------------------------ black bars

@@ -1187,18 +1187,50 @@ namespace PipStudio
         public static bool SpotGoesDown(string spot) { return spot.StartsWith("T") || spot == "L" || spot == "R"; }
 
         /// <summary>
-        /// Where <paramref name="self"/> goes when it's put at <paramref name="want"/>, and which PiPs move for it
+        /// The PiPs that share the screen with <paramref name="want"/>: PiP Studio's and other apps' (when you let it steer
+        /// them), apart from the one being placed. Movable ones can be pushed aside; the rest (locked, theater, another app's
+        /// PiP that doesn't snap or that its app keeps moving) are only stacked around. Keyed by window handle.
+        /// </summary>
+        void Participants(PipWindow selfPip, IntPtr selfExt, Rectangle area, List<IntPtr> movable, List<Rectangle> movableR, List<Rectangle> stuck)
+        {
+            foreach (var p in Pips)
+            {
+                if (p == selfPip || p.IsClosing || !p.Visible || !p.IsHandleCreated || p.Handle == selfExt) continue;
+                var b = p.TargetBounds;
+                if (!p.St.Locked && !p.InTheater && area.IntersectsWith(b)) { movable.Add(p.Handle); movableR.Add(b); }
+                else stuck.Add(b);
+            }
+            if (!S.ControlOtherPips) return;
+            foreach (var e in ExternalPip.Participants())
+            {
+                if (e.Item1 == selfExt) continue;
+                if (e.Item3 && area.IntersectsWith(e.Item2)) { movable.Add(e.Item1); movableR.Add(e.Item2); }
+                else stuck.Add(e.Item2);
+            }
+        }
+
+        /// <summary>
+        /// Where a PiP goes when it's put at <paramref name="want"/>, and which PiPs (PiP Studio's or other apps') move for it
         /// (Stacking.Place): on the screen, stacked next to PiPs in the way or pushing them aside.
         /// </summary>
-        public Rectangle Place(PipWindow self, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<PipWindow, Rectangle> bump)
+        public Rectangle Place(PipWindow self, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<IntPtr, Rectangle> bump)
         {
-            int gap = (int)Math.Round(12 * self.UiScale);
+            return PlaceAny(self, IntPtr.Zero, (int)Math.Round(12 * self.UiScale), want, stackDown, stackFirst, allowBump, out bump);
+        }
+
+        /// <summary>The same for another app's PiP window.</summary>
+        public Rectangle PlaceExternal(IntPtr h, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<IntPtr, Rectangle> bump)
+        {
+            return PlaceAny(null, h, (int)Math.Round(12 * U.ScaleOf(h)), want, stackDown, stackFirst, allowBump, out bump);
+        }
+
+        Rectangle PlaceAny(PipWindow selfPip, IntPtr selfExt, int gap, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<IntPtr, Rectangle> bump)
+        {
             Rectangle wa = Screen.FromRectangle(want).WorkingArea;
-            var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
-            var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
-            var stuck = others.Except(movable).Select(p => p.TargetBounds).ToList();
+            var movable = new List<IntPtr>(); var movableR = new List<Rectangle>(); var stuck = new List<Rectangle>();
+            Participants(selfPip, selfExt, wa, movable, movableR, stuck);
             Dictionary<int, Rectangle> plan;
-            var r = Stacking.Place(want, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap, stackDown, stackFirst, allowBump, out plan);
+            var r = Stacking.Place(want, movableR, stuck, wa, gap, stackDown, stackFirst, allowBump, out plan);
             bump = plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
             return r;
         }
@@ -1207,15 +1239,22 @@ namespace PipStudio
         /// The PiPs in the way of <paramref name="r"/> pushed one way (dx, dy), even past it: for swapping places with a
         /// controller. Null when they don't fit on the screen that way, or one of them can't move.
         /// </summary>
-        public Dictionary<PipWindow, Rectangle> PlanPush(PipWindow self, Rectangle r, int dx, int dy)
+        public Dictionary<IntPtr, Rectangle> PlanPush(PipWindow self, Rectangle r, int dx, int dy)
         {
             int gap = (int)Math.Round(12 * self.UiScale);
             Rectangle wa = Screen.FromRectangle(r).WorkingArea;
-            var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
-            var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
-            var stuck = others.Except(movable).Select(p => p.TargetBounds);
-            var plan = Stacking.PlanBump(r, movable.Select(p => p.TargetBounds).ToList(), stuck, wa, gap, dx, dy);
+            var movable = new List<IntPtr>(); var movableR = new List<Rectangle>(); var stuck = new List<Rectangle>();
+            Participants(self, IntPtr.Zero, wa, movable, movableR, stuck);
+            var plan = Stacking.PlanBump(r, movableR, stuck, wa, gap, dx, dy);
             return plan == null ? null : plan.ToDictionary(kv => movable[kv.Key], kv => kv.Value);
+        }
+
+        /// <summary>Moves a PiP that made room: one of PiP Studio's (gliding) or another app's.</summary>
+        public void MoveAny(IntPtr h, Rectangle r, bool animate)
+        {
+            var own = Pips.FirstOrDefault(p => !p.IsClosing && p.IsHandleCreated && p.Handle == h);
+            if (own != null) own.MoveTo(r, animate);
+            else ExternalPip.MoveTo(h, r);
         }
 
         public bool FullscreenOn(PipWindow p)
