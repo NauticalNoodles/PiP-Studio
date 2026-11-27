@@ -2,13 +2,12 @@
 
 ## 1.0.6
 
+- **Controller**: real button icons for Xbox, PlayStation and Switch, and the Menu button opens the buttons above each page
+- **Other apps' PiPs** (browsers, Discord...) stack and push aside together with PiP Studio's, with a preview while you drag
+- Crash reports now also catch sudden crashes, using what Windows recorded
+- The Microsoft Store version asks once for a rating, after a few days of use
 - Fixed: PiP Studio could crash at random with an Xbox controller connected
-- **Controller**: the Menu button opens the buttons above each page (Open in PiP, Click a window, Screen region and more), which the D-pad couldn't reach
-- The scroll bar no longer covers the right edge of list rows
-- Crash reports also catch crashes too sudden for PiP Studio to note down, using what Windows recorded about them
-- Microsoft Store version: asks once for a rating, after a few days of use
-- Other apps' PiPs (a browser's, Discord's...) stack and push aside like PiP Studio's own, together with them, with the outlines of where they'll land while you drag
-- Controller hints show your controller's real buttons: Xbox's coloured A, B, X, Y, PlayStation's ✕ ○ □ △ and Switch's buttons
+- Fixed: the scroll bar covered the edge of list rows
 
 ## 1.0.5
 
