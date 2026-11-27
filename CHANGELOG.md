@@ -2,6 +2,7 @@
 
 ## 1.0.6
 
+- Fixed: PiP Studio could crash at random with an Xbox controller connected
 - **Controller**: the Menu button opens the buttons above each page (Open in PiP, Click a window, Screen region and more), which the D-pad couldn't reach
 - The scroll bar no longer covers the right edge of list rows
 - Crash reports also catch crashes too sudden for PiP Studio to note down, using what Windows recorded about them

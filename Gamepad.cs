@@ -18,8 +18,11 @@ namespace PipStudio
     // =================================================================================
     static class Pad
     {
+        // XInputGetStateEx (ordinal 100) fills XINPUT_STATE_EX: the usual state plus a 4-byte padding field at the end
+        // (dwPaddingReserved). Without Reserved here it wrote 4 bytes past this struct on every read, corrupting memory
+        // and, sooner or later, crashing PiP Studio (heap corruption, 0xc0000374). XInputGetState fills the first 16 only.
         [StructLayout(LayoutKind.Sequential)]
-        struct XSTATE { public uint Packet; public ushort Buttons; public byte LT, RT; public short LX, LY, RX, RY; }
+        struct XSTATE { public uint Packet; public ushort Buttons; public byte LT, RT; public short LX, LY, RX, RY; public uint Reserved; }
 
         [DllImport("xinput1_4.dll")] static extern int XInputGetState(int idx, out XSTATE s);
         [DllImport("xinput1_4.dll", EntryPoint = "#100")] static extern int XInputGetStateEx(int idx, out XSTATE s);   // also reports the Guide button
