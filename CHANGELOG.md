@@ -1,5 +1,10 @@
 # PiP Studio changelog
 
+## 1.0.6
+
+- **Controller**: the Menu button opens the buttons above each page (Open in PiP, Click a window, Screen region and more), which the D-pad couldn't reach
+- The scroll bar no longer covers the right edge of list rows
+
 ## 1.0.5
 
 - **Saved layouts**: save the PiPs you have open and bring them all back in one go, or have them open when an app starts

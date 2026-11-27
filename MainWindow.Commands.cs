@@ -21,6 +21,9 @@ namespace PipStudio
     static partial class MainUI
     {
         // ----------------------------------------------------------------------------- command bar (Task Manager style)
+        /// <summary>A button above a page, as the controller's options menu shows it.</summary>
+        class PageCommand { public string Glyph, Text; public Action Run; }
+
         static Wpf.Ui.Controls.Button Cmd(string glyph, string text, Action click, bool enabled = true)
         {
             var sp = new StackPanel { Orientation = Orientation.Horizontal };
@@ -40,6 +43,7 @@ namespace PipStudio
                 IsEnabled = enabled
             };
             b.Click += (o, e) => { try { click(); } catch (Exception ex) { App.ReportError(ex); } };
+            b.Tag = new PageCommand { Glyph = glyph, Text = text, Run = click };   // the controller's Menu button lists these
             return b;
         }
 

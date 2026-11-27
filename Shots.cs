@@ -75,6 +75,18 @@ namespace PipStudio
             shot("shortcuts", "shortcuts");
             shot("settings", "settings");
             shot("phone", "phone");
+            // controller layout: the Menu button's options menu on the Windows page
+            steps.Add(() => { Navigate("windows", false); SetPadVisual(true); });
+            steps.Add(() => { ShowPageOptions(); Log("options menu: " + (dlgList == null ? "didn't open" : dlgList.Count + " entries")); });
+            steps.Add(() =>
+            {
+                string tmp = Path.Combine(dir, "controller-options.png");
+                Save(tmp);
+                using (var big = new System.Drawing.Bitmap(tmp))
+                using (var small = new System.Drawing.Bitmap(big, new System.Drawing.Size(1200, (int)(1200.0 * big.Height / big.Width)))) small.Save(Path.Combine(dir, "share-options.png"));
+                CloseDialog(false);
+                SetPadVisual(false);
+            });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
             steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light

@@ -362,7 +362,7 @@ namespace PipStudio
                   <Grid.ColumnDefinitions><ColumnDefinition Width='*' MinWidth='120'/><ColumnDefinition Width='{DynamicResource WColApp}'/><ColumnDefinition Width='{DynamicResource WColSize}'/><ColumnDefinition Width='{DynamicResource WColStatus}'/></Grid.ColumnDefinitions>
                 </Grid>
                 <Border DockPanel.Dock='Top' Height='1' Background='{DynamicResource Divider}' Margin='0,0,0,4'/>
-                <ListBox x:Name='WinList' Background='Transparent' BorderThickness='0' Padding='0' ItemTemplate='{StaticResource WinRow}' ItemContainerStyle='{StaticResource RowItem}' HorizontalContentAlignment='Stretch' ScrollViewer.HorizontalScrollBarVisibility='Disabled' VirtualizingPanel.IsVirtualizing='True' VirtualizingPanel.ScrollUnit='Pixel'/>
+                <ListBox x:Name='WinList' Background='Transparent' BorderThickness='0' Padding='0,0,14,0' ItemTemplate='{StaticResource WinRow}' ItemContainerStyle='{StaticResource RowItem}' HorizontalContentAlignment='Stretch' ScrollViewer.HorizontalScrollBarVisibility='Disabled' VirtualizingPanel.IsVirtualizing='True' VirtualizingPanel.ScrollUnit='Pixel'/>
               </DockPanel>
             </Grid>
 
@@ -384,7 +384,7 @@ namespace PipStudio
                     <ScrollViewer x:Name='MarkedScroll' MaxHeight='212' VerticalScrollBarVisibility='Auto' HorizontalScrollBarVisibility='Disabled'><StackPanel x:Name='MarkedList'/></ScrollViewer>
                   </StackPanel>
                 </Border>
-                <ListBox x:Name='RunList' Background='Transparent' BorderThickness='0' Padding='0' ItemTemplate='{StaticResource RunRow}' ItemContainerStyle='{StaticResource RowItem}' HorizontalContentAlignment='Stretch' ScrollViewer.HorizontalScrollBarVisibility='Disabled' VirtualizingPanel.ScrollUnit='Pixel'/>
+                <ListBox x:Name='RunList' Background='Transparent' BorderThickness='0' Padding='0,0,14,0' ItemTemplate='{StaticResource RunRow}' ItemContainerStyle='{StaticResource RowItem}' HorizontalContentAlignment='Stretch' ScrollViewer.HorizontalScrollBarVisibility='Disabled' VirtualizingPanel.ScrollUnit='Pixel'/>
               </DockPanel>
               <StackPanel x:Name='RunEmptyPanel' HorizontalAlignment='Center' VerticalAlignment='Center' Margin='20' Visibility='Collapsed'>
                 <TextBlock Text='&#xE8A7;' FontFamily='Segoe Fluent Icons, Segoe MDL2 Assets' FontSize='40' Foreground='{DynamicResource Tertiary}' HorizontalAlignment='Center' Margin='0,0,0,12'/>

@@ -204,6 +204,7 @@ namespace PipStudio
             add(Pad.Name(BtnLB, kind) + "  " + Pad.Name(BtnRB, kind), "Tabs");
             add(Pad.Name(BtnY, kind), "Search");
             if (ExplainPages.Contains(page ?? "")) add(Pad.Name(BtnX, kind), App.S.ShowExplainers ? "Hide explanations" : "Explanations");
+            add(Pad.Name(BtnMenu, kind), "Options");
             add("R-Stick", "Scroll");
             tabLB.Child = Chip(Pad.Name(BtnLB, kind));
             tabRB.Child = Chip(Pad.Name(BtnRB, kind));
@@ -326,7 +327,7 @@ namespace PipStudio
             if ((pressed & BtnB) != 0) PadBack();
             if ((pressed & BtnLB) != 0) PadPage(-1);
             if ((pressed & BtnRB) != 0) PadPage(1);
-            if ((pressed & BtnMenu) != 0 && !padVisual) PadMenu();
+            if ((pressed & BtnMenu) != 0) { if (padVisual) ShowPageOptions(); else PadMenu(); }   // Menu: the buttons above the page
             if ((b & (RsUp | RsDown)) != 0) PadScroll((b & RsDown) != 0 ? 1 : -1);
             return true;
         }
@@ -715,13 +716,74 @@ namespace PipStudio
             var cb = dlgDone;
             dlgDone = null;
             dlgExtra = null;
+            dlgList = null;
             DelayRun(60, UpdatePreview);
             if (padVisual) Dispatch(FocusContent, DispatcherPriority.Loaded);
             if (cb != null) cb(yes);
         }
 
+        static List<ButtonBase> dlgList;                    // the options menu: its entries, top to bottom
+
+        /// <summary>
+        /// The controller's Menu button: the buttons above the page (Open in PiP, Click a window, Screen region...) in a menu,
+        /// since the D-pad moves through the list and can't reach them. Up and down choose, A picks, B or Menu closes.
+        /// </summary>
+        static void ShowPageOptions()
+        {
+            if (cmdBar == null) return;
+            var cmds = cmdBar.Children.OfType<ButtonBase>().Where(x => x.Tag is PageCommand && x.Visibility == Visibility.Visible).ToList();
+            if (cmds.Count == 0) return;
+            var list = new StackPanel { Margin = new Thickness(0, 4, 0, 0) };
+            var entries = new List<ButtonBase>();
+            foreach (var c in cmds)
+            {
+                var pc = (PageCommand)c.Tag;
+                var sp = new StackPanel { Orientation = Orientation.Horizontal };
+                sp.Children.Add(new TextBlock { Text = pc.Glyph, FontFamily = Fluent.IconFont, FontSize = 18, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 14, 0) });
+                sp.Children.Add(new TextBlock { Text = L.T(pc.Text), FontSize = 16, VerticalAlignment = VerticalAlignment.Center });
+                var e = new Wpf.Ui.Controls.Button
+                {
+                    Content = sp, Height = 46, HorizontalAlignment = HorizontalAlignment.Stretch, HorizontalContentAlignment = HorizontalAlignment.Left,
+                    Padding = new Thickness(14, 4, 14, 4), Margin = new Thickness(0, 0, 0, 4), IsEnabled = c.IsEnabled,
+                    Appearance = Wpf.Ui.Controls.ControlAppearance.Secondary
+                };
+                var run = pc.Run;
+                e.Click += (o, a) => { CloseDialog(false); DelayRun(80, () => { try { run(); } catch (Exception ex) { App.ReportError(ex); } }); };
+                list.Children.Add(e);
+                entries.Add(e);
+            }
+            var first = entries.FirstOrDefault(x => x.IsEnabled);
+            Ask(L.T("Options") + " · " + PageTitleText(), "", "Close", null, null, false, list, first);
+            dlgList = entries;
+        }
+
+        static string PageTitleText()
+        {
+            int i = Array.IndexOf(navKeys, page ?? "");
+            return i >= 0 ? L.T(navLabels[i]) : "";
+        }
+
         static void DialogPad(int b, int pressed)
         {
+            if (dlgList != null)
+            {
+                // the options menu: up and down through the entries (and the Close button below them)
+                var cur = Focused() as UIElement;
+                var stops = dlgList.Where(x => x.IsEnabled).Cast<UIElement>().ToList();
+                stops.Add(dlgYes);
+                int i = stops.IndexOf(cur);
+                if ((pressed & DirUp) != 0) stops[i <= 0 ? stops.Count - 1 : i - 1].Focus();
+                else if ((pressed & DirDown) != 0) stops[i < 0 || i >= stops.Count - 1 ? 0 : i + 1].Focus();
+                if ((pressed & BtnA) != 0)
+                {
+                    var bb = Focused() as ButtonBase;
+                    if (bb != null && dlgList.Contains(bb) && onClick != null) { try { onClick.Invoke(bb, null); } catch { } }
+                    else CloseDialog(false);
+                }
+                else if ((pressed & (BtnB | BtnMenu)) != 0) CloseDialog(false);
+                if (!padVisual && pressed != 0) SetPadVisual(true);
+                return;
+            }
             var f = Focused();
             bool onExtra = dlgExtra != null && f == dlgExtra;
             if ((pressed & DirUp) != 0 && dlgExtra != null && dlgExtra.IsEnabled) dlgExtra.Focus();          // up: the option above the buttons
