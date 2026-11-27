@@ -215,30 +215,49 @@ namespace PipStudio
             foreach (var gl in glyphs)
             {
                 var fg = new SolidColorBrush(Color.FromRgb(gl.Fg.R, gl.Fg.G, gl.Fg.B));
-                if (gl.Round || gl.Pill)
-                {
-                    bool symbol = gl.Text.Length == 1 && gl.Text[0] > 0x2000;
-                    var t = new TextBlock
-                    {
-                        Text = gl.Text, Foreground = fg, FontWeight = FontWeights.Bold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center,
-                        FontSize = gl.Round ? size * (symbol ? 0.6 : 0.55) : size * 0.42,
-                        FontFamily = symbol ? new FontFamily("Segoe UI Symbol") : Fluent.TextFont
-                    };
-                    var b = new Border
-                    {
-                        Height = size, MinWidth = size, CornerRadius = new CornerRadius(size / 2), Child = t, Margin = new Thickness(0, 0, 3, 0),
-                        Padding = gl.Pill ? new Thickness(size * 0.3, 0, size * 0.3, 0) : new Thickness(0),
-                        Background = new SolidColorBrush(Color.FromRgb(62, 62, 70))
-                    };
-                    row.Children.Add(b);
-                }
-                else
+                if (gl.Plain)
                 {
                     var t = Fluent.Label(gl.Text, size * 0.5, "Sub", false);
                     t.VerticalAlignment = VerticalAlignment.Center;
                     t.Margin = new Thickness(1, 0, 4, 0);
                     row.Children.Add(t);
+                    continue;
                 }
+                bool symbol = gl.Text.Length == 1 && gl.Text[0] > 0x2000;
+                if (gl.Shape == "cross")                                  // the D-pad: just the cross
+                {
+                    row.Children.Add(new TextBlock { Text = "✛", FontFamily = new FontFamily("Segoe UI Symbol"), FontSize = size * 0.95, Foreground = new SolidColorBrush(Color.FromRgb(200, 200, 210)),
+                                                     VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(0, 0, 3, 0) });
+                    continue;
+                }
+                var tb = new TextBlock
+                {
+                    Text = gl.Text, Foreground = fg, FontWeight = FontWeights.Bold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center,
+                    FontSize = gl.Shape == "round" ? size * (symbol ? 0.6 : 0.55) : size * 0.4,
+                    FontFamily = symbol ? new FontFamily("Segoe UI Symbol") : Fluent.TextFont
+                };
+                var b = new Border { Child = tb, Margin = new Thickness(0, 0, 3, 0), VerticalAlignment = VerticalAlignment.Center, Background = new SolidColorBrush(Color.FromRgb(62, 62, 70)) };
+                double big, mid, small;
+                switch (gl.Shape)
+                {
+                    case "bumper":                                        // a wide, flat shoulder: its outer top corner rounder
+                        b.Height = size * 0.72; b.MinWidth = size * 1.5; b.Padding = new Thickness(size * 0.25, 0, size * 0.25, 0);
+                        big = b.Height * 0.5; small = b.Height * 0.2;
+                        b.CornerRadius = gl.Left ? new CornerRadius(big, small, small, small) : new CornerRadius(small, big, small, small);
+                        break;
+                    case "trigger":                                       // taller, with a rounded top
+                        b.Height = size; b.MinWidth = size * 1.15; b.Padding = new Thickness(size * 0.2, size * 0.08, size * 0.2, 0);
+                        big = size * 0.5; mid = size * 0.3; small = size * 0.14;
+                        b.CornerRadius = gl.Left ? new CornerRadius(big, mid, small, small) : new CornerRadius(mid, big, small, small);
+                        break;
+                    case "pill":                                          // Options, Share, Guide
+                        b.Height = size * 0.72; b.Padding = new Thickness(size * 0.3, 0, size * 0.3, 0); b.CornerRadius = new CornerRadius(size * 0.36);
+                        break;
+                    default:                                              // face buttons, sticks, + and −
+                        b.Height = size; b.Width = size; b.CornerRadius = new CornerRadius(size / 2);
+                        break;
+                }
+                row.Children.Add(b);
             }
             return row;
         }

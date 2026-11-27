@@ -74,9 +74,12 @@ namespace PipStudio
         public class Glyph
         {
             public string Text = "";
-            public bool Round, Pill, Plain;
+            /// <summary>"round" (face buttons, sticks, + −), "bumper", "trigger", "pill" (Options, Share, Guide), "cross" (the D-pad), "plain" (text).</summary>
+            public string Shape = "round";
+            public bool Left;                                    // a left bumper or trigger (its outer corner is on the left)
             public System.Drawing.Color Fg = System.Drawing.Color.White;
-            public static Glyph Of(string t) { return new Glyph { Text = t, Plain = true }; }
+            public bool Plain { get { return Shape == "plain"; } }
+            public static Glyph Of(string t) { return new Glyph { Text = t, Shape = "plain" }; }
         }
 
         static System.Drawing.Color Hex(int rgb) { return System.Drawing.Color.FromArgb((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255); }
@@ -98,7 +101,7 @@ namespace PipStudio
         /// <summary>A whole stick or the D-pad (for "R-Stick ↕"): its round symbol.</summary>
         public static Glyph Group(string name)
         {
-            return name == "D-pad" ? new Glyph { Text = "✛", Round = true } : new Glyph { Text = name.StartsWith("L") ? "L" : "R", Round = true };
+            return name == "D-pad" ? new Glyph { Text = "✛", Shape = "cross" } : new Glyph { Text = name.StartsWith("L") ? "L" : "R" };
         }
 
         static IEnumerable<Glyph> One(int m, string kind)
@@ -111,27 +114,29 @@ namespace PipStudio
                     int i = m == 0x1000 ? 0 : m == 0x2000 ? 1 : m == 0x4000 ? 2 : 3;
                     var fg = kind == "ps" ? new[] { 0x7AA7E8, 0xEE5A5A, 0xE58AC9, 0x3FC1A6 }[i]
                            : kind == "switch" ? 0xFFFFFF : new[] { 0x6CC04A, 0xE3423F, 0x3B8EEA, 0xF4B41A }[i];
-                    yield return new Glyph { Text = name, Round = true, Fg = Hex(fg) };
+                    yield return new Glyph { Text = name, Fg = Hex(fg) };
                     break;
                 case 0x10: case 0x20:                                    // Menu / View, Options / Share, + / −
-                    if (kind == "ps") yield return new Glyph { Text = name.ToUpperInvariant(), Pill = true };
-                    else yield return new Glyph { Text = kind == "switch" ? name : (m == 0x10 ? "≡" : "⧉"), Round = true };
+                    if (kind == "ps") yield return new Glyph { Text = name.ToUpperInvariant(), Shape = "pill" };
+                    else yield return new Glyph { Text = kind == "switch" ? name : (m == 0x10 ? "≡" : "⧉") };
                     break;
                 case 0x40: case 0x80:                                    // stick clicks
-                    yield return new Glyph { Text = m == 0x40 ? "L" : "R", Round = true };
+                    yield return new Glyph { Text = m == 0x40 ? "L" : "R" };
                     yield return Glyph.Of("click");
                     break;
                 case 1: case 2: case 4: case 8:                          // D-pad directions
-                    yield return new Glyph { Text = "✛", Round = true };
+                    yield return new Glyph { Text = "✛", Shape = "cross" };
                     yield return Glyph.Of(m == 1 ? "↑" : m == 2 ? "↓" : m == 4 ? "←" : "→");
                     break;
                 default:
                     if (name.Contains("Stick"))                          // stick directions
                     {
-                        yield return new Glyph { Text = name.StartsWith("L") ? "L" : "R", Round = true };
+                        yield return new Glyph { Text = name.StartsWith("L") ? "L" : "R" };
                         yield return Glyph.Of(name.Substring(name.Length - 1));
                     }
-                    else yield return new Glyph { Text = name, Pill = true };   // bumpers, triggers, Guide, Capture
+                    else if (m == 0x100 || m == 0x200) yield return new Glyph { Text = name, Shape = "bumper", Left = m == 0x100 };
+                    else if (m == 0x10000 || m == 0x20000) yield return new Glyph { Text = name, Shape = "trigger", Left = m == 0x10000 };
+                    else yield return new Glyph { Text = name, Shape = "pill" };   // Guide, Capture
                     break;
             }
         }

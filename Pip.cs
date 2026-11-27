@@ -2562,9 +2562,15 @@ namespace PipStudio
         static int GlyphWidth(Graphics g, Pad.Glyph gl, float s, int h)
         {
             int d = h - (int)(4 * s);
-            if (gl.Round) return d;
-            if (gl.Pill) return LT.MeasureText(gl.Text, U.UIBold(8.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width + (int)(12 * s);
-            return LT.MeasureText(gl.Text, U.UI(10.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width;
+            int tw = gl.Plain ? 0 : LT.MeasureText(gl.Text, U.UIBold(8.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width;
+            switch (gl.Shape)
+            {
+                case "plain": return LT.MeasureText(gl.Text, U.UI(10.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width;
+                case "bumper": return Math.Max((int)(d * 1.5), tw + (int)(d * 0.5));
+                case "trigger": return Math.Max((int)(d * 1.15), tw + (int)(d * 0.4));
+                case "pill": return tw + (int)(d * 0.6);
+                default: return d;                                   // round, cross
+            }
         }
 
         static int GlyphsWidth(Graphics g, List<Pad.Glyph> gs, float s, int h)
@@ -2572,26 +2578,64 @@ namespace PipStudio
             return gs.Sum(x => GlyphWidth(g, x, s, h)) + (int)(3 * s) * Math.Max(0, gs.Count - 1);
         }
 
-        /// <summary>Draws a row of button glyphs (round face buttons in their colours, pills for bumpers and triggers, plain text between).</summary>
+        /// <summary>A rounded rectangle with its own radius at each corner (top-left, top-right, bottom-right, bottom-left).</summary>
+        static System.Drawing.Drawing2D.GraphicsPath Corners(RectangleF r, float tl, float tr, float br, float bl)
+        {
+            var p = new System.Drawing.Drawing2D.GraphicsPath();
+            Action<float, float, float, float> arc = (x, y, rad, start) => { if (rad > 0.5f) p.AddArc(x, y, rad * 2, rad * 2, start, 90); else p.AddLine(x, y, x, y); };
+            arc(r.X, r.Y, tl, 180);
+            arc(r.Right - tr * 2, r.Y, tr, 270);
+            arc(r.Right - br * 2, r.Bottom - br * 2, br, 0);
+            arc(r.X, r.Bottom - bl * 2, bl, 90);
+            p.CloseFigure();
+            return p;
+        }
+
+        /// <summary>Draws a row of button glyphs, each in its controller's shape: round face buttons in their colours, flat
+        /// shoulder bumpers, rounded-top triggers, pills for Options and Guide, the D-pad's cross, plain text between.</summary>
         internal static void DrawGlyphs(Graphics g, List<Pad.Glyph> gs, int x, int y, int h, float s)
         {
             int d = h - (int)(4 * s), top = y + (h - d) / 2;
             var oldMode = g.SmoothingMode;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            var flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine;
             foreach (var gl in gs)
             {
                 int w = GlyphWidth(g, gl, s, h);
-                if (gl.Round || gl.Pill)
+                if (gl.Plain)
+                    LT.DrawText(g, gl.Text, U.UI(10.5f * s), new Rectangle(x, y, w + 2, h), Color.FromArgb(200, 200, 210), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+                else if (gl.Shape == "cross")
+                    LT.DrawText(g, "✛", GlyphFont(gl, d * 0.95f), new Rectangle(x, y, w, h), Color.FromArgb(200, 200, 210), flags);
+                else
                 {
-                    var r = new Rectangle(x, top, w, d);
-                    using (var path = U.RoundRect(r, d / 2f))
+                    RectangleF r;
+                    System.Drawing.Drawing2D.GraphicsPath path;
+                    if (gl.Shape == "bumper")
+                    {
+                        float bh = d * 0.72f; r = new RectangleF(x, y + (h - bh) / 2, w, bh);
+                        float big = bh * 0.5f, small = bh * 0.2f;
+                        path = gl.Left ? Corners(r, big, small, small, small) : Corners(r, small, big, small, small);
+                    }
+                    else if (gl.Shape == "trigger")
+                    {
+                        r = new RectangleF(x, top, w, d);
+                        float big = d * 0.5f, mid = d * 0.3f, small = d * 0.14f;
+                        path = gl.Left ? Corners(r, big, mid, small, small) : Corners(r, mid, big, small, small);
+                    }
+                    else if (gl.Shape == "pill")
+                    {
+                        float ph = d * 0.72f; r = new RectangleF(x, y + (h - ph) / 2, w, ph);
+                        path = Corners(r, ph / 2, ph / 2, ph / 2, ph / 2);
+                    }
+                    else { r = new RectangleF(x, top, w, d); path = Corners(r, d / 2f, d / 2f, d / 2f, d / 2f); }
+                    using (path)
                     using (var b = new SolidBrush(Color.FromArgb(62, 62, 70)))
                         g.FillPath(b, path);
-                    var f = gl.Round ? GlyphFont(gl, d * 0.62f) : U.UIBold(8.5f * s);
-                    LT.DrawText(g, gl.Text, f, r, gl.Fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+                    var f = gl.Shape == "round" ? GlyphFont(gl, d * 0.62f) : U.UIBold(8.5f * s);
+                    var tr = Rectangle.Round(r);
+                    if (gl.Shape == "trigger") tr.Y += (int)(d * 0.06f);
+                    LT.DrawText(g, gl.Text, f, tr, gl.Fg, flags);
                 }
-                else
-                    LT.DrawText(g, gl.Text, U.UI(10.5f * s), new Rectangle(x, y, w + 2, h), Color.FromArgb(200, 200, 210), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
                 x += w + (int)(3 * s);
             }
             g.SmoothingMode = oldMode;
