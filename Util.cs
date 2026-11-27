@@ -592,6 +592,9 @@ namespace PipStudio
     {
         public bool FirstRun = true;
         public bool RestoreSessions = true;
+        public string FirstUse = "";              // the day PiP Studio was first used (the Store version's rating question waits a few days)
+        public int PipsOpened = 0;                // ...and a few PiPs
+        public bool RateAsked = false;            // ...and asks once
         public bool HideFromCapture = false;      // excluding windows from capture adds compositor work, so it's opt-in
         public bool ShowTips = true;
         public int DefaultCorner = (int)Corner.BottomRight;

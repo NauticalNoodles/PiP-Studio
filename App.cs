@@ -363,6 +363,7 @@ namespace PipStudio
 
             SystemEvents.SessionEnding += (o, e) => { try { SaveSession(); } catch { } CrashReports.CleanExit(); };   // Windows shutting down isn't a crash
 
+            MainUI.NoteFirstUse();
             if (S.RestoreSessions) RestoreSession();
             bool silent = args.Any(a => a.Equals("--startup", StringComparison.OrdinalIgnoreCase))
                           || (Packaged.IsPackaged && args.Length == 0 && Packaged.LaunchedAtStartup());
@@ -1148,6 +1149,7 @@ namespace PipStudio
 
         public PipWindow CreatePip(PipState st, IntPtr src)
         {
+            if (S.PipsOpened < 1000) { S.PipsOpened++; SaveSettingsSoon(); }   // the Store version's rating question waits for some use
             var p = new PipWindow(st, src);
             Pips.Add(p);
             Current = p;

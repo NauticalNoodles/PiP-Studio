@@ -154,6 +154,7 @@ namespace PipStudio
             try { U.ForceForeground(new WindowInteropHelper(w).Handle); } catch { }
             if (pageKey != null) Navigate(pageKey);
             if (U.XboxMode && App.S.PadUiMode == 1 && !padVisual) Dispatch(() => SetPadVisual(true), DispatcherPriority.Loaded);   // Xbox mode: you're on a controller
+            DelayRun(2500, MaybeAskForRating);                            // Store version: once, after a few days of use
         }
 
         static T F<T>(string name) where T : class { return (T)w.FindName(name); }

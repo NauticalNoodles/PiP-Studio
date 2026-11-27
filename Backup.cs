@@ -17,7 +17,7 @@ namespace PipStudio
         /// <summary>Settings that only make sense on this PC.</summary>
         static readonly HashSet<string> ThisPcOnly = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "CompanionDevices", "CompanionOn", "GpuPrefsAdded", "UpdateNotified", "FirstRun"
+            "CompanionDevices", "CompanionOn", "GpuPrefsAdded", "UpdateNotified", "FirstRun", "FirstUse", "PipsOpened", "RateAsked"
         };
 
         public static void Export(string path)

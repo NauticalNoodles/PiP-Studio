@@ -774,6 +774,9 @@ namespace PipStudio
                 { "The only PiP", "نافذة PiP الوحيدة" },
                 { "click", "ضغط" },
                 { "hold", "مطوّل" },
+                { "Enjoying PiP Studio?", "هل يعجبك PiP Studio؟" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "يساعد تقييمك في Microsoft Store الآخرين على العثور عليه. لن يستغرق سوى لحظة." },
+                { "Rate it", "قيّمه" },
             };
         }
 
@@ -1527,6 +1530,9 @@ namespace PipStudio
                 { "The only PiP", "唯一的画中画" },
                 { "click", "按下" },
                 { "hold", "长按" },
+                { "Enjoying PiP Studio?", "喜欢 PiP Studio 吗？" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "在 Microsoft Store 中评分可以帮助其他人找到它，只需片刻。" },
+                { "Rate it", "去评分" },
             };
         }
 
@@ -2280,6 +2286,9 @@ namespace PipStudio
                 { "The only PiP", "Das einzige PiP" },
                 { "click", "Klick" },
                 { "hold", "halten" },
+                { "Enjoying PiP Studio?", "Gefällt Ihnen PiP Studio?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Eine Bewertung im Microsoft Store hilft anderen, es zu finden. Dauert nur einen Moment." },
+                { "Rate it", "Bewerten" },
             };
         }
 
@@ -3033,6 +3042,9 @@ namespace PipStudio
                 { "The only PiP", "El único PiP" },
                 { "click", "clic" },
                 { "hold", "mantener" },
+                { "Enjoying PiP Studio?", "¿Te gusta PiP Studio?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Una valoración en Microsoft Store ayuda a que otras personas lo encuentren. Solo lleva un momento." },
+                { "Rate it", "Valorar" },
             };
         }
 
@@ -3786,6 +3798,9 @@ namespace PipStudio
                 { "The only PiP", "Le seul PiP" },
                 { "click", "clic" },
                 { "hold", "maintenir" },
+                { "Enjoying PiP Studio?", "Vous aimez PiP Studio ?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Une note dans le Microsoft Store aide d'autres personnes à le trouver. Cela ne prend qu'un instant." },
+                { "Rate it", "Le noter" },
             };
         }
 
@@ -4539,6 +4554,9 @@ namespace PipStudio
                 { "The only PiP", "唯一の PiP" },
                 { "click", "押し込み" },
                 { "hold", "長押し" },
+                { "Enjoying PiP Studio?", "PiP Studio を気に入っていただけましたか?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Microsoft Store での評価は、ほかの人が見つける助けになります。すぐに終わります。" },
+                { "Rate it", "評価する" },
             };
         }
 
@@ -5292,6 +5310,9 @@ namespace PipStudio
                 { "The only PiP", "O único PiP" },
                 { "click", "clique" },
                 { "hold", "segurar" },
+                { "Enjoying PiP Studio?", "Está gostando do PiP Studio?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Uma avaliação na Microsoft Store ajuda outras pessoas a encontrá-lo. Leva só um instante." },
+                { "Rate it", "Avaliar" },
             };
         }
 
@@ -6045,6 +6066,9 @@ namespace PipStudio
                 { "The only PiP", "Единственный PiP" },
                 { "click", "нажатие" },
                 { "hold", "удерж." },
+                { "Enjoying PiP Studio?", "Нравится PiP Studio?" },
+                { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Оценка в Microsoft Store помогает другим найти его. Это займёт всего минуту." },
+                { "Rate it", "Оценить" },
             };
         }
     }
