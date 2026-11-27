@@ -2497,28 +2497,29 @@ namespace PipStudio
 
         void DrawPadHints(Graphics g, float s) { DrawHintChips(g, s, ClientSize); }
 
-        /// <summary>The controller hint chips along the bottom (also used on other apps' PiPs).</summary>
+        /// <summary>The controller hint chips along the bottom (also used on other apps' PiPs): the buttons as they look on
+        /// this controller (Xbox's coloured letters, PlayStation's shapes...), then what they do.</summary>
         internal static void DrawHintChips(Graphics g, float s, Size client)
         {
             var hints = App.I.PadHints();
             if (hints.Count == 0) return;
-            Font fb = U.UIBold(11 * s), fn = U.UI(11 * s);
-            int padX = (int)(8 * s), gap = (int)(4 * s), chipH = (int)(22 * s);
+            Font fn = U.UI(11 * s);
+            int padX = (int)(8 * s), gap = (int)(4 * s), chipH = (int)(24 * s);
             int maxW = client.Width - 2 * padX;
-            var chips = new List<Tuple<string, string, int, int>>();   // button, label, button width, total width
+            var chips = new List<Tuple<List<Pad.Glyph>, string, int, int>>();   // buttons, label, buttons' width, total width
             foreach (var h in hints)
             {
-                int bw = LT.MeasureText(h.Key, fb, Size.Empty, TextFormatFlags.NoPadding).Width;
-                int lw = LT.MeasureText(h.Value, fn, Size.Empty, TextFormatFlags.NoPadding).Width;
-                chips.Add(Tuple.Create(h.Key, h.Value, bw, bw + lw + (int)(20 * s)));
+                int bw = GlyphsWidth(g, h.Item1, s, chipH);
+                int lw = LT.MeasureText(h.Item2, fn, Size.Empty, TextFormatFlags.NoPadding).Width;
+                chips.Add(Tuple.Create(h.Item1, h.Item2, bw, bw + lw + (int)(18 * s)));
             }
             // wrap into rows, laid out from the bottom up
-            var rows = new List<List<Tuple<string, string, int, int>>>();
-            var row = new List<Tuple<string, string, int, int>>();
+            var rows = new List<List<Tuple<List<Pad.Glyph>, string, int, int>>>();
+            var row = new List<Tuple<List<Pad.Glyph>, string, int, int>>();
             int rowW = 0;
             foreach (var c in chips)
             {
-                if (row.Count > 0 && rowW + gap + c.Item4 > maxW) { rows.Add(row); row = new List<Tuple<string, string, int, int>>(); rowW = 0; }
+                if (row.Count > 0 && rowW + gap + c.Item4 > maxW) { rows.Add(row); row = new List<Tuple<List<Pad.Glyph>, string, int, int>>(); rowW = 0; }
                 row.Add(c);
                 rowW += (row.Count > 1 ? gap : 0) + c.Item4;
             }
@@ -2536,14 +2537,64 @@ namespace PipStudio
                     using (var path = U.RoundRect(rc, chipH / 2f))
                     using (var b = new SolidBrush(Color.FromArgb(24, 24, 28)))
                         g.FillPath(b, path);
-                    var br = new Rectangle(x + (int)(9 * s), y, c.Item3 + 2, chipH);
-                    LT.DrawText(g, c.Item1, fb, br, Theme.Accent, TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
-                    var lr = new Rectangle(br.Right + (int)(4 * s), y, c.Item4 - c.Item3 - (int)(18 * s), chipH);
+                    DrawGlyphs(g, c.Item1, x + (int)(4 * s), y, chipH, s);
+                    var lr = new Rectangle(x + (int)(4 * s) + c.Item3 + (int)(6 * s), y, c.Item4 - c.Item3 - (int)(10 * s), chipH);
                     LT.DrawText(g, c.Item2, fn, lr, Color.FromArgb(225, 225, 232), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
                     x += c.Item4 + gap;
                 }
                 y += chipH + gap;
             }
+        }
+
+        static readonly Dictionary<int, Font> symbolFonts = new Dictionary<int, Font>();
+
+        static Font GlyphFont(Pad.Glyph gl, float px)
+        {
+            // the shapes (✕ ○ □ △ ≡ ⧉ ✛) are in Segoe UI Symbol; letters in Segoe UI Semibold
+            bool symbol = gl.Text.Length == 1 && gl.Text[0] > 0x2000;
+            if (!symbol) return U.UIBold(px * 0.75f);
+            int k = (int)Math.Round(px);
+            Font f;
+            if (!symbolFonts.TryGetValue(k, out f)) symbolFonts[k] = f = new Font("Segoe UI Symbol", k, FontStyle.Bold, GraphicsUnit.Pixel);
+            return f;
+        }
+
+        static int GlyphWidth(Graphics g, Pad.Glyph gl, float s, int h)
+        {
+            int d = h - (int)(4 * s);
+            if (gl.Round) return d;
+            if (gl.Pill) return LT.MeasureText(gl.Text, U.UIBold(8.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width + (int)(12 * s);
+            return LT.MeasureText(gl.Text, U.UI(10.5f * s), Size.Empty, TextFormatFlags.NoPadding).Width;
+        }
+
+        static int GlyphsWidth(Graphics g, List<Pad.Glyph> gs, float s, int h)
+        {
+            return gs.Sum(x => GlyphWidth(g, x, s, h)) + (int)(3 * s) * Math.Max(0, gs.Count - 1);
+        }
+
+        /// <summary>Draws a row of button glyphs (round face buttons in their colours, pills for bumpers and triggers, plain text between).</summary>
+        internal static void DrawGlyphs(Graphics g, List<Pad.Glyph> gs, int x, int y, int h, float s)
+        {
+            int d = h - (int)(4 * s), top = y + (h - d) / 2;
+            var oldMode = g.SmoothingMode;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            foreach (var gl in gs)
+            {
+                int w = GlyphWidth(g, gl, s, h);
+                if (gl.Round || gl.Pill)
+                {
+                    var r = new Rectangle(x, top, w, d);
+                    using (var path = U.RoundRect(r, d / 2f))
+                    using (var b = new SolidBrush(Color.FromArgb(62, 62, 70)))
+                        g.FillPath(b, path);
+                    var f = gl.Round ? GlyphFont(gl, d * 0.62f) : U.UIBold(8.5f * s);
+                    LT.DrawText(g, gl.Text, f, r, gl.Fg, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+                }
+                else
+                    LT.DrawText(g, gl.Text, U.UI(10.5f * s), new Rectangle(x, y, w + 2, h), Color.FromArgb(200, 200, 210), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.SingleLine);
+                x += w + (int)(3 * s);
+            }
+            g.SmoothingMode = oldMode;
         }
 
         protected override void WndProc(ref Message m)

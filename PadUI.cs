@@ -186,28 +186,61 @@ namespace PipStudio
             string kind = App.I.PadKind;
             hintsKind = kind;
             padHintsPanel.Children.Clear();
-            Action<string, string> add = (btn, label) =>
+            Action<List<Pad.Glyph>, string> add = (glyphs, label) =>
             {
-                var chip = new Border { CornerRadius = new CornerRadius(11), Padding = new Thickness(9, 2, 9, 3), MinWidth = 24, Margin = new Thickness(18, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center };
-                chip.SetResourceReference(Border.BackgroundProperty, "Tile");
-                var t = Fluent.Label(btn, 12, "Text", false);
-                t.FontWeight = FontWeights.SemiBold;
-                t.HorizontalAlignment = HorizontalAlignment.Center;
-                chip.Child = t;
-                padHintsPanel.Children.Add(chip);
+                var row = GlyphRow(glyphs, 24);
+                row.Margin = new Thickness(18, 0, 8, 0);
+                padHintsPanel.Children.Add(row);
                 var l = Fluent.Label(label, 13, "Sub", false);
                 l.VerticalAlignment = VerticalAlignment.Center;
                 padHintsPanel.Children.Add(l);
             };
-            add(Pad.Name(BtnA, kind), "Select");
-            add(Pad.Name(BtnB, kind), "Back");
-            add(Pad.Name(BtnLB, kind) + "  " + Pad.Name(BtnRB, kind), "Tabs");
-            add(Pad.Name(BtnY, kind), "Search");
-            if (ExplainPages.Contains(page ?? "")) add(Pad.Name(BtnX, kind), App.S.ShowExplainers ? "Hide explanations" : "Explanations");
-            add(Pad.Name(BtnMenu, kind), "Options");
-            add("R-Stick", "Scroll");
-            tabLB.Child = Chip(Pad.Name(BtnLB, kind));
-            tabRB.Child = Chip(Pad.Name(BtnRB, kind));
+            add(Pad.Glyphs(BtnA, kind), "Select");
+            add(Pad.Glyphs(BtnB, kind), "Back");
+            var tabs = Pad.Glyphs(BtnLB, kind); tabs.AddRange(Pad.Glyphs(BtnRB, kind));
+            add(tabs, "Tabs");
+            add(Pad.Glyphs(BtnY, kind), "Search");
+            if (ExplainPages.Contains(page ?? "")) add(Pad.Glyphs(BtnX, kind), App.S.ShowExplainers ? "Hide explanations" : "Explanations");
+            add(Pad.Glyphs(BtnMenu, kind), "Options");
+            add(new List<Pad.Glyph> { Pad.Group("R-Stick"), Pad.Glyph.Of("↕") }, "Scroll");
+            tabLB.Child = GlyphRow(Pad.Glyphs(BtnLB, kind), 28);
+            tabRB.Child = GlyphRow(Pad.Glyphs(BtnRB, kind), 28);
+        }
+
+        /// <summary>Controller buttons as they look on this controller: round face buttons in their own colours (Xbox's
+        /// green A, PlayStation's blue ✕...), pills for bumpers, triggers and Options, plain text between them.</summary>
+        static StackPanel GlyphRow(List<Pad.Glyph> glyphs, double size)
+        {
+            var row = new StackPanel { Orientation = Orientation.Horizontal, VerticalAlignment = VerticalAlignment.Center };
+            foreach (var gl in glyphs)
+            {
+                var fg = new SolidColorBrush(Color.FromRgb(gl.Fg.R, gl.Fg.G, gl.Fg.B));
+                if (gl.Round || gl.Pill)
+                {
+                    bool symbol = gl.Text.Length == 1 && gl.Text[0] > 0x2000;
+                    var t = new TextBlock
+                    {
+                        Text = gl.Text, Foreground = fg, FontWeight = FontWeights.Bold, HorizontalAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center,
+                        FontSize = gl.Round ? size * (symbol ? 0.6 : 0.55) : size * 0.42,
+                        FontFamily = symbol ? new FontFamily("Segoe UI Symbol") : Fluent.TextFont
+                    };
+                    var b = new Border
+                    {
+                        Height = size, MinWidth = size, CornerRadius = new CornerRadius(size / 2), Child = t, Margin = new Thickness(0, 0, 3, 0),
+                        Padding = gl.Pill ? new Thickness(size * 0.3, 0, size * 0.3, 0) : new Thickness(0),
+                        Background = new SolidColorBrush(Color.FromRgb(62, 62, 70))
+                    };
+                    row.Children.Add(b);
+                }
+                else
+                {
+                    var t = Fluent.Label(gl.Text, size * 0.5, "Sub", false);
+                    t.VerticalAlignment = VerticalAlignment.Center;
+                    t.Margin = new Thickness(1, 0, 4, 0);
+                    row.Children.Add(t);
+                }
+            }
+            return row;
         }
 
         static Border Chip(string text)

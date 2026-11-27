@@ -772,6 +772,8 @@ namespace PipStudio
                 { "Control the previous PiP", "التحكم في نافذة PiP السابقة" },
                 { "Switch PiP", "تبديل PiP" },
                 { "The only PiP", "نافذة PiP الوحيدة" },
+                { "click", "ضغط" },
+                { "hold", "مطوّل" },
             };
         }
 
@@ -1523,6 +1525,8 @@ namespace PipStudio
                 { "Control the previous PiP", "控制上一个画中画" },
                 { "Switch PiP", "切换画中画" },
                 { "The only PiP", "唯一的画中画" },
+                { "click", "按下" },
+                { "hold", "长按" },
             };
         }
 
@@ -2274,6 +2278,8 @@ namespace PipStudio
                 { "Control the previous PiP", "Vorheriges PiP steuern" },
                 { "Switch PiP", "PiP wechseln" },
                 { "The only PiP", "Das einzige PiP" },
+                { "click", "Klick" },
+                { "hold", "halten" },
             };
         }
 
@@ -3025,6 +3031,8 @@ namespace PipStudio
                 { "Control the previous PiP", "Controlar el PiP anterior" },
                 { "Switch PiP", "Cambiar PiP" },
                 { "The only PiP", "El único PiP" },
+                { "click", "clic" },
+                { "hold", "mantener" },
             };
         }
 
@@ -3776,6 +3784,8 @@ namespace PipStudio
                 { "Control the previous PiP", "Contrôler le PiP précédent" },
                 { "Switch PiP", "Changer de PiP" },
                 { "The only PiP", "Le seul PiP" },
+                { "click", "clic" },
+                { "hold", "maintenir" },
             };
         }
 
@@ -4527,6 +4537,8 @@ namespace PipStudio
                 { "Control the previous PiP", "前の PiP を操作" },
                 { "Switch PiP", "PiP 切替" },
                 { "The only PiP", "唯一の PiP" },
+                { "click", "押し込み" },
+                { "hold", "長押し" },
             };
         }
 
@@ -5278,6 +5290,8 @@ namespace PipStudio
                 { "Control the previous PiP", "Controlar o PiP anterior" },
                 { "Switch PiP", "Trocar PiP" },
                 { "The only PiP", "O único PiP" },
+                { "click", "clique" },
+                { "hold", "segurar" },
             };
         }
 
@@ -6029,6 +6043,8 @@ namespace PipStudio
                 { "Control the previous PiP", "Управлять предыдущим PiP" },
                 { "Switch PiP", "Сменить PiP" },
                 { "The only PiP", "Единственный PiP" },
+                { "click", "нажатие" },
+                { "hold", "удерж." },
             };
         }
     }

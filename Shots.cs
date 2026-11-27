@@ -85,7 +85,41 @@ namespace PipStudio
                 using (var big = new System.Drawing.Bitmap(tmp))
                 using (var small = new System.Drawing.Bitmap(big, new System.Drawing.Size(1200, (int)(1200.0 * big.Height / big.Width)))) small.Save(Path.Combine(dir, "share-options.png"));
                 CloseDialog(false);
+            });
+            // the button glyphs for each kind of controller: the hints bar along the bottom of this window, and a PiP's hint chips
+            steps.Add(() =>
+            {
+                var strips = new List<System.Drawing.Bitmap>();
+                foreach (var kind in new[] { "xbox", "ps", "switch" })
+                {
+                    App.I.PadKind = kind;
+                    BuildPadHints();
+                    w.UpdateLayout();
+                    string tmp = Path.Combine(dir, "hints-" + kind + ".png");
+                    Save(tmp);
+                    using (var full = new System.Drawing.Bitmap(tmp))
+                    {
+                        int hgt = 110, wid = full.Width;
+                        var strip = new System.Drawing.Bitmap(wid, hgt + 90);
+                        using (var g = System.Drawing.Graphics.FromImage(strip))
+                        {
+                            g.Clear(System.Drawing.Color.FromArgb(32, 32, 32));
+                            g.DrawImage(full, new System.Drawing.Rectangle(0, 0, wid, hgt), new System.Drawing.Rectangle(0, full.Height - hgt, wid, hgt), System.Drawing.GraphicsUnit.Pixel);
+                            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+                            PipOverlay.DrawHintChips(g, 2f, new System.Drawing.Size(wid, hgt + 90 + 16));   // a PiP's chips, under it
+                        }
+                        strips.Add(strip);
+                    }
+                }
+                using (var all = new System.Drawing.Bitmap(strips[0].Width, strips.Sum(x => x.Height)))
+                {
+                    using (var g = System.Drawing.Graphics.FromImage(all)) { int y = 0; foreach (var st in strips) { g.DrawImage(st, 0, y); y += st.Height; } }
+                    using (var small = new System.Drawing.Bitmap(all, new System.Drawing.Size(1400, (int)(1400.0 * all.Height / all.Width)))) small.Save(Path.Combine(dir, "share-glyphs.png"));
+                }
+                foreach (var st in strips) st.Dispose();
+                App.I.PadKind = "xbox";
                 SetPadVisual(false);
+                Log("glyphs: drawn for xbox, ps and switch");
             });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));

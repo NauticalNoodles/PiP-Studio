@@ -715,15 +715,20 @@ namespace PipStudio
         }
 
         /// <summary>Button hints shown on the PiP while controller controls are on.</summary>
-        public List<KeyValuePair<string, string>> PadHints()
+        /// <summary>Button hints shown on the PiP while controller controls are on: the buttons (as they look on this
+        /// controller) and what they do.</summary>
+        public List<Tuple<List<Pad.Glyph>, string>> PadHints()
         {
-            var l = new List<KeyValuePair<string, string>>();
+            var l = new List<Tuple<List<Pad.Glyph>, string>>();
             if (!S.PadHints) return l;
             var dirs = new[] { "up", "down", "left", "right" }.Select(k => PadMask[k]).Where(m => m != 0).ToList();
             if (dirs.Count > 0)
             {
                 bool dpad = dirs.All(m => m >= 1 && m <= 8);
-                l.Add(new KeyValuePair<string, string>(dpad ? "D-pad" : string.Join(" ", dirs.Select(m => Pad.Name(m, PadKind))), "Move"));
+                var g = new List<Pad.Glyph>();
+                if (dpad) g.Add(Pad.Group("D-pad"));
+                else foreach (var m in dirs) { if (g.Count > 0) g.Add(Pad.Glyph.Of(" ")); g.AddRange(Pad.Glyphs(m, PadKind)); }
+                l.Add(Tuple.Create(g, "Move"));
             }
             // paired controls share one hint: "R-Stick ↕  Opacity" when both halves sit on one axis of a stick or the D-pad
             var used = new HashSet<string> { "up", "down", "left", "right", "pad", "startpip" };
@@ -736,39 +741,43 @@ namespace PipStudio
                 if (m1 == 0 && m2 == 0) continue;
                 if (m1 != 0 && m2 != 0)
                 {
-                    string axis = AxisName(m1, m2);
-                    string label = axis ?? (HintButton(pr.Item1) + " / " + HintButton(pr.Item2));
-                    l.Add(new KeyValuePair<string, string>(label, pr.Item3));
+                    var axis = Axis(m1, m2);
+                    List<Pad.Glyph> g;
+                    if (axis != null) g = new List<Pad.Glyph> { Pad.Group(axis.Item1), Pad.Glyph.Of(axis.Item2) };
+                    else { g = HintGlyphs(pr.Item1); g.Add(Pad.Glyph.Of("/")); g.AddRange(HintGlyphs(pr.Item2)); }
+                    l.Add(Tuple.Create(g, pr.Item3));
                 }
                 else
                 {
                     string k = m1 != 0 ? pr.Item1 : pr.Item2;
-                    l.Add(new KeyValuePair<string, string>(HintButton(k), Actions.First(x => x.Key == k).Brief));
+                    l.Add(Tuple.Create(HintGlyphs(k), Actions.First(x => x.Key == k).Brief));
                 }
             }
             // every other bound control
             foreach (var a in Actions)
             {
                 if (used.Contains(a.Key) || PadMask[a.Key] == 0) continue;
-                l.Add(new KeyValuePair<string, string>(HintButton(a.Key), a.Brief));
+                l.Add(Tuple.Create(HintGlyphs(a.Key), a.Brief));
             }
             return l;
         }
 
-        string HintButton(string key)
+        List<Pad.Glyph> HintGlyphs(string key)
         {
-            string tag = PadMode[key] == 1 ? " ×2" : PadMode[key] == 2 ? " (hold)" : "";
-            return Pad.Name(PadMask[key], PadKind) + tag;
+            var g = Pad.Glyphs(PadMask[key], PadKind);
+            if (PadMode[key] == 1) g.Add(Pad.Glyph.Of("×2"));
+            else if (PadMode[key] == 2) g.Add(Pad.Glyph.Of("hold"));
+            return g;
         }
 
-        /// <summary>"R-Stick ↕" when two single-button bindings are the two ends of one axis of the same stick (or the D-pad).</summary>
-        static string AxisName(int a, int b)
+        /// <summary>("R-Stick", "↕") when two single-button bindings are the two ends of one axis of the same stick (or the D-pad).</summary>
+        static Tuple<string, string> Axis(int a, int b)
         {
             var groups = new[] { Tuple.Create("D-pad", 0x1, 0x2, 0x4, 0x8), Tuple.Create("L-Stick", 0x40000, 0x80000, 0x100000, 0x200000), Tuple.Create("R-Stick", 0x400000, 0x800000, 0x1000000, 0x2000000) };
             foreach (var g in groups)
             {
-                if ((a == g.Item2 && b == g.Item3) || (a == g.Item3 && b == g.Item2)) return g.Item1 + " ↕";
-                if ((a == g.Item4 && b == g.Item5) || (a == g.Item5 && b == g.Item4)) return g.Item1 + " ↔";
+                if ((a == g.Item2 && b == g.Item3) || (a == g.Item3 && b == g.Item2)) return Tuple.Create(g.Item1, "↕");
+                if ((a == g.Item4 && b == g.Item5) || (a == g.Item5 && b == g.Item4)) return Tuple.Create(g.Item1, "↔");
             }
             return null;
         }

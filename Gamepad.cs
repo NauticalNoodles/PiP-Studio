@@ -69,6 +69,73 @@ namespace PipStudio
             return string.Join(" + ", Names.Where(x => (mask & x.m) != 0).Select(x => x.n[col]));
         }
 
+        /// <summary>How a button looks in the hints: a round face button in its own colour, a pill (bumpers, triggers, Options),
+        /// or plain text between them ("/", "↕", "×2").</summary>
+        public class Glyph
+        {
+            public string Text = "";
+            public bool Round, Pill, Plain;
+            public System.Drawing.Color Fg = System.Drawing.Color.White;
+            public static Glyph Of(string t) { return new Glyph { Text = t, Plain = true }; }
+        }
+
+        static System.Drawing.Color Hex(int rgb) { return System.Drawing.Color.FromArgb((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255); }
+
+        /// <summary>Each button in the mask as it looks on that controller (Xbox's coloured letters, PlayStation's shapes,
+        /// Switch's letters), joined with "+".</summary>
+        public static List<Glyph> Glyphs(int mask, string kind)
+        {
+            var list = new List<Glyph>();
+            if (mask == 0) { list.Add(Glyph.Of("Unbound")); return list; }
+            foreach (var x in Names.Where(x => (mask & x.m) != 0))
+            {
+                if (list.Count > 0) list.Add(Glyph.Of("+"));
+                list.AddRange(One(x.m, kind));
+            }
+            return list;
+        }
+
+        /// <summary>A whole stick or the D-pad (for "R-Stick ↕"): its round symbol.</summary>
+        public static Glyph Group(string name)
+        {
+            return name == "D-pad" ? new Glyph { Text = "✛", Round = true } : new Glyph { Text = name.StartsWith("L") ? "L" : "R", Round = true };
+        }
+
+        static IEnumerable<Glyph> One(int m, string kind)
+        {
+            int col = kind == "ps" ? 1 : kind == "switch" ? 2 : 0;
+            string name = Names.First(x => x.m == m).n[col];
+            switch (m)
+            {
+                case 0x1000: case 0x2000: case 0x4000: case 0x8000:     // A B X Y (✕ ○ □ △)
+                    int i = m == 0x1000 ? 0 : m == 0x2000 ? 1 : m == 0x4000 ? 2 : 3;
+                    var fg = kind == "ps" ? new[] { 0x7AA7E8, 0xEE5A5A, 0xE58AC9, 0x3FC1A6 }[i]
+                           : kind == "switch" ? 0xFFFFFF : new[] { 0x6CC04A, 0xE3423F, 0x3B8EEA, 0xF4B41A }[i];
+                    yield return new Glyph { Text = name, Round = true, Fg = Hex(fg) };
+                    break;
+                case 0x10: case 0x20:                                    // Menu / View, Options / Share, + / −
+                    if (kind == "ps") yield return new Glyph { Text = name.ToUpperInvariant(), Pill = true };
+                    else yield return new Glyph { Text = kind == "switch" ? name : (m == 0x10 ? "≡" : "⧉"), Round = true };
+                    break;
+                case 0x40: case 0x80:                                    // stick clicks
+                    yield return new Glyph { Text = m == 0x40 ? "L" : "R", Round = true };
+                    yield return Glyph.Of("click");
+                    break;
+                case 1: case 2: case 4: case 8:                          // D-pad directions
+                    yield return new Glyph { Text = "✛", Round = true };
+                    yield return Glyph.Of(m == 1 ? "↑" : m == 2 ? "↓" : m == 4 ? "←" : "→");
+                    break;
+                default:
+                    if (name.Contains("Stick"))                          // stick directions
+                    {
+                        yield return new Glyph { Text = name.StartsWith("L") ? "L" : "R", Round = true };
+                        yield return Glyph.Of(name.Substring(name.Length - 1));
+                    }
+                    else yield return new Glyph { Text = name, Pill = true };   // bumpers, triggers, Guide, Capture
+                    break;
+            }
+        }
+
         public static string FamilyName(string kind)
         {
             return kind == "ps" ? "PlayStation controller" : kind == "switch" ? "Switch controller" : kind == "xbox" ? "Xbox controller" : "Controller";
