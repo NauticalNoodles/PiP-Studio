@@ -742,17 +742,3 @@ Control the next PiP	التحكم في نافذة PiP التالية	控制下�
 Control the previous PiP	التحكم في نافذة PiP السابقة	控制上一个画中画
 Switch PiP	تبديل PiP	切换画中画
 The only PiP	نافذة PiP الوحيدة	唯一的画中画
-Side by side on / off (experimental)	التشغيل جنبًا إلى جنب / إيقافه (تجريبي)	并排显示 开/关（实验性）
-Side by side	جنبًا إلى جنب	并排
-Side by side (experimental)	جنبًا إلى جنب (تجريبي)	并排（实验性）
-Side by side didn't start	تعذّر بدء العرض جنبًا إلى جنب	无法启动并排显示
-Windows wouldn't reserve that part of the screen.	لم يحجز Windows ذلك الجزء من الشاشة.	Windows 未能保留屏幕的那一部分。
-Couldn't make {0} smaller	تعذّر تصغير {0}	无法缩小 {0}
-It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	يعمل في وضع ملء الشاشة الحصري أو يحتفظ بحجمه. حوّله إلى وضع بلا حدود أو وضع النافذة من إعداداته.	它以独占全屏运行或保持自身大小。请在其设置中切换为无边框或窗口模式。
-Experimental	تجريبي	实验性
-Side by side (picture-by-picture)	جنبًا إلى جنب (صورة بجانب صورة)	并排（画面并排）
-Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	تجريبي. يُحجز شريط من الشاشة لنوافذ PiP: تتقلص التطبيقات والألعاب بملء الشاشة بلا حدود إلى باقي الشاشة، فلا يغطيها شيء. لا يمكن تصغير الألعاب في وضع ملء الشاشة الحصري.	实验性。显示器的一条区域留给画中画：应用和无边框全屏游戏会缩小到其余部分，不会被遮挡。独占全屏的游戏无法缩小。
-Side	الجانب	位置
-PiPs get	نصيب نوافذ PiP	画中画占用
-Of the display	من الشاشة	显示器的比例
-Side by side: move it along the strip	جنبًا إلى جنب: حرّكها على طول الشريط	并排：沿条带移动它

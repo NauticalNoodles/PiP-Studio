@@ -742,17 +742,3 @@ Control the next PiP	次の PiP を操作
 Control the previous PiP	前の PiP を操作
 Switch PiP	PiP 切替
 The only PiP	唯一の PiP
-Side by side on / off (experimental)	横並び オン / オフ（試験的）
-Side by side	横並び
-Side by side (experimental)	横並び（試験的）
-Side by side didn't start	横並びを開始できませんでした
-Windows wouldn't reserve that part of the screen.	Windows が画面のその部分を確保できませんでした。
-Couldn't make {0} smaller	{0} を小さくできませんでした
-It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	排他的フルスクリーンで動いているか、サイズを固定しています。設定でボーダーレスまたはウィンドウ モードに切り替えてください。
-Experimental	試験的
-Side by side (picture-by-picture)	横並び（ピクチャー バイ ピクチャー）
-Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	試験的。画面の帯を PiP 用に確保します。アプリとボーダーレス全画面のゲームは残りの部分に縮小されるので、何にも覆われません。排他的フルスクリーンのゲームは縮小できません。
-Side	位置
-PiPs get	PiP の領域
-Of the display	画面に対して
-Side by side: move it along the strip	横並び: 帯に沿って動かしてください

@@ -132,35 +132,6 @@ namespace PipStudio
             return dx * mx + dy * my >= minPx;
         }
 
-        /// <summary>
-        /// Side by side: where PiPs go in the strip, in this order: stacked down it (or across, for a strip along the bottom),
-        /// each its own shape (<paramref name="aspects"/>, width / height) and as wide as the strip allows, or as wide as you
-        /// made it (<paramref name="wanted"/>: a width, or a height across; 0 = as big as fits). When they don't all fit, all
-        /// shrink by the same share. Centered across the strip.
-        /// </summary>
-        public static List<Rectangle> StripSlots(Rectangle strip, bool across, IList<double> aspects, IList<int> wanted, int gap, int margin)
-        {
-            var list = new List<Rectangle>();
-            int n = aspects.Count;
-            if (n == 0) return list;
-            double full = (across ? strip.Height : strip.Width) - 2 * margin;           // the most a PiP can be across the strip
-            var size = new double[n];                                                   // across the strip: width (or height)
-            for (int i = 0; i < n; i++) size[i] = wanted != null && i < wanted.Count && wanted[i] > 0 ? Math.Min(full, Math.Max(60, wanted[i])) : full;
-            Func<int, double> along = i => across ? size[i] * aspects[i] : size[i] / aspects[i];   // and along it
-            double avail = (across ? strip.Width : strip.Height) - 2 * margin - gap * (n - 1);
-            double total = Enumerable.Range(0, n).Sum(along);
-            if (total > avail && total > 0) { double k = avail / total; for (int i = 0; i < n; i++) size[i] *= k; }
-            double pos = (across ? strip.Left : strip.Top) + margin;
-            for (int i = 0; i < n; i++)
-            {
-                int a = (int)size[i], b = (int)along(i);
-                list.Add(across ? new Rectangle((int)pos, strip.Top + (strip.Height - a) / 2, b, a)
-                                : new Rectangle(strip.Left + (strip.Width - a) / 2, (int)pos, a, b));
-                pos += b + gap;
-            }
-            return list;
-        }
-
         static double Dist(Rectangle a, Rectangle b)
         {
             double dx = (a.X + a.Width / 2.0) - (b.X + b.Width / 2.0), dy = (a.Y + a.Height / 2.0) - (b.Y + b.Height / 2.0);

@@ -323,7 +323,6 @@ namespace PipStudio
                 new ActionDef("playpause", "Media play / pause", "Play", "HK_PlayPause", 0, () => U.MediaKey(0xB3)),
                 new ActionDef("crop", "Crop the PiP", "Crop", "HK_Crop", 0, () => WithCurrent(p => p.StartCrop())),
                 new ActionDef("close", "Close the PiP", "Close", "HK_Close", 0, () => WithCurrent(p => p.CloseAnimated())),
-                new ActionDef("pbp", "Side by side on / off (experimental)", "Side by side", "HK_Pbp", 0, Pbp.Toggle),
                 new ActionDef("nextpip", "Control the next PiP", "Switch PiP", "HK_NextPip", 0x200000, () => SwitchPip(1)),
                 new ActionDef("prevpip", "Control the previous PiP", "Switch PiP", "HK_PrevPip", 0x100000, () => SwitchPip(-1)),
                 new ActionDef("pad", "Controller controls on / off", "Controls", "HK_Pad", 0x30, () => SetPadOn(!PadOn)),
@@ -1143,10 +1142,9 @@ namespace PipStudio
             var p = new PipWindow(st, src);
             Pips.Add(p);
             Current = p;
-            if (st.HasBounds && Screen.AllScreens.Any(sc => Pbp.AreaOf(sc).IntersectsWith(st.Bounds))) p.Bounds = st.Bounds;
+            if (st.HasBounds && Screen.AllScreens.Any(sc => sc.WorkingArea.IntersectsWith(st.Bounds))) p.Bounds = st.Bounds;
             else p.PlaceDefault();
             p.Show();
-            if (Pbp.Active) RunSoon(() => Pbp.Arrange(true), 250);           // side by side: into the strip with the others
             RefreshPadVisuals();
             SaveSoon();
             RaiseState();
@@ -1157,8 +1155,6 @@ namespace PipStudio
         {
             Pips.Remove(p);
             if (Current == p) Current = null;
-            Pbp.Forget(p);
-            if (Pbp.Active && !cleaned) RunSoon(() => Pbp.Arrange(false), 250);
             if (!cleaned) { SaveSoon(); RaiseState(); RefreshPadVisuals(); }
         }
 
@@ -1188,7 +1184,7 @@ namespace PipStudio
         public Rectangle Place(PipWindow self, Rectangle want, bool stackDown, bool stackFirst, bool allowBump, out Dictionary<PipWindow, Rectangle> bump)
         {
             int gap = (int)Math.Round(12 * self.UiScale);
-            Rectangle wa = Pbp.AreaOf(want);
+            Rectangle wa = Screen.FromRectangle(want).WorkingArea;
             var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
             var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
             var stuck = others.Except(movable).Select(p => p.TargetBounds).ToList();
@@ -1205,7 +1201,7 @@ namespace PipStudio
         public Dictionary<PipWindow, Rectangle> PlanPush(PipWindow self, Rectangle r, int dx, int dy)
         {
             int gap = (int)Math.Round(12 * self.UiScale);
-            Rectangle wa = Pbp.AreaOf(r);
+            Rectangle wa = Screen.FromRectangle(r).WorkingArea;
             var others = Pips.Where(p => p != self && !p.IsClosing && p.Visible).ToList();
             var movable = others.Where(p => !p.St.Locked && !p.InTheater && wa.IntersectsWith(p.TargetBounds)).ToList();
             var stuck = others.Except(movable).Select(p => p.TargetBounds);
@@ -1235,7 +1231,6 @@ namespace PipStudio
                 }
             }
             bgTicks++;
-            if (bgTicks % 2 == 0 && Pbp.Active) { try { Pbp.Tick(); } catch (Exception ex) { ReportError(ex); } }
             if (bgTicks % 6 == 0) { try { Layouts.Tick(); } catch (Exception ex) { ReportError(ex); } }   // layouts that open with an app
             if (bgTicks % 4 == 0)
             {
@@ -1278,7 +1273,6 @@ namespace PipStudio
             items.Add(Menus.Item("Click a window on screen…", () => PickOnScreen(null)));
             items.Add(Menus.Item("Mirror a screen region…", () => PipScreenRegion(null), "HK_ScreenRegion"));
             items.Add(LayoutsMenu());
-            items.Add(Menus.Check("Side by side (experimental)", Pbp.Active, Pbp.Toggle));
 
             var live = Pips.Where(p => !p.IsClosing).ToList();
             if (live.Count > 0)
@@ -1442,7 +1436,6 @@ namespace PipStudio
             cleaned = true;
             bgTimer.Stop(); padTimer.Stop(); fgTimer.Stop(); trimTimer.Stop();
             try { Companion.Stop(); } catch { }
-            try { Pbp.Off(); } catch { }                                     // gives the reserved strip back and restores the game
             CrashReports.CleanExit();
             try { SaveSession(); } catch { }
             try { var c = CloseMain; if (c != null) c(); } catch { }

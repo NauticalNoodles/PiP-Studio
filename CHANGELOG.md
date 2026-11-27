@@ -1,17 +1,19 @@
 # PiP Studio changelog
 
+## 1.0.5
+
+- **Saved layouts**: save the PiPs you have open and bring them all back in one go, or have them open when an app starts
+- **PiPs bump each other** instead of overlapping, with a preview of where they'll land while you drag
+- **Controller**: the left stick switches which PiP you're controlling, and moving PiPs around each other works properly
+- **Back up settings**: export your settings, shortcuts and layouts to a file and import them on another PC
+- Better in Xbox mode: opens in the controller layout, and "hide over full-screen apps" no longer hides every PiP there
+- Fixed: Restart as administrator could leave PiP Studio running with no window
+- Fixed: Discord's tray menu was treated as a PiP
+- Fixed: the controls on other apps' PiPs didn't show in game streams (Moonlight, Steam Link)
+- Screen readers announce each PiP and what it shows
+
 ## 1.0.4
 
-- **PiPs bump each other**: drop or resize a PiP onto another and the other one is pushed out of the way, so they stack instead of overlapping. Drop one just above (or below) a PiP sitting in a corner and it stacks there; when there's no room to push, the one you moved stacks next to it instead. Locked PiPs stay put. While you drag or resize, faint outlines show where it and the PiPs it pushes will land
-- Moving PiPs with a controller or shortcuts works with other PiPs around: a taken spot means stacking next to the PiP there (or pushing it aside), a spot where it wouldn't really move is skipped (or the PiPs swap places, like a tall PiP moving up past a small one), PiPs never end up off-screen, and making one bigger pushes its neighbours aside instead of covering them
-- Controller: **left stick left/right switches which PiP you're controlling** (in reading order, its name shows on it), and only that PiP wears the controller outline, so you can tell which one the buttons steer. Also available as keyboard shortcuts (Control the next / previous PiP, unset by default)
-- **Side by side** (experimental, Behavior > Experimental, the tray menu, or a shortcut or controller button you set): a strip of the display (the right third by default; left or bottom, 25–50%) is kept for your PiPs, stacked in it. Apps fit beside it, and borderless full-screen games are shrunk to the rest of the display, so nothing covers them. Turning it off puts everything back. Games in exclusive full screen can't be shrunk: PiP Studio says so. In the strip, drag a PiP to change its place in the stack, resize it to give it its own size (the others make room), and move it up or down the stack with the controller or arrow shortcuts
-- Restart as administrator no longer makes PiP Studio seem to vanish: its window opens again after the restart (it used to stay in the tray when PiPs came back), and starting PiP Studio again while it runs as administrator brings its window up (it did nothing before). Starting it yourself always opens the window; only starting with Windows stays in the tray
-- Game streaming (Moonlight, Steam Link): the outline, title bar and volume pop-up PiP Studio adds to other apps' PiPs now show up in the stream. Like PiP Studio's own PiPs, they're only hidden from capture when "Hide PiPs from screenshots, recordings and screen sharing" is on
-- Other apps' menus are no longer mistaken for PiPs: Discord's tray menu (right-clicking Discord in the tray) works again instead of being shrunk by black bar removal and getting a PiP title bar. Only windows you can resize count as another app's PiP, and black bar removal never reshapes a window that can't be resized
-- Screen readers: Narrator and other screen readers announce each PiP by name and what it shows
-- **Saved layouts**: save the PiPs you have open under a name ("Gaming", "Work") and bring them all back in one go from Running PiPs > Layouts, the tray menu or Behavior > Layouts. A layout can also open by itself when an app starts, and close its PiPs when the app exits
-- **Back up settings** (Settings): export your settings, shortcuts and layouts to a file and import them on another PC
 - PiP Studio now speaks **Spanish, Portuguese (Brazil), French, German, Russian and Japanese**, next to English, Arabic and Chinese (Settings > General > Language, or it follows Windows)
 - Touch screens: drag a finger to scroll the settings, the window lists and drop-down lists
 - Long drop-down lists (like Language) scroll with the mouse wheel again, instead of the page behind them
@@ -61,7 +63,6 @@ Control PiP Studio from your phone:
 
 Controller fixes:
 
-- Better in Windows' Xbox mode (the full screen experience on handhelds and gaming PCs): PiP Studio opens straight into its controller layout, Hide PiPs over full-screen apps no longer hides them all the time (every app is full screen there), and its tips say to start PiP Studio again instead of clicking a tray icon that isn't there
 - "Release the game's focus" now works reliably when you turn controller controls on with your controller, not only with the keyboard shortcut (Windows used to refuse it unless you hadn't touched the keyboard or mouse for a few minutes)
 - If a game runs as administrator, PiP Studio tells you it can't take the game's focus, and offers to restart as administrator, which fixes it
 - New **Always start as administrator** in Settings > General: PiP Studio then starts as administrator every time, also at sign-in, without asking (Windows asks once to set it up)

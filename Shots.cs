@@ -75,49 +75,6 @@ namespace PipStudio
             shot("shortcuts", "shortcuts");
             shot("settings", "settings");
             shot("phone", "phone");
-            // side by side: one of the demo pages made full-screen, then turned on: the page should shrink, the PiPs move to the strip
-            steps.Add(() =>
-            {
-                var sun = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Sunset timelapse", StringComparison.OrdinalIgnoreCase));
-                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-                if (sun != IntPtr.Zero) { Native.SetWindowPos(sun, IntPtr.Zero, sb.X, sb.Y, sb.Width, sb.Height, Native.SWP_NOACTIVATE); Log("side by side: page made full-screen " + U.WindowRect(sun)); }
-                w.WindowState = WindowState.Minimized;
-            });
-            steps.Add(() =>
-            {
-                var before = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea;
-                Pbp.On();
-                Log("side by side: on=" + Pbp.Active + " strip=" + Pbp.Strip + " work area " + before + " -> " + System.Windows.Forms.Screen.PrimaryScreen.WorkingArea);
-                foreach (var kv in Pbp.Shrunk) Log("side by side: shrank " + U.WindowTitle(kv.Key) + " from " + kv.Value + " to " + U.WindowRect(kv.Key));
-            });
-            steps.Add(() =>
-            {
-                foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: PiP " + p.DisplayName + " at " + p.TargetBounds);
-                // what you'd do by hand: make the top one smaller, then move it down the stack
-                var top = App.I.Pips.Where(x => !x.IsClosing).OrderBy(x => x.TargetBounds.Top).FirstOrDefault();
-                if (top != null)
-                {
-                    var b = top.TargetBounds;
-                    Pbp.SetSize(top, new System.Drawing.Size(b.Width * 6 / 10, b.Height * 6 / 10));
-                    Log("side by side: made " + top.DisplayName + " smaller: " + top.TargetBounds);
-                    Log("side by side: moved it down the stack: " + Pbp.Nudge(top, 1));
-                }
-            });
-            steps.Add(() =>
-            {
-                foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: after, PiP " + p.DisplayName + " at " + p.TargetBounds);
-                var sb = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-                using (var full = new System.Drawing.Bitmap(sb.Width, sb.Height))
-                {
-                    using (var g = System.Drawing.Graphics.FromImage(full)) g.CopyFromScreen(sb.Location, System.Drawing.Point.Empty, sb.Size);
-                    using (var small = new System.Drawing.Bitmap(full, new System.Drawing.Size(960, 540))) small.Save(Path.Combine(dir, "share-pbp.png"));
-                }
-                Pbp.Off();
-                Log("side by side: off, work area " + System.Windows.Forms.Screen.PrimaryScreen.WorkingArea);
-                w.WindowState = WindowState.Normal;
-            });
-            steps.Add(() => { var sun = WinEnum.AltTab().FirstOrDefault(h => (U.WindowTitle(h) ?? "").StartsWith("Sunset timelapse", StringComparison.OrdinalIgnoreCase)); if (sun != IntPtr.Zero) Log("side by side: page back at " + U.WindowRect(sun)); });
-            steps.Add(() => { foreach (var p in App.I.Pips.Where(x => !x.IsClosing)) Log("side by side: PiP " + p.DisplayName + " back at " + p.TargetBounds); });
             steps.Add(() => { S.ThemeMode = 3; SwitchLanguage(); Navigate("appearance", false); });   // OLED (rebuilt, so the theme list shows it)
             steps.Add(() => Save(Path.Combine(dir, "appearance-oled.png")));
             steps.Add(() => { S.ThemeMode = 1; SwitchLanguage(); Navigate("behavior", false); });     // light

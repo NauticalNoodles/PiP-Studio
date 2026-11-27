@@ -742,17 +742,3 @@ Control the next PiP	Nächstes PiP steuern
 Control the previous PiP	Vorheriges PiP steuern
 Switch PiP	PiP wechseln
 The only PiP	Das einzige PiP
-Side by side on / off (experimental)	Nebeneinander ein / aus (experimentell)
-Side by side	Nebeneinander
-Side by side (experimental)	Nebeneinander (experimentell)
-Side by side didn't start	Nebeneinander ließ sich nicht starten
-Windows wouldn't reserve that part of the screen.	Windows hat diesen Teil des Bildschirms nicht reserviert.
-Couldn't make {0} smaller	{0} ließ sich nicht verkleinern
-It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	Es läuft im exklusiven Vollbild oder behält seine Größe. Stellen Sie in seinen Einstellungen randloses Fenster oder Fenstermodus ein.
-Experimental	Experimentell
-Side by side (picture-by-picture)	Nebeneinander (Bild neben Bild)
-Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	Experimentell. Ein Streifen des Bildschirms bleibt für Ihre PiPs frei: Apps und randlose Vollbildspiele schrumpfen auf den Rest, nichts verdeckt sie. Spiele im exklusiven Vollbild lassen sich nicht verkleinern.
-Side	Seite
-PiPs get	Für die PiPs
-Of the display	Des Bildschirms
-Side by side: move it along the strip	Nebeneinander: entlang des Streifens bewegen

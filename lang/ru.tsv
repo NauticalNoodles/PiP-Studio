@@ -742,17 +742,3 @@ Control the next PiP	Управлять следующим PiP
 Control the previous PiP	Управлять предыдущим PiP
 Switch PiP	Сменить PiP
 The only PiP	Единственный PiP
-Side by side on / off (experimental)	Рядом: вкл. / выкл. (экспериментально)
-Side by side	Рядом
-Side by side (experimental)	Рядом (экспериментально)
-Side by side didn't start	Не удалось включить режим «рядом»
-Windows wouldn't reserve that part of the screen.	Windows не выделила эту часть экрана.
-Couldn't make {0} smaller	Не удалось уменьшить {0}
-It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	Оно работает в эксклюзивном полноэкранном режиме или сохраняет свой размер. Переключите его в режим без рамки или в окно в его настройках.
-Experimental	Экспериментальное
-Side by side (picture-by-picture)	Рядом (картинка рядом с картинкой)
-Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	Экспериментально. Полоса экрана отводится под PiP: приложения и игры в полноэкранном режиме без рамки уменьшаются до остальной части, и ничто их не закрывает. Игры в эксклюзивном полноэкранном режиме уменьшить нельзя.
-Side	Сторона
-PiPs get	Под PiP
-Of the display	Экрана
-Side by side: move it along the strip	Рядом: двигайте его вдоль полосы

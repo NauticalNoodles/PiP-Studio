@@ -742,17 +742,3 @@ Control the next PiP	Contrôler le PiP suivant
 Control the previous PiP	Contrôler le PiP précédent
 Switch PiP	Changer de PiP
 The only PiP	Le seul PiP
-Side by side on / off (experimental)	Côte à côte activé / désactivé (expérimental)
-Side by side	Côte à côte
-Side by side (experimental)	Côte à côte (expérimental)
-Side by side didn't start	Impossible de lancer le côte à côte
-Windows wouldn't reserve that part of the screen.	Windows n'a pas réservé cette partie de l'écran.
-Couldn't make {0} smaller	Impossible de réduire {0}
-It runs in exclusive full screen or keeps its own size. Switch it to borderless or windowed mode in its settings.	Il tourne en plein écran exclusif ou garde sa taille. Passez-le en mode sans bordure ou fenêtré dans ses paramètres.
-Experimental	Expérimental
-Side by side (picture-by-picture)	Côte à côte (image à côté de l'image)
-Experimental. A strip of the display is kept for your PiPs: apps and borderless full-screen games shrink to the rest, so nothing covers them. Games in exclusive full screen can't be shrunk.	Expérimental. Une bande de l'écran est réservée à vos PiP : les applications et les jeux en plein écran sans bordure se réduisent au reste, rien ne les recouvre. Les jeux en plein écran exclusif ne peuvent pas être réduits.
-Side	Côté
-PiPs get	Pour les PiP
-Of the display	De l'écran
-Side by side: move it along the strip	Côte à côte : déplacez-le le long de la bande

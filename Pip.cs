@@ -266,8 +266,6 @@ namespace PipStudio
             if (overlay != null) overlay.Invalidate();
         }
         public bool PadActiveShown { get { return padActive; } }
-        /// <summary>Being dragged or resized right now.</summary>
-        public bool Moving { get { return moving; } }
 
         PipOutline outline;
 
@@ -591,7 +589,7 @@ namespace PipStudio
             return r;
         }
 
-        Rectangle WorkArea() { return Pbp.AreaOf(TargetBounds); }   // the side-by-side strip while that's on
+        Rectangle WorkArea() { return Screen.FromRectangle(TargetBounds).WorkingArea; }
 
         /// <summary>Where new PiPs open: a corner (0-3), or the middle of an edge (4 top, 5 bottom, 6 left, 7 right) when 8 spots are on.</summary>
         public static string StartTag()
@@ -689,7 +687,7 @@ namespace PipStudio
             Point cur = Cursor.Position;
             Screen sc = Screen.FromPoint(cur);
             scale = U.ScaleAt(cur);
-            var wa = Pbp.AreaOf(sc);
+            var wa = sc.WorkingArea;
             Size sz = FitSizeIn((int)(wa.Width * SizePresets.Frac(App.S.DefaultSize)), wa, 0.8);
             string spot = StartTag();
             Rectangle target = new Rectangle(SpotPoint(spot, sz, wa), sz);
@@ -710,7 +708,7 @@ namespace PipStudio
 
         public void PlaceDefaultAnimated()
         {
-            var wa = Pbp.AreaOf(Screen.FromPoint(Cursor.Position));
+            var wa = Screen.FromPoint(Cursor.Position).WorkingArea;
             string spot = StartTag();
             Size sz = TargetBounds.Size;
             if (sz.Width > wa.Width || sz.Height > wa.Height) sz = FitSizeIn((int)(wa.Width * 0.25), wa, 0.8);
@@ -731,7 +729,6 @@ namespace PipStudio
 
         public void SnapToSpot(string spot, bool animate)
         {
-            if (Pbp.Manages(this)) { Pbp.Arrange(false); return; }   // side by side: its place is in the strip
             inTheater = false;
             var wa = WorkArea();
             Size sz = TargetBounds.Size;
@@ -762,7 +759,6 @@ namespace PipStudio
         /// where it is) is skipped.</summary>
         public void CycleCorner()
         {
-            if (Pbp.Manages(this)) { if (!Pbp.Nudge(this, 1)) Pbp.Nudge(this, -1); return; }   // side by side: next place in the stack
             string[] order = { "TL", "TR", "BR", "BL" };
             int i = Array.IndexOf(order, NearestSpot(false));
             var wa = WorkArea();
@@ -787,7 +783,6 @@ namespace PipStudio
             idx = U.Clamp(idx, 0, SizePresets.Count - 1);
             Size sz = PresetSize(idx, wa);
             string spot = NearestSpot(App.S.SnapToEdges);
-            if (Pbp.Manages(this)) { Pbp.SetSize(this, sz); Osd(SizePresets.Names[idx]); return; }   // side by side: in the strip
             inTheater = false;
             // it keeps its spot (or where it's anchored) and pushes the PiPs it grows into aside
             if (SnapOn) PlaceAt(new Rectangle(SpotPoint(spot, sz, wa), sz), App.SpotGoesDown(spot), true, true, true);
@@ -870,16 +865,6 @@ namespace PipStudio
             int cw = TargetBounds.Width;
             int i = SizePresets.Next(cw, wa.Width, dir, k => PresetSize(k, wa).Width);
             if (i < 0) { Osd(dir > 0 ? "Largest size" : "Smallest size"); return; }
-            if (Pbp.Manages(this))
-            {
-                // side by side: a step bigger or smaller within the strip
-                int cur = Pbp.SizeOf(this), next = (int)Math.Round(cur * (dir > 0 ? 1.15 : 1 / 1.15));
-                var tb = TargetBounds;
-                double a = tb.Width / (double)Math.Max(1, tb.Height);
-                Pbp.SetSize(this, App.S.PbpSide == 2 ? new Size((int)(next * a), next) : new Size(next, (int)(next / a)));
-                App.I.SaveSoon();
-                return;
-            }
             inTheater = false;
             PlaceAt(AnchoredResize(PresetSize(i, wa)), App.SpotGoesDown(NearestSpot(App.S.SnapToEdges)), false, true, true);   // grows into others: they move aside
             Osd(SizePresets.Names[i]);
@@ -923,7 +908,7 @@ namespace PipStudio
         {
             Screen curS = Screen.FromRectangle(TargetBounds);
             double rel = TargetBounds.Width / (double)curS.WorkingArea.Width;
-            var wa = Pbp.AreaOf(ns);
+            var wa = ns.WorkingArea;
             Size sz = St.Fit == FitMode.Fit ? FitSizeIn((int)(wa.Width * rel), wa, 0.9)
                                             : new Size((int)(wa.Width * rel), (int)(TargetBounds.Height * (wa.Width / (double)curS.WorkingArea.Width)));
             inTheater = false;
@@ -963,14 +948,6 @@ namespace PipStudio
         public void MoveDir(int dx, int dy)
         {
             App.I.Current = this;
-            if (Pbp.Manages(this))
-            {
-                // side by side: along the strip, up or down the stack; across it, nothing (it stays in the strip)
-                int along = App.S.PbpSide == 2 ? dx : dy;
-                if (along == 0 || !Pbp.Nudge(this, along)) Osd(along == 0 ? "Side by side: move it along the strip" : "No room that way");
-                App.I.SaveSoon();
-                return;
-            }
             bool edges = App.S.SnapToEdges;
             int step = edges ? 1 : 2;
             string spot = inTheater ? (dx < 0 ? "L" : dx > 0 ? "R" : dy < 0 ? "T" : "B") : NearestSpot(edges);
@@ -1030,23 +1007,9 @@ namespace PipStudio
             App.I.SaveSoon();
         }
 
-        Size sizeAtGrab;
-
         void AfterUserMove()
         {
             HideDropPreview();
-            // side by side: in the strip, a drag puts it in a new place in the stack, a resize gives it its own size
-            if (Pbp.Active)
-            {
-                if (Pbp.Manages(this))
-                {
-                    if (Size != sizeAtGrab) Pbp.SetSize(this, Size);
-                    else Pbp.Arrange(false);
-                    App.I.SaveSoon();
-                    return;
-                }
-                Pbp.Forget(this);                                  // taken to another display: an ordinary PiP there
-            }
             inTheater = false;
             Dictionary<PipWindow, Rectangle> bump;
             var r = PlanDrop(out bump);
@@ -1084,23 +1047,11 @@ namespace PipStudio
             var spots = new List<Rectangle>();
             try
             {
+                Dictionary<PipWindow, Rectangle> bump;
+                var r = PlanDrop(out bump);
                 var b = Bounds;
-                if (Pbp.Manages(this))
-                {
-                    // side by side: where it and the others will be in the stack
-                    foreach (var kv in Pbp.Plan(this, b))
-                    {
-                        var now = kv.Key == this ? b : kv.Key.TargetBounds;
-                        if (Math.Abs(kv.Value.X - now.X) + Math.Abs(kv.Value.Y - now.Y) + Math.Abs(kv.Value.Width - now.Width) > 6) spots.Add(kv.Value);
-                    }
-                }
-                else
-                {
-                    Dictionary<PipWindow, Rectangle> bump;
-                    var r = PlanDrop(out bump);
-                    if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) + Math.Abs(r.Width - b.Width) > 6) spots.Add(r);   // it won't stay right here
-                    spots.AddRange(bump.Values);
-                }
+                if (Math.Abs(r.X - b.X) + Math.Abs(r.Y - b.Y) + Math.Abs(r.Width - b.Width) > 6) spots.Add(r);   // it won't stay right here
+                spots.AddRange(bump.Values);
             }
             catch { }
             while (ghosts.Count < spots.Count) ghosts.Add(new DropGhost());
@@ -1430,7 +1381,6 @@ namespace PipStudio
                     break;
                 case Native.WM_ENTERSIZEMOVE:
                     moving = true;
-                    sizeAtGrab = Size;
                     animating = false;
                     break;
                 case Native.WM_EXITSIZEMOVE:
