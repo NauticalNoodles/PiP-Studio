@@ -4,6 +4,7 @@
 
 - **Controller**: the Menu button opens the buttons above each page (Open in PiP, Click a window, Screen region and more), which the D-pad couldn't reach
 - The scroll bar no longer covers the right edge of list rows
+- Crash reports also catch crashes too sudden for PiP Studio to note down, using what Windows recorded about them
 - Microsoft Store version: asks once for a rating, after a few days of use
 - Other apps' PiPs (a browser's, Discord's...) stack and push aside like PiP Studio's own, together with them, with the outlines of where they'll land while you drag
 - Controller hints show your controller's real buttons: Xbox's coloured A, B, X, Y, PlayStation's ✕ ○ □ △ and Switch's buttons

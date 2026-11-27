@@ -43,10 +43,12 @@ namespace PipStudio
                 if (File.Exists(CrashFile)) report = File.ReadAllText(CrashFile);
                 else if (File.Exists(Marker))
                 {
-                    // ended without a normal exit: only call it a crash when errors were logged during that run
+                    // ended without a normal exit: a crash when errors were logged during that run, or when Windows recorded
+                    // one (a crash too deep for PiP Studio to write anything, like a failure inside Windows code)
                     var started = File.GetLastWriteTimeUtc(Marker);
-                    if (File.Exists(ErrorLog) && File.GetLastWriteTimeUtc(ErrorLog) > started)
-                        report = Header("PiP Studio stopped without closing normally.") + RecentErrors(started);
+                    string errs = File.Exists(ErrorLog) && File.GetLastWriteTimeUtc(ErrorLog) > started ? RecentErrors(started) : "";
+                    string win = WindowsCrashEvents(started);
+                    if (errs.Length > 0 || win.Length > 0) report = Header("PiP Studio stopped without closing normally.") + errs + win;
                 }
             }
             catch { }
@@ -108,6 +110,34 @@ namespace PipStudio
                     .Reverse().Take(3).Reverse().ToList();
                 if (entries.Count == 0) return "";
                 return "\nRecent errors:\n" + string.Join("\n\n", entries.Select(x => Trim(x, 1500)));
+            }
+            catch { return ""; }
+        }
+
+        /// <summary>
+        /// What Windows recorded about PiP Studio crashing or hanging since <paramref name="sinceUtc"/> (Event Viewer >
+        /// Windows Logs > Application: Application Error, .NET Runtime, Application Hang): which part failed and how.
+        /// </summary>
+        static string WindowsCrashEvents(DateTime sinceUtc)
+        {
+            try
+            {
+                string exe = System.IO.Path.GetFileNameWithoutExtension(Environment.ProcessPath ?? "PiPStudio");
+                string q = "*[System[(Provider[@Name='Application Error'] or Provider[@Name='.NET Runtime'] or Provider[@Name='Application Hang'])" +
+                           " and TimeCreated[@SystemTime>='" + sinceUtc.ToString("yyyy-MM-ddTHH:mm:ss.fffZ") + "']]]";
+                var found = new System.Collections.Generic.List<string>();
+                using (var reader = new System.Diagnostics.Eventing.Reader.EventLogReader(new System.Diagnostics.Eventing.Reader.EventLogQuery("Application", System.Diagnostics.Eventing.Reader.PathType.LogName, q)))
+                {
+                    for (var e = reader.ReadEvent(); e != null && found.Count < 3; e = reader.ReadEvent())
+                        using (e)
+                        {
+                            string text = "";
+                            try { text = e.FormatDescription() ?? ""; } catch { }
+                            if (text.IndexOf(exe, StringComparison.OrdinalIgnoreCase) < 0) continue;
+                            found.Add(e.ProviderName + " (" + (e.TimeCreated.HasValue ? e.TimeCreated.Value.ToUniversalTime().ToString("HH:mm:ss") + " UTC" : "?") + "):\n" + Trim(text.Trim(), 1500));
+                        }
+                }
+                return found.Count == 0 ? "" : "\nWhat Windows recorded:\n" + string.Join("\n\n", found);
             }
             catch { return ""; }
         }
