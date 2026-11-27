@@ -670,7 +670,6 @@ namespace PipStudio
             if (target != a) Opacity(h, target - a);
         }
 
-        public static float? VolumeOf(IntPtr h) { return Audio.GetVolume(U.ProcessName(h)); }
 
         public static void SetVolumeLevel(IntPtr h, float v)
         {

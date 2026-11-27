@@ -12,7 +12,7 @@
 <p align="center"><sub>The Store version can't run as administrator (so it can't show apps that run as administrator) and has no phone companion. The GitHub version has everything.</sub></p>
 
 <p align="center">
-  <img src="docs/screenshots/pip-over-game.png" width="49%" alt="A PiP over a game">
+  <img src="docs/screenshots/pip-over-game.jpg" width="49%" alt="A PiP over a game">
   <img src="docs/screenshots/windows-page.png" width="49%" alt="The Windows page">
 </p>
 <p align="center">
