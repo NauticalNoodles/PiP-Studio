@@ -705,7 +705,7 @@ namespace PipStudio
             Anim.Enter(card, 16, 0, 260);
             // a risky question starts on the safe answer
             var first = warn && dlgNo != null ? dlgNo : dlgYes;
-            Dispatch(() => first.Focus(), DispatcherPriority.Loaded);
+            Dispatch(() => (dlgList != null && extraFocus != null ? extraFocus : first).Focus(), DispatcherPriority.Loaded);   // a menu starts on its first entry
         }
 
         static void CloseDialog(bool yes)
