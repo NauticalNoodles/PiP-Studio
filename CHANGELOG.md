@@ -4,6 +4,7 @@
 
 - **Controller**: the Menu button opens the buttons above each page (Open in PiP, Click a window, Screen region and more), which the D-pad couldn't reach
 - The scroll bar no longer covers the right edge of list rows
+- Dragging another app's PiP (a browser's, Discord's...) shows the outline of the spot it will snap to, like PiP Studio's own
 - Controller hints show your controller's real buttons: Xbox's coloured A, B, X, Y, PlayStation's ✕ ○ □ △ and Switch's buttons
 
 ## 1.0.5

@@ -483,10 +483,19 @@ namespace PipStudio
                 if (mouseDown) moved.Add(h);                              // you're dragging or resizing it
                 else if (!moved.Contains(h)) appControlled.Add(h);        // the app moved it by itself: leave it alone from now on
             }
+            DragPreview(mouseDown);
         }
 
         /// <summary>Puts it on the nearest of PiP Studio's spots: the 4 corners, plus the middle of each edge when 8 spots are on.</summary>
         static void SnapNearest(IntPtr h)
+        {
+            var b = Bounds(h);
+            var t = SnapTarget(h);
+            if (t.X != b.Left || t.Y != b.Top) Place(h, t);
+        }
+
+        /// <summary>The spot SnapNearest would put it on (the drag preview shows it).</summary>
+        static Rectangle SnapTarget(IntPtr h)
         {
             var b = Bounds(h);
             var wa = Work(h);
@@ -503,7 +512,23 @@ namespace PipStudio
                     double d = Math.Pow(x + b.Width / 2.0 - cx, 2) + Math.Pow(y + b.Height / 2.0 - cy, 2);
                     if (d < best) { best = d; bx = x; by = y; }
                 }
-            if (bx != b.Left || by != b.Top) Place(h, new Rectangle(bx, by, b.Width, b.Height));
+            return new Rectangle(bx, by, b.Width, b.Height);
+        }
+
+        static DropGhost ghost;
+
+        /// <summary>While you drag another app's PiP: a faint outline of the spot it will glide to when you let go,
+        /// like PiP Studio's own PiPs show.</summary>
+        static void DragPreview(bool mouseDown)
+        {
+            IntPtr h = IntPtr.Zero;
+            if (mouseDown) foreach (var x in moved) if (Native.IsWindow(x) && !appControlled.Contains(x) && SnapsHere(x)) { h = x; break; }
+            if (h == IntPtr.Zero) { if (ghost != null && !ghost.IsDisposed && ghost.Visible) ghost.Hide(); return; }
+            var t = SnapTarget(h);
+            var b = Bounds(h);
+            if (Math.Abs(t.X - b.X) + Math.Abs(t.Y - b.Y) <= 6) { if (ghost != null && ghost.Visible) ghost.Hide(); return; }
+            if (ghost == null || ghost.IsDisposed) ghost = new DropGhost();
+            ghost.ShowAt(t, h, App.S.RoundedCorners);
         }
 
         static void Place(IntPtr h, Rectangle r)

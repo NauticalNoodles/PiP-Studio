@@ -1948,12 +1948,15 @@ namespace PipStudio
         }
 
         /// <summary>Shows it over r, just under the PiP you're dragging.</summary>
-        public void ShowAt(Rectangle r, Form under, bool rounded)
+        public void ShowAt(Rectangle r, Form under, bool rounded) { ShowAt(r, under.Handle, rounded); }
+
+        /// <summary>Shows it over r, just under that window (a PiP of PiP Studio's or another app's).</summary>
+        public void ShowAt(Rectangle r, IntPtr under, bool rounded)
         {
             if (round != rounded) { round = rounded; if (IsHandleCreated) U.RoundCorners(Handle, round); }
             if (!Visible) { Bounds = r; Show(); if (IsHandleCreated) U.RoundCorners(Handle, round); }
             else if (Bounds != r) Bounds = r;
-            try { Native.SetWindowPos(Handle, under.Handle, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE); } catch { }
+            try { Native.SetWindowPos(Handle, under, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_NOACTIVATE); } catch { }
             Invalidate();
         }
 
