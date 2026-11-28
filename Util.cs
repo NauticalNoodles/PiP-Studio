@@ -629,6 +629,7 @@ namespace PipStudio
         public int ThemeMode = 0;                   // 0 follow Windows, 1 light, 2 dark, 3 OLED (black)
         public bool MinimizeMemory = true;          // close the main window to the tray instead of keeping it in memory
         public bool CloseToTray = true;
+        public bool StillRunningTip = false;      // a notification when you close the window and PiP Studio keeps running
         // Controller
         public bool PadEnabled = true;              // watch for controllers at all
         public bool PadStartOn = false;             // controller controls are on when the app starts

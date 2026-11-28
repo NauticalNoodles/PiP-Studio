@@ -413,7 +413,7 @@ namespace PipStudio
                     win.Dispatcher.BeginInvoke(new Action(App.I.ExitApp));
                     return;
                 }
-                if (!exiting && !closedHintShown && App.S.ShowTips)
+                if (!exiting && !closedHintShown && App.S.ShowTips && App.S.StillRunningTip)
                 {
                     closedHintShown = true;
                     App.I.Balloon("PiP Studio is still running", U.XboxMode

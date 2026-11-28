@@ -1,5 +1,9 @@
 # PiP Studio changelog
 
+## 1.0.7
+
+- The "PiP Studio is still running" notification when you close the window is off by default (Settings > General to turn it back on)
+
 ## 1.0.6
 
 - **Controller**: real button icons for Xbox, PlayStation and Switch, and the Menu button opens the buttons above each page

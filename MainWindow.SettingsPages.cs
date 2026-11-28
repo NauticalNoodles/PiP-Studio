@@ -222,6 +222,7 @@ namespace PipStudio
             Card(ge, "", "Hide PiPs from screenshots, recordings and screen sharing", "OBS, Discord, Teams and the Snipping Tool won't see them. Costs a little performance, so leave it off unless you stream or share your screen.", Switch(() => S.HideFromCapture, v => S.HideFromCapture = v), "capture stream share record obs");
             Section(ge, "Performance");
             Card(ge, "", "Keep running in the tray when I close this window", "Otherwise closing this window quits PiP Studio", Switch(() => S.CloseToTray, v => S.CloseToTray = v), "tray background close quit");
+            Card(ge, "\uE7E7", "Tell me it's still running", "A notification when you close this window and PiP Studio keeps running in the tray", Switch(() => S.StillRunningTip, v => S.StillRunningTip = v), "notification tray close still running reminder");
             Card(ge, "", "Release memory while idle", "Gives unused memory back to Windows while PiP Studio sits in the tray", Switch(() => S.MinimizeMemory, v => S.MinimizeMemory = v), "ram memory trim");
             {
                 var bk = new StackPanel { Orientation = Orientation.Horizontal };

@@ -777,6 +777,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "هل يعجبك PiP Studio؟" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "يساعد تقييمك في Microsoft Store الآخرين على العثور عليه. لن يستغرق سوى لحظة." },
                 { "Rate it", "قيّمه" },
+                { "Tell me it's still running", "أخبرني أنه ما زال يعمل" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "إشعار عند إغلاق هذه النافذة واستمرار PiP Studio في العمل في الدرج" },
             };
         }
 
@@ -1533,6 +1535,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "喜欢 PiP Studio 吗？" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "在 Microsoft Store 中评分可以帮助其他人找到它，只需片刻。" },
                 { "Rate it", "去评分" },
+                { "Tell me it's still running", "提醒我它仍在运行" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "关闭此窗口且 PiP Studio 继续在托盘中运行时显示通知" },
             };
         }
 
@@ -2289,6 +2293,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "Gefällt Ihnen PiP Studio?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Eine Bewertung im Microsoft Store hilft anderen, es zu finden. Dauert nur einen Moment." },
                 { "Rate it", "Bewerten" },
+                { "Tell me it's still running", "Melden, dass es weiterläuft" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "Eine Benachrichtigung, wenn Sie dieses Fenster schließen und PiP Studio im Infobereich weiterläuft" },
             };
         }
 
@@ -3045,6 +3051,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "¿Te gusta PiP Studio?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Una valoración en Microsoft Store ayuda a que otras personas lo encuentren. Solo lleva un momento." },
                 { "Rate it", "Valorar" },
+                { "Tell me it's still running", "Avisarme de que sigue abierto" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "Una notificación al cerrar esta ventana cuando PiP Studio sigue en la bandeja" },
             };
         }
 
@@ -3801,6 +3809,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "Vous aimez PiP Studio ?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Une note dans le Microsoft Store aide d'autres personnes à le trouver. Cela ne prend qu'un instant." },
                 { "Rate it", "Le noter" },
+                { "Tell me it's still running", "Me dire qu'il tourne encore" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "Une notification quand vous fermez cette fenêtre et que PiP Studio continue dans la zone de notification" },
             };
         }
 
@@ -4557,6 +4567,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "PiP Studio を気に入っていただけましたか?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Microsoft Store での評価は、ほかの人が見つける助けになります。すぐに終わります。" },
                 { "Rate it", "評価する" },
+                { "Tell me it's still running", "実行中であることを知らせる" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "このウィンドウを閉じても PiP Studio がトレイで動き続けるときに通知" },
             };
         }
 
@@ -5313,6 +5325,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "Está gostando do PiP Studio?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Uma avaliação na Microsoft Store ajuda outras pessoas a encontrá-lo. Leva só um instante." },
                 { "Rate it", "Avaliar" },
+                { "Tell me it's still running", "Avisar que continua em execução" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "Uma notificação ao fechar esta janela quando o PiP Studio continua na bandeja" },
             };
         }
 
@@ -6069,6 +6083,8 @@ namespace PipStudio
                 { "Enjoying PiP Studio?", "Нравится PiP Studio?" },
                 { "A rating in the Microsoft Store helps other people find it. It only takes a moment.", "Оценка в Microsoft Store помогает другим найти его. Это займёт всего минуту." },
                 { "Rate it", "Оценить" },
+                { "Tell me it's still running", "Сообщать, что программа работает" },
+                { "A notification when you close this window and PiP Studio keeps running in the tray", "Уведомление, когда вы закрываете это окно, а PiP Studio продолжает работать в трее" },
             };
         }
     }

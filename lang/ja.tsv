@@ -747,3 +747,5 @@ hold	長押し
 Enjoying PiP Studio?	PiP Studio を気に入っていただけましたか?
 A rating in the Microsoft Store helps other people find it. It only takes a moment.	Microsoft Store での評価は、ほかの人が見つける助けになります。すぐに終わります。
 Rate it	評価する
+Tell me it's still running	実行中であることを知らせる
+A notification when you close this window and PiP Studio keeps running in the tray	このウィンドウを閉じても PiP Studio がトレイで動き続けるときに通知

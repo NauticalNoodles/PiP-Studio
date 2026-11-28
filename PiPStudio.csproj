@@ -16,7 +16,7 @@
     <Description>Picture-in-picture for any window, display or part of the screen</Description>
     <Copyright>Copyright (c) 2026 NauticalNoodles</Copyright>
     <ApplicationIcon>PiPStudio.ico</ApplicationIcon>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
     <ServerGarbageCollector>false</ServerGarbageCollector>
     <TieredPGO>false</TieredPGO>
